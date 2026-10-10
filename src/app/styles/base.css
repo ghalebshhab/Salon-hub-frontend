@@ -1143,11 +1143,46 @@ select {
 }
 
 .footer {
-  background: white;
+  background: linear-gradient(180deg, #ffffff, #fff7f3);
   border-top: 1px solid var(--border);
-  padding: 28px 0;
+  padding: 30px 0;
   color: var(--muted);
-  text-align: center;
+}
+
+.footer-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.footer-brand {
+  color: inherit;
+  text-decoration: none;
+}
+
+.footer p {
+  margin: 0;
+  text-align: right;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+@media (max-width: 640px) {
+  .footer-inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .footer p {
+    text-align: left;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brand-logo-mark {
+    transition: none;
+  }
 }
 
 .auth-page,
@@ -1994,25 +2029,52 @@ select {
   flex-shrink: 0;
 }
 
-.brand-icon {
-  width: 46px;
-  height: 46px;
-  border-radius: 16px;
-  display: grid;
-  place-items: center;
-  color: #ffffff;
-  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-  box-shadow: 0 12px 26px rgba(192, 132, 151, 0.35);
+.brand-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
 }
 
-.brand-text {
+.brand-logo-mark {
+  width: 48px;
+  height: 48px;
+  flex: 0 0 auto;
+  filter: drop-shadow(0 10px 16px rgba(159, 100, 120, 0.2));
+  transition:
+    transform 0.24s ease,
+    filter 0.24s ease;
+}
+
+.brand-logo-copy,
+.brand-logo-name,
+.brand-logo-tagline {
+  display: block;
+}
+
+.brand-logo-name {
   font-size: 1.45rem;
-  font-weight: 900;
-  letter-spacing: -0.6px;
+  font-weight: 950;
+  line-height: 1;
+  letter-spacing: -0.75px;
 }
 
-.brand-text span {
+.brand-logo-name span {
   color: var(--primary);
+}
+
+.brand-logo-tagline {
+  margin-top: 5px;
+  color: var(--muted);
+  font-size: 0.58rem;
+  font-weight: 900;
+  letter-spacing: 1.25px;
+  text-transform: uppercase;
+}
+
+.creative-brand:hover .brand-logo-mark,
+.footer-brand:hover .brand-logo-mark {
+  filter: drop-shadow(0 13px 20px rgba(159, 100, 120, 0.3));
+  transform: translateY(-2px) rotate(-2deg);
 }
 
 .creative-nav {
@@ -2279,11 +2341,11 @@ select {
 }
 
 @media (max-width: 520px) {
-  .brand-text {
+  .brand-logo-name {
     font-size: 1.22rem;
   }
 
-  .brand-icon {
+  .brand-logo-mark {
     width: 42px;
     height: 42px;
   }

@@ -17,6 +17,7 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import { logoutApi } from "../../features/auth/api/authApi.js";
 import useAuth from "../../shared/auth/useAuth.js";
 import { clearAuthData } from "../../shared/auth/tokenStorage.js";
+import BrandLogo from "../../shared/components/BrandLogo.jsx";
 
 function Navbar() {
   const navigate = useNavigate();
@@ -42,12 +43,7 @@ function Navbar() {
     <header className="creative-navbar">
       <div className="container creative-navbar-inner">
         <Link to="/" className="creative-brand" onClick={closeMenus}>
-          <span className="brand-icon">
-            <Scissors size={20} />
-          </span>
-          <span className="brand-text">
-            Salon<span>Hub</span>
-          </span>
+          <BrandLogo />
         </Link>
         <nav className={mobileOpen ? "creative-nav open" : "creative-nav"}>
           <div className="main-nav-links">

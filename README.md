@@ -1,6 +1,6 @@
 # SalonHub frontend
 
-React + Vite frontend for salon discovery, appointment booking, hiring applications, and salon management. The existing visual design and route URLs are preserved.
+React + Vite frontend for salon discovery, career profiles, hiring applications, and salon management.
 
 ## Local development
 
@@ -11,7 +11,7 @@ npm ci
 npm run dev
 ```
 
-The development API defaults to `http://localhost:8080/api`. Copy `.env.example` to `.env.local` to override `VITE_API_BASE_URL`. Restart Vite after changing environment values. All `VITE_*` values are public and must not contain secrets.
+Browser requests use `/api`. During development, Vite proxies that path to `http://localhost:8080`; set `VITE_API_PROXY_TARGET` in `.env.local` to change the local backend target. Set `VITE_API_BASE_URL` only when the API must use a separate public origin. Restart Vite after changing environment values. All `VITE_*` values are public and must not contain secrets.
 
 ## Commands
 
@@ -36,15 +36,12 @@ src/
   app/                  Composition, routes, layout, and ordered global styles
   features/
     auth/               Login and registration
-    bookings/           Customer, employee, and owner booking flows
     dashboard/          Owner navigation
-    employees/          Invitations and application management
+    employees/          Owner hiring-application management
     hiring/             Hiring posts and applications
     home/               Landing page
-    media/              Salon photos and videos
-    reviews/            Ratings and booking reviews
+    profile/            Career profile editing
     salons/             Public profiles and owner salon management
-    services/           Salon service management
   shared/
     api/                HTTP transport and response envelope handling
     auth/               Session persistence and reactive subscriptions
@@ -69,7 +66,7 @@ These boundaries apply single responsibility without adding inheritance or specu
 
 ## Request and session behavior
 
-`useQuery` accepts a stable loader and supplies an AbortSignal. GET adapters forward the signal to Axios. Navigation, loader changes, and refreshes abort obsolete requests; late responses cannot overwrite the current resource. Hooks call `refetch` after successful mutations. Optional employee/media data can fail without hiding an otherwise valid salon profile.
+`useQuery` accepts a stable loader and supplies an AbortSignal. GET adapters forward the signal to Axios. Navigation, loader changes, and refreshes abort obsolete requests; late responses cannot overwrite the current resource. Hooks call `refetch` after successful mutations.
 
 The HTTP client has a 15-second timeout and adds bearer authentication to protected requests. A 401 from the current token clears the session; a 403 preserves it. A late 401 for an older token cannot clear a newer login. Session changes update navigation and route guards in the current tab and across tabs. Login returns users to their requested route.
 
@@ -83,20 +80,20 @@ The existing backend token contract uses localStorage. Route guards provide navi
 
 1. Run `npm ci` and `npm run check`.
 2. Build with `VITE_API_BASE_URL` pointing to the deployed API, or use the production default `/api` with a same-origin reverse proxy.
-3. Serve `dist/` over HTTPS. Rewrite frontend routes to `index.html` so deep links such as `/owner/services` work. Do not rewrite `/api` requests to the SPA.
+3. Serve `dist/` over HTTPS. Rewrite frontend routes to `index.html` so deep links such as `/owner/applications` work. Proxy `/api` to the Spring Boot backend.
 4. If the API is on a different origin, configure its CORS policy for the frontend origin.
 
 Pages are lazy-loaded. The app has route-loading, not-found, and render-error fallbacks. Vite preview is for local verification, not the production web server.
 
 ## Verification scope
 
-Tests cover every existing route with mocked API responses, login redirects, authentication subscriptions, 401/403 handling, stale request cancellation, refresh/recovery, service validation, salon payload contracts, and local booking dates. They do not replace acceptance testing against a running backend with real customer, employee, and owner accounts.
+Tests cover active routes with mocked API responses, login redirects, authentication subscriptions, 401/403 handling, stale request cancellation, and salon payload contracts. They do not replace acceptance testing against a running backend with real accounts.
 
 ## Project status and related repository
 
 Active development. SalonHub aims to provide a clean, responsive user experience with reusable components and maintainable backend integration.
 
-Backend: [Salon Booking App](https://github.com/ghalebshhab/Salon-Booking-App-Backend-Refinment)
+Backend: [Salon Hub Backend](https://github.com/ghalebshhab/Salon-hub-backend)
 
 ## Author
 

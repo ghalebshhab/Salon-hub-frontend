@@ -12,24 +12,16 @@ const salon = {
   Images: [],
   maxNumOfEmployees: 3,
 };
-const service = {
-  id: 1,
-  name: "Haircut",
-  price: 10,
-  durationMinutes: 30,
-  isActive: true,
-};
 beforeEach(() => {
   http.defaults.adapter = vi.fn(async (config) => {
     const url = config.url;
     let data = [];
-    if (url === "/salons") data = [salon];
-    else if (url === "/salons/1" || url === "/salons/my-salon") data = salon;
-    else if (url.includes("salon-services")) data = [service];
-    else if (url.endsWith("/summary"))
-      data = { averageRating: 0, totalReviews: 0 };
-    else if (url === "/users/profile")
-      data = { firstName: "Test", lastName: "User" };
+    if (url === "/salons/active") data = [salon];
+    else if (url === "/salons/1" || url === "/salons/mine") data = salon;
+    else if (url === "/hiring-posts") data = { content: [] };
+    else if (url === "/hiring-posts/owner") data = [];
+    else if (url === "/profile")
+      data = { firstName: "Test", lastName: "User", skills: [] };
     return {
       config,
       status: 200,
@@ -46,19 +38,12 @@ const paths = [
   "/login",
   "/register",
   "/hiring-posts/1/apply",
-  "/salons/1/book",
-  "/my-bookings",
-  "/employee/bookings",
-  "/owner/bookings",
+  "/profile/career",
   "/owner/dashboard",
   "/owner/create-salon",
   "/owner/my-salon",
   "/owner/create-hiring-post",
-  "/owner/create-media-post",
-  "/owner/services",
-  "/owner/create-service",
-  "/owner/services/1/edit",
-  "/owner/employees",
+  "/owner/applications",
 ];
 it.each(paths)(
   "renders route %s with the existing API contracts",
@@ -81,7 +66,7 @@ it.each(paths)(
 it("redirects protected routes to login and retains the destination", async () => {
   clearAuthData();
   render(
-    <MemoryRouter initialEntries={["/owner/employees"]}>
+    <MemoryRouter initialEntries={["/owner/applications"]}>
       <AppRoutes />
     </MemoryRouter>,
   );
@@ -108,7 +93,7 @@ it("returns to the protected destination after a successful login", async () => 
     },
   });
   const { container } = render(
-    <MemoryRouter initialEntries={["/owner/employees"]}>
+    <MemoryRouter initialEntries={["/owner/applications"]}>
       <AppRoutes />
     </MemoryRouter>,
   );
@@ -121,6 +106,6 @@ it("returns to the protected destination after a successful login", async () => 
   });
   fireEvent.submit(container.querySelector("form"));
   expect(
-    await screen.findByRole("heading", { name: "My Salon Employees" }),
+    await screen.findByRole("heading", { name: "Hiring Applications" }),
   ).toBeDefined();
 });

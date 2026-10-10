@@ -1,0 +1,125 @@
+/* Shared interaction language for light cards and information panels. */
+:is(
+  .auth-card,
+  .form-card,
+  .feature-card,
+  .dashboard-card,
+  .info-card,
+  .employee-card,
+  .owner-employee-card,
+  .media-card,
+  .hiring-card,
+  .service-card,
+  .booking-card,
+  .booking-form-panel,
+  .booking-section-box,
+  .booking-total-box,
+  .booking-service-option,
+  .employee-booking-card,
+  .booking-assigned-employee-box,
+  .employee-count-box,
+  .employee-invite-card,
+  .salon-showcase-card,
+  .salon-side-card,
+  .salon-stat-card,
+  .review-card,
+  .reviews-summary-card,
+  .employee-summary-card,
+  .my-salon-action-card,
+  .my-salon-panel,
+  .my-salon-side-card,
+  .modern-feature-card,
+  .home-step-card,
+  .home-faq-card,
+  .home-workflow-card,
+  .empty-state
+) {
+  transition:
+    transform 0.24s ease,
+    background-color 0.24s ease,
+    border-color 0.24s ease,
+    box-shadow 0.24s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  :is(
+    .auth-card,
+    .form-card,
+    .feature-card,
+    .dashboard-card,
+    .info-card,
+    .employee-card,
+    .owner-employee-card,
+    .media-card,
+    .hiring-card,
+    .service-card,
+    .booking-card,
+    .booking-form-panel,
+    .booking-section-box,
+    .booking-total-box,
+    .booking-service-option,
+    .employee-booking-card,
+    .booking-assigned-employee-box,
+    .employee-count-box,
+    .employee-invite-card,
+    .salon-showcase-card,
+    .salon-side-card,
+    .salon-stat-card,
+    .review-card,
+    .reviews-summary-card,
+    .employee-summary-card,
+    .my-salon-action-card,
+    .my-salon-panel,
+    .my-salon-side-card,
+    .modern-feature-card,
+    .home-step-card,
+    .home-faq-card,
+    .home-workflow-card,
+    .empty-state
+  ):hover {
+    border-color: var(--primary);
+    background: #fff0f4;
+    box-shadow: 0 22px 50px rgba(159, 100, 120, 0.18);
+    transform: translateY(-5px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :is(
+    .auth-card,
+    .form-card,
+    .feature-card,
+    .dashboard-card,
+    .info-card,
+    .employee-card,
+    .owner-employee-card,
+    .media-card,
+    .hiring-card,
+    .service-card,
+    .booking-card,
+    .booking-form-panel,
+    .booking-section-box,
+    .booking-total-box,
+    .booking-service-option,
+    .employee-booking-card,
+    .booking-assigned-employee-box,
+    .employee-count-box,
+    .employee-invite-card,
+    .salon-showcase-card,
+    .salon-side-card,
+    .salon-stat-card,
+    .review-card,
+    .reviews-summary-card,
+    .employee-summary-card,
+    .my-salon-action-card,
+    .my-salon-panel,
+    .my-salon-side-card,
+    .modern-feature-card,
+    .home-step-card,
+    .home-faq-card,
+    .home-workflow-card,
+    .empty-state
+  ) {
+    transition: none;
+  }
+}

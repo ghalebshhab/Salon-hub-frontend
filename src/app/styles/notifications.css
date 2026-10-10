@@ -1,0 +1,211 @@
+/* ============================= */
+/* Soft Creative Toast Messages */
+/* ============================= */
+
+/* ============================= */
+/* Premium SalonHub Toast Design */
+/* ============================= */
+
+.Toastify__toast-container {
+  z-index: 5000;
+}
+
+.Toastify__toast-container--bottom-right {
+  right: 26px;
+  bottom: 26px;
+  width: auto;
+}
+
+.Toastify__toast.salon-toast-shell {
+  width: 390px;
+  min-height: unset;
+  padding: 0 !important;
+  margin-bottom: 14px !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+}
+
+.Toastify__toast-body.salon-toast-body {
+  width: 100%;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.salon-toast-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  width: 100%;
+  min-height: 82px;
+  padding: 16px 20px;
+  overflow: hidden;
+  border-radius: 20px;
+  color: #fffaf7;
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(247, 231, 206, 0.13),
+      transparent 34%
+    ),
+    linear-gradient(135deg, rgba(43, 43, 43, 0.94), rgba(31, 41, 55, 0.92));
+  border: 1px solid rgba(247, 231, 206, 0.14);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow:
+    0 18px 46px rgba(43, 43, 43, 0.22),
+    inset 0 1px 1px rgba(255, 255, 255, 0.06);
+  animation: salonToastEnter 0.32s ease;
+}
+
+.salon-toast-card::before {
+  content: "";
+  position: absolute;
+  width: 135px;
+  height: 135px;
+  right: -68px;
+  top: -68px;
+  border-radius: 999px;
+  background: var(--toast-color);
+  opacity: 0.1;
+  filter: blur(2px);
+}
+
+.salon-toast-accent {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: linear-gradient(180deg, var(--toast-color), transparent);
+  box-shadow: 2px 0 16px var(--toast-color-glow);
+}
+
+.salon-toast-icon-box {
+  position: relative;
+  z-index: 2;
+  width: 46px;
+  height: 46px;
+  flex: 0 0 46px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  color: var(--toast-color);
+  background: var(--toast-bg-subtle);
+  box-shadow: 0 0 14px var(--toast-color-glow);
+  animation: salonToastPulse 2.6s infinite ease-in-out;
+}
+
+.salon-toast-content {
+  position: relative;
+  z-index: 2;
+  min-width: 0;
+}
+
+.salon-toast-content h4 {
+  margin: 0 0 5px;
+  font-size: 0.98rem;
+  font-weight: 900;
+  color: var(--toast-color);
+  letter-spacing: 0.2px;
+}
+
+.salon-toast-content p {
+  margin: 0;
+  color: #e7d8d0;
+  font-size: 0.88rem;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+/* SalonHub suitable colors */
+.salon-toast-success {
+  --toast-color: #4ade80;
+  --toast-color-glow: rgba(74, 222, 128, 0.36);
+  --toast-bg-subtle: rgba(74, 222, 128, 0.12);
+}
+
+.salon-toast-error {
+  --toast-color: #fb7185;
+  --toast-color-glow: rgba(251, 113, 133, 0.36);
+  --toast-bg-subtle: rgba(251, 113, 133, 0.12);
+}
+
+.salon-toast-info {
+  --toast-color: #c08497;
+  --toast-color-glow: rgba(192, 132, 151, 0.46);
+  --toast-bg-subtle: rgba(192, 132, 151, 0.16);
+}
+
+.salon-toast-warning {
+  --toast-color: #f7c873;
+  --toast-color-glow: rgba(247, 200, 115, 0.38);
+  --toast-bg-subtle: rgba(247, 200, 115, 0.13);
+}
+
+.Toastify__toast-icon {
+  display: none !important;
+}
+
+.Toastify__close-button {
+  display: none !important;
+}
+
+@keyframes salonToastPulse {
+  0%,
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 12px var(--toast-color-glow);
+  }
+
+  50% {
+    transform: scale(1.06);
+    box-shadow: 0 0 26px var(--toast-color-glow);
+  }
+}
+
+@keyframes salonToastEnter {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (max-width: 620px) {
+  .Toastify__toast-container--bottom-right {
+    left: 12px;
+    right: 12px;
+    bottom: 14px;
+    width: auto;
+  }
+
+  .Toastify__toast.salon-toast-shell {
+    width: 100%;
+  }
+
+  .salon-toast-card {
+    min-height: 76px;
+    padding: 15px 16px;
+    border-radius: 18px;
+  }
+
+  .salon-toast-icon-box {
+    width: 42px;
+    height: 42px;
+    flex-basis: 42px;
+  }
+
+  .salon-toast-content h4 {
+    font-size: 0.92rem;
+  }
+
+  .salon-toast-content p {
+    font-size: 0.82rem;
+  }
+}

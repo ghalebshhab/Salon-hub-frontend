@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 310 76" role="img" aria-labelledby="title desc">
+  <title id="title">SalonHub</title>
+  <desc id="desc">SalonHub logo, where salons meet talent</desc>
+  <defs>
+    <linearGradient id="logo-gradient" x1="6" y1="5" x2="66" y2="68" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#C08497"/>
+      <stop offset="1" stop-color="#8F566A"/>
+    </linearGradient>
+  </defs>
+  <rect x="4" y="4" width="68" height="68" rx="21" fill="url(#logo-gradient)"/>
+  <path d="M21 58V34.5C21 23.5 28.5 16 38 16s17 7.5 17 18.5V58M25 58h26" fill="none" stroke="#F7E7CE" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="29" cy="49" r="4.5" fill="none" stroke="#fff" stroke-width="3"/>
+  <circle cx="47" cy="49" r="4.5" fill="none" stroke="#fff" stroke-width="3"/>
+  <path d="m32.5 45.5 14-15M43.5 45.5l-14-15" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round"/>
+  <circle cx="38" cy="40" r="2.3" fill="#F7C873"/>
+  <path d="M57 17v6M54 20h6" stroke="#F7C873" stroke-width="2.2" stroke-linecap="round"/>
+  <text x="88" y="43" fill="#2B2B2B" font-family="Arial, Helvetica, sans-serif" font-size="31" font-weight="800" letter-spacing="-1">Salon<tspan fill="#C08497">Hub</tspan></text>
+  <text x="90" y="60" fill="#6B7280" font-family="Arial, Helvetica, sans-serif" font-size="9" font-weight="700" letter-spacing="1.8">SALONS • PEOPLE • GROWTH</text>
+</svg>

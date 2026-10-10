@@ -244,9 +244,57 @@ body {
 
 .loading {
   min-height: 240px;
-  display: grid;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-items: center;
+  justify-content: center;
   place-items: center;
   font-weight: 800;
+}
+
+.loading-spinner {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 24px;
+}
+
+.loading-spinner span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--primary);
+  animation: loadingBounce 0.9s ease-in-out infinite;
+}
+
+.loading-spinner span:nth-child(2) {
+  animation-delay: 0.12s;
+}
+
+.loading-spinner span:nth-child(3) {
+  animation-delay: 0.24s;
+}
+
+@keyframes loadingBounce {
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.45;
+  }
+
+  30% {
+    transform: translateY(-7px);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loading-spinner span {
+    animation: none;
+    opacity: 0.75;
+  }
 }
 
 @media (max-width: 1000px) {

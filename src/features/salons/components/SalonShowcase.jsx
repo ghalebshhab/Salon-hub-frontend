@@ -6,7 +6,25 @@ import { MapPin, Clock, ArrowRight } from "lucide-react";
 function SalonShowcase() {
   const { getImages, formatTime, salons, loading } = useSalonShowcase();
   if (loading) {
-    return <div className="loading">Loading salons...</div>;
+    return (
+      <div
+        className="salon-showcase-grid"
+        role="status"
+        aria-label="Loading salons"
+      >
+        {[0, 1, 2].map((item) => (
+          <div className="salon-showcase-card salon-skeleton" key={item}>
+            <div className="salon-skeleton-image" />
+            <div className="salon-skeleton-body">
+              <span className="skeleton-line skeleton-title" />
+              <span className="skeleton-line" />
+              <span className="skeleton-line skeleton-short" />
+            </div>
+          </div>
+        ))}
+        <span className="sr-only">Loading salons...</span>
+      </div>
+    );
   }
 
   if (salons.length === 0) {

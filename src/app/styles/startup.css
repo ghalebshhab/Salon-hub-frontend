@@ -1,0 +1,81 @@
+.startup-splash {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  min-height: 100dvh;
+  background: var(--bg);
+  animation: splashExit 1.8s ease both;
+}
+
+.startup-splash .brand-logo {
+  gap: 20px;
+  animation: splashLogoEnter 0.75s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.startup-splash .brand-logo-mark {
+  width: clamp(84px, 10vw, 112px);
+  height: clamp(84px, 10vw, 112px);
+  filter: drop-shadow(0 22px 32px rgba(159, 100, 120, 0.28));
+}
+
+.startup-splash .brand-logo-name {
+  font-size: clamp(2.5rem, 7vw, 5rem);
+  letter-spacing: -2.5px;
+}
+
+.application-enter {
+  animation: applicationEnter 0.4s ease both;
+}
+
+@keyframes splashLogoEnter {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.92);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes splashExit {
+  0%,
+  78% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes applicationEnter {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 520px) {
+  .startup-splash .brand-logo {
+    gap: 14px;
+  }
+
+  .startup-splash .brand-logo-name {
+    letter-spacing: -1.5px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .startup-splash,
+  .startup-splash .brand-logo,
+  .application-enter {
+    animation: none;
+  }
+}

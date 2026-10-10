@@ -15,11 +15,11 @@ export const logoutApi = async (data) => {
 };
 
 export const getUserProfileApi = async (config = {}) => {
-  const response = await httpClient.get("/users/profile", config);
+  const response = await httpClient.get("/profile", config);
   return response.data;
 };
 
 export const updateUserProfileApi = async (data) => {
-  const response = await httpClient.put("/users/profile", data);
+  const response = await httpClient.put("/profile/career", data);
   return response.data;
 };

@@ -1,36 +1,52 @@
 import { expect, it } from "vitest";
-import { toSalonPayload } from "./salonForm.js";
-it("preserves the backend Images field and employee invitation details without mutating the form", () => {
-  const form = {
-    name: " Test ",
-    email: " a@b.com ",
-    address: " Street ",
-    phoneNumber: " 123 ",
-    openTime: "09:00:00",
-    closeTime: "18:00:00",
-    city: " Amman ",
-    state: "OPEN",
-    maxNumOfEmployees: "3",
-    Images: " https://example.com/a.png, , https://example.com/b.png ",
-    employees: [
-      {
-        fullName: " A ",
-        email: " a@b.com ",
-        phoneNumber: " 123 ",
-        imageUrl: "",
-        specialty: " Barber ",
-        startTime: "09:00:00",
-        endTime: "18:00:00",
-      },
-    ],
-  };
-  const payload = toSalonPayload(form);
-  expect(payload.Images).toEqual([
-    "https://example.com/a.png",
-    "https://example.com/b.png",
-  ]);
-  expect(payload.maxNumOfEmployees).toBe(3);
-  expect(payload.currentNumOfEmployees).toBe(1);
-  expect(payload.employees[0].fullName).toBe("A");
-  expect(form.employees[0].fullName).toBe(" A ");
+import { fromSalonResponse, toSalonPayload } from "./salonForm.js";
+
+it("maps the salon form to the backend create contract", () => {
+  expect(
+    toSalonPayload({
+      name: " Test ",
+      description: " A salon ",
+      phoneNumber: " 123 ",
+      email: " a@b.com ",
+      city: "Amman",
+      maxNumOfEmployees: "3",
+      openTime: "09:00:00",
+      closeTime: "18:00:00",
+      profilePictureUrl: " https://example.com/a.png ",
+    }),
+  ).toEqual({
+    salonName: "Test",
+    salonDescription: "A salon",
+    salonPhoneNumber: "123",
+    salonEmail: "a@b.com",
+    salonCity: "Amman",
+    maxNumberOfEmployees: 3,
+    openingTime: "09:00:00",
+    closingTime: "18:00:00",
+    profilePictureUrl: "https://example.com/a.png",
+  });
+});
+
+it("maps the backend salon response to the frontend view model", () => {
+  const salon = fromSalonResponse({
+    id: 7,
+    salonName: "Test",
+    salonEmail: "a@b.com",
+    salonPhoneNumber: "123",
+    location: "Amman",
+    currentEmployeesNumber: 2,
+    maxEmployeesNumber: 4,
+    profilePictureUrl: "https://example.com/a.png",
+    openingTime: "09:00:00",
+    closingTime: "18:00:00",
+  });
+  expect(salon).toMatchObject({
+    salonId: 7,
+    name: "Test",
+    email: "a@b.com",
+    city: "Amman",
+    currentNumOfEmployees: 2,
+    maxNumOfEmployees: 4,
+    images: ["https://example.com/a.png"],
+  });
 });

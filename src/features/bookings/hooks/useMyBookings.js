@@ -1,7 +1,7 @@
 import { getStatusClass, canCancel } from "../model/booking.js";
 import useQuery from "../../../shared/hooks/useQuery.js";
 import { requireData } from "../../../shared/api/response.js";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   showSuccessToast,
   showErrorToast,
@@ -19,6 +19,34 @@ export default function useMyBookings() {
     loading,
     refetch: loadBookings,
   } = useQuery(loader, { initialData: [], onError: showErrorToast });
+
+  const previousStatuses = useRef(null);
+  useEffect(() => {
+    const previous = previousStatuses.current;
+    if (previous) {
+      bookings.forEach((booking) => {
+        const oldStatus = previous.get(booking.id);
+        if (oldStatus === booking.status) return;
+        if (booking.status === "ACCEPTED") {
+          showSuccessToast(
+            `Your appointment at ${booking.salonName} was accepted.`,
+          );
+        } else if (booking.status === "REJECTED") {
+          showErrorToast(
+            `Your appointment at ${booking.salonName} was declined.`,
+          );
+        }
+      });
+    }
+    previousStatuses.current = new Map(
+      bookings.map((booking) => [booking.id, booking.status]),
+    );
+  }, [bookings]);
+
+  useEffect(() => {
+    const intervalId = window.setInterval(() => loadBookings(), 30_000);
+    return () => window.clearInterval(intervalId);
+  }, [loadBookings]);
 
   const handleCancel = async (bookingId) => {
     const confirmCancel = window.confirm(

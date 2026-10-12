@@ -52,6 +52,25 @@ function MyBookings() {
                 </span>
               </div>
 
+              {booking.status === "ACCEPTED" && (
+                <p className="booking-decision accepted">
+                  The salon accepted your request. Your appointment is
+                  confirmed.
+                </p>
+              )}
+              {booking.status === "REJECTED" && (
+                <p className="booking-decision rejected">
+                  The salon could not accept this time. Check the salon’s note
+                  below and choose another time if you’d like to try again.
+                </p>
+              )}
+              {booking.status === "PENDING" && (
+                <p className="booking-decision pending">
+                  Your request was sent to the salon. We’ll show the decision
+                  here.
+                </p>
+              )}
+
               <div className="booking-info-grid">
                 <p>
                   <CalendarDays size={16} />

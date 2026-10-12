@@ -15,6 +15,7 @@ function CreateBooking() {
     salon,
     services,
     employees,
+    eligibleEmployees,
     selectedServiceIds,
     selectedEmployeeId,
     setSelectedEmployeeId,
@@ -35,6 +36,7 @@ function CreateBooking() {
     totalDuration,
     handleServiceToggle,
     getTodayDate,
+    getEarliestBookingTime,
     handleSubmit,
   } = useCreateBooking();
 
@@ -153,7 +155,7 @@ function CreateBooking() {
                 </div>
               </label>
 
-              {employees.map((employee) => (
+              {eligibleEmployees.map((employee) => (
                 <label
                   className={
                     Number(selectedEmployeeId) === Number(employee.id)
@@ -188,6 +190,14 @@ function CreateBooking() {
                   </div>
                 </label>
               ))}
+              {selectedServiceIds.length > 0 &&
+                eligibleEmployees.length === 0 && (
+                  <p className="booking-availability-note">
+                    No active employee is currently listed for all selected
+                    services. You can still send the request and let the salon
+                    assign someone.
+                  </p>
+                )}
             </div>
           </div>
 
@@ -246,6 +256,11 @@ function CreateBooking() {
                 <input
                   type="time"
                   value={bookingTime}
+                  min={
+                    bookingDate === getTodayDate()
+                      ? getEarliestBookingTime()
+                      : undefined
+                  }
                   onChange={(e) => setBookingTime(e.target.value)}
                 />
               </div>

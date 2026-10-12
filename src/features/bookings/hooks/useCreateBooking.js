@@ -1,4 +1,8 @@
-import { getTodayDate } from "../model/booking.js";
+import {
+  canEmployeePerformServices,
+  getEarliestBookingTime,
+  getTodayDate,
+} from "../model/booking.js";
 import useQuery from "../../../shared/hooks/useQuery.js";
 import { requireData } from "../../../shared/api/response.js";
 import { useCallback, useMemo, useState } from "react";
@@ -62,6 +66,14 @@ export default function useCreateBooking() {
     );
   }, [services, selectedServiceIds]);
 
+  const eligibleEmployees = useMemo(
+    () =>
+      employees.filter((employee) =>
+        canEmployeePerformServices(employee, selectedServiceIds),
+      ),
+    [employees, selectedServiceIds],
+  );
+
   const totalPrice = useMemo(() => {
     return selectedServices.reduce(
       (total, service) => total + Number(service.price || 0),
@@ -85,6 +97,20 @@ export default function useCreateBooking() {
       }
 
       return [...prev, id];
+    });
+  };
+
+  const handleServiceSelection = (serviceId) => {
+    handleServiceToggle(serviceId);
+    setSelectedEmployeeId((currentId) => {
+      const employee = employees.find(
+        (item) => Number(item.id) === Number(currentId),
+      );
+      if (!employee) return currentId;
+      const nextIds = selectedServiceIds.includes(Number(serviceId))
+        ? selectedServiceIds.filter((id) => id !== Number(serviceId))
+        : [...selectedServiceIds, Number(serviceId)];
+      return canEmployeePerformServices(employee, nextIds) ? currentId : "";
     });
   };
 
@@ -117,8 +143,9 @@ export default function useCreateBooking() {
       return false;
     }
 
-    if (bookingDate < getTodayDate()) {
-      showErrorToast("Please choose today or a future date");
+    const requestedDateTime = new Date(`${bookingDate}T${bookingTime}`);
+    if (requestedDateTime <= new Date()) {
+      showErrorToast("Choose an appointment time later than now");
       return false;
     }
     return true;
@@ -167,6 +194,7 @@ export default function useCreateBooking() {
     salon,
     services,
     employees,
+    eligibleEmployees,
     selectedServiceIds,
     selectedEmployeeId,
     setSelectedEmployeeId,
@@ -185,8 +213,9 @@ export default function useCreateBooking() {
     selectedServices,
     totalPrice,
     totalDuration,
-    handleServiceToggle,
+    handleServiceToggle: handleServiceSelection,
     getTodayDate,
+    getEarliestBookingTime,
     handleSubmit,
   };
 }

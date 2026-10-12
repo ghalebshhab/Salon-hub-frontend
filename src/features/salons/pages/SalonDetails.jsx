@@ -1,6 +1,7 @@
 import { Clock, Mail, MapPin, Phone, Scissors, UsersRound } from "lucide-react";
 import useSalonDetails from "../hooks/useSalonDetails.js";
 import SalonStatusBadge from "../components/SalonStatusBadge.jsx";
+import SalonServicesList from "../../services/components/SalonServicesList.jsx";
 
 function SalonDetails() {
   const { salon, loading } = useSalonDetails();
@@ -90,6 +91,16 @@ function SalonDetails() {
                 <h2>{salon.name}</h2>
                 <p>{salon.description || "No description provided."}</p>
               </div>
+            </section>
+            <section className="salon-content-section">
+              <div className="salon-section-heading">
+                <span className="eyebrow">Menu</span>
+                <h2>Services and booking</h2>
+                <p>
+                  Choose a service to see its price and request an appointment.
+                </p>
+              </div>
+              <SalonServicesList salonId={salon.salonId ?? salon.id} />
             </section>
           </main>
         </div>

@@ -7,6 +7,7 @@ import {
   LogOut,
   Menu,
   ClipboardList,
+  CalendarDays,
   Scissors,
   User,
   UserPlus,
@@ -158,6 +159,14 @@ function Navbar() {
                   >
                     <ClipboardList size={17} />
                     My Applications
+                  </NavLink>
+                  <NavLink
+                    to="/my-bookings"
+                    className="dropdown-item"
+                    onClick={closeMenus}
+                  >
+                    <CalendarDays size={17} />
+                    My Bookings
                   </NavLink>
                   <button className="dropdown-item" onClick={logout}>
                     <LogOut size={17} />

@@ -35,6 +35,12 @@ const CareerProfile = lazy(
 const MyApplications = lazy(
   () => import("../../features/applications/pages/MyApplications.jsx"),
 );
+const CreateBooking = lazy(
+  () => import("../../features/bookings/pages/CreateBooking.jsx"),
+);
+const MyBookings = lazy(
+  () => import("../../features/bookings/pages/MyBookings.jsx"),
+);
 
 export default function AppRoutes() {
   return (
@@ -42,6 +48,10 @@ export default function AppRoutes() {
       <Route element={<AppLayout />}>
         <Route path="/" element={<Home />} />
         <Route path="/salons/:salonId" element={<SalonDetails />} />
+        <Route element={<ProtectedRoute />}>
+          <Route path="/salons/:salonId/book" element={<CreateBooking />} />
+          <Route path="/my-bookings" element={<MyBookings />} />
+        </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route element={<ProtectedRoute />}>

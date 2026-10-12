@@ -17,6 +17,24 @@
   --danger-soft: #fee2e2;
   --shadow: 0 18px 45px rgba(43, 43, 43, 0.08);
   --radius: 22px;
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  --primary: #f08bb4;
+  --primary-dark: #d26391;
+  --secondary: #302a34;
+  --bg: #151319;
+  --card: #211e26;
+  --text: #f4eef3;
+  --muted: #b8aeb8;
+  --border: #3b333f;
+  --success: #4ade80;
+  --success-soft: #123622;
+  --danger: #fb7185;
+  --danger-soft: #401e29;
+  --shadow: 0 20px 55px rgba(0, 0, 0, 0.3);
+  color-scheme: dark;
 }
 
 body {
@@ -24,6 +42,149 @@ body {
   font-family: Arial, Helvetica, sans-serif;
   color: var(--text);
   background: var(--bg);
+}
+
+body,
+.creative-navbar,
+.profile-header,
+.info-card,
+.hiring-card,
+.empty-state,
+.service-card,
+.booking-card,
+.booking-section-box,
+.booking-side-panel,
+.salon-stat-card,
+.salon-side-card,
+.salon-showcase-card,
+.employee-booking-card,
+.review-modal,
+.owner-dropdown-menu {
+  transition:
+    background-color 180ms ease,
+    color 180ms ease,
+    border-color 180ms ease;
+}
+
+:root[data-theme="dark"] body {
+  color: var(--text);
+  background: var(--bg);
+}
+
+:root[data-theme="dark"]
+  :is(
+    .creative-navbar,
+    .profile-header,
+    .info-card,
+    .hiring-card,
+    .empty-state,
+    .service-card,
+    .booking-card,
+    .booking-section-box,
+    .booking-side-panel,
+    .salon-stat-card,
+    .salon-side-card,
+    .salon-showcase-card,
+    .employee-booking-card,
+    .form-card,
+    .dashboard-card,
+    .candidate-application-card,
+    .my-salon-action-card,
+    .my-salon-side-card,
+    .my-salon-panel,
+    .team-summary-card,
+    .employee-invite-card,
+    .employee-card,
+    .review-card,
+    .reject-modal,
+    .review-modal,
+    .owner-dropdown-menu,
+    .salon-content-section,
+    .application-card,
+    .booking-form-panel
+  ) {
+  color: var(--text);
+  background-color: var(--card);
+  border-color: var(--border);
+}
+
+:root[data-theme="dark"]
+  :is(
+    .home-hero-badge,
+    .home-visual-card,
+    .floating-home-card,
+    .modern-feature-card,
+    .home-step-card,
+    .home-workflow-card,
+    .home-faq-card
+  ) {
+  color: var(--text);
+  background: var(--card);
+  border-color: var(--border);
+}
+
+:root[data-theme="dark"]
+  :is(.home-journey-section, .home-professional-section) {
+  background: #1b1820;
+  border-color: var(--border);
+}
+
+:root[data-theme="dark"] .home-trust-row span,
+:root[data-theme="dark"] .home-professional-card h2 {
+  color: var(--text);
+}
+
+:root[data-theme="dark"] .home-visual-card {
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(240, 139, 180, 0.12),
+      transparent 45%
+    ),
+    linear-gradient(145deg, #27222c, #1b1820);
+}
+
+:root[data-theme="dark"] .modern-feature-card:hover {
+  box-shadow: 0 24px 55px rgba(0, 0, 0, 0.35);
+}
+
+:root[data-theme="dark"] :is(input, textarea, select) {
+  color: var(--text);
+  background-color: #1b1820;
+  border-color: var(--border);
+}
+
+:root[data-theme="dark"] :is(input, textarea, select)::placeholder {
+  color: #928894;
+}
+
+:root[data-theme="dark"]
+  :is(
+    .candidate-application-card,
+    .form-card,
+    .dashboard-card,
+    .my-salon-action-card,
+    .my-salon-side-card,
+    .my-salon-panel,
+    .team-summary-card,
+    .employee-invite-card,
+    .employee-card,
+    .review-card,
+    .reject-modal
+  )
+  :is(h1, h2, h3, p, label, strong, span) {
+  color: inherit;
+}
+
+:root[data-theme="dark"]
+  :is(
+    .muted,
+    .profile-header p,
+    .info-card p,
+    .service-card p,
+    .booking-section-box > p
+  ) {
+  color: var(--muted);
 }
 .salon-cover {
   width: 100%;
@@ -1993,6 +2154,58 @@ select {
   background: rgba(255, 249, 245, 0.84);
   backdrop-filter: blur(18px);
   border-bottom: 1px solid rgba(240, 217, 217, 0.8);
+}
+
+.theme-toggle {
+  min-height: 42px;
+  padding: 0 13px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--text);
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background-color 180ms ease,
+    border-color 180ms ease,
+    transform 180ms ease;
+}
+
+.theme-toggle:hover {
+  border-color: var(--primary);
+  transform: translateY(-1px);
+}
+
+.theme-toggle svg {
+  color: var(--primary);
+}
+
+:root[data-theme="dark"] .creative-nav-link,
+:root[data-theme="dark"] .owner-dropdown-button,
+:root[data-theme="dark"] .dropdown-item {
+  color: var(--text);
+}
+
+:root[data-theme="dark"] .dropdown-item:hover,
+:root[data-theme="dark"] .dropdown-item.active {
+  background: #302733;
+}
+
+@media (max-width: 768px) {
+  .theme-toggle span {
+    display: none;
+  }
+
+  .theme-toggle {
+    width: 42px;
+    padding: 0;
+  }
 }
 
 .creative-navbar-inner {

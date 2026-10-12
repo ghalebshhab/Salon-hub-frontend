@@ -9,6 +9,8 @@ import {
   ClipboardList,
   CalendarDays,
   Scissors,
+  Moon,
+  Sun,
   User,
   UserPlus,
   UsersRound,
@@ -20,10 +22,12 @@ import { logoutApi } from "../../features/auth/api/authApi.js";
 import useAuth from "../../shared/auth/useAuth.js";
 import { clearAuthData } from "../../shared/auth/tokenStorage.js";
 import BrandLogo from "../../shared/components/BrandLogo.jsx";
+import useTheme from "../../shared/theme/useTheme.js";
 
 function Navbar() {
   const navigate = useNavigate();
   const { loggedIn } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [ownerMenuOpen, setOwnerMenuOpen] = useState(false);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
@@ -127,6 +131,17 @@ function Navbar() {
             </div>
           )}
           <div className="navbar-auth-area">
+            <button
+              className="theme-toggle"
+              type="button"
+              onClick={toggleTheme}
+              aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+              aria-pressed={theme === "dark"}
+              title={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+            >
+              {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
+              <span>{theme === "dark" ? "Light" : "Dark"}</span>
+            </button>
             {loggedIn ? (
               <div className="owner-dropdown">
                 <button

@@ -2,7 +2,11 @@ import axios from "axios";
 import { apiBaseUrl } from "../config/env.js";
 import { getToken, clearAuthData } from "../auth/tokenStorage.js";
 
-const httpClient = axios.create({ baseURL: apiBaseUrl, timeout: 15000 });
+const httpClient = axios.create({
+  baseURL: apiBaseUrl,
+  timeout: 15000,
+  withCredentials: true,
+});
 httpClient.interceptors.request.use((config) => {
   const token = getToken();
   if (token && !config.url?.startsWith("/auth/"))

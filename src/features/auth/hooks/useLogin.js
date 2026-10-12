@@ -5,7 +5,7 @@ import {
   showErrorToast,
 } from "../../../shared/notifications/toast.jsx";
 import { loginApi } from "../api/authApi.js";
-import { saveToken, saveUser } from "../../../shared/auth/tokenStorage.js";
+import { saveToken } from "../../../shared/auth/tokenStorage.js";
 
 export default function useLogin() {
   const navigate = useNavigate();
@@ -38,7 +38,6 @@ export default function useLogin() {
       }
 
       saveToken(response.data.token);
-      saveUser(response.data);
 
       showSuccessToast("Welcome back to SalonHub ✨", "Logged in");
       const from = location.state?.from;

@@ -36,6 +36,7 @@ src/
   app/                  Composition, routes, layout, and ordered global styles
   features/
     auth/               Login and registration
+    applications/       Candidate application tracking
     dashboard/          Owner navigation
     employees/          Owner hiring-application management
     hiring/             Hiring posts and applications

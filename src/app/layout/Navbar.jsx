@@ -6,6 +6,7 @@ import {
   LogIn,
   LogOut,
   Menu,
+  ClipboardList,
   Scissors,
   User,
   UserPlus,
@@ -149,6 +150,14 @@ function Navbar() {
                   >
                     <BriefcaseBusiness size={17} />
                     Career Profile
+                  </NavLink>
+                  <NavLink
+                    to="/my-applications"
+                    className="dropdown-item"
+                    onClick={closeMenus}
+                  >
+                    <ClipboardList size={17} />
+                    My Applications
                   </NavLink>
                   <button className="dropdown-item" onClick={logout}>
                     <LogOut size={17} />

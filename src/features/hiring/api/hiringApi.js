@@ -56,6 +56,14 @@ export const getHiringPostApplicationsApi = async (postId, config = {}) => {
   return response.data;
 };
 
+export const getMyHiringApplicationsApi = async (config = {}) => {
+  const response = await httpClient.get(
+    "/hiring-posts/applications/me",
+    config,
+  );
+  return response.data;
+};
+
 export const acceptHiringApplicationApi = async (applicationId) => {
   const response = await httpClient.post(
     `/hiring-posts/applications/${applicationId}/accept`,

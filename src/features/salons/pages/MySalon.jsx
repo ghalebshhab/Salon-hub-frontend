@@ -1,11 +1,14 @@
 import {
   BriefcaseBusiness,
+  CalendarDays,
+  CalendarClock,
   Clock,
   Eye,
   Mail,
   MapPin,
   Phone,
   Plus,
+  Scissors,
   Trash2,
   UsersRound,
 } from "lucide-react";
@@ -79,6 +82,21 @@ function MySalon() {
           </div>
         </div>
         <div className="my-salon-actions-grid">
+          <Link className="my-salon-action-card" to="/owner/services">
+            <Scissors />
+            <h3>Manage Services</h3>
+            <p>Keep your salon menu and booking prices up to date.</p>
+          </Link>
+          <Link className="my-salon-action-card" to="/owner/employees">
+            <CalendarClock />
+            <h3>Employees & Schedules</h3>
+            <p>Assign service skills and weekly working hours.</p>
+          </Link>
+          <Link className="my-salon-action-card" to="/owner/bookings">
+            <CalendarDays />
+            <h3>Booking Requests</h3>
+            <p>Review customer requests and manage appointments.</p>
+          </Link>
           <Link className="my-salon-action-card" to="/owner/create-hiring-post">
             <BriefcaseBusiness />
             <h3>Create Hiring Post</h3>

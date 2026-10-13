@@ -13,26 +13,34 @@ export const getSalonEmployeesApi = async (salonId, config = {}) => {
   return response.data;
 };
 
-export const addEmployeeToMySalonApi = async (employeeData) => {
-  const response = await httpClient.post("/salon-employees", employeeData);
-  return response.data;
-};
-
-export const resendEmployeeInvitationApi = async (employeeId) => {
-  const response = await httpClient.post(
-    `/salon-employees/${employeeId}/resend-invitation`,
+export const getEmployeeServicesApi = async (employeeId, config = {}) => {
+  const response = await httpClient.get(
+    `/salon-employees/${employeeId}/services`,
+    config,
   );
   return response.data;
 };
 
-export const removeEmployeeApi = async (employeeId) => {
-  const response = await httpClient.delete(`/salon-employees/${employeeId}`);
+export const updateEmployeeServicesApi = async (employeeId, serviceIds) => {
+  const response = await httpClient.put(
+    `/salon-employees/${employeeId}/services`,
+    { serviceIds },
+  );
   return response.data;
 };
 
-export const processApplicationApi = async (applicationId, accept) => {
+export const getEmployeeScheduleApi = async (employeeId, config = {}) => {
+  const response = await httpClient.get(
+    `/salon-employees/${employeeId}/schedule`,
+    config,
+  );
+  return response.data;
+};
+
+export const updateEmployeeScheduleApi = async (employeeId, periods) => {
   const response = await httpClient.put(
-    `/salon-employees/applications/${applicationId}/process?accept=${accept}`,
+    `/salon-employees/${employeeId}/schedule`,
+    { periods },
   );
   return response.data;
 };

@@ -1,5 +1,5 @@
 import { lazy } from "react";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import AppLayout from "../layout/AppLayout.jsx";
 import ProtectedRoute from "../layout/ProtectedRoute.jsx";
 import NotFound from "./NotFound.jsx";
@@ -34,6 +34,27 @@ const CareerProfile = lazy(
 );
 const MyApplications = lazy(
   () => import("../../features/applications/pages/MyApplications.jsx"),
+);
+const ManageSalonEmployees = lazy(
+  () => import("../../features/employees/pages/ManageSalonEmployees.jsx"),
+);
+const ManageEmployeeSetup = lazy(
+  () => import("../../features/employees/pages/ManageEmployeeSetup.jsx"),
+);
+const MySalonServices = lazy(
+  () => import("../../features/services/pages/MySalonServices.jsx"),
+);
+const AddSalonService = lazy(
+  () => import("../../features/services/pages/AddSalonService.jsx"),
+);
+const EditSalonService = lazy(
+  () => import("../../features/services/pages/EditSalonService.jsx"),
+);
+const SalonBookings = lazy(
+  () => import("../../features/bookings/pages/SalonBookings.jsx"),
+);
+const EmployeeBookings = lazy(
+  () => import("../../features/bookings/pages/EmployeeBookings.jsx"),
 );
 const CreateBooking = lazy(
   () => import("../../features/bookings/pages/CreateBooking.jsx"),
@@ -70,10 +91,19 @@ export default function AppRoutes() {
             element={<CreateHiringPost />}
           />
           <Route path="/owner/applications" element={<HiringApplications />} />
+          <Route path="/owner/employees" element={<ManageSalonEmployees />} />
           <Route
-            path="/owner/employees"
-            element={<Navigate to="/owner/applications" replace />}
+            path="/owner/employees/:employeeId/setup"
+            element={<ManageEmployeeSetup />}
           />
+          <Route path="/owner/services" element={<MySalonServices />} />
+          <Route path="/owner/create-service" element={<AddSalonService />} />
+          <Route
+            path="/owner/services/:serviceId/edit"
+            element={<EditSalonService />}
+          />
+          <Route path="/owner/bookings" element={<SalonBookings />} />
+          <Route path="/employee/bookings" element={<EmployeeBookings />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Route>

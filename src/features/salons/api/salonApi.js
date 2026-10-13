@@ -36,10 +36,6 @@ export const deleteSalonApi = async (salonId) => {
   return response.data;
 };
 
-export const getSalonEmployeesApi = async (salonId, config = {}) => {
-  const response = await httpClient.get(`/salons/${salonId}/employees`, config);
-  return response.data;
-};
 export const getAllSalonsApi = async (config = {}) => {
   const response = await httpClient.get("/salons/active", config);
   return mapSalonResponse(response).data;

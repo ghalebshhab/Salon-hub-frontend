@@ -112,6 +112,30 @@ function Navbar() {
                   My Salon
                 </NavLink>
                 <NavLink
+                  to="/owner/services"
+                  className="dropdown-item"
+                  onClick={closeMenus}
+                >
+                  <Scissors size={17} />
+                  Salon Services
+                </NavLink>
+                <NavLink
+                  to="/owner/employees"
+                  className="dropdown-item"
+                  onClick={closeMenus}
+                >
+                  <UsersRound size={17} />
+                  Employees & Schedules
+                </NavLink>
+                <NavLink
+                  to="/owner/bookings"
+                  className="dropdown-item"
+                  onClick={closeMenus}
+                >
+                  <CalendarDays size={17} />
+                  Booking Requests
+                </NavLink>
+                <NavLink
                   to="/owner/create-hiring-post"
                   className="dropdown-item"
                   onClick={closeMenus}
@@ -124,7 +148,7 @@ function Navbar() {
                   className="dropdown-item"
                   onClick={closeMenus}
                 >
-                  <UsersRound size={17} />
+                  <ClipboardList size={17} />
                   Hiring Applications
                 </NavLink>
               </div>

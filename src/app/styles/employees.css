@@ -123,3 +123,216 @@
   background: #fee2e2;
   cursor: pointer;
 }
+.employee-setup-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 26px;
+}
+
+.employee-setup-card,
+.employee-setup-panel {
+  padding: 24px;
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  background: var(--card);
+  box-shadow: var(--shadow);
+}
+
+.employee-setup-card {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.employee-setup-avatar,
+.employee-setup-panel-icon {
+  display: grid;
+  place-items: center;
+  color: var(--primary-dark);
+  background: var(--secondary);
+}
+
+.employee-setup-avatar {
+  width: 54px;
+  height: 54px;
+  overflow: hidden;
+  border-radius: 18px;
+}
+
+.employee-setup-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.employee-setup-copy h2,
+.employee-setup-copy p {
+  margin: 0;
+}
+
+.employee-setup-copy h2 {
+  font-size: 1.08rem;
+}
+
+.employee-setup-copy p {
+  margin-top: 4px;
+  color: var(--muted);
+}
+
+.employee-setup-copy > span {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 0.87rem;
+}
+
+.employee-setup-card > a {
+  grid-column: 1 / -1;
+  justify-self: start;
+}
+
+.employee-setup-page {
+  display: grid;
+  gap: 20px;
+}
+
+.employee-setup-panel-heading {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.employee-setup-panel-icon {
+  width: 46px;
+  height: 46px;
+  flex: 0 0 auto;
+  border-radius: 15px;
+}
+
+.employee-setup-panel-heading h2,
+.employee-setup-panel-heading p {
+  margin: 0;
+}
+
+.employee-setup-panel-heading p {
+  margin-top: 5px;
+  color: var(--muted);
+}
+
+.employee-service-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.employee-service-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  cursor: pointer;
+}
+
+.employee-service-option input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--primary-dark);
+}
+
+.employee-service-option span,
+.employee-service-option small {
+  display: block;
+}
+
+.employee-service-option small {
+  margin-top: 4px;
+  color: var(--muted);
+}
+
+.employee-setup-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.employee-week-grid {
+  display: grid;
+  gap: 12px;
+}
+
+.employee-day-row {
+  display: grid;
+  grid-template-columns: 130px minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.employee-day-periods {
+  display: grid;
+  gap: 10px;
+}
+
+.employee-period-inputs {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.employee-period-inputs input {
+  min-width: 130px;
+}
+
+.employee-add-period,
+.icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: fit-content;
+  padding: 7px 10px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  background: var(--card);
+  cursor: pointer;
+}
+
+.icon-button {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+}
+
+.icon-button.danger {
+  color: var(--danger);
+}
+
+@media (max-width: 760px) {
+  .employee-setup-grid,
+  .employee-service-options {
+    grid-template-columns: 1fr;
+  }
+
+  .employee-day-row {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .employee-period-inputs {
+    flex-wrap: wrap;
+  }
+
+  .employee-period-inputs input {
+    min-width: 110px;
+  }
+}

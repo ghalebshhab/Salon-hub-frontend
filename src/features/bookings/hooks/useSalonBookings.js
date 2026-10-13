@@ -22,6 +22,10 @@ export default function useSalonBookings() {
   const [rejectReason, setRejectReason] = useState("");
   const [suggestedTime, setSuggestedTime] = useState("");
   const [rejecting, setRejecting] = useState(false);
+  const [assignmentBooking, setAssignmentBooking] = useState(null);
+  const [replacementEmployeeId, setReplacementEmployeeId] = useState("");
+  const [assignmentNote, setAssignmentNote] = useState("");
+  const [assigning, setAssigning] = useState(false);
 
   const loader = useCallback(async (signal) => {
     const [bookings, employees] = await Promise.all([
@@ -44,14 +48,46 @@ export default function useSalonBookings() {
   } = useQuery(loader, { initialData: {}, onError: showErrorToast });
   const { bookings = [], employees = [] } = data;
 
-  const handleAssignEmployee = async (bookingId, employeeId) => {
+  const openAssignment = (booking, employeeId) => {
     if (!employeeId) return;
+    const employee = employees.find(
+      (item) => Number(item.id) === Number(employeeId),
+    );
+    const note = booking.assignedEmployeeName
+      ? `${booking.assignedEmployeeName} is unavailable for your appointment, so we’ve assigned ${employee?.fullName || "another qualified employee"} instead.`
+      : `We’ve assigned ${employee?.fullName || "an employee"} to your appointment.`;
+    setAssignmentBooking(booking);
+    setReplacementEmployeeId(String(employeeId));
+    setAssignmentNote(note);
+  };
+
+  const closeAssignment = () => {
+    if (assigning) return;
+    setAssignmentBooking(null);
+    setReplacementEmployeeId("");
+    setAssignmentNote("");
+  };
+
+  const submitAssignment = async () => {
+    if (!assignmentBooking || !replacementEmployeeId) return;
+    if (!assignmentNote.trim()) {
+      showErrorToast("Add a short update for the customer.");
+      return;
+    }
 
     try {
-      const response = await assignEmployeeToBookingApi(bookingId, employeeId);
+      setAssigning(true);
+      const response = await assignEmployeeToBookingApi(
+        assignmentBooking.id,
+        replacementEmployeeId,
+        { ownerNote: assignmentNote.trim() },
+      );
 
       if (response.success) {
-        showSuccessToast("Employee assigned successfully.", "Assigned");
+        showSuccessToast("Employee assigned and customer update saved.");
+        setAssignmentBooking(null);
+        setReplacementEmployeeId("");
+        setAssignmentNote("");
         loadBookings();
       } else {
         showErrorToast(
@@ -61,7 +97,11 @@ export default function useSalonBookings() {
       }
     } catch (error) {
       console.error(error);
-      showErrorToast("Could not assign employee.", "Failed");
+      showErrorToast(
+        error?.response?.data?.message || "Could not assign employee.",
+      );
+    } finally {
+      setAssigning(false);
     }
   };
 
@@ -164,7 +204,15 @@ export default function useSalonBookings() {
     suggestedTime,
     setSuggestedTime,
     rejecting,
-    handleAssignEmployee,
+    assignmentBooking,
+    replacementEmployeeId,
+    setReplacementEmployeeId,
+    assignmentNote,
+    setAssignmentNote,
+    assigning,
+    openAssignment,
+    closeAssignment,
+    submitAssignment,
     handleAccept,
     openRejectModal,
     closeRejectModal,

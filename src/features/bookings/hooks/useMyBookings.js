@@ -25,28 +25,58 @@ export default function useMyBookings() {
     const previous = previousStatuses.current;
     if (previous) {
       bookings.forEach((booking) => {
-        const oldStatus = previous.get(booking.id);
-        if (oldStatus === booking.status) return;
-        if (booking.status === "ACCEPTED") {
+        const oldBooking = previous.get(booking.id);
+        if (!oldBooking) return;
+        if (
+          oldBooking.status !== booking.status &&
+          booking.status === "ACCEPTED"
+        ) {
           showSuccessToast(
             `Your appointment at ${booking.salonName} was accepted.`,
           );
-        } else if (booking.status === "REJECTED") {
+        } else if (
+          oldBooking.status !== booking.status &&
+          booking.status === "REJECTED"
+        ) {
           showErrorToast(
             `Your appointment at ${booking.salonName} was declined.`,
+          );
+        } else if (
+          oldBooking.assignedEmployeeId !== booking.assignedEmployeeId &&
+          booking.assignedEmployeeName
+        ) {
+          showSuccessToast(
+            `Your service provider for ${booking.salonName} is now ${booking.assignedEmployeeName}. See the booking update for details.`,
           );
         }
       });
     }
     previousStatuses.current = new Map(
-      bookings.map((booking) => [booking.id, booking.status]),
+      bookings.map((booking) => [booking.id, booking]),
     );
   }, [bookings]);
 
   useEffect(() => {
-    const intervalId = window.setInterval(() => loadBookings(), 30_000);
-    return () => window.clearInterval(intervalId);
-  }, [loadBookings]);
+    const hasBookingsNeedingUpdates = bookings.some((booking) => {
+      if (booking.status === "PENDING") return true;
+      if (booking.status !== "ACCEPTED") return false;
+      const appointmentDate = new Date(
+        `${booking.bookingDate}T${booking.bookingTime}`,
+      );
+      return appointmentDate > new Date();
+    });
+    if (!hasBookingsNeedingUpdates) return;
+
+    const refreshWhenVisible = () => {
+      if (document.visibilityState === "visible") loadBookings();
+    };
+    const intervalId = window.setInterval(refreshWhenVisible, 30_000);
+    document.addEventListener("visibilitychange", refreshWhenVisible);
+    return () => {
+      window.clearInterval(intervalId);
+      document.removeEventListener("visibilitychange", refreshWhenVisible);
+    };
+  }, [bookings, loadBookings]);
 
   const handleCancel = async (bookingId) => {
     const confirmCancel = window.confirm(

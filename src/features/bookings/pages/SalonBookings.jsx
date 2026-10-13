@@ -1,4 +1,5 @@
 import useSalonBookings from "../hooks/useSalonBookings.js";
+import { canEmployeePerformServices } from "../model/booking.js";
 
 import {
   CalendarDays,
@@ -10,6 +11,13 @@ import {
   MessageSquareText,
   UserRound,
 } from "lucide-react";
+
+function getEligibleEmployees(booking, employees) {
+  const serviceIds = booking.services?.map((service) => service.id) || [];
+  return employees.filter((employee) =>
+    canEmployeePerformServices(employee, serviceIds),
+  );
+}
 
 function SalonBookings() {
   const {
@@ -23,7 +31,15 @@ function SalonBookings() {
     suggestedTime,
     setSuggestedTime,
     rejecting,
-    handleAssignEmployee,
+    assignmentBooking,
+    replacementEmployeeId,
+    setReplacementEmployeeId,
+    assignmentNote,
+    setAssignmentNote,
+    assigning,
+    openAssignment,
+    closeAssignment,
+    submitAssignment,
     handleAccept,
     openRejectModal,
     closeRejectModal,
@@ -31,6 +47,9 @@ function SalonBookings() {
     handleComplete,
     getStatusClass,
   } = useSalonBookings();
+  const replacementEmployees = assignmentBooking
+    ? getEligibleEmployees(assignmentBooking, employees)
+    : [];
 
   if (loading) {
     return <div className="loading">Loading salon bookings...</div>;
@@ -56,140 +75,144 @@ function SalonBookings() {
         </div>
       ) : (
         <div className="booking-list">
-          {bookings.map((booking) => (
-            <div className="booking-card" key={booking.id}>
-              <div className="booking-card-header">
-                <div>
-                  <h3>{booking.customerName || "Customer"}</h3>
-                  <p>{booking.customerEmail}</p>
+          {bookings.map((booking) => {
+            const eligibleEmployees = getEligibleEmployees(booking, employees);
+            return (
+              <div className="booking-card" key={booking.id}>
+                <div className="booking-card-header">
+                  <div>
+                    <h3>{booking.customerName || "Customer"}</h3>
+                    <p>{booking.customerEmail}</p>
+                  </div>
+
+                  <span className={getStatusClass(booking.status)}>
+                    {booking.status}
+                  </span>
                 </div>
 
-                <span className={getStatusClass(booking.status)}>
-                  {booking.status}
-                </span>
-              </div>
-
-              <div className="booking-info-grid">
-                <p>
-                  <CalendarDays size={16} />
-                  {booking.bookingDate}
-                </p>
-
-                <p>
-                  <Clock size={16} />
-                  {booking.bookingTime?.toString().slice(0, 5)}
-                </p>
-
-                <p>
-                  <Phone size={16} />
-                  {booking.customerPhoneNumber}
-                </p>
-
-                <p>
-                  <MapPin size={16} />
-                  {booking.customerLocation}
-                </p>
-              </div>
-
-              <div className="booking-services">
-                <strong>Requested services:</strong>
-                <div>
-                  {booking.services?.map((service) => (
-                    <span className="service-chip" key={service.id}>
-                      {service.name} - {service.price} JD
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              <div className="booking-assigned-employee-box">
-                <div>
-                  <strong>
-                    <UserRound size={15} />
-                    Assigned employee
-                  </strong>
+                <div className="booking-info-grid">
                   <p>
-                    {booking.assignedEmployeeName
-                      ? `${booking.assignedEmployeeName} • ${
-                          booking.assignedEmployeeSpecialty || "Employee"
-                        }`
-                      : "No employee assigned yet"}
+                    <CalendarDays size={16} />
+                    {booking.bookingDate}
+                  </p>
+
+                  <p>
+                    <Clock size={16} />
+                    {booking.bookingTime?.toString().slice(0, 5)}
+                  </p>
+
+                  <p>
+                    <Phone size={16} />
+                    {booking.customerPhoneNumber}
+                  </p>
+
+                  <p>
+                    <MapPin size={16} />
+                    {booking.customerLocation}
                   </p>
                 </div>
 
-                {(booking.status === "PENDING" ||
-                  booking.status === "ACCEPTED") && (
-                  <select
-                    value={booking.assignedEmployeeId || ""}
-                    onChange={(e) =>
-                      handleAssignEmployee(booking.id, e.target.value)
-                    }
-                  >
-                    <option value="">Assign employee</option>
-                    {employees.map((employee) => (
-                      <option key={employee.id} value={employee.id}>
-                        {employee.fullName} - {employee.specialty || "Employee"}
-                      </option>
+                <div className="booking-services">
+                  <strong>Requested services:</strong>
+                  <div>
+                    {booking.services?.map((service) => (
+                      <span className="service-chip" key={service.id}>
+                        {service.name} - {service.price} JD
+                      </span>
                     ))}
-                  </select>
+                  </div>
+                </div>
+
+                <div className="booking-assigned-employee-box">
+                  <div>
+                    <strong>
+                      <UserRound size={15} />
+                      Assigned employee
+                    </strong>
+                    <p>
+                      {booking.assignedEmployeeName
+                        ? `${booking.assignedEmployeeName} • ${
+                            booking.assignedEmployeeSpecialty || "Employee"
+                          }`
+                        : "No employee assigned yet"}
+                    </p>
+                  </div>
+
+                  {(booking.status === "PENDING" ||
+                    booking.status === "ACCEPTED") && (
+                    <select
+                      value={booking.assignedEmployeeId || ""}
+                      onChange={(e) => openAssignment(booking, e.target.value)}
+                    >
+                      <option value="">Assign employee</option>
+                      {eligibleEmployees.map((employee) => (
+                        <option key={employee.id} value={employee.id}>
+                          {employee.fullName} -{" "}
+                          {employee.specialty || "Employee"}
+                        </option>
+                      ))}
+                    </select>
+                  )}
+                </div>
+
+                <div className="booking-summary-row">
+                  <span>Total Price: {booking.totalPrice} JD</span>
+                  <span>
+                    Total Duration: {booking.totalDurationMinutes} min
+                  </span>
+                </div>
+
+                {booking.note && (
+                  <p className="booking-note">
+                    <strong>Customer note:</strong> {booking.note}
+                  </p>
                 )}
-              </div>
 
-              <div className="booking-summary-row">
-                <span>Total Price: {booking.totalPrice} JD</span>
-                <span>Total Duration: {booking.totalDurationMinutes} min</span>
-              </div>
+                {booking.ownerNote && (
+                  <p className="booking-note">
+                    <strong>Your note:</strong> {booking.ownerNote}
+                  </p>
+                )}
 
-              {booking.note && (
-                <p className="booking-note">
-                  <strong>Customer note:</strong> {booking.note}
-                </p>
-              )}
+                {booking.ownerSuggestedTime && (
+                  <p className="booking-note">
+                    <strong>Suggested time:</strong>{" "}
+                    {booking.ownerSuggestedTime?.toString().slice(0, 5)}
+                  </p>
+                )}
 
-              {booking.ownerNote && (
-                <p className="booking-note">
-                  <strong>Your note:</strong> {booking.ownerNote}
-                </p>
-              )}
+                {booking.status === "PENDING" && (
+                  <div className="service-actions">
+                    <button
+                      className="btn btn-primary btn-small"
+                      onClick={() => handleAccept(booking)}
+                    >
+                      <CheckCircle size={16} />
+                      Accept
+                    </button>
 
-              {booking.ownerSuggestedTime && (
-                <p className="booking-note">
-                  <strong>Suggested time:</strong>{" "}
-                  {booking.ownerSuggestedTime?.toString().slice(0, 5)}
-                </p>
-              )}
+                    <button
+                      className="btn btn-danger btn-small"
+                      onClick={() => openRejectModal(booking)}
+                    >
+                      <XCircle size={16} />
+                      Reject
+                    </button>
+                  </div>
+                )}
 
-              {booking.status === "PENDING" && (
-                <div className="service-actions">
+                {booking.status === "ACCEPTED" && (
                   <button
-                    className="btn btn-primary btn-small"
-                    onClick={() => handleAccept(booking)}
+                    className="btn btn-secondary btn-small"
+                    onClick={() => handleComplete(booking.id)}
                   >
                     <CheckCircle size={16} />
-                    Accept
+                    Mark Completed
                   </button>
-
-                  <button
-                    className="btn btn-danger btn-small"
-                    onClick={() => openRejectModal(booking)}
-                  >
-                    <XCircle size={16} />
-                    Reject
-                  </button>
-                </div>
-              )}
-
-              {booking.status === "ACCEPTED" && (
-                <button
-                  className="btn btn-secondary btn-small"
-                  onClick={() => handleComplete(booking.id)}
-                >
-                  <CheckCircle size={16} />
-                  Mark Completed
-                </button>
-              )}
-            </div>
-          ))}
+                )}
+              </div>
+            );
+          })}
         </div>
       )}
 
@@ -266,6 +289,76 @@ function SalonBookings() {
                 disabled={rejecting}
               >
                 {rejecting ? "Sending..." : "Send Rejection"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {assignmentBooking && (
+        <div className="reject-modal-overlay">
+          <div className="reject-modal">
+            <button
+              className="reject-modal-close"
+              type="button"
+              onClick={closeAssignment}
+              aria-label="Close reassignment dialog"
+            >
+              ×
+            </button>
+            <div className="reject-modal-icon">
+              <UserRound size={30} />
+            </div>
+            <span className="eyebrow">Appointment update</span>
+            <h2>Assign another employee</h2>
+            <p className="reject-modal-subtitle">
+              The customer will see this update with the new employee on their
+              booking.
+            </p>
+            <div className="reject-input-group">
+              <label htmlFor="replacement-employee">Available employee</label>
+              <select
+                id="replacement-employee"
+                value={replacementEmployeeId}
+                onChange={(event) =>
+                  setReplacementEmployeeId(event.target.value)
+                }
+              >
+                {replacementEmployees.map((employee) => (
+                  <option key={employee.id} value={employee.id}>
+                    {employee.fullName} - {employee.specialty || "Employee"}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="reject-input-group">
+              <label htmlFor="assignment-customer-note">
+                Update for the customer
+              </label>
+              <textarea
+                id="assignment-customer-note"
+                maxLength={1000}
+                value={assignmentNote}
+                onChange={(event) => setAssignmentNote(event.target.value)}
+                placeholder="Explain that the selected employee is unavailable and who will take the appointment."
+              />
+            </div>
+            <div className="reject-modal-actions">
+              <button
+                className="btn btn-secondary"
+                type="button"
+                onClick={closeAssignment}
+                disabled={assigning}
+              >
+                Cancel
+              </button>
+              <button
+                className="btn btn-primary"
+                type="button"
+                onClick={submitAssignment}
+                disabled={assigning || !replacementEmployeeId}
+              >
+                {assigning ? "Saving…" : "Assign and update customer"}
               </button>
             </div>
           </div>

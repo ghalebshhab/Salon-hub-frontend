@@ -50,9 +50,14 @@ export const getMyEmployeeBookingsApi = async (config = {}) => {
   return response.data;
 };
 
-export const assignEmployeeToBookingApi = async (bookingId, employeeId) => {
+export const assignEmployeeToBookingApi = async (
+  bookingId,
+  employeeId,
+  assignmentData = {},
+) => {
   const response = await httpClient.put(
     `/bookings/${bookingId}/assign-employee/${employeeId}`,
+    assignmentData,
   );
   return response.data;
 };

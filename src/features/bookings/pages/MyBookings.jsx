@@ -2,7 +2,14 @@ import useMyBookings from "../hooks/useMyBookings.js";
 
 import { MessageSquareText } from "lucide-react";
 import CreateReviewModal from "../../reviews/components/CreateReviewModal.jsx";
-import { CalendarDays, Clock, MapPin, Phone, XCircle } from "lucide-react";
+import {
+  CalendarDays,
+  Clock,
+  MapPin,
+  Phone,
+  UserRound,
+  XCircle,
+} from "lucide-react";
 
 function MyBookings() {
   const {
@@ -104,6 +111,17 @@ function MyBookings() {
                 </div>
               </div>
 
+              {booking.assignedEmployeeName && (
+                <p className="booking-note">
+                  <UserRound size={15} />
+                  <strong>Your service provider:</strong>{" "}
+                  {booking.assignedEmployeeName}
+                  {booking.assignedEmployeeSpecialty
+                    ? ` • ${booking.assignedEmployeeSpecialty}`
+                    : ""}
+                </p>
+              )}
+
               <div className="booking-summary-row">
                 <span>Total Price: {booking.totalPrice} JD</span>
                 <span>Total Duration: {booking.totalDurationMinutes} min</span>
@@ -117,7 +135,7 @@ function MyBookings() {
 
               {booking.ownerNote && (
                 <p className="booking-note">
-                  <strong>Owner note:</strong> {booking.ownerNote}
+                  <strong>Update from the salon:</strong> {booking.ownerNote}
                 </p>
               )}
 

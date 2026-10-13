@@ -23,6 +23,7 @@ import useAuth from "../../shared/auth/useAuth.js";
 import { clearAuthData } from "../../shared/auth/tokenStorage.js";
 import BrandLogo from "../../shared/components/BrandLogo.jsx";
 import useTheme from "../../shared/theme/useTheme.js";
+import NotificationBell from "../../features/notifications/components/NotificationBell.jsx";
 
 function Navbar() {
   const navigate = useNavigate();
@@ -167,52 +168,55 @@ function Navbar() {
               <span>{theme === "dark" ? "Light" : "Dark"}</span>
             </button>
             {loggedIn ? (
-              <div className="owner-dropdown">
-                <button
-                  className="owner-dropdown-button"
-                  type="button"
-                  onClick={() => setProfileMenuOpen((value) => !value)}
-                >
-                  <User size={20} />
-                  <ChevronDown size={16} />
-                </button>
-                <div
-                  className={
-                    profileMenuOpen
-                      ? "owner-dropdown-menu show"
-                      : "owner-dropdown-menu"
-                  }
-                >
-                  <NavLink
-                    to="/profile/career"
-                    className="dropdown-item"
-                    onClick={closeMenus}
+              <>
+                <NotificationBell />
+                <div className="owner-dropdown">
+                  <button
+                    className="owner-dropdown-button"
+                    type="button"
+                    onClick={() => setProfileMenuOpen((value) => !value)}
                   >
-                    <BriefcaseBusiness size={17} />
-                    Career Profile
-                  </NavLink>
-                  <NavLink
-                    to="/my-applications"
-                    className="dropdown-item"
-                    onClick={closeMenus}
-                  >
-                    <ClipboardList size={17} />
-                    My Applications
-                  </NavLink>
-                  <NavLink
-                    to="/my-bookings"
-                    className="dropdown-item"
-                    onClick={closeMenus}
-                  >
-                    <CalendarDays size={17} />
-                    My Bookings
-                  </NavLink>
-                  <button className="dropdown-item" onClick={logout}>
-                    <LogOut size={17} />
-                    Logout
+                    <User size={20} />
+                    <ChevronDown size={16} />
                   </button>
+                  <div
+                    className={
+                      profileMenuOpen
+                        ? "owner-dropdown-menu show"
+                        : "owner-dropdown-menu"
+                    }
+                  >
+                    <NavLink
+                      to="/profile/career"
+                      className="dropdown-item"
+                      onClick={closeMenus}
+                    >
+                      <BriefcaseBusiness size={17} />
+                      Career Profile
+                    </NavLink>
+                    <NavLink
+                      to="/my-applications"
+                      className="dropdown-item"
+                      onClick={closeMenus}
+                    >
+                      <ClipboardList size={17} />
+                      My Applications
+                    </NavLink>
+                    <NavLink
+                      to="/my-bookings"
+                      className="dropdown-item"
+                      onClick={closeMenus}
+                    >
+                      <CalendarDays size={17} />
+                      My Bookings
+                    </NavLink>
+                    <button className="dropdown-item" onClick={logout}>
+                      <LogOut size={17} />
+                      Logout
+                    </button>
+                  </div>
                 </div>
-              </div>
+              </>
             ) : (
               <>
                 <NavLink

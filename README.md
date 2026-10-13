@@ -41,6 +41,8 @@ src/
     employees/          Owner hiring-application management
     hiring/             Hiring posts and applications
     home/               Landing page
+    bookings/           Customer, salon, and employee booking flows
+    notifications/       Booking notification inbox and unread state
     profile/            Career profile editing
     salons/             Public profiles and owner salon management
   shared/
@@ -69,9 +71,24 @@ These boundaries apply single responsibility without adding inheritance or specu
 
 `useQuery` accepts a stable loader and supplies an AbortSignal. GET adapters forward the signal to Axios. Navigation, loader changes, and refreshes abort obsolete requests; late responses cannot overwrite the current resource. Hooks call `refetch` after successful mutations.
 
-The HTTP client has a 15-second timeout and adds bearer authentication to protected requests. A 401 from the current token clears the session; a 403 preserves it. A late 401 for an older token cannot clear a newer login. Session changes update navigation and route guards in the current tab and across tabs. Login returns users to their requested route.
+The HTTP client has a 15-second timeout, sends credentials, and adds bearer authentication to protected requests. The frontend stores the session token in the `salonhub_session` cookie and sends it as a bearer token. A 401 from the current token clears the session; a 403 preserves it. A late 401 for an older token cannot clear a newer login. Session changes update navigation and route guards in the current tab and across tabs. Login returns users to their requested route.
 
-The existing backend token contract uses localStorage. Route guards provide navigation behavior; the backend must enforce authorization for every operation. Owner and employee roles are not inferred from undocumented token fields.
+## Booking notifications
+
+Signed-in users see an unread-count badge in the navbar. The dropdown shows recent updates; `/notifications` provides the paginated inbox, where a notification can be opened to visit its related booking. Users can mark one item or the whole inbox as read. The frontend refreshes the unread count every 30 seconds and when the tab becomes visible; an open dropdown refreshes its list every 30 seconds.
+
+The notifications feature uses the shared authenticated HTTP client and the backend's `ApiResponse` envelope. Its endpoints are:
+
+| Method | Path | Purpose |
+| ------ | ---- | ------- |
+| `GET` | `/api/notifications?page=0&size=20` | Fetch a page of the signed-in user's notifications, newest first |
+| `GET` | `/api/notifications/unread-count` | Fetch the unread badge count |
+| `PUT` | `/api/notifications/{notificationId}/read` | Mark one owned notification as read |
+| `PUT` | `/api/notifications/read-all` | Mark all of the signed-in user's notifications as read |
+
+Notification records include the event type, message, booking and salon details, read state, creation time, and internal target path. The UI handles booking accepted, rejected, time suggested, employee reassigned, and cancelled event types. Authorization and recipient scoping are enforced by the backend; the frontend does not send a recipient ID.
+
+Route guards provide navigation behavior; the backend must enforce authorization for every operation. Owner and employee roles are not inferred from undocumented token fields.
 
 ## Styling
 

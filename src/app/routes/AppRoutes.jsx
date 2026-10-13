@@ -62,6 +62,9 @@ const CreateBooking = lazy(
 const MyBookings = lazy(
   () => import("../../features/bookings/pages/MyBookings.jsx"),
 );
+const NotificationsPage = lazy(
+  () => import("../../features/notifications/pages/NotificationsPage.jsx"),
+);
 
 export default function AppRoutes() {
   return (
@@ -72,6 +75,7 @@ export default function AppRoutes() {
         <Route element={<ProtectedRoute />}>
           <Route path="/salons/:salonId/book" element={<CreateBooking />} />
           <Route path="/my-bookings" element={<MyBookings />} />
+          <Route path="/notifications" element={<NotificationsPage />} />
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />

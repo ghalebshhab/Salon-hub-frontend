@@ -5,15 +5,19 @@ import Footer from "./Footer.jsx";
 import Loading from "../../shared/components/Loading.jsx";
 import { NotificationProvider } from "../../features/notifications/model/NotificationProvider.jsx";
 import useAuth from "../../shared/auth/useAuth.js";
+import ScrollManager from "./ScrollManager.jsx";
 export default function AppLayout() {
   const location = useLocation();
   const { token } = useAuth();
   return (
     <NotificationProvider key={token || "anonymous"} enabled={Boolean(token)}>
+      <ScrollManager />
       <Navbar />
       <main className="page-main">
         <Suspense fallback={<Loading />}>
-          <Outlet key={location.pathname} />
+          <div className="page-route-transition" key={location.pathname}>
+            <Outlet />
+          </div>
         </Suspense>
       </main>
       <Footer />

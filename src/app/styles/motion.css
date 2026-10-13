@@ -1,0 +1,71 @@
+:root {
+  --motion-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --motion-fast: 180ms;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 96px;
+}
+
+:where(button, a, input, textarea, select) {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:where(button:not(:disabled), a, [role="button"]:not([aria-disabled="true"])) {
+  touch-action: manipulation;
+}
+
+:where(button, a.btn, [role="button"]) {
+  transition-timing-function: var(--motion-ease);
+}
+
+:where(input, textarea, select) {
+  transition:
+    border-color var(--motion-fast) var(--motion-ease),
+    box-shadow var(--motion-fast) var(--motion-ease),
+    background-color var(--motion-fast) var(--motion-ease);
+}
+
+:where(button:not(:disabled)):active,
+:where(a.btn:active, [role="button"]:not([aria-disabled="true"]):active) {
+  transform: scale(0.985);
+}
+
+:where(a, button, input, textarea, select, [role="button"]):focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--primary) 55%, transparent);
+  outline-offset: 3px;
+}
+
+.page-route-transition {
+  animation: pageRouteEnter 260ms var(--motion-ease);
+}
+
+@keyframes pageRouteEnter {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .page-route-transition {
+    animation: none;
+  }
+}

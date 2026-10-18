@@ -7,9 +7,15 @@ import {
   showErrorToast,
 } from "../../../shared/notifications/toast.jsx";
 
-import { cancelMyBookingApi, getMyBookingsApi } from "../api/bookingApi.js";
+import {
+  acceptBookingRescheduleApi,
+  cancelMyBookingApi,
+  getMyBookingsApi,
+  rejectBookingRescheduleApi,
+} from "../api/bookingApi.js";
 
 export default function useMyBookings() {
+  const [respondingProposalId, setRespondingProposalId] = useState(null);
   const loader = useCallback(
     async (signal) => requireData(await getMyBookingsApi({ signal })) || [],
     [],
@@ -99,6 +105,27 @@ export default function useMyBookings() {
       showErrorToast("Failed to cancel booking");
     }
   };
+
+  const handleRescheduleDecision = async (bookingId, proposalId, accept) => {
+    try {
+      setRespondingProposalId(proposalId);
+      const response = accept
+        ? await acceptBookingRescheduleApi(bookingId, proposalId)
+        : await rejectBookingRescheduleApi(bookingId, proposalId);
+      if (!response.success) {
+        showErrorToast(response.message || "Could not save your decision.");
+        return;
+      }
+      showSuccessToast(response.message || "Your decision was saved.");
+      loadBookings();
+    } catch (error) {
+      showErrorToast(
+        error?.response?.data?.message || "Could not save your decision.",
+      );
+    } finally {
+      setRespondingProposalId(null);
+    }
+  };
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
   const [selectedReviewBooking, setSelectedReviewBooking] = useState(null);
   const openReviewModal = (booking) => {
@@ -119,6 +146,8 @@ export default function useMyBookings() {
     bookings,
     loading,
     handleCancel,
+    handleRescheduleDecision,
+    respondingProposalId,
     reviewModalOpen,
     selectedReviewBooking,
     openReviewModal,

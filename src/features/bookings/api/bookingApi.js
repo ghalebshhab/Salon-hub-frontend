@@ -73,3 +73,38 @@ export const assignEmployeeToBookingApi = async (
   );
   return response.data;
 };
+
+export const getBookingRescheduleAvailabilityApi = async (
+  bookingId,
+  bookingDate,
+  config = {},
+) => {
+  const response = await httpClient.post(
+    `/bookings/${bookingId}/reschedule-availability`,
+    { bookingDate },
+    config,
+  );
+  return response.data;
+};
+
+export const proposeBookingRescheduleApi = async (bookingId, proposal) => {
+  const response = await httpClient.post(
+    `/bookings/${bookingId}/reschedule-proposals`,
+    proposal,
+  );
+  return response.data;
+};
+
+export const acceptBookingRescheduleApi = async (bookingId, proposalId) => {
+  const response = await httpClient.put(
+    `/bookings/${bookingId}/reschedule-proposals/${proposalId}/accept`,
+  );
+  return response.data;
+};
+
+export const rejectBookingRescheduleApi = async (bookingId, proposalId) => {
+  const response = await httpClient.put(
+    `/bookings/${bookingId}/reschedule-proposals/${proposalId}/reject`,
+  );
+  return response.data;
+};

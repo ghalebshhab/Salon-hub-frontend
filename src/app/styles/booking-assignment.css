@@ -161,6 +161,93 @@
   font-weight: 700;
 }
 
+.booking-time-slots.compact {
+  max-height: 230px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.reschedule-modal {
+  width: min(620px, calc(100vw - 32px));
+}
+
+.reschedule-history {
+  display: grid;
+  gap: 10px;
+  margin: 16px 0;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: #fff9f5;
+}
+
+.reschedule-history-item {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 5px 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+  color: var(--text);
+  font-weight: 750;
+}
+
+.reschedule-history-item p {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: var(--muted);
+  font-weight: 650;
+}
+
+.reschedule-status {
+  align-self: start;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: #eef2f7;
+  color: var(--muted);
+  font-size: 0.7rem;
+  font-weight: 900;
+}
+
+.reschedule-status.pending {
+  background: #fff3cd;
+  color: #805b10;
+}
+
+.reschedule-status.accepted {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.reschedule-status.rejected,
+.reschedule-status.cancelled {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.reschedule-decision-card {
+  display: grid;
+  gap: 12px;
+  margin: 16px 0;
+  padding: 18px;
+  border: 1px solid #93c5fd;
+  border-radius: 20px;
+  background: #eff6ff;
+}
+
+.reschedule-decision-card > div:first-child {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  color: #1d4ed8;
+}
+
+.reschedule-decision-card p,
+.reschedule-decision-card small {
+  margin: 2px 0 0;
+  color: var(--muted);
+  font-weight: 700;
+}
+
 .booking-assigned-employee-box {
   display: flex;
   align-items: center;

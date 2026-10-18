@@ -3,6 +3,7 @@ import { canEmployeePerformServices } from "../model/booking.js";
 
 import {
   CalendarDays,
+  CalendarClock,
   CheckCircle,
   Clock,
   MapPin,
@@ -13,7 +14,8 @@ import {
 } from "lucide-react";
 
 function getEligibleEmployees(booking, employees) {
-  const serviceIds = booking.services?.map((service) => service.id) || [];
+  const serviceIds =
+    booking.services?.map((service) => service.serviceId ?? service.id) || [];
   return employees.filter((employee) =>
     canEmployeePerformServices(employee, serviceIds),
   );
@@ -28,8 +30,6 @@ function SalonBookings() {
     selectedBooking,
     rejectReason,
     setRejectReason,
-    suggestedTime,
-    setSuggestedTime,
     rejecting,
     assignmentBooking,
     replacementEmployeeId,
@@ -45,6 +45,20 @@ function SalonBookings() {
     closeRejectModal,
     submitReject,
     handleComplete,
+    rescheduleBooking,
+    rescheduleDate,
+    setRescheduleDate,
+    rescheduleTime,
+    setRescheduleTime,
+    rescheduleNote,
+    setRescheduleNote,
+    rescheduleSlots,
+    rescheduleLoading,
+    rescheduleError,
+    rescheduleSaving,
+    openReschedule,
+    closeReschedule,
+    submitReschedule,
     getStatusClass,
   } = useSalonBookings();
   const replacementEmployees = assignmentBooking
@@ -77,6 +91,9 @@ function SalonBookings() {
         <div className="booking-list">
           {bookings.map((booking) => {
             const eligibleEmployees = getEligibleEmployees(booking, employees);
+            const pendingReschedule = booking.rescheduleProposals?.find(
+              (proposal) => proposal.status === "PENDING",
+            );
             return (
               <div className="booking-card" key={booking.id}>
                 <div className="booking-card-header">
@@ -174,11 +191,42 @@ function SalonBookings() {
                   </p>
                 )}
 
-                {booking.ownerSuggestedTime && (
-                  <p className="booking-note">
-                    <strong>Suggested time:</strong>{" "}
-                    {booking.ownerSuggestedTime?.toString().slice(0, 5)}
-                  </p>
+                {booking.rescheduleProposals?.length > 0 && (
+                  <div className="reschedule-history">
+                    <strong>Reschedule history</strong>
+                    {booking.rescheduleProposals.map((proposal) => (
+                      <div
+                        className="reschedule-history-item"
+                        key={proposal.id}
+                      >
+                        <span>
+                          {proposal.proposedDate} •{" "}
+                          {proposal.proposedTime?.toString().slice(0, 5)}
+                        </span>
+                        <span
+                          className={`reschedule-status ${proposal.status.toLowerCase()}`}
+                        >
+                          {proposal.status}
+                        </span>
+                        {proposal.note && <p>{proposal.note}</p>}
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {(booking.status === "PENDING" ||
+                  booking.status === "ACCEPTED") && (
+                  <button
+                    className="btn btn-secondary btn-small"
+                    type="button"
+                    onClick={() => openReschedule(booking)}
+                    disabled={Boolean(pendingReschedule)}
+                  >
+                    <CalendarClock size={16} />
+                    {pendingReschedule
+                      ? "Waiting for customer decision"
+                      : "Propose new date and time"}
+                  </button>
                 )}
 
                 {booking.status === "PENDING" && (
@@ -186,6 +234,7 @@ function SalonBookings() {
                     <button
                       className="btn btn-primary btn-small"
                       onClick={() => handleAccept(booking)}
+                      disabled={Boolean(pendingReschedule)}
                     >
                       <CheckCircle size={16} />
                       Accept
@@ -232,8 +281,7 @@ function SalonBookings() {
             <h2>Send a clear reason</h2>
 
             <p className="reject-modal-subtitle">
-              Let the customer know why this booking cannot be accepted and
-              suggest another available time.
+              Let the customer know why this booking cannot be accepted.
             </p>
 
             <div className="reject-booking-summary">
@@ -264,15 +312,6 @@ function SalonBookings() {
               />
             </div>
 
-            <div className="reject-input-group">
-              <label>Suggest another time</label>
-              <input
-                type="time"
-                value={suggestedTime}
-                onChange={(e) => setSuggestedTime(e.target.value)}
-              />
-            </div>
-
             <div className="reject-modal-actions">
               <button
                 className="btn btn-secondary"
@@ -289,6 +328,118 @@ function SalonBookings() {
                 disabled={rejecting}
               >
                 {rejecting ? "Sending..." : "Send Rejection"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {rescheduleBooking && (
+        <div className="reject-modal-overlay">
+          <div className="reject-modal reschedule-modal">
+            <button
+              className="reject-modal-close"
+              type="button"
+              onClick={closeReschedule}
+              aria-label="Close reschedule dialog"
+            >
+              ×
+            </button>
+            <div className="reject-modal-icon">
+              <CalendarClock size={30} />
+            </div>
+            <span className="eyebrow">Reschedule appointment</span>
+            <h2>Offer another available time</h2>
+            <p className="reject-modal-subtitle">
+              The original appointment stays unchanged until the customer
+              accepts this proposal.
+            </p>
+
+            <div className="reject-booking-summary">
+              <div>
+                <strong>Current appointment</strong>
+                <span>
+                  {rescheduleBooking.bookingDate} •{" "}
+                  {rescheduleBooking.bookingTime?.toString().slice(0, 5)}
+                </span>
+              </div>
+              <div>
+                <strong>Duration</strong>
+                <span>{rescheduleBooking.totalDurationMinutes} minutes</span>
+              </div>
+            </div>
+
+            <div className="reject-input-group">
+              <label htmlFor="reschedule-date">New date</label>
+              <input
+                id="reschedule-date"
+                type="date"
+                min={new Date().toLocaleDateString("en-CA")}
+                value={rescheduleDate}
+                onChange={(event) => setRescheduleDate(event.target.value)}
+              />
+            </div>
+
+            <div className="reject-input-group">
+              <label>Available times</label>
+              {rescheduleLoading ? (
+                <p className="booking-time-message">Loading available times…</p>
+              ) : rescheduleError ? (
+                <p className="booking-time-message error">{rescheduleError}</p>
+              ) : rescheduleSlots.length === 0 ? (
+                <p className="booking-time-message">
+                  No other appointment time is available on this date.
+                </p>
+              ) : (
+                <div className="booking-time-slots compact">
+                  {rescheduleSlots.map((slot) => {
+                    const time = slot.time?.toString().slice(0, 5);
+                    return (
+                      <button
+                        className={`booking-time-slot ${rescheduleTime === time ? "selected" : ""}`}
+                        key={time}
+                        type="button"
+                        onClick={() => setRescheduleTime(time)}
+                      >
+                        <strong>{time}</strong>
+                        <span>
+                          {slot.eligibleEmployees?.length || 0} employee
+                          {slot.eligibleEmployees?.length === 1 ? "" : "s"}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
+            <div className="reject-input-group">
+              <label htmlFor="reschedule-note">Message to customer</label>
+              <textarea
+                id="reschedule-note"
+                maxLength={1000}
+                value={rescheduleNote}
+                onChange={(event) => setRescheduleNote(event.target.value)}
+                placeholder="Explain why you are offering another appointment time."
+              />
+            </div>
+
+            <div className="reject-modal-actions">
+              <button
+                className="btn btn-secondary"
+                type="button"
+                onClick={closeReschedule}
+                disabled={rescheduleSaving}
+              >
+                Cancel
+              </button>
+              <button
+                className="btn btn-primary"
+                type="button"
+                onClick={submitReschedule}
+                disabled={rescheduleSaving || !rescheduleTime}
+              >
+                {rescheduleSaving ? "Sending…" : "Send proposal"}
               </button>
             </div>
           </div>

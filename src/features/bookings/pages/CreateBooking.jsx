@@ -18,7 +18,7 @@ function CreateBooking() {
     eligibleEmployees,
     selectedServiceIds,
     selectedEmployeeId,
-    setSelectedEmployeeId,
+    handleEmployeeSelection,
     customerPhoneNumber,
     setCustomerPhoneNumber,
     customerLocation,
@@ -36,7 +36,10 @@ function CreateBooking() {
     totalDuration,
     handleServiceToggle,
     getTodayDate,
-    getEarliestBookingTime,
+    availableSlots,
+    availabilityLoading,
+    availabilityError,
+    minimumLeadMinutes,
     handleSubmit,
   } = useCreateBooking();
 
@@ -140,7 +143,7 @@ function CreateBooking() {
                   name="selectedEmployee"
                   value=""
                   checked={selectedEmployeeId === ""}
-                  onChange={() => setSelectedEmployeeId("")}
+                  onChange={() => handleEmployeeSelection("")}
                 />
 
                 <div className="employee-booking-avatar any-employee-avatar">
@@ -169,7 +172,9 @@ function CreateBooking() {
                     name="selectedEmployee"
                     value={employee.id}
                     checked={Number(selectedEmployeeId) === Number(employee.id)}
-                    onChange={() => setSelectedEmployeeId(String(employee.id))}
+                    onChange={() =>
+                      handleEmployeeSelection(String(employee.id))
+                    }
                   />
 
                   <div className="employee-booking-avatar">
@@ -193,9 +198,8 @@ function CreateBooking() {
               {selectedServiceIds.length > 0 &&
                 eligibleEmployees.length === 0 && (
                   <p className="booking-availability-note">
-                    No active employee is currently listed for all selected
-                    services. You can still send the request and let the salon
-                    assign someone.
+                    No active employee is currently qualified for every selected
+                    service. Change the services to continue.
                   </p>
                 )}
             </div>
@@ -244,25 +248,64 @@ function CreateBooking() {
                   type="date"
                   value={bookingDate}
                   min={getTodayDate()}
-                  onChange={(e) => setBookingDate(e.target.value)}
+                  onChange={(e) => {
+                    setBookingDate(e.target.value);
+                    setBookingTime("");
+                  }}
                 />
               </div>
 
-              <div className="booking-input-group">
+              <div className="booking-input-group booking-time-group">
                 <label>
                   <Clock size={16} />
-                  Booking Time
+                  Available Times
                 </label>
-                <input
-                  type="time"
-                  value={bookingTime}
-                  min={
-                    bookingDate === getTodayDate()
-                      ? getEarliestBookingTime()
-                      : undefined
-                  }
-                  onChange={(e) => setBookingTime(e.target.value)}
-                />
+                {!bookingDate || selectedServiceIds.length === 0 ? (
+                  <p className="booking-time-message">
+                    Choose services and a date to see available times.
+                  </p>
+                ) : availabilityLoading ? (
+                  <p className="booking-time-message">
+                    Loading available times...
+                  </p>
+                ) : availabilityError ? (
+                  <p className="booking-time-message error">
+                    {availabilityError}
+                  </p>
+                ) : availableSlots.length === 0 ? (
+                  <p className="booking-time-message">
+                    No appointment times are available for this selection.
+                  </p>
+                ) : (
+                  <div className="booking-time-slots">
+                    {availableSlots.map((slot) => {
+                      const time = slot.time?.toString().slice(0, 5);
+                      const employeeCount = slot.eligibleEmployees?.length || 0;
+                      return (
+                        <button
+                          type="button"
+                          className={
+                            bookingTime === time
+                              ? "booking-time-slot selected"
+                              : "booking-time-slot"
+                          }
+                          key={time}
+                          onClick={() => setBookingTime(time)}
+                        >
+                          <strong>{time}</strong>
+                          <span>
+                            {employeeCount} employee
+                            {employeeCount === 1 ? "" : "s"}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+                <small className="booking-time-help">
+                  Same-day appointments require at least {minimumLeadMinutes}
+                  minutes notice.
+                </small>
               </div>
             </div>
           </div>

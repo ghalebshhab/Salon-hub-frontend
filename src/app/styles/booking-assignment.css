@@ -88,6 +88,79 @@
   font-weight: 900;
 }
 
+.booking-time-group {
+  grid-column: 1 / -1;
+}
+
+.booking-time-slots {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(112px, 1fr));
+  gap: 10px;
+}
+
+.booking-time-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-height: 68px;
+  padding: 12px 10px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: #ffffff;
+  color: var(--text);
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.booking-time-slot:hover {
+  transform: translateY(-2px);
+  border-color: var(--primary);
+  box-shadow: 0 10px 22px rgba(17, 24, 39, 0.08);
+}
+
+.booking-time-slot.selected {
+  border-color: var(--primary);
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: #ffffff;
+  box-shadow: 0 0 0 4px rgba(192, 132, 151, 0.1);
+}
+
+.booking-time-slot strong {
+  font-size: 1rem;
+}
+
+.booking-time-slot span {
+  color: var(--muted);
+  font-size: 0.74rem;
+  font-weight: 800;
+}
+
+.booking-time-slot.selected span {
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.booking-time-message {
+  margin: 0;
+  padding: 16px;
+  border: 1px dashed var(--border);
+  border-radius: 16px;
+  background: #fff9f5;
+  color: var(--muted);
+  font-weight: 750;
+}
+
+.booking-time-message.error {
+  border-color: #ef9a9a;
+  background: #fff5f5;
+  color: #b42318;
+}
+
+.booking-time-help {
+  color: var(--muted);
+  font-weight: 700;
+}
+
 .booking-assigned-employee-box {
   display: flex;
   align-items: center;

@@ -1,5 +1,17 @@
 import httpClient from "../../../shared/api/httpClient.js";
 
+export const getBookingAvailabilityApi = async (
+  availabilityData,
+  config = {},
+) => {
+  const response = await httpClient.post(
+    "/bookings/availability",
+    availabilityData,
+    config,
+  );
+  return response.data;
+};
+
 export const createBookingApi = async (bookingData) => {
   const response = await httpClient.post("/bookings", bookingData);
   return response.data;

@@ -1,8 +1,4 @@
-import {
-  canEmployeePerformServices,
-  getEarliestBookingTime,
-  getTodayDate,
-} from "../model/booking.js";
+import { canEmployeePerformServices, getTodayDate } from "../model/booking.js";
 import useQuery from "../../../shared/hooks/useQuery.js";
 import { requireData } from "../../../shared/api/response.js";
 import { useCallback, useMemo, useState } from "react";
@@ -15,7 +11,10 @@ import {
 import { getSalonByIdApi } from "../../salons/api/salonApi.js";
 import { getActiveSalonServicesApi } from "../../services/api/salonServicesApi.js";
 import { getSalonEmployeesApi } from "../../employees/api/salonEmployeesApi.js";
-import { createBookingApi } from "../api/bookingApi.js";
+import {
+  createBookingApi,
+  getBookingAvailabilityApi,
+} from "../api/bookingApi.js";
 
 export default function useCreateBooking() {
   const { salonId } = useParams();
@@ -88,7 +87,53 @@ export default function useCreateBooking() {
     );
   }, [selectedServices]);
 
+  const availabilityReady =
+    Boolean(bookingDate) &&
+    selectedServiceIds.length > 0 &&
+    selectedServices.length === selectedServiceIds.length;
+  const availabilityLoader = useCallback(
+    async (signal) => {
+      if (!availabilityReady) return null;
+      const response = await getBookingAvailabilityApi(
+        {
+          salonId: Number(salonId),
+          serviceIds: selectedServiceIds,
+          bookingDate,
+          employeeId: selectedEmployeeId ? Number(selectedEmployeeId) : null,
+        },
+        { signal },
+      );
+      return requireData(response, "Unable to load available times");
+    },
+    [
+      availabilityReady,
+      bookingDate,
+      salonId,
+      selectedEmployeeId,
+      selectedServiceIds,
+    ],
+  );
+  const {
+    data: availability,
+    error: availabilityQueryError,
+    loading: availabilityQueryLoading,
+  } = useQuery(availabilityLoader, { initialData: null });
+  const availabilityLoading = availabilityReady && availabilityQueryLoading;
+  const availabilityError = availabilityQueryError
+    ? availabilityQueryError?.response?.data?.message ||
+      availabilityQueryError?.message ||
+      "Unable to load available times"
+    : "";
+
+  const availableSlots = availability?.slots || [];
+
+  const handleEmployeeSelection = (employeeId) => {
+    setSelectedEmployeeId(employeeId);
+    setBookingTime("");
+  };
+
   const handleServiceToggle = (serviceId) => {
+    setBookingTime("");
     const id = Number(serviceId);
 
     setSelectedServiceIds((prev) => {
@@ -138,14 +183,22 @@ export default function useCreateBooking() {
       return false;
     }
 
-    if (!bookingTime) {
-      showErrorToast("Booking time is required");
+    if (availabilityLoading) {
+      showErrorToast("Please wait while available times are loading");
       return false;
     }
 
-    const requestedDateTime = new Date(`${bookingDate}T${bookingTime}`);
-    if (requestedDateTime <= new Date()) {
-      showErrorToast("Choose an appointment time later than now");
+    if (!bookingTime) {
+      showErrorToast("Choose one of the available appointment times");
+      return false;
+    }
+
+    if (
+      !availableSlots.some(
+        (slot) => slot.time?.toString().slice(0, 5) === bookingTime,
+      )
+    ) {
+      showErrorToast("This appointment time is no longer available");
       return false;
     }
     return true;
@@ -197,7 +250,7 @@ export default function useCreateBooking() {
     eligibleEmployees,
     selectedServiceIds,
     selectedEmployeeId,
-    setSelectedEmployeeId,
+    handleEmployeeSelection,
     customerPhoneNumber,
     setCustomerPhoneNumber,
     customerLocation,
@@ -215,7 +268,10 @@ export default function useCreateBooking() {
     totalDuration,
     handleServiceToggle: handleServiceSelection,
     getTodayDate,
-    getEarliestBookingTime,
+    availableSlots,
+    availabilityLoading,
+    availabilityError,
+    minimumLeadMinutes: availability?.minimumLeadMinutes || 30,
     handleSubmit,
   };
 }

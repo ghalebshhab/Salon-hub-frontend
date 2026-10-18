@@ -2,6 +2,9 @@ const TITLES = {
   BOOKING_ACCEPTED: "Booking accepted",
   BOOKING_REJECTED: "Booking update",
   BOOKING_TIME_SUGGESTED: "Suggested appointment time",
+  BOOKING_RESCHEDULE_PROPOSED: "New appointment proposal",
+  BOOKING_RESCHEDULE_ACCEPTED: "Reschedule accepted",
+  BOOKING_RESCHEDULE_REJECTED: "Reschedule declined",
   BOOKING_EMPLOYEE_REASSIGNED: "Employee updated",
   BOOKING_CANCELLED: "Booking cancelled",
 };

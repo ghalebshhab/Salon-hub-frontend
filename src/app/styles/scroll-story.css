@@ -1,0 +1,150 @@
+/* Full-screen editorial chapters and viewport reveal motion. */
+html:has(.editorial-home) {
+  scroll-snap-type: y proximity;
+}
+
+.editorial-home
+  > :is(
+    .editorial-hero,
+    .editorial-section,
+    .editorial-band,
+    .editorial-career-band,
+    .editorial-final-wrap
+  ) {
+  min-height: calc(100svh - 78px);
+  scroll-snap-align: start;
+  scroll-snap-stop: normal;
+}
+
+.editorial-home > .editorial-hero,
+.editorial-home > .editorial-band,
+.editorial-home > .editorial-career-band,
+.editorial-home > .editorial-final-wrap {
+  display: grid;
+  align-items: center;
+}
+
+.editorial-home > .editorial-section {
+  display: grid;
+  align-content: center;
+}
+
+.editorial-home > .editorial-band > .editorial-section {
+  width: 100%;
+}
+
+.scroll-reveal {
+  opacity: 0;
+  filter: blur(8px);
+  transform: translate3d(0, clamp(28px, 5vw, 64px), 0) scale(0.985);
+  transform-origin: center bottom;
+  transition:
+    opacity 760ms var(--motion-ease) var(--reveal-delay, 0ms),
+    transform 920ms var(--motion-ease) var(--reveal-delay, 0ms),
+    filter 680ms ease var(--reveal-delay, 0ms);
+  will-change: opacity, transform, filter;
+}
+
+.scroll-reveal.is-visible {
+  opacity: 1;
+  filter: blur(0);
+  transform: translate3d(0, 0, 0) scale(1);
+  will-change: auto;
+}
+
+.editorial-scroll-cue {
+  display: inline-flex;
+  width: max-content;
+  align-items: center;
+  gap: 10px;
+  margin-top: 30px;
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition:
+    color 180ms ease,
+    transform 180ms ease;
+}
+
+.editorial-scroll-cue span {
+  display: grid;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  border: 1px solid var(--border);
+  color: var(--primary);
+  background: var(--card);
+  animation: editorialScrollCue 2.2s ease-in-out infinite;
+}
+
+.editorial-scroll-cue:hover {
+  color: var(--primary);
+  transform: translateY(2px);
+}
+
+@keyframes editorialScrollCue {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(5px);
+  }
+}
+
+@media (max-width: 1180px) {
+  .editorial-home
+    > :is(
+      .editorial-hero,
+      .editorial-section,
+      .editorial-band,
+      .editorial-career-band,
+      .editorial-final-wrap
+    ) {
+    min-height: calc(100svh - 72px);
+  }
+}
+
+@media (max-width: 700px) {
+  html:has(.editorial-home) {
+    scroll-snap-type: y proximity;
+  }
+
+  .editorial-home
+    > :is(
+      .editorial-hero,
+      .editorial-section,
+      .editorial-band,
+      .editorial-career-band,
+      .editorial-final-wrap
+    ) {
+    min-height: 100svh;
+  }
+
+  .scroll-reveal {
+    filter: blur(5px);
+    transform: translate3d(0, 34px, 0) scale(0.99);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:has(.editorial-home) {
+    scroll-snap-type: none;
+  }
+
+  .scroll-reveal,
+  .scroll-reveal.is-visible {
+    opacity: 1;
+    filter: none;
+    transform: none;
+    transition: none;
+  }
+
+  .editorial-scroll-cue span {
+    animation: none;
+  }
+}

@@ -67,6 +67,14 @@ Dependencies flow from app to features to shared. Shared code cannot import feat
 
 These boundaries apply single responsibility without adding inheritance or speculative service interfaces. New features extend the route composition and use small modules. The shared query hook accepts a loader instead of knowing any endpoint, making lifecycle behavior independent of the transport. Pure model functions can be tested without React.
 
+## Component design rules
+
+Page modules compose feature sections and connect them to feature hooks. They do not contain endpoint calls, large static content collections, or reusable dialogs. Components own one visible responsibility, while hooks coordinate state and side effects. Pure selectors and business decisions live in `model/`; editable display copy lives in `content/`; route and menu metadata stays close to the app layout that consumes it.
+
+The navigation illustrates dependency inversion in practice: `Navbar` composes the layout, `useNavigationMenus` owns menu state, the auth feature owns logout, and leaf components receive callbacks rather than importing session or API infrastructure. The booking management page follows the same pattern with a page orchestrator, a booking card, focused action dialogs, and a pure employee-eligibility selector.
+
+Prefer composition over configurable all-purpose components. When a page starts coordinating an unrelated workflow or a component gains its own independent state, extract that responsibility into the corresponding feature layer. Keep public props about user intent, such as `onSubmit` and `onClose`, instead of transport details.
+
 ## Request and session behavior
 
 `useQuery` accepts a stable loader and supplies an AbortSignal. GET adapters forward the signal to Axios. Navigation, loader changes, and refreshes abort obsolete requests; late responses cannot overwrite the current resource. Hooks call `refetch` after successful mutations.
@@ -79,12 +87,12 @@ Signed-in users see an unread-count badge in the navbar. The dropdown shows rece
 
 The notifications feature uses the shared authenticated HTTP client and the backend's `ApiResponse` envelope. Its endpoints are:
 
-| Method | Path | Purpose |
-| ------ | ---- | ------- |
-| `GET` | `/api/notifications?page=0&size=20` | Fetch a page of the signed-in user's notifications, newest first |
-| `GET` | `/api/notifications/unread-count` | Fetch the unread badge count |
-| `PUT` | `/api/notifications/{notificationId}/read` | Mark one owned notification as read |
-| `PUT` | `/api/notifications/read-all` | Mark all of the signed-in user's notifications as read |
+| Method | Path                                       | Purpose                                                          |
+| ------ | ------------------------------------------ | ---------------------------------------------------------------- |
+| `GET`  | `/api/notifications?page=0&size=20`        | Fetch a page of the signed-in user's notifications, newest first |
+| `GET`  | `/api/notifications/unread-count`          | Fetch the unread badge count                                     |
+| `PUT`  | `/api/notifications/{notificationId}/read` | Mark one owned notification as read                              |
+| `PUT`  | `/api/notifications/read-all`              | Mark all of the signed-in user's notifications as read           |
 
 Notification records include the event type, message, booking and salon details, read state, creation time, and internal target path. The UI handles booking accepted, rejected, time suggested, employee reassigned, and cancelled event types. Authorization and recipient scoping are enforced by the backend; the frontend does not send a recipient ID.
 

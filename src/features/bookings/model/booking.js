@@ -29,3 +29,11 @@ export function canEmployeePerformServices(employee, serviceIds) {
   const capabilities = new Set((employee.serviceIds || []).map(Number));
   return serviceIds.every((serviceId) => capabilities.has(Number(serviceId)));
 }
+
+export function getEligibleEmployees(booking, employees) {
+  const serviceIds =
+    booking.services?.map((service) => service.serviceId ?? service.id) || [];
+  return employees.filter((employee) =>
+    canEmployeePerformServices(employee, serviceIds),
+  );
+}

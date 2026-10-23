@@ -65,10 +65,14 @@ const MyBookings = lazy(
 const NotificationsPage = lazy(
   () => import("../../features/notifications/pages/NotificationsPage.jsx"),
 );
+const DesignLab = lazy(
+  () => import("../../features/designLab/pages/DesignLab.jsx"),
+);
 
 export default function AppRoutes() {
   return (
     <Routes>
+      <Route path="/design-lab" element={<DesignLab />} />
       <Route element={<AppLayout />}>
         <Route path="/" element={<Home />} />
         <Route path="/salons/:salonId" element={<SalonDetails />} />

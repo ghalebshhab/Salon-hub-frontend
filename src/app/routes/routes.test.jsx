@@ -70,7 +70,9 @@ it("redirects protected routes to login and retains the destination", async () =
       <AppRoutes />
     </MemoryRouter>,
   );
-  expect(await screen.findByRole("heading", { name: "Login" })).toBeDefined();
+  expect(
+    await screen.findByRole("heading", { name: "Welcome back" }),
+  ).toBeDefined();
 });
 it("renders a not-found page", async () => {
   render(
@@ -97,7 +99,7 @@ it("returns to the protected destination after a successful login", async () => 
       <AppRoutes />
     </MemoryRouter>,
   );
-  await screen.findByRole("heading", { name: "Login" });
+  await screen.findByRole("heading", { name: "Welcome back" });
   fireEvent.change(container.querySelector('input[name="email"]'), {
     target: { value: "test@example.com" },
   });

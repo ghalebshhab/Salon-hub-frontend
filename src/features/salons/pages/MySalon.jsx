@@ -3,11 +3,13 @@ import {
   CalendarDays,
   CalendarClock,
   Clock,
+  Edit3,
   Eye,
   Mail,
   MapPin,
   Phone,
   Plus,
+  RefreshCw,
   Scissors,
   Trash2,
   UsersRound,
@@ -27,6 +29,8 @@ function MySalon() {
     deleteSalonModalOpen,
     setDeleteSalonModalOpen,
     deletingSalon,
+    resubmittingSalon,
+    handleResubmitSalon,
     handleDeleteSalon,
   } = useMySalon();
   if (loading) return <Loading />;
@@ -67,6 +71,10 @@ function MySalon() {
               {salon.city}
             </p>
             <div className="my-salon-hero-actions">
+              <Link className="btn btn-secondary" to="/owner/my-salon/edit">
+                <Edit3 size={18} />
+                Edit Salon
+              </Link>
               <Link className="btn btn-primary" to={`/salons/${salon.salonId}`}>
                 <Eye size={18} />
                 Public View
@@ -108,6 +116,33 @@ function MySalon() {
             <p>Review candidates who applied.</p>
           </Link>
         </div>
+        {salon.status === "Rejected" && (
+          <section className="my-salon-panel salon-resubmission-panel">
+            <div>
+              <span className="eyebrow">Action required</span>
+              <h2>Update the rejected details, then resubmit your salon.</h2>
+              <p>
+                {salon.rejectionReason ||
+                  "The administrator requested changes to your salon details."}
+              </p>
+              <small>
+                {salon.remainingResubmissions ?? 0} resubmission
+                {salon.remainingResubmissions === 1 ? "" : "s"} remaining
+              </small>
+            </div>
+            <button
+              className="btn btn-primary"
+              type="button"
+              onClick={handleResubmitSalon}
+              disabled={
+                resubmittingSalon || (salon.remainingResubmissions ?? 0) <= 0
+              }
+            >
+              <RefreshCw size={18} />
+              {resubmittingSalon ? "Resubmitting…" : "Resubmit for review"}
+            </button>
+          </section>
+        )}
         <div className="my-salon-dashboard-layout">
           <aside className="my-salon-sidebar">
             <div className="my-salon-side-card">

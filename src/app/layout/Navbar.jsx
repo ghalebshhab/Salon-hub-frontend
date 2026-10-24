@@ -10,7 +10,7 @@ import OwnerWorkspaceMenu from "./navigation/OwnerWorkspaceMenu.jsx";
 import useNavigationMenus from "./navigation/useNavigationMenus.js";
 
 function Navbar() {
-  const { loggedIn } = useAuth();
+  const { loggedIn, isOwner } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const logout = useLogout();
   const menus = useNavigationMenus();
@@ -38,7 +38,7 @@ function Navbar() {
             loggedIn={loggedIn}
             onNavigate={menus.closeMenus}
           />
-          {loggedIn && (
+          {loggedIn && isOwner && (
             <OwnerWorkspaceMenu
               open={menus.ownerMenuOpen}
               onToggle={menus.toggleOwnerMenu}

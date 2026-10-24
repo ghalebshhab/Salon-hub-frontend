@@ -6,6 +6,7 @@ import {
   ClipboardList,
   House,
   LayoutDashboard,
+  Sparkles,
   Scissors,
   UserPlus,
   UsersRound,
@@ -13,6 +14,7 @@ import {
 
 export const exploreLinks = [
   { to: "/", label: "Home", icon: House, public: true },
+  { to: "/prototype", label: "Prototype", icon: Sparkles, public: true },
   { to: "/my-bookings", label: "My bookings", icon: CalendarDays },
   { to: "/hiring-posts", label: "Careers", icon: BriefcaseBusiness },
 ];

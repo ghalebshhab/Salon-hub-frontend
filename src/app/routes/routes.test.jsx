@@ -3,7 +3,26 @@ import { beforeEach, expect, it, vi } from "vitest";
 import { MemoryRouter } from "react-router-dom";
 import AppRoutes from "./AppRoutes.jsx";
 import { clearAuthData, saveToken } from "../../shared/auth/tokenStorage.js";
+import AuthProvider from "../../features/auth/providers/AuthProvider.jsx";
 import http from "../../shared/api/httpClient.js";
+const ownerProfile = {
+  id: 7,
+  firstName: "Test",
+  lastName: "Owner",
+  role: "OWNER",
+  skills: [],
+};
+
+function renderRoutes(pathname, profile = ownerProfile) {
+  const loadProfile = async () => ({ success: true, data: profile });
+  return render(
+    <AuthProvider loadProfile={loadProfile}>
+      <MemoryRouter initialEntries={[pathname]}>
+        <AppRoutes />
+      </MemoryRouter>
+    </AuthProvider>,
+  );
+}
 const salon = {
   salonId: 1,
   name: "Test Salon",
@@ -33,6 +52,7 @@ beforeEach(() => {
 });
 const paths = [
   "/",
+  "/prototype",
   "/salons/1",
   "/hiring-posts",
   "/login",
@@ -42,6 +62,7 @@ const paths = [
   "/owner/dashboard",
   "/owner/create-salon",
   "/owner/my-salon",
+  "/owner/my-salon/edit",
   "/owner/create-hiring-post",
   "/owner/applications",
 ];
@@ -49,11 +70,7 @@ it.each(paths)(
   "renders route %s with the existing API contracts",
   async (pathname) => {
     saveToken("test-token");
-    const { container } = render(
-      <MemoryRouter initialEntries={[pathname]}>
-        <AppRoutes />
-      </MemoryRouter>,
-    );
+    const { container } = renderRoutes(pathname);
     await waitFor(() => {
       expect(
         container.querySelector(".page-main h1, .page-main h2"),
@@ -65,21 +82,13 @@ it.each(paths)(
 );
 it("redirects protected routes to login and retains the destination", async () => {
   clearAuthData();
-  render(
-    <MemoryRouter initialEntries={["/owner/applications"]}>
-      <AppRoutes />
-    </MemoryRouter>,
-  );
+  renderRoutes("/owner/applications");
   expect(
     await screen.findByRole("heading", { name: "Welcome back" }),
   ).toBeDefined();
 });
 it("renders a not-found page", async () => {
-  render(
-    <MemoryRouter initialEntries={["/missing"]}>
-      <AppRoutes />
-    </MemoryRouter>,
-  );
+  renderRoutes("/missing");
   expect(
     await screen.findByRole("heading", { name: "Page not found" }),
   ).toBeDefined();
@@ -94,11 +103,7 @@ it("returns to the protected destination after a successful login", async () => 
       data: config.url === "/auth/login" ? { token: "signed-in" } : [],
     },
   });
-  const { container } = render(
-    <MemoryRouter initialEntries={["/owner/applications"]}>
-      <AppRoutes />
-    </MemoryRouter>,
-  );
+  const { container } = renderRoutes("/owner/applications");
   await screen.findByRole("heading", { name: "Welcome back" });
   fireEvent.change(container.querySelector('input[name="email"]'), {
     target: { value: "test@example.com" },
@@ -110,4 +115,16 @@ it("returns to the protected destination after a successful login", async () => 
   expect(
     await screen.findByRole("heading", { name: "Hiring Applications" }),
   ).toBeDefined();
+});
+
+it("redirects authenticated non-owners away from the owner dashboard", async () => {
+  saveToken("member-token");
+  renderRoutes("/owner/dashboard", { ...ownerProfile, role: "USER" });
+
+  expect(
+    await screen.findByRole("heading", {
+      name: /Your next great.*salon experience.*starts here/i,
+    }),
+  ).toBeDefined();
+  expect(screen.queryByText("Good morning, Test")).toBeNull();
 });

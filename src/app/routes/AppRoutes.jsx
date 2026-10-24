@@ -2,9 +2,11 @@ import { lazy } from "react";
 import { Route, Routes } from "react-router-dom";
 import AppLayout from "../layout/AppLayout.jsx";
 import ProtectedRoute from "../layout/ProtectedRoute.jsx";
+import OwnerRoute from "../layout/OwnerRoute.jsx";
 import NotFound from "./NotFound.jsx";
 
 const Home = lazy(() => import("../../features/home/pages/Home.jsx"));
+const Prototype = lazy(() => import("../../features/prototype/Prototype.jsx"));
 const SalonDetails = lazy(
   () => import("../../features/salons/pages/SalonDetails.jsx"),
 );
@@ -23,6 +25,9 @@ const CreateSalon = lazy(
   () => import("../../features/salons/pages/CreateSalon.jsx"),
 );
 const MySalon = lazy(() => import("../../features/salons/pages/MySalon.jsx"));
+const EditSalon = lazy(
+  () => import("../../features/salons/pages/EditSalon.jsx"),
+);
 const CreateHiringPost = lazy(
   () => import("../../features/hiring/pages/CreateHiringPost.jsx"),
 );
@@ -71,6 +76,7 @@ export default function AppRoutes() {
     <Routes>
       <Route element={<AppLayout />}>
         <Route path="/" element={<Home />} />
+        <Route path="/prototype" element={<Prototype />} />
         <Route path="/salons/:salonId" element={<SalonDetails />} />
         <Route element={<ProtectedRoute />}>
           <Route path="/salons/:salonId/book" element={<CreateBooking />} />
@@ -87,9 +93,12 @@ export default function AppRoutes() {
           />
           <Route path="/profile/career" element={<CareerProfile />} />
           <Route path="/my-applications" element={<MyApplications />} />
-          <Route path="/owner/dashboard" element={<OwnerDashboard />} />
+          <Route element={<OwnerRoute />}>
+            <Route path="/owner/dashboard" element={<OwnerDashboard />} />
+          </Route>
           <Route path="/owner/create-salon" element={<CreateSalon />} />
           <Route path="/owner/my-salon" element={<MySalon />} />
+          <Route path="/owner/my-salon/edit" element={<EditSalon />} />
           <Route
             path="/owner/create-hiring-post"
             element={<CreateHiringPost />}

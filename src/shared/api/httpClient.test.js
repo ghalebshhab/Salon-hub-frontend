@@ -6,6 +6,23 @@ const fail = (status) => async (config) => {
   throw { config, response: { status } };
 };
 describe("HTTP authentication policy", () => {
+  it("sends authentication to logout but not to public login", async () => {
+    saveToken("valid");
+    const inspect = (expectedAuthorization) => async (config) => {
+      expect(config.headers.Authorization).toBe(expectedAuthorization);
+      return {
+        config,
+        data: { success: true, data: null },
+        headers: {},
+        status: 200,
+        statusText: "OK",
+      };
+    };
+
+    await http.post("/auth/login", {}, { adapter: inspect(undefined) });
+    await http.post("/auth/logout", {}, { adapter: inspect("Bearer valid") });
+  });
+
   it("attaches the token and clears an expired session on 401", async () => {
     saveToken("old");
     await expect(

@@ -7,9 +7,16 @@ const httpClient = axios.create({
   timeout: 15000,
   withCredentials: true,
 });
+
+const publicAuthenticationPaths = new Set([
+  "/auth/login",
+  "/auth/register",
+  "/auth/rigester",
+]);
+
 httpClient.interceptors.request.use((config) => {
   const token = getToken();
-  if (token && !config.url?.startsWith("/auth/"))
+  if (token && !publicAuthenticationPaths.has(config.url))
     config.headers.Authorization = `Bearer ${token}`;
   return config;
 });

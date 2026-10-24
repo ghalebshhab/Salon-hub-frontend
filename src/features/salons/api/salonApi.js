@@ -31,6 +31,11 @@ export const updateSalonApi = async (salonId, data) => {
   return mapSalonResponse(response).data;
 };
 
+export const resubmitSalonApi = async (salonId) => {
+  const response = await httpClient.post(`/salons/${salonId}/resubmit`);
+  return mapSalonResponse(response).data;
+};
+
 export const deleteSalonApi = async (salonId) => {
   const response = await httpClient.delete(`/salons/${salonId}`);
   return response.data;

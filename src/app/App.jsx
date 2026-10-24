@@ -4,6 +4,7 @@ import ErrorBoundary from "../shared/components/ErrorBoundary.jsx";
 import StartupSplash from "../shared/components/StartupSplash.jsx";
 import AppRoutes from "./routes/AppRoutes.jsx";
 import { ToastContainer } from "react-toastify";
+import AuthProvider from "../features/auth/providers/AuthProvider.jsx";
 
 function App() {
   const [showSplash, setShowSplash] = useState(true);
@@ -17,27 +18,29 @@ function App() {
   if (showSplash) return <StartupSplash />;
 
   return (
-    <div className="application-enter">
-      <ErrorBoundary>
-        <BrowserRouter>
-          <AppRoutes />
+    <AuthProvider>
+      <div className="application-enter">
+        <ErrorBoundary>
+          <BrowserRouter>
+            <AppRoutes />
 
-          <ToastContainer
-            position="bottom-right"
-            autoClose={3600}
-            hideProgressBar={true}
-            newestOnTop={false}
-            closeOnClick
-            pauseOnHover
-            draggable
-            limit={4}
-            theme="dark"
-            toastClassName="salon-toast-shell"
-            bodyClassName="salon-toast-body"
-          />
-        </BrowserRouter>
-      </ErrorBoundary>
-    </div>
+            <ToastContainer
+              position="bottom-right"
+              autoClose={3600}
+              hideProgressBar={true}
+              newestOnTop={false}
+              closeOnClick
+              pauseOnHover
+              draggable
+              limit={4}
+              theme="dark"
+              toastClassName="salon-toast-shell"
+              bodyClassName="salon-toast-body"
+            />
+          </BrowserRouter>
+        </ErrorBoundary>
+      </div>
+    </AuthProvider>
   );
 }
 

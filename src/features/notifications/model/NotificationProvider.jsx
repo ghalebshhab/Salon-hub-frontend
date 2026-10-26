@@ -1,5 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
-import { requireData } from "../../../shared/api/response.js";
+import {
+  getApiErrorMessage,
+  requireData,
+} from "../../../shared/api/response.js";
 import { NotificationContext } from "../context/NotificationContext.js";
 import {
   getNotificationsApi,
@@ -48,7 +51,9 @@ export function NotificationProvider({ children, enabled = true }) {
           loadError?.name !== "CanceledError" &&
           loadError?.name !== "AbortError"
         ) {
-          setError(loadError?.message || "Unable to load notifications");
+          setError(
+            getApiErrorMessage(loadError, "Unable to load notifications"),
+          );
         }
         throw loadError;
       } finally {

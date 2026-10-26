@@ -59,7 +59,9 @@ export default function useCreateReviewModal({
     } catch (error) {
       console.error(error);
       showErrorToast(
-        error?.response?.data?.message || "Could not add review.",
+        error?.response?.data?.message ||
+          error?.message ||
+          "Could not add review.",
         "Review failed",
       );
     } finally {

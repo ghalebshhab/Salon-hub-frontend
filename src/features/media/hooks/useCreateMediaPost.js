@@ -37,7 +37,9 @@ export default function useCreateMediaPost() {
       setForm({ caption: "", mediaUrl: "", mediaType: "IMAGE" });
     } catch (error) {
       showErrorToast(
-        error?.response?.data?.message || "Failed to create media post",
+        error?.response?.data?.message ||
+          error?.message ||
+          "Failed to create media post",
       );
       console.error(error);
     } finally {

@@ -42,7 +42,9 @@ export default function useApplyHiringPost() {
       navigate("/hiring-posts");
     } catch (error) {
       showErrorToast(
-        error?.response?.data?.message || "Failed to submit application.",
+        error?.response?.data?.message ||
+          error?.message ||
+          "Failed to submit application.",
       );
     } finally {
       setSubmitting(false);

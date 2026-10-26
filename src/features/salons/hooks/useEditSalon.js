@@ -68,7 +68,9 @@ export default function useEditSalon() {
       navigate("/owner/my-salon");
     } catch (error) {
       showErrorToast(
-        error?.response?.data?.message || "Could not update salon.",
+        error?.response?.data?.message ||
+          error?.message ||
+          "Could not update salon.",
       );
     } finally {
       setSaving(false);

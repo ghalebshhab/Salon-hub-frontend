@@ -57,7 +57,9 @@ export default function useCareerProfile() {
       showSuccessToast("Career profile saved.");
     } catch (error) {
       showErrorToast(
-        error?.response?.data?.message || "Could not save career profile",
+        error?.response?.data?.message ||
+          error?.message ||
+          "Could not save career profile",
       );
     } finally {
       setSaving(false);

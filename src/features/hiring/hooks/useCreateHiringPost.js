@@ -46,7 +46,9 @@ export default function useCreateHiringPost() {
       setForm(initialForm);
     } catch (error) {
       showErrorToast(
-        error?.response?.data?.message || "Failed to create hiring post",
+        error?.response?.data?.message ||
+          error?.message ||
+          "Failed to create hiring post",
       );
     } finally {
       setLoading(false);

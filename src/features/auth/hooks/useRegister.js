@@ -42,7 +42,9 @@ export default function useRegister() {
       showSuccessToast("Registered successfully. Please login.");
       navigate("/login");
     } catch (error) {
-      showErrorToast(error?.response?.data?.message || "Register failed");
+      showErrorToast(
+        error?.response?.data?.message || error?.message || "Register failed",
+      );
       console.error(error);
     } finally {
       setLoading(false);

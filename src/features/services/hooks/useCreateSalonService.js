@@ -53,7 +53,9 @@ export default function useCreateSalonService() {
     } catch (error) {
       console.error(error);
       showErrorToast(
-        error?.response?.data?.message || "Failed to create service",
+        error?.response?.data?.message ||
+          error?.message ||
+          "Failed to create service",
       );
     } finally {
       setSubmitting(false);

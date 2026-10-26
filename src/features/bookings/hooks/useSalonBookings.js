@@ -107,7 +107,9 @@ export default function useSalonBookings() {
     } catch (error) {
       console.error(error);
       showErrorToast(
-        error?.response?.data?.message || "Could not assign employee.",
+        error?.response?.data?.message ||
+          error?.message ||
+          "Could not assign employee.",
       );
     } finally {
       setAssigning(false);
@@ -129,7 +131,7 @@ export default function useSalonBookings() {
       }
     } catch (error) {
       console.error(error);
-      showErrorToast("Failed to accept booking");
+      showErrorToast(error?.message || "Failed to accept booking");
     }
   };
 
@@ -170,7 +172,7 @@ export default function useSalonBookings() {
       }
     } catch (error) {
       console.error(error);
-      showErrorToast("Failed to reject booking");
+      showErrorToast(error?.message || "Failed to reject booking");
     } finally {
       setRejecting(false);
     }
@@ -232,6 +234,7 @@ export default function useSalonBookings() {
           setRescheduleSlots([]);
           setRescheduleError(
             error?.response?.data?.message ||
+              error?.message ||
               "Could not load appointment times.",
           );
         }
@@ -277,7 +280,9 @@ export default function useSalonBookings() {
       loadBookings();
     } catch (error) {
       showErrorToast(
-        error?.response?.data?.message || "Could not send the proposal.",
+        error?.response?.data?.message ||
+          error?.message ||
+          "Could not send the proposal.",
       );
     } finally {
       setRescheduleSaving(false);
@@ -302,7 +307,7 @@ export default function useSalonBookings() {
       }
     } catch (error) {
       console.error(error);
-      showErrorToast("Failed to complete booking");
+      showErrorToast(error?.message || "Failed to complete booking");
     }
   };
 

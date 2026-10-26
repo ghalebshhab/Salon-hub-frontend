@@ -42,7 +42,7 @@ export default function useMySalonServices() {
       }
     } catch (error) {
       console.error(error);
-      showErrorToast("Failed to disable service");
+      showErrorToast(error?.message || "Failed to disable service");
     }
   };
 

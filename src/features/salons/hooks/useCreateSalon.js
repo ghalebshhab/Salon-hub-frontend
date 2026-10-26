@@ -49,7 +49,9 @@ export default function useCreateSalon() {
       navigate("/owner/my-salon");
     } catch (error) {
       showErrorToast(
-        error?.response?.data?.message || "Failed to submit salon",
+        error?.response?.data?.message ||
+          error?.message ||
+          "Failed to submit salon",
       );
     } finally {
       setLoading(false);

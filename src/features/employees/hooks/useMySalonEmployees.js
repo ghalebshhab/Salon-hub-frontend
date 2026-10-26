@@ -55,7 +55,9 @@ export default function useMySalonEmployees() {
       refetch();
     } catch (error) {
       showErrorToast(
-        error?.response?.data?.message || "Could not update application.",
+        error?.response?.data?.message ||
+          error?.message ||
+          "Could not update application.",
       );
     }
   };

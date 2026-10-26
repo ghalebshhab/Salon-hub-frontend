@@ -236,7 +236,9 @@ export default function useCreateBooking() {
     } catch (error) {
       console.error(error);
       showErrorToast(
-        error?.response?.data?.message || "Failed to create booking",
+        error?.response?.data?.message ||
+          error?.message ||
+          "Failed to create booking",
       );
     } finally {
       setSubmitting(false);

@@ -50,7 +50,9 @@ export default function useLogin() {
         { replace: true },
       );
     } catch (error) {
-      showErrorToast(error?.response?.data?.message || "Login failed");
+      showErrorToast(
+        error?.response?.data?.message || error?.message || "Login failed",
+      );
       console.error(error);
     } finally {
       setLoading(false);

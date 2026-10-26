@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { getApiErrorMessage } from "../api/response.js";
 
 // The loader owns data access; this hook owns request lifecycle and stale-result protection.
 export default function useQuery(
@@ -19,9 +20,7 @@ export default function useQuery(
       } catch (error) {
         if (controller.signal.aborted) return;
         setResult({ loader, revision, data: null, error });
-        onError?.(
-          error?.response?.data?.message || error?.message || errorMessage,
-        );
+        onError?.(getApiErrorMessage(error, errorMessage));
       }
     }
     run();

@@ -102,7 +102,7 @@ export default function useMyBookings() {
       }
     } catch (error) {
       console.error(error);
-      showErrorToast("Failed to cancel booking");
+      showErrorToast(error?.message || "Failed to cancel booking");
     }
   };
 
@@ -120,7 +120,9 @@ export default function useMyBookings() {
       loadBookings();
     } catch (error) {
       showErrorToast(
-        error?.response?.data?.message || "Could not save your decision.",
+        error?.response?.data?.message ||
+          error?.message ||
+          "Could not save your decision.",
       );
     } finally {
       setRespondingProposalId(null);

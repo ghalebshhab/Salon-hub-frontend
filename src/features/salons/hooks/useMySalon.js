@@ -41,7 +41,9 @@ export default function useMySalon() {
       await refetch();
     } catch (error) {
       showErrorToast(
-        error?.response?.data?.message || "Could not resubmit salon.",
+        error?.response?.data?.message ||
+          error?.message ||
+          "Could not resubmit salon.",
       );
     } finally {
       setResubmittingSalon(false);
@@ -60,7 +62,9 @@ export default function useMySalon() {
       navigate("/owner/dashboard");
     } catch (error) {
       showErrorToast(
-        error?.response?.data?.message || "Could not delete salon.",
+        error?.response?.data?.message ||
+          error?.message ||
+          "Could not delete salon.",
       );
     } finally {
       setDeletingSalon(false);

@@ -6,7 +6,7 @@ export default function EditSalon() {
   const { form, setForm, salon, loading, saving, handleChange, handleSubmit } =
     useEditSalon();
 
-  if (loading) return <Loading />;
+  if (loading) return <Loading message="Preparing your salon details…" />;
   if (!salon) return <div className="empty-state">Salon not found.</div>;
 
   return (

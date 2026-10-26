@@ -36,7 +36,7 @@ function ManageEmployeeSetup() {
     [periods],
   );
 
-  if (loading) return <Loading />;
+  if (loading) return <Loading message="Loading employee setup…" />;
   if (error || !capabilities || !schedule) {
     return (
       <section className="container section">

@@ -33,7 +33,7 @@ function MySalon() {
     handleResubmitSalon,
     handleDeleteSalon,
   } = useMySalon();
-  if (loading) return <Loading />;
+  if (loading) return <Loading message="Loading your salon…" />;
   if (error || !salon)
     return (
       <section className="container section">

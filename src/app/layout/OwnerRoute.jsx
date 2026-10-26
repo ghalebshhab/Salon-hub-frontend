@@ -16,6 +16,6 @@ export default function OwnerRoute() {
     );
   }
 
-  if (profileLoading) return <Loading />;
+  if (profileLoading) return <Loading message="Checking owner access…" />;
   return isOwner ? <Outlet /> : <Navigate to="/" replace />;
 }

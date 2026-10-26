@@ -15,7 +15,7 @@ function HiringPosts() {
       </div>
 
       {loading ? (
-        <Loading />
+        <Loading message="Finding career opportunities…" />
       ) : posts.length === 0 ? (
         <EmptyState title="No open hiring posts" message="Check again later." />
       ) : (

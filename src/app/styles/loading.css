@@ -1,0 +1,345 @@
+.salon-loading-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 12000;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  cursor: wait;
+  background: color-mix(in srgb, var(--bg) 38%, transparent);
+  backdrop-filter: blur(3px) saturate(0.84);
+  -webkit-backdrop-filter: blur(3px) saturate(0.84);
+  animation: salonLoadingBackdropIn 180ms ease-out both;
+}
+
+.salon-loading-focus {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 18px;
+  min-width: min(310px, calc(100vw - 48px));
+  padding: 34px 42px 30px;
+  overflow: hidden;
+  isolation: isolate;
+  color: var(--text);
+  text-align: center;
+  border: 1px solid color-mix(in srgb, var(--primary) 25%, var(--border));
+  border-radius: 28px;
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      color-mix(in srgb, var(--primary) 16%, transparent),
+      transparent 58%
+    ),
+    color-mix(in srgb, var(--card) 94%, transparent);
+  box-shadow:
+    0 30px 80px rgba(47, 27, 35, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.55);
+  animation: salonLoadingFocusIn 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+:root[data-theme="dark"] .salon-loading-overlay {
+  background: color-mix(in srgb, var(--bg) 38%, transparent);
+  backdrop-filter: blur(3px) saturate(0.88);
+  -webkit-backdrop-filter: blur(3px) saturate(0.88);
+}
+
+:root[data-theme="dark"] .salon-loading-focus {
+  border-color: color-mix(in srgb, var(--primary) 42%, var(--border));
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      color-mix(in srgb, var(--primary) 22%, transparent),
+      transparent 60%
+    ),
+    color-mix(in srgb, var(--card) 94%, transparent);
+  box-shadow:
+    0 30px 90px rgba(0, 0, 0, 0.48),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.salon-loading-focus::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  width: 180px;
+  height: 180px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--primary) 14%, transparent);
+  filter: blur(42px);
+  animation: salonLoadingAura 2.4s ease-in-out infinite;
+}
+
+.salon-snip-stage,
+.salon-navigation-logo-stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 118px;
+  height: 118px;
+}
+
+.salon-snip-stage::before,
+.salon-navigation-logo-stage::before {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--primary-soft) 68%, transparent);
+  box-shadow: 0 18px 35px color-mix(in srgb, var(--primary) 18%, transparent);
+}
+
+.salon-snip-ring,
+.salon-navigation-logo-ring {
+  position: absolute;
+  inset: 1px;
+  border: 1px solid color-mix(in srgb, var(--primary) 30%, transparent);
+  border-radius: 50%;
+  animation: salonLoadingRing 2.2s ease-in-out infinite;
+}
+
+.salon-snip-scissors {
+  position: relative;
+  z-index: 2;
+  width: 88px;
+  height: 88px;
+  filter: drop-shadow(0 13px 20px color-mix(in srgb, var(--primary) 28%, transparent));
+}
+
+.salon-snip-blade {
+  position: absolute;
+  top: 16px;
+  left: 42px;
+  width: 5px;
+  height: 51px;
+  border-radius: 99px;
+  background: linear-gradient(180deg, var(--accent), var(--primary-dark));
+  transform-origin: 50% 29px;
+}
+
+.salon-snip-blade::after {
+  content: "";
+  position: absolute;
+  bottom: -15px;
+  left: -7px;
+  width: 14px;
+  height: 14px;
+  border: 4px solid var(--primary);
+  border-radius: 50%;
+  background: var(--card);
+}
+
+.salon-snip-blade-left {
+  animation: salonSnipLeft 1s ease-in-out infinite;
+}
+
+.salon-snip-blade-right {
+  animation: salonSnipRight 1s ease-in-out infinite;
+}
+
+.salon-snip-pivot {
+  position: absolute;
+  z-index: 3;
+  top: 40px;
+  left: 39px;
+  width: 11px;
+  height: 11px;
+  border: 3px solid var(--card);
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 2px var(--primary);
+}
+
+.salon-snip-spark {
+  position: absolute;
+  top: 7px;
+  right: 2px;
+  color: var(--accent);
+  font-size: 1.2rem;
+  animation: salonSnipSpark 1s ease-in-out infinite;
+}
+
+.salon-navigation-logo-stage img {
+  position: relative;
+  z-index: 2;
+  width: 76px;
+  height: 76px;
+  filter: drop-shadow(0 14px 22px color-mix(in srgb, var(--primary) 32%, transparent));
+  animation: salonNavigationLogo 1.8s ease-in-out infinite;
+}
+
+.salon-loading-copy {
+  display: grid;
+  gap: 5px;
+}
+
+.salon-loading-copy span {
+  color: var(--primary);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.salon-loading-copy strong {
+  max-width: 260px;
+  font-family: var(--font-display, inherit);
+  font-size: clamp(1rem, 2vw, 1.15rem);
+  line-height: 1.4;
+}
+
+.salon-loading-dots {
+  display: flex;
+  gap: 7px;
+  height: 8px;
+}
+
+.salon-loading-dots i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--primary);
+  animation: salonLoadingDot 1.05s ease-in-out infinite;
+}
+
+.salon-loading-dots i:nth-child(2) {
+  animation-delay: 140ms;
+}
+
+.salon-loading-dots i:nth-child(3) {
+  animation-delay: 280ms;
+}
+
+@keyframes salonLoadingBackdropIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes salonLoadingFocusIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes salonSnipLeft {
+  0%,
+  100% {
+    transform: rotate(-30deg);
+  }
+  50%,
+  60% {
+    transform: rotate(-8deg);
+  }
+}
+
+@keyframes salonSnipRight {
+  0%,
+  100% {
+    transform: rotate(30deg);
+  }
+  50%,
+  60% {
+    transform: rotate(8deg);
+  }
+}
+
+@keyframes salonSnipSpark {
+  0%,
+  40%,
+  100% {
+    opacity: 0.2;
+    transform: scale(0.6) rotate(0deg);
+  }
+  55%,
+  70% {
+    opacity: 1;
+    transform: scale(1.15) rotate(18deg);
+  }
+}
+
+@keyframes salonLoadingRing {
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: scale(0.92);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes salonNavigationLogo {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-4px) scale(1.035);
+  }
+}
+
+@keyframes salonLoadingAura {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(0.9);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.12);
+  }
+}
+
+@keyframes salonLoadingDot {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-4px);
+  }
+}
+
+@media (max-width: 520px) {
+  .salon-loading-focus {
+    padding: 28px 24px 25px;
+    border-radius: 24px;
+  }
+
+  .salon-snip-stage,
+  .salon-navigation-logo-stage {
+    width: 104px;
+    height: 104px;
+  }
+
+  .salon-navigation-logo-stage img {
+    width: 68px;
+    height: 68px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .salon-loading-overlay,
+  .salon-loading-focus,
+  .salon-loading-focus::before,
+  .salon-snip-blade,
+  .salon-snip-spark,
+  .salon-snip-ring,
+  .salon-navigation-logo-ring,
+  .salon-navigation-logo-stage img,
+  .salon-loading-dots i {
+    animation: none;
+  }
+}

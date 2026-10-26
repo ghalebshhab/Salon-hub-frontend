@@ -1,10 +1,17 @@
-import { describe, expect, it } from "vitest";
-import http from "./httpClient.js";
+import { afterEach, describe, expect, it } from "vitest";
+import http, { loadingMessageFor } from "./httpClient.js";
 import { getToken, saveToken } from "../auth/tokenStorage.js";
-import { requireData } from "./response.js";
+import { getApiErrorMessage, requireData } from "./response.js";
+import {
+  getLoadingSnapshot,
+  resetLoadingForTests,
+} from "../loading/loadingStore.js";
 const fail = (status) => async (config) => {
   throw { config, response: { status } };
 };
+
+afterEach(resetLoadingForTests);
+
 describe("HTTP authentication policy", () => {
   it("sends authentication to logout but not to public login", async () => {
     saveToken("valid");
@@ -58,5 +65,65 @@ describe("HTTP authentication policy", () => {
       requireData({ success: false, message: "Not available" }),
     ).toThrow("Not available");
     expect(requireData({ success: true, data: [1] })).toEqual([1]);
+  });
+  it("prefers backend reasons and explains transport failures clearly", () => {
+    expect(
+      getApiErrorMessage({
+        response: {
+          status: 400,
+          data: { success: false, message: "Selected time is unavailable" },
+        },
+      }),
+    ).toBe("Selected time is unavailable");
+    expect(getApiErrorMessage({ response: { status: 403, data: {} } })).toBe(
+      "Your account does not have permission to perform this action.",
+    );
+    expect(getApiErrorMessage({ code: "ERR_NETWORK", request: {} })).toBe(
+      "The server could not be reached. Check your connection and try again.",
+    );
+  });
+  it("tracks foreground mutations and leaves background reads unobtrusive", async () => {
+    const inspectMutation = async (config) => {
+      expect(getLoadingSnapshot()).toMatchObject({
+        active: true,
+        message: "Accepting the booking…",
+      });
+      return {
+        config,
+        data: { success: true, data: null },
+        headers: {},
+        status: 200,
+        statusText: "OK",
+      };
+    };
+
+    await http.put("/bookings/10/accept", {}, { adapter: inspectMutation });
+    expect(getLoadingSnapshot().active).toBe(false);
+
+    await http.get("/notifications", {
+      adapter: async (config) => {
+        expect(getLoadingSnapshot().active).toBe(false);
+        return { config, data: {}, headers: {}, status: 200, statusText: "OK" };
+      },
+    });
+  });
+
+  it("uses an action-specific loading message", () => {
+    expect(
+      loadingMessageFor({ method: "post", url: "/auth/login" }),
+    ).toBe("Signing you in…");
+    expect(
+      loadingMessageFor({ method: "post", url: "/auth/logout" }),
+    ).toBe("Signing you out…");
+    expect(
+      loadingMessageFor({ method: "put", url: "/bookings/10/accept" }),
+    ).toBe("Accepting the booking…");
+    expect(
+      loadingMessageFor({
+        method: "get",
+        url: "/salons/active",
+        params: { search: "Amman" },
+      }),
+    ).toBe("Searching SalonHub…");
   });
 });

@@ -4,7 +4,10 @@ import { requireData } from "../../../shared/api/response.js";
 import AuthContext from "../../../shared/auth/authContext.js";
 import { getToken, subscribeAuth } from "../../../shared/auth/tokenStorage.js";
 
-export default function AuthProvider({ children, loadProfile = getUserProfileApi }) {
+export default function AuthProvider({
+  children,
+  loadProfile = getUserProfileApi,
+}) {
   const token = useSyncExternalStore(subscribeAuth, getToken, () => null);
   const [profileState, setProfileState] = useState({
     token: null,
@@ -45,8 +48,7 @@ export default function AuthProvider({ children, loadProfile = getUserProfileApi
       user,
       role: user?.role || null,
       isOwner: user?.role === "OWNER",
-      profileLoading: Boolean(token) &&
-        (!current || profileState.loading),
+      profileLoading: Boolean(token) && (!current || profileState.loading),
       profileError: current ? profileState.error : null,
     };
   }, [profileState, token]);

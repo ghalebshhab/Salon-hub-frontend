@@ -4,7 +4,7 @@ import useCareerProfile from "../hooks/useCareerProfile.js";
 function CareerProfile() {
   const { form, profile, loading, saving, handleChange, handleSubmit } =
     useCareerProfile();
-  if (loading) return <Loading />;
+  if (loading) return <Loading message="Loading your career profile…" />;
   return (
     <section className="form-page">
       <form className="form-card" onSubmit={handleSubmit}>

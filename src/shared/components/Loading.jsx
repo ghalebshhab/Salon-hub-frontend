@@ -1,14 +1,13 @@
-import BrandLogo from "./BrandLogo.jsx";
+import BrandedLoadingOverlay from "./BrandedLoadingOverlay.jsx";
 
-function Loading() {
+function Loading({ message = "Preparing your experience…" }) {
   return (
-    <div
-      className="startup-splash route-loading-splash"
-      role="status"
-      aria-label="SalonHub is loading"
-    >
-      <BrandLogo />
-    </div>
+    <BrandedLoadingOverlay
+      visible
+      message={message}
+      variant="navigation"
+      className="loading route-loading-overlay"
+    />
   );
 }
 

@@ -7,7 +7,7 @@ export const getBookingAvailabilityApi = async (
   const response = await httpClient.post(
     "/bookings/availability",
     availabilityData,
-    config,
+    { ...config, showLoading: false },
   );
   return response.data;
 };
@@ -82,7 +82,7 @@ export const getBookingRescheduleAvailabilityApi = async (
   const response = await httpClient.post(
     `/bookings/${bookingId}/reschedule-availability`,
     { bookingDate },
-    config,
+    { ...config, showLoading: false },
   );
   return response.data;
 };

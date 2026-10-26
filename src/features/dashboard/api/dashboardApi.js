@@ -27,11 +27,17 @@ export async function getOwnerDashboardApi(signal) {
 
   return {
     salon,
-    bookings: requireData(bookingsResponse, "Bookings could not be loaded.") || [],
-    employees: requireData(employeesResponse, "Employees could not be loaded.") || [],
-    services: requireData(servicesResponse, "Services could not be loaded.") || [],
+    bookings:
+      requireData(bookingsResponse, "Bookings could not be loaded.") || [],
+    employees:
+      requireData(employeesResponse, "Employees could not be loaded.") || [],
+    services:
+      requireData(servicesResponse, "Services could not be loaded.") || [],
     reviews: requireData(reviewsResponse, "Reviews could not be loaded.") || [],
     reviewSummary:
-      requireData(reviewSummaryResponse, "Rating summary could not be loaded.") || {},
+      requireData(
+        reviewSummaryResponse,
+        "Rating summary could not be loaded.",
+      ) || {},
   };
 }

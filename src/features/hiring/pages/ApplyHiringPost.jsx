@@ -12,7 +12,7 @@ function ApplyHiringPost() {
     submitting,
     handleSubmit,
   } = useApplyHiringPost();
-  if (loading) return <Loading />;
+  if (loading) return <Loading message="Preparing the application…" />;
   return (
     <section className="auth-page">
       <form className="auth-card wide" onSubmit={handleSubmit}>

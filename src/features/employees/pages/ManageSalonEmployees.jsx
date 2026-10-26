@@ -7,7 +7,7 @@ import useManageSalonEmployees from "../hooks/useManageSalonEmployees.js";
 function ManageSalonEmployees() {
   const { employees, loading } = useManageSalonEmployees();
 
-  if (loading) return <Loading />;
+  if (loading) return <Loading message="Loading your salon team…" />;
 
   return (
     <section className="container section">

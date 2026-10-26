@@ -5,6 +5,7 @@ import StartupSplash from "../shared/components/StartupSplash.jsx";
 import AppRoutes from "./routes/AppRoutes.jsx";
 import { ToastContainer } from "react-toastify";
 import AuthProvider from "../features/auth/providers/AuthProvider.jsx";
+import GlobalLoadingOverlay from "../shared/components/GlobalLoadingOverlay.jsx";
 
 function App() {
   const [showSplash, setShowSplash] = useState(true);
@@ -23,6 +24,7 @@ function App() {
         <ErrorBoundary>
           <BrowserRouter>
             <AppRoutes />
+            <GlobalLoadingOverlay />
 
             <ToastContainer
               position="bottom-right"

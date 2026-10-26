@@ -127,7 +127,7 @@ function MyApplications() {
   const { applications, loading, error, filter, setFilter } =
     useMyApplications();
 
-  if (loading) return <Loading />;
+  if (loading) return <Loading message="Loading your applications…" />;
 
   const visibleApplications = filterApplications(applications, filter);
 

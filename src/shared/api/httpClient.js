@@ -14,6 +14,11 @@ const publicAuthenticationPaths = new Set([
   "/auth/login",
   "/auth/register",
   "/auth/rigester",
+  "/auth/email/verify",
+  "/auth/email/resend",
+  "/auth/password/forgot",
+  "/auth/password/verify-code",
+  "/auth/password/reset",
 ]);
 
 export function loadingMessageFor(config) {
@@ -31,6 +36,15 @@ export function loadingMessageFor(config) {
   if (url === "/auth/logout") return "Signing you out…";
   if (url === "/auth/register" || url === "/auth/rigester")
     return "Creating your SalonHub account…";
+  if (url === "/auth/email/verify") return "Verifying your email…";
+  if (url === "/auth/email/resend")
+    return "Sending a new verification code…";
+  if (url === "/auth/password/forgot")
+    return "Sending password reset instructions…";
+  if (url === "/auth/password/verify-code")
+    return "Verifying your reset code…";
+  if (url === "/auth/password/reset")
+    return "Securing your new password…";
   if (url === "/profile/career") return "Updating your career profile…";
   if (url.includes("/applications/") && url.endsWith("/accept"))
     return "Accepting the application…";

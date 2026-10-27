@@ -6,13 +6,14 @@ import {
 } from "../../../shared/notifications/toast.jsx";
 import { loginApi } from "../api/authApi.js";
 import { saveToken } from "../../../shared/auth/tokenStorage.js";
+import { getApiErrorMessage } from "../../../shared/api/response.js";
 
 export default function useLogin() {
   const navigate = useNavigate();
   const location = useLocation();
 
   const [form, setForm] = useState({
-    email: "",
+    email: location.state?.email || "",
     password: "",
   });
 
@@ -50,10 +51,7 @@ export default function useLogin() {
         { replace: true },
       );
     } catch (error) {
-      showErrorToast(
-        error?.response?.data?.message || error?.message || "Login failed",
-      );
-      console.error(error);
+      showErrorToast(getApiErrorMessage(error, "Sign in could not be completed."));
     } finally {
       setLoading(false);
     }

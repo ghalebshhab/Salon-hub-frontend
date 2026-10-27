@@ -1,12 +1,17 @@
-export default function AuthSubmitButton({ loading, children }) {
+export default function AuthSubmitButton({
+  loading,
+  loadingLabel = "Please wait…",
+  disabled = false,
+  children,
+}) {
   return (
     <button
       className="btn btn-primary full-width auth-submit"
       type="submit"
-      disabled={loading}
+      disabled={loading || disabled}
       aria-busy={loading}
     >
-      {loading ? "Please wait…" : children}
+      {loading ? loadingLabel : children}
     </button>
   );
 }

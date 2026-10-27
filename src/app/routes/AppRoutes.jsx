@@ -15,6 +15,18 @@ const HiringPosts = lazy(
 );
 const Login = lazy(() => import("../../features/auth/pages/Login.jsx"));
 const Register = lazy(() => import("../../features/auth/pages/Register.jsx"));
+const EmailVerification = lazy(
+  () => import("../../features/auth/pages/EmailVerification.jsx"),
+);
+const ForgotPassword = lazy(
+  () => import("../../features/auth/pages/ForgotPassword.jsx"),
+);
+const VerifyResetCode = lazy(
+  () => import("../../features/auth/pages/VerifyResetCode.jsx"),
+);
+const ResetPassword = lazy(
+  () => import("../../features/auth/pages/ResetPassword.jsx"),
+);
 const ApplyHiringPost = lazy(
   () => import("../../features/hiring/pages/ApplyHiringPost.jsx"),
 );
@@ -85,6 +97,10 @@ export default function AppRoutes() {
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/verify-email" element={<EmailVerification />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/verify-reset-code" element={<VerifyResetCode />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         <Route element={<ProtectedRoute />}>
           <Route path="/hiring-posts" element={<HiringPosts />} />
           <Route

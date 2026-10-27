@@ -81,7 +81,9 @@ function Register() {
         <p className="auth-hint">
           Use the password rules required by your SalonHub account.
         </p>
-        <AuthSubmitButton loading={loading}>Create account</AuthSubmitButton>
+        <AuthSubmitButton loading={loading} loadingLabel="Creating your account…">
+          Create account
+        </AuthSubmitButton>
       </form>
       <div className="auth-note">
         Your normal user profile is created automatically. You can upgrade to a

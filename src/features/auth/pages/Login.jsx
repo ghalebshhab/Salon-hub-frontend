@@ -37,9 +37,13 @@ function Login() {
         />
         <div className="auth-inline">
           <span>Secure access to your account</span>
-          <span>Protected by SalonHub</span>
+          <Link className="auth-link" to="/forgot-password">
+            Forgot password?
+          </Link>
         </div>
-        <AuthSubmitButton loading={loading}>Sign in</AuthSubmitButton>
+        <AuthSubmitButton loading={loading} loadingLabel="Signing you in…">
+          Sign in
+        </AuthSubmitButton>
       </form>
       <div className="auth-note">
         Your profile keeps bookings, salon relationships, and career progress in
@@ -49,6 +53,12 @@ function Login() {
         New to SalonHub?{" "}
         <Link className="auth-link" to="/register">
           Create an account
+        </Link>
+        <span className="auth-footer-separator" aria-hidden="true">
+          ·
+        </span>
+        <Link className="auth-link" to="/verify-email">
+          Verify email
         </Link>
       </p>
     </AuthShell>

@@ -1299,30 +1299,24 @@ select {
 .footer-inner {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   gap: 24px;
-}
-
-.footer-brand {
-  color: inherit;
-  text-decoration: none;
 }
 
 .footer p {
   margin: 0;
-  text-align: right;
+  text-align: center;
   font-size: 0.9rem;
   font-weight: 700;
 }
 
 @media (max-width: 640px) {
   .footer-inner {
-    flex-direction: column;
-    align-items: flex-start;
+    justify-content: center;
   }
 
   .footer p {
-    text-align: left;
+    text-align: center;
   }
 }
 
@@ -2288,8 +2282,7 @@ select {
   text-transform: uppercase;
 }
 
-.creative-brand:hover .brand-logo-mark,
-.footer-brand:hover .brand-logo-mark {
+.creative-brand:hover .brand-logo-mark {
   filter: drop-shadow(0 13px 20px rgba(159, 100, 120, 0.3));
   transform: translateY(-2px) rotate(-2deg);
 }

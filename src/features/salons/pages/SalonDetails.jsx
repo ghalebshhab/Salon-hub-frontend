@@ -1,11 +1,16 @@
-import { Clock, Mail, MapPin, Phone, Scissors, UsersRound } from "lucide-react";
+import { Clock, Mail, MapPin, Phone, Scissors, UserPlus, UsersRound } from "lucide-react";
+import { Link } from "react-router-dom";
 import useSalonDetails from "../hooks/useSalonDetails.js";
 import SalonStatusBadge from "../components/SalonStatusBadge.jsx";
 import SalonServicesList from "../../services/components/SalonServicesList.jsx";
 import ReviewsList from "../../reviews/components/ReviewsList.jsx";
+import useAuth from "../../../shared/auth/useAuth.js";
+import useJoinSalonRequest from "../../employment/hooks/useJoinSalonRequest.js";
 
 function SalonDetails() {
   const { salon, loading } = useSalonDetails();
+  const { loggedIn, user } = useAuth();
+  const { joining, requestJoin } = useJoinSalonRequest();
   if (loading) return <div className="loading">Loading salon profile...</div>;
   if (!salon)
     return (
@@ -47,6 +52,26 @@ function SalonDetails() {
                 <Phone size={18} />
                 Call Salon
               </a>
+              {loggedIn && user?.role === "USER" && (
+                <button
+                  className="btn btn-secondary"
+                  type="button"
+                  disabled={joining}
+                  onClick={() => requestJoin(salon.salonId ?? salon.id)}
+                >
+                  <UserPlus size={18} />
+                  {joining ? "Sending request…" : "Request to join team"}
+                </button>
+              )}
+              {!loggedIn && (
+                <Link
+                  className="btn btn-secondary"
+                  to="/login"
+                  state={{ from: `/salons/${salon.salonId ?? salon.id}` }}
+                >
+                  <UserPlus size={18} /> Sign in to join
+                </Link>
+              )}
             </div>
             <div className="salon-profile-stats">
               <div className="salon-stat-card">

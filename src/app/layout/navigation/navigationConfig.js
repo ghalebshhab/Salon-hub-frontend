@@ -5,9 +5,11 @@ import {
   CalendarDays,
   ClipboardList,
   House,
+  Handshake,
   LayoutDashboard,
   Sparkles,
   Scissors,
+  ShieldCheck,
   UserPlus,
   UsersRound,
 } from "lucide-react";
@@ -25,6 +27,7 @@ export const ownerLinks = [
   { to: "/owner/bookings", label: "Booking requests", icon: CalendarDays },
   { to: "/owner/services", label: "Services", icon: Scissors },
   { to: "/owner/employees", label: "Team & schedules", icon: UsersRound },
+  { to: "/owner/employment", label: "Employment", icon: Handshake },
   {
     to: "/owner/applications",
     label: "Hiring applications",
@@ -48,6 +51,8 @@ export const ownerActions = [
 ];
 
 export const accountLinks = [
+  { to: "/account/security", label: "Account security", icon: ShieldCheck },
+  { to: "/employment", label: "Employment center", icon: Handshake },
   { to: "/profile/career", label: "Career profile", icon: BriefcaseBusiness },
   { to: "/my-applications", label: "My applications", icon: ClipboardList },
   { to: "/notifications", label: "Notifications", icon: Bell },

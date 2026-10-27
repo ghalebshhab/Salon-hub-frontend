@@ -33,6 +33,9 @@ describe("HTTP authentication policy", () => {
       adapter: inspect(undefined),
     });
     await http.post("/auth/password/reset", {}, { adapter: inspect(undefined) });
+    await http.post("/auth/password/change", {}, {
+      adapter: inspect("Bearer valid"),
+    });
     await http.post("/auth/logout", {}, { adapter: inspect("Bearer valid") });
   });
 
@@ -130,6 +133,18 @@ describe("HTTP authentication policy", () => {
     expect(
       loadingMessageFor({ method: "post", url: "/auth/password/reset" }),
     ).toBe("Securing your new password…");
+    expect(
+      loadingMessageFor({ method: "post", url: "/auth/password/change" }),
+    ).toBe("Changing your password securely…");
+    expect(
+      loadingMessageFor({ method: "post", url: "/employment/join" }),
+    ).toBe("Sending your join request…");
+    expect(
+      loadingMessageFor({
+        method: "post",
+        url: "/employment/leave/accept/12",
+      }),
+    ).toBe("Confirming the employee release…");
     expect(
       loadingMessageFor({ method: "put", url: "/bookings/10/accept" }),
     ).toBe("Accepting the booking…");

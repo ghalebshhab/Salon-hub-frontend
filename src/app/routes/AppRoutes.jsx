@@ -27,6 +27,9 @@ const VerifyResetCode = lazy(
 const ResetPassword = lazy(
   () => import("../../features/auth/pages/ResetPassword.jsx"),
 );
+const AccountSecurity = lazy(
+  () => import("../../features/auth/pages/AccountSecurity.jsx"),
+);
 const ApplyHiringPost = lazy(
   () => import("../../features/hiring/pages/ApplyHiringPost.jsx"),
 );
@@ -82,6 +85,12 @@ const MyBookings = lazy(
 const NotificationsPage = lazy(
   () => import("../../features/notifications/pages/NotificationsPage.jsx"),
 );
+const EmploymentCenter = lazy(
+  () => import("../../features/employment/pages/EmploymentCenter.jsx"),
+);
+const OwnerEmployment = lazy(
+  () => import("../../features/employment/pages/OwnerEmployment.jsx"),
+);
 
 export default function AppRoutes() {
   return (
@@ -94,6 +103,8 @@ export default function AppRoutes() {
           <Route path="/salons/:salonId/book" element={<CreateBooking />} />
           <Route path="/my-bookings" element={<MyBookings />} />
           <Route path="/notifications" element={<NotificationsPage />} />
+          <Route path="/account/security" element={<AccountSecurity />} />
+          <Route path="/employment" element={<EmploymentCenter />} />
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
@@ -111,6 +122,7 @@ export default function AppRoutes() {
           <Route path="/my-applications" element={<MyApplications />} />
           <Route element={<OwnerRoute />}>
             <Route path="/owner/dashboard" element={<OwnerDashboard />} />
+            <Route path="/owner/employment" element={<OwnerEmployment />} />
           </Route>
           <Route path="/owner/create-salon" element={<CreateSalon />} />
           <Route path="/owner/my-salon" element={<MySalon />} />

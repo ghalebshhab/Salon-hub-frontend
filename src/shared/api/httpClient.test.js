@@ -13,7 +13,7 @@ const fail = (status) => async (config) => {
 afterEach(resetLoadingForTests);
 
 describe("HTTP authentication policy", () => {
-  it("sends authentication to logout but not to public login", async () => {
+  it("sends authentication to logout but not to public authentication flows", async () => {
     saveToken("valid");
     const inspect = (expectedAuthorization) => async (config) => {
       expect(config.headers.Authorization).toBe(expectedAuthorization);
@@ -27,6 +27,12 @@ describe("HTTP authentication policy", () => {
     };
 
     await http.post("/auth/login", {}, { adapter: inspect(undefined) });
+    await http.post("/auth/email/verify", {}, { adapter: inspect(undefined) });
+    await http.post("/auth/password/forgot", {}, { adapter: inspect(undefined) });
+    await http.post("/auth/password/verify-code", {}, {
+      adapter: inspect(undefined),
+    });
+    await http.post("/auth/password/reset", {}, { adapter: inspect(undefined) });
     await http.post("/auth/logout", {}, { adapter: inspect("Bearer valid") });
   });
 
@@ -115,6 +121,15 @@ describe("HTTP authentication policy", () => {
     expect(
       loadingMessageFor({ method: "post", url: "/auth/logout" }),
     ).toBe("Signing you out…");
+    expect(
+      loadingMessageFor({ method: "post", url: "/auth/email/verify" }),
+    ).toBe("Verifying your email…");
+    expect(
+      loadingMessageFor({ method: "post", url: "/auth/password/forgot" }),
+    ).toBe("Sending password reset instructions…");
+    expect(
+      loadingMessageFor({ method: "post", url: "/auth/password/reset" }),
+    ).toBe("Securing your new password…");
     expect(
       loadingMessageFor({ method: "put", url: "/bookings/10/accept" }),
     ).toBe("Accepting the booking…");

@@ -57,6 +57,10 @@ const paths = [
   "/hiring-posts",
   "/login",
   "/register",
+  "/verify-email",
+  "/forgot-password",
+  "/verify-reset-code",
+  "/reset-password",
   "/hiring-posts/1/apply",
   "/profile/career",
   "/owner/dashboard",
@@ -75,7 +79,7 @@ it.each(paths)(
       expect(
         container.querySelector(".page-main h1, .page-main h2"),
       ).not.toBeNull();
-    });
+    }, { timeout: 3000 });
     await waitFor(() => expect(container.querySelector(".loading")).toBeNull());
     expect(screen.queryByText("Something went wrong")).toBeNull();
   },

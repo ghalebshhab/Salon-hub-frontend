@@ -1,0 +1,366 @@
+.employment-page {
+  max-width: 1180px;
+  min-height: 70vh;
+}
+
+.employment-hero,
+.employment-section-heading,
+.employment-card-heading,
+.candidate-directory-heading,
+.employment-card-actions,
+.employment-transfer-route,
+.employment-search {
+  display: flex;
+  align-items: center;
+}
+
+.employment-hero {
+  justify-content: space-between;
+  gap: 28px;
+  margin-bottom: 34px;
+}
+
+.employment-hero h1 {
+  margin: 8px 0 12px;
+  font-size: clamp(2.45rem, 5vw, 4.6rem);
+  letter-spacing: -0.055em;
+}
+
+.employment-hero > div:first-child > p {
+  max-width: 680px;
+  margin: 0;
+  color: var(--muted);
+  font-weight: 650;
+  line-height: 1.7;
+}
+
+.employment-summary-card,
+.employment-summary-grid {
+  flex: 0 0 auto;
+  border: 1px solid var(--border);
+  background: var(--card);
+  box-shadow: var(--shadow);
+}
+
+.employment-summary-card {
+  display: grid;
+  min-width: 180px;
+  justify-items: center;
+  gap: 6px;
+  padding: 24px;
+  border-radius: 24px;
+  color: var(--primary-dark);
+}
+
+.employment-summary-card strong {
+  font-size: 2rem;
+}
+
+.employment-summary-card span,
+.employment-summary-grid span {
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.employment-summary-grid {
+  display: grid;
+  min-width: 220px;
+  gap: 10px;
+  padding: 18px 20px;
+  border-radius: 20px;
+}
+
+.employment-summary-grid strong {
+  margin-right: 5px;
+  color: var(--primary-dark);
+  font-size: 1.15rem;
+}
+
+.employment-section {
+  margin-top: 34px;
+  padding-top: 28px;
+  border-top: 1px solid var(--border);
+}
+
+.employment-section-heading {
+  justify-content: space-between;
+  gap: 22px;
+  margin-bottom: 20px;
+}
+
+.employment-section-heading h2,
+.employment-decision-panel h2 {
+  margin: 6px 0 0;
+  font-size: clamp(1.65rem, 3vw, 2.35rem);
+}
+
+.employment-grid,
+.candidate-directory-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.employment-card,
+.candidate-directory-card,
+.employment-decision-panel,
+.employment-leave-form {
+  border: 1px solid var(--border);
+  background: var(--card);
+  box-shadow: var(--shadow);
+}
+
+.employment-card,
+.candidate-directory-card {
+  padding: 22px;
+  border-radius: 24px;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s,
+    transform 0.2s;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .employment-card:hover,
+  .candidate-directory-card:hover {
+    border-color: color-mix(in srgb, var(--primary) 54%, var(--border));
+    background: color-mix(in srgb, var(--primary) 4%, var(--card));
+    box-shadow: 0 22px 52px color-mix(in srgb, var(--primary-dark) 14%, transparent);
+    transform: translateY(-3px);
+  }
+}
+
+.employment-card-heading {
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.employment-card-heading > div:nth-child(2),
+.employment-card-heading > div:first-child:not(.employment-card-icon) {
+  min-width: 0;
+  flex: 1;
+}
+
+.employment-card-heading h3,
+.candidate-directory-heading h3,
+.employment-leave-form h3 {
+  margin: 5px 0 0;
+}
+
+.employment-card-icon,
+.candidate-directory-avatar {
+  display: grid;
+  width: 46px;
+  height: 46px;
+  flex: 0 0 46px;
+  place-items: center;
+  border-radius: 15px;
+  color: var(--primary-dark);
+  background: var(--secondary);
+}
+
+.employment-status {
+  flex: 0 0 auto;
+  padding: 7px 10px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--muted);
+  background: var(--surface-elevated);
+  font-size: 0.7rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.employment-status-requested,
+.employment-status-accepted_pending_leave {
+  border-color: color-mix(in srgb, var(--accent) 70%, var(--border));
+  color: #8a5b0a;
+  background: color-mix(in srgb, var(--accent) 16%, var(--card));
+}
+
+.employment-status-accepted {
+  border-color: #9fd7b1;
+  color: #176538;
+  background: #eaf8ef;
+}
+
+.employment-status-rejected,
+.employment-status-cancelled {
+  border-color: #e5c2c8;
+  color: #974052;
+  background: #faecef;
+}
+
+:root[data-theme="dark"] .employment-status-requested,
+:root[data-theme="dark"] .employment-status-accepted_pending_leave {
+  color: #f2cb82;
+}
+
+:root[data-theme="dark"] .employment-status-accepted {
+  border-color: #356e4c;
+  color: #9ee0b5;
+  background: #1d3a29;
+}
+
+:root[data-theme="dark"] .employment-status-rejected,
+:root[data-theme="dark"] .employment-status-cancelled {
+  border-color: #70414c;
+  color: #efa8b8;
+  background: #3a242a;
+}
+
+.employment-card-meta,
+.candidate-directory-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px 16px;
+  margin-top: 18px;
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 750;
+}
+
+.employment-card-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.employment-context,
+.employment-reason,
+.candidate-directory-bio,
+.employment-policy-note,
+.employment-leave-form p {
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.employment-context,
+.employment-reason {
+  margin: 16px 0 0;
+  padding: 12px 14px;
+  border-left: 3px solid var(--accent);
+  background: var(--surface-elevated);
+}
+
+.employment-card-actions {
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-top: 18px;
+}
+
+.employment-decision-panel,
+.employment-leave-form {
+  display: grid;
+  gap: 16px;
+  margin-top: 24px;
+  padding: 22px;
+  border-radius: 24px;
+}
+
+.employment-decision-panel textarea,
+.employment-leave-form textarea {
+  width: 100%;
+  padding: 13px 14px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--text);
+  background: var(--surface-elevated);
+  font: inherit;
+  resize: vertical;
+}
+
+.employment-transfer-route {
+  gap: 10px;
+  margin-top: 18px;
+  color: var(--primary-dark);
+  font-size: 0.88rem;
+  font-weight: 850;
+}
+
+.employment-search {
+  min-width: min(430px, 100%);
+  gap: 9px;
+  padding: 7px 8px 7px 13px;
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  background: var(--card);
+}
+
+.employment-search input {
+  min-width: 0;
+  flex: 1;
+  border: 0;
+  outline: 0;
+  color: var(--text);
+  background: transparent;
+}
+
+.candidate-directory-heading {
+  gap: 12px;
+}
+
+.candidate-directory-heading h3 {
+  margin: 0;
+}
+
+.candidate-directory-heading p {
+  margin: 3px 0 0;
+  color: var(--muted);
+}
+
+.candidate-directory-bio {
+  min-height: 52px;
+}
+
+.candidate-directory-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.candidate-directory-skills span {
+  padding: 6px 9px;
+  border-radius: 999px;
+  color: var(--primary-dark);
+  background: var(--secondary);
+  font-size: 0.74rem;
+  font-weight: 850;
+}
+
+@media (max-width: 820px) {
+  .employment-hero,
+  .employment-section-heading {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .employment-summary-card,
+  .employment-summary-grid,
+  .employment-search {
+    width: 100%;
+  }
+
+  .employment-grid,
+  .candidate-directory-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 540px) {
+  .employment-card-heading {
+    flex-wrap: wrap;
+  }
+
+  .employment-status {
+    margin-left: 58px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .employment-card,
+  .candidate-directory-card {
+    transition: none;
+  }
+}

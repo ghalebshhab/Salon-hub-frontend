@@ -23,7 +23,6 @@ export const exploreLinks = [
 
 export const ownerLinks = [
   { to: "/owner/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { to: "/owner/my-salon", label: "My salon", icon: Building2 },
   { to: "/owner/bookings", label: "Booking requests", icon: CalendarDays },
   { to: "/owner/services", label: "Services", icon: Scissors },
   { to: "/owner/employees", label: "Team & schedules", icon: UsersRound },

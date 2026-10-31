@@ -1,10 +1,11 @@
-import { LogIn, Moon, Sun } from "lucide-react";
+import { Building2, LogIn, Moon, Sun } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import NotificationBell from "../../../features/notifications/components/NotificationBell.jsx";
 import AccountMenu from "./AccountMenu.jsx";
 
 export default function NavigationActions({
   loggedIn,
+  hasSalon,
   theme,
   profileMenuOpen,
   onToggleTheme,
@@ -29,6 +30,16 @@ export default function NavigationActions({
 
       {loggedIn ? (
         <>
+          {hasSalon && (
+            <NavLink
+              to="/owner/my-salon"
+              className="creative-nav-link"
+              onClick={onNavigate}
+            >
+              <Building2 size={17} />
+              My salon
+            </NavLink>
+          )}
           <div className="nav-notification-wrap">
             <NotificationBell />
             <span className="nav-mobile-control-label">Notifications</span>

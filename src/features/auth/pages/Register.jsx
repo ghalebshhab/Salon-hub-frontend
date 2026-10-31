@@ -19,7 +19,7 @@ function Register() {
         </div>
         <PasswordField id="register-password" name="password" label="Password" value={form.password} onChange={handleChange} placeholder="Create a strong password" autoComplete="new-password" required />
         <p className="auth-hint">Use the password rules required by your SalonHub account.</p>
-        <AuthSubmitButton loading={loading}>Create account</AuthSubmitButton>
+        <AuthSubmitButton loading={loading} loadingLabel="Creating your account…">Create account</AuthSubmitButton>
       </form>
       <div className="auth-note">Your normal user profile is created automatically. You can upgrade to a career profile later—no career fields are needed here.</div>
       <p className="auth-footer">Already have an account? <Link className="auth-link" to="/login">Sign in</Link></p>

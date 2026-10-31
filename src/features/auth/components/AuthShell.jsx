@@ -1,12 +1,11 @@
 import { Link } from "react-router-dom";
-import BrandLogo from "../../../shared/components/BrandLogo.jsx";
 
 export default function AuthShell({ eyebrow, title, intro, children, footer }) {
   return (
     <main className="auth-experience">
       <section className="auth-story" aria-label="About SalonHub">
-        <Link to="/" className="auth-story-brand" aria-label="SalonHub home">
-          <BrandLogo showTagline />
+        <Link to="/" className="auth-story-wordmark" aria-label="Return to SalonHub home">
+          SalonHub
         </Link>
         <div className="auth-story-copy">
           <p className="auth-kicker">A better way to book</p>

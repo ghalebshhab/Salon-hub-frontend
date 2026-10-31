@@ -11,7 +11,7 @@ function Login() {
         <AuthField id="login-email" name="email" label="Email address" type="email" value={form.email} onChange={handleChange} placeholder="you@example.com" autoComplete="email" required />
         <PasswordField id="login-password" name="password" label="Password" value={form.password} onChange={handleChange} placeholder="Enter your password" autoComplete="current-password" required />
         <div className="auth-inline"><span>Secure access to your account</span><span>Protected by SalonHub</span></div>
-        <AuthSubmitButton loading={loading}>Sign in</AuthSubmitButton>
+        <AuthSubmitButton loading={loading} loadingLabel="Signing you in…">Sign in</AuthSubmitButton>
       </form>
       <div className="auth-note">Your profile keeps bookings, salon relationships, and career progress in one place.</div>
       <p className="auth-footer">New to SalonHub? <Link className="auth-link" to="/register">Create an account</Link></p>

@@ -118,7 +118,7 @@ function NotificationBell() {
             </p>
           ) : notifications.length === 0 ? (
             <p className="notification-feedback">
-              Booking updates will appear here.
+              Booking and salon updates will appear here.
             </p>
           ) : (
             <div className="notification-list">

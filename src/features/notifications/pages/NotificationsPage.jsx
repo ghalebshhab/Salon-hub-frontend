@@ -50,7 +50,7 @@ export default function NotificationsPage() {
           <div>
             <p className="notifications-eyebrow">SALONHUP UPDATES</p>
             <h1>Notifications</h1>
-            <p>Keep up with changes to your bookings.</p>
+            <p>Keep up with changes to your bookings and salon.</p>
           </div>
         </div>
         <button
@@ -75,7 +75,7 @@ export default function NotificationsPage() {
         <div className="notifications-page-empty">
           <Bell size={27} />
           <h2>Nothing new yet</h2>
-          <p>Booking decisions and updates from your salon will show here.</p>
+          <p>Booking decisions and salon-request updates will show here.</p>
         </div>
       ) : (
         <div className="notifications-page-list">

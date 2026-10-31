@@ -30,6 +30,9 @@ const ResetPassword = lazy(
 const AccountSecurity = lazy(
   () => import("../../features/auth/pages/AccountSecurity.jsx"),
 );
+const AuthBackgroundLab = lazy(
+  () => import("../../features/auth/pages/AuthBackgroundLab.jsx"),
+);
 const ApplyHiringPost = lazy(
   () => import("../../features/hiring/pages/ApplyHiringPost.jsx"),
 );
@@ -112,6 +115,7 @@ export default function AppRoutes() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/verify-reset-code" element={<VerifyResetCode />} />
         <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/auth-background-lab" element={<AuthBackgroundLab />} />
         <Route element={<ProtectedRoute />}>
           <Route path="/hiring-posts" element={<HiringPosts />} />
           <Route

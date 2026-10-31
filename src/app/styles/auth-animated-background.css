@@ -1,0 +1,154 @@
+.auth-animated-bg {
+  position: absolute;
+  inset: -10%;
+  z-index: -2;
+  overflow: hidden;
+  background: #503747;
+}
+
+.auth-bg-layer {
+  position: absolute;
+  display: block;
+  pointer-events: none;
+}
+
+.auth-animated-bg-silk {
+  background: linear-gradient(135deg, #38242f, #76546f 48%, #34212f);
+}
+
+.auth-animated-bg-silk .auth-bg-layer {
+  inset: -35%;
+  border-radius: 45%;
+  filter: blur(3px);
+  mix-blend-mode: screen;
+}
+
+.auth-animated-bg-silk .auth-bg-layer-one {
+  background: repeating-radial-gradient(ellipse at 30% 40%, rgba(239,195,148,.48) 0 4%, rgba(118,84,111,.06) 10% 16%, rgba(31,17,27,.36) 22% 29%);
+  animation: silkDrift 15s ease-in-out infinite alternate;
+}
+
+.auth-animated-bg-silk .auth-bg-layer-two {
+  background: repeating-radial-gradient(ellipse at 75% 58%, rgba(197,142,186,.35) 0 5%, rgba(255,255,255,.04) 11% 18%, rgba(35,20,31,.45) 24% 31%);
+  animation: silkDrift 20s -6s ease-in-out infinite alternate-reverse;
+}
+
+.auth-animated-bg-silk .auth-bg-layer-three {
+  inset: 0;
+  background: linear-gradient(112deg, transparent 20%, rgba(255,224,190,.16) 43%, transparent 59%);
+  animation: silkSheen 8s ease-in-out infinite;
+}
+
+.auth-animated-bg-aurora {
+  background: linear-gradient(160deg, #3a2838, #6a4964);
+}
+
+.auth-animated-bg-aurora .auth-bg-layer {
+  width: 74%;
+  height: 60%;
+  border-radius: 50%;
+  filter: blur(45px);
+  opacity: .62;
+}
+
+.auth-animated-bg-aurora .auth-bg-layer-one {
+  top: -12%;
+  left: -20%;
+  background: #d9a3c7;
+  animation: auroraFloat 12s ease-in-out infinite alternate;
+}
+
+.auth-animated-bg-aurora .auth-bg-layer-two {
+  top: 8%;
+  right: -26%;
+  background: #d7a86e;
+  animation: auroraFloat 15s -4s ease-in-out infinite alternate-reverse;
+}
+
+.auth-animated-bg-aurora .auth-bg-layer-three {
+  bottom: -26%;
+  left: 16%;
+  background: #9e6f96;
+  animation: auroraFloat 17s -8s ease-in-out infinite alternate;
+}
+
+.auth-animated-bg-threads {
+  background: radial-gradient(circle at 75% 20%, #805b77, #3b2735 65%);
+}
+
+.auth-bg-threads {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: .62;
+}
+
+.auth-bg-threads path {
+  fill: none;
+  stroke: color-mix(in srgb, #f2d3b0 48%, #c58eba);
+  stroke-width: 1.2;
+  stroke-linecap: round;
+  stroke-dasharray: 18 9;
+  animation: threadFlow 14s linear infinite;
+}
+
+.auth-animated-bg-threads .auth-bg-layer-one {
+  inset: 0;
+  background: radial-gradient(circle at 30% 55%, rgba(225,185,120,.18), transparent 42%);
+  animation: threadGlow 8s ease-in-out infinite alternate;
+}
+
+.auth-animated-bg-rays {
+  background: linear-gradient(145deg, #3b2636, #6f4e68);
+}
+
+.auth-animated-bg-rays .auth-bg-layer-one {
+  width: 135%;
+  height: 135%;
+  top: -75%;
+  right: -75%;
+  background: repeating-conic-gradient(from 210deg, rgba(241,204,151,.28) 0 4deg, transparent 7deg 19deg);
+  filter: blur(5px);
+  transform-origin: top right;
+  animation: raysSway 13s ease-in-out infinite alternate;
+}
+
+.auth-animated-bg-rays .auth-bg-layer-two {
+  inset: 0;
+  background: radial-gradient(circle at 100% 0%, rgba(255,225,180,.45), transparent 34%);
+  animation: rayGlow 6s ease-in-out infinite alternate;
+}
+
+@keyframes silkDrift {
+  to { transform: translate(8%, -5%) rotate(8deg) scale(1.08); }
+}
+
+@keyframes silkSheen {
+  0%, 100% { transform: translateX(-22%); opacity: .25; }
+  50% { transform: translateX(22%); opacity: .7; }
+}
+
+@keyframes auroraFloat {
+  to { transform: translate(18%, 14%) scale(1.18) rotate(12deg); }
+}
+
+@keyframes threadFlow {
+  to { stroke-dashoffset: -270; }
+}
+
+@keyframes threadGlow {
+  to { transform: translate(18%, -12%) scale(1.2); }
+}
+
+@keyframes raysSway {
+  to { transform: rotate(7deg) scale(1.08); }
+}
+
+@keyframes rayGlow {
+  to { opacity: .55; transform: scale(1.08); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .auth-animated-bg * { animation: none !important; }
+}

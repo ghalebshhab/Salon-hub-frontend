@@ -110,7 +110,7 @@ export function loadingMessageFor(config) {
 
 httpClient.interceptors.request.use((config) => {
   const token = getToken();
-  if (token && !publicAuthenticationPaths.has(config.url))
+  if (token && !config.skipAuth && !publicAuthenticationPaths.has(config.url))
     config.headers.Authorization = `Bearer ${token}`;
   const method = config.method?.toLowerCase();
   const shouldShowLoading =

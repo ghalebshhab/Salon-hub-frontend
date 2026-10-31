@@ -8,7 +8,7 @@ export const createSalonServiceApi = async (serviceData) => {
 export const getActiveSalonServicesApi = async (salonId, config = {}) => {
   const response = await httpClient.get(
     `/salon-services/salon/${salonId}`,
-    config,
+    { ...config, skipAuth: true },
   );
   return response.data;
 };

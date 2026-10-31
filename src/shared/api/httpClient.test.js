@@ -46,6 +46,23 @@ describe("HTTP authentication policy", () => {
     ).rejects.toBeDefined();
     expect(getToken()).toBeNull();
   });
+  it("does not send a stale session with explicitly public requests", async () => {
+    saveToken("stale");
+    await http.get("/salons/1", {
+      skipAuth: true,
+      adapter: async (config) => {
+        expect(config.headers.Authorization).toBeUndefined();
+        return {
+          config,
+          data: { success: true, data: { id: 1 } },
+          headers: {},
+          status: 200,
+          statusText: "OK",
+        };
+      },
+    });
+    expect(getToken()).toBe("stale");
+  });
   it("keeps the session for forbidden requests and failed login attempts", async () => {
     saveToken("valid");
     await expect(

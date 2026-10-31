@@ -17,7 +17,10 @@ export const createSalonApi = async (data) => {
 };
 
 export const getSalonByIdApi = async (salonId, config = {}) => {
-  const response = await httpClient.get(`/salons/${salonId}`, config);
+  const response = await httpClient.get(`/salons/${salonId}`, {
+    ...config,
+    skipAuth: true,
+  });
   return mapSalonResponse(response).data;
 };
 
@@ -42,7 +45,10 @@ export const deleteSalonApi = async (salonId) => {
 };
 
 export const getAllSalonsApi = async (config = {}) => {
-  const response = await httpClient.get("/salons/active", config);
+  const response = await httpClient.get("/salons/active", {
+    ...config,
+    skipAuth: true,
+  });
   return mapSalonResponse(response).data;
 };
 export const deleteMySalonApi = deleteSalonApi;

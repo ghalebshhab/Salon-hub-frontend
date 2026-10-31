@@ -17,6 +17,9 @@
 @import "./employment.css";
 @import "./motion.css";
 @import "./auth.css";
+@import "./auth-animated-background.css";
+@import "./auth-background-lab.css";
 @import "./navigation.css";
 @import "./scroll-story.css";
+@import "./floating-inputs.css";
 @import "../../features/prototype/prototype.css";

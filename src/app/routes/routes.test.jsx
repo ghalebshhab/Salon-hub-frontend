@@ -61,6 +61,7 @@ const paths = [
   "/forgot-password",
   "/verify-reset-code",
   "/reset-password",
+  "/auth-background-lab",
   "/account/security",
   "/employment",
   "/hiring-posts/1/apply",

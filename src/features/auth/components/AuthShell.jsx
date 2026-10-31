@@ -1,7 +1,11 @@
+import AuthAnimatedBackground from "./AuthAnimatedBackground.jsx";
+
 export default function AuthShell({ eyebrow, title, intro, children, footer }) {
   return (
     <div className="auth-experience">
       <section className="auth-story" aria-label="About SalonHub">
+        <AuthAnimatedBackground variant="silk" />
+        <div className="auth-story-shade" aria-hidden="true" />
         <div className="auth-story-copy">
           <p className="auth-kicker">A better way to book</p>
           <h1>Trusted places. Simple plans. More room to grow.</h1>

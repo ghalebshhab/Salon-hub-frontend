@@ -7,6 +7,8 @@ const navigationMessages = [
   [/^\/my-bookings/, "Opening your bookings…"],
   [/^\/notifications/, "Opening your notifications…"],
   [/^\/profile/, "Opening your profile…"],
+  [/^\/account\/security/, "Opening account security…"],
+  [/^\/employment/, "Opening your employment center…"],
   [/^\/login/, "Opening sign in…"],
   [/^\/register/, "Opening registration…"],
   [/^\/verify-email/, "Opening email verification…"],

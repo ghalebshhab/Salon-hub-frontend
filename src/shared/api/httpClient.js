@@ -45,6 +45,8 @@ export function loadingMessageFor(config) {
     return "Verifying your reset code…";
   if (url === "/auth/password/reset")
     return "Securing your new password…";
+  if (url === "/auth/password/change")
+    return "Changing your password securely…";
   if (url === "/profile/career") return "Updating your career profile…";
   if (url.includes("/applications/") && url.endsWith("/accept"))
     return "Accepting the application…";
@@ -85,6 +87,16 @@ export function loadingMessageFor(config) {
   if (url.startsWith("/salon-media"))
     return method === "delete" ? "Removing the salon post…" : "Publishing the salon post…";
   if (url.startsWith("/notifications")) return "Updating your notifications…";
+  if (url.startsWith("/employment")) {
+    if (url.includes("/invite/")) return "Sending the salon invitation…";
+    if (url.endsWith("/join")) return "Sending your join request…";
+    if (url.endsWith("/accept")) return "Accepting the employment request…";
+    if (url.endsWith("/reject")) return "Saving the employment decision…";
+    if (url.endsWith("/cancel")) return "Cancelling the employment request…";
+    if (url.includes("/leave/accept/")) return "Confirming the employee release…";
+    if (url.includes("/leave/cancel/")) return "Cancelling the leave request…";
+    if (url.endsWith("/leave/request")) return "Sending the leave request…";
+  }
   if (url.startsWith("/salons")) {
     if (url.endsWith("/resubmit")) return "Resubmitting your salon…";
     if (method === "delete") return "Removing your salon…";

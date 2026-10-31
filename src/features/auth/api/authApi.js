@@ -34,6 +34,11 @@ export const resetPasswordApi = async (data) => {
   const response = await httpClient.post("/auth/password/reset", data);
   return response.data;
 };
+
+export const changePasswordApi = async (data) => {
+  const response = await httpClient.post("/auth/password/change", data);
+  return response.data;
+};
 export const logoutApi = async (data) => {
   const response = await httpClient.post("/auth/logout", data);
   return response.data;

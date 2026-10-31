@@ -1,0 +1,118 @@
+/*
+ * SalonHub adaptation of Maximinodotpy/thin-sheep-13 (MIT).
+ * It preserves the original input-first markup, 20px outline, inset label,
+ * and label-to-border transition while using the SalonHub theme tokens.
+ */
+.ui-floating-field,
+.auth-input-wrap {
+  position: relative;
+}
+
+.ui-floating-field > :is(input, textarea),
+.auth-input-wrap > input {
+  width: 100%;
+  min-height: 56px;
+  padding: 0.8em;
+  border: 2px solid color-mix(in srgb, var(--border) 82%, var(--primary));
+  border-radius: 20px;
+  outline: none;
+  color: var(--text);
+  background: transparent;
+  font-size: 1rem;
+  transition:
+    border-color 300ms ease,
+    box-shadow 300ms ease,
+    background-color 300ms ease;
+}
+
+.ui-floating-field > textarea {
+  min-height: 118px;
+  resize: vertical;
+}
+
+.ui-floating-field > label,
+.auth-input-wrap > label {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  left: 0;
+  max-width: calc(100% - 34px);
+  margin-left: 0.5em;
+  padding: 0.8em;
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 1rem;
+  font-weight: 650;
+  line-height: 1.5;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  pointer-events: none;
+  transform-origin: left center;
+  transition:
+    color 300ms ease,
+    transform 300ms cubic-bezier(.2,.8,.2,1),
+    margin 300ms ease,
+    padding 300ms ease,
+    background-color 300ms ease;
+}
+
+.ui-floating-field:has(> :is(input, textarea):focus) > label,
+.ui-floating-field:has(> :is(input, textarea):not(:placeholder-shown)) > label,
+.auth-input-wrap:has(> input:focus) > label,
+.auth-input-wrap:has(> input:not(:placeholder-shown)) > label {
+  margin: 0 0 0 1.3em;
+  padding: 0.4em;
+  color: var(--primary);
+  background: var(--auth-field-label-bg, var(--card));
+  transform: translateY(-50%) scale(0.9);
+}
+
+.ui-floating-field:has(> :is(input, textarea):focus) > :is(input, textarea),
+.ui-floating-field:has(> :is(input, textarea):not(:placeholder-shown)) > :is(input, textarea),
+.auth-input-wrap:has(> input:focus) > input,
+.auth-input-wrap:has(> input:not(:placeholder-shown)) > input {
+  border-color: var(--primary);
+}
+
+.ui-floating-field:has(> :is(input, textarea):focus) > :is(input, textarea),
+.auth-input-wrap:has(> input:focus) > input {
+  background: color-mix(in srgb, var(--card) 48%, transparent);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary) 15%, transparent);
+}
+
+.ui-floating-field > :is(input, textarea)::placeholder,
+.auth-input-wrap > input::placeholder {
+  color: var(--muted);
+  opacity: 0;
+  transition: opacity 180ms ease;
+}
+
+.ui-floating-field > :is(input, textarea):focus::placeholder,
+.auth-input-wrap > input:focus::placeholder {
+  opacity: 0.62;
+}
+
+.auth-field[data-invalid="true"] .auth-input-wrap > input,
+.ui-floating-field[data-invalid="true"] > :is(input, textarea) {
+  border-color: var(--danger);
+}
+
+.auth-field[data-invalid="true"] .auth-input-wrap > label,
+.ui-floating-field[data-invalid="true"] > label {
+  color: var(--danger);
+}
+
+.ui-floating-field > :is(input, textarea):disabled,
+.auth-input-wrap > input:disabled {
+  cursor: not-allowed;
+  opacity: 0.62;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-floating-field > :is(input, textarea),
+  .auth-input-wrap > input,
+  .ui-floating-field > label,
+  .auth-input-wrap > label {
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -1,15 +1,25 @@
-export default function AuthField({ id, label, hint, error, ...props }) {
+export default function AuthField({
+  id,
+  label,
+  hint,
+  error,
+  placeholder,
+  ...props
+}) {
   return (
     <div className="auth-field" data-invalid={Boolean(error)}>
-      <label htmlFor={id}>{label}</label>
-      <input
-        id={id}
-        aria-invalid={Boolean(error)}
-        aria-describedby={
-          error ? `${id}-error` : hint ? `${id}-hint` : undefined
-        }
-        {...props}
-      />
+      <div className="auth-input-wrap">
+        <input
+          id={id}
+          placeholder={placeholder || " "}
+          aria-invalid={Boolean(error)}
+          aria-describedby={
+            error ? `${id}-error` : hint ? `${id}-hint` : undefined
+          }
+          {...props}
+        />
+        <label htmlFor={id}>{label}</label>
+      </div>
       {hint && (
         <p id={`${id}-hint`} className="auth-hint">
           {hint}

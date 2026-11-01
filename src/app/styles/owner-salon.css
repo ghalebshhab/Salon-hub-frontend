@@ -40,6 +40,26 @@
   box-shadow: 0 24px 70px rgba(43, 43, 43, 0.14);
 }
 
+.my-salon-cover-edit {
+  position: absolute;
+  z-index: 3;
+  right: 18px;
+  bottom: 18px;
+  width: min(390px, calc(100% - 36px));
+}
+
+.my-salon-cover-edit .media-source-picker {
+  border-color: rgba(255, 255, 255, 0.28);
+  background: color-mix(in srgb, var(--card) 92%, transparent);
+  box-shadow: 0 16px 38px rgba(0, 0, 0, 0.22);
+}
+
+.salon-cover-editor { display: grid; gap: 9px; }
+.salon-cover-editor { position: relative; }
+.salon-cover-editor > .btn { justify-self: end; }
+.salon-cover-close { position: absolute; z-index: 2; top: 8px; right: 8px; }
+.salon-cover-open { margin-left: auto; box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2); }
+
 .my-salon-cover img {
   width: 100%;
   height: 100%;

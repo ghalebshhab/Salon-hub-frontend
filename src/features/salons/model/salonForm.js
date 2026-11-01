@@ -5,10 +5,13 @@ export function toSalonPayload(form) {
     salonPhoneNumber: form.phoneNumber.trim(),
     salonEmail: form.email.trim(),
     salonCity: form.city,
+    googleMapsUrl: (form.googleMapsUrl || "").trim() || null,
+    latitude: form.latitude == null || form.latitude === "" ? null : Number(form.latitude),
+    longitude: form.longitude == null || form.longitude === "" ? null : Number(form.longitude),
     maxNumberOfEmployees: Number(form.maxNumOfEmployees),
     openingTime: form.openTime,
     closingTime: form.closeTime,
-    profilePictureUrl: form.profilePictureUrl.trim() || null,
+    profilePictureUrl: (form.profilePictureUrl || "").trim() || null,
   };
 }
 
@@ -26,6 +29,9 @@ export function fromSalonResponse(salon) {
     email: salon.email ?? salon.salonEmail,
     city: location,
     address: location,
+    googleMapsUrl: salon.googleMapsUrl || "",
+    latitude: salon.latitude ?? "",
+    longitude: salon.longitude ?? "",
     description: salon.description ?? salon.salonDescription,
     openTime: salon.openingTime ?? salon.openTime,
     closeTime: salon.closingTime ?? salon.closeTime,

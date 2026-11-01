@@ -9,6 +9,10 @@ import {
 } from "../../../shared/notifications/toast.jsx";
 import { getMySalonApi, updateSalonApi } from "../api/salonApi.js";
 import { toSalonPayload } from "../model/salonForm.js";
+import {
+  uploadSalonCoverApi,
+  uploadSalonCoverFromDriveApi,
+} from "../../media/api/mediaApi.js";
 
 function toSalonForm(salon) {
   return {
@@ -21,6 +25,12 @@ function toSalonForm(salon) {
     closeTime: salon?.closeTime || "18:00:00",
     maxNumOfEmployees: salon?.maxNumOfEmployees ?? 1,
     profilePictureUrl: salon?.profilePictureUrl || salon?.images?.[0] || "",
+    googleMapsUrl: salon?.googleMapsUrl || "",
+    latitude: salon?.latitude ?? "",
+    longitude: salon?.longitude ?? "",
+    coverFile: null,
+    coverDriveUrl: "",
+    coverPreviewUrl: "",
   };
 }
 
@@ -63,6 +73,19 @@ export default function useEditSalon() {
       if (!response.success) {
         showErrorToast(response.message || "Could not update salon.");
         return;
+      }
+      if (form.coverFile) {
+        const mediaResponse = await uploadSalonCoverApi(form.coverFile);
+        if (!mediaResponse.success) {
+          showErrorToast(mediaResponse.message);
+          return;
+        }
+      } else if (form.coverDriveUrl) {
+        const mediaResponse = await uploadSalonCoverFromDriveApi(form.coverDriveUrl);
+        if (!mediaResponse.success) {
+          showErrorToast(mediaResponse.message);
+          return;
+        }
       }
       showSuccessToast("Salon details updated.");
       navigate("/owner/my-salon");

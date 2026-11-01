@@ -15,13 +15,17 @@ import {
   UsersRound,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 import ConfirmDialog from "../../../shared/components/ConfirmDialog.jsx";
 import EmptyState from "../../../shared/components/EmptyState.jsx";
 import Loading from "../../../shared/components/Loading.jsx";
 import useMySalon from "../hooks/useMySalon.js";
 import SalonStatusBadge from "../components/SalonStatusBadge.jsx";
+import SalonCoverEditor from "../components/SalonCoverEditor.jsx";
+import { optimizedCloudinaryImage } from "../../media/model/cloudinaryMedia.js";
 
 function MySalon() {
+  const [uploadedImage, setUploadedImage] = useState("");
   const {
     salon,
     loading,
@@ -47,14 +51,14 @@ function MySalon() {
         </Link>
       </section>
     );
-  const image = salon.images?.[0];
+  const image = uploadedImage || salon.images?.[0];
   return (
     <section className="my-salon-page">
       <div className="container section">
         <div className="my-salon-hero">
           <div className="my-salon-cover">
             {image ? (
-              <img src={image} alt={salon.name} />
+              <img src={optimizedCloudinaryImage(image, { width: 1400, height: 700 })} alt={salon.name} />
             ) : (
               <div className="my-salon-cover-placeholder">
                 {salon.name?.[0]}
@@ -63,13 +67,20 @@ function MySalon() {
             <div className="my-salon-floating-status">
               <SalonStatusBadge state={salon.state} />
             </div>
+            <div className="my-salon-cover-edit">
+              <SalonCoverEditor currentUrl={image} onUploaded={setUploadedImage} />
+            </div>
           </div>
           <div className="my-salon-hero-content">
             <h1>{salon.name}</h1>
-            <p>
+            {salon.googleMapsUrl ? (
+              <a className="my-salon-location" href={salon.googleMapsUrl} target="_blank" rel="noreferrer">
+                <MapPin size={17} /> {salon.city}
+              </a>
+            ) : <p className="my-salon-location">
               <MapPin size={17} />
               {salon.city}
-            </p>
+            </p>}
             <div className="my-salon-hero-actions">
               <Link className="btn btn-secondary" to="/owner/my-salon/edit">
                 <Edit3 size={18} />

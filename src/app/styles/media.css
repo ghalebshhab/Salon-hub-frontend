@@ -1,0 +1,152 @@
+.media-source-picker {
+  display: grid;
+  gap: 14px;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: color-mix(in srgb, var(--card) 94%, transparent);
+}
+
+.media-picker-heading,
+.salon-location-heading,
+.salon-location-heading > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.media-picker-heading small,
+.salon-location-heading small {
+  display: block;
+  margin-top: 3px;
+  color: var(--muted);
+}
+
+.media-picker-label { color: var(--text); font-weight: 850; }
+.media-clear-button,
+.media-delete-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--muted);
+  background: var(--card);
+  cursor: pointer;
+}
+.media-clear-button { width: 34px; height: 34px; }
+.media-delete-button { padding: 7px 10px; color: #b44d63; }
+
+.media-picker-preview {
+  overflow: hidden;
+  width: 100%;
+  aspect-ratio: 16 / 7;
+  border-radius: 16px;
+  background: var(--secondary);
+}
+.media-picker-preview img,
+.media-picker-preview video { width: 100%; height: 100%; object-fit: cover; }
+
+.media-picker-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.media-picker-tabs button,
+.media-device-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 42px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--muted);
+  background: var(--card);
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+  transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+.media-picker-tabs button:hover,
+.media-device-button:hover,
+.media-picker-tabs button.active {
+  border-color: var(--primary);
+  color: var(--text);
+  box-shadow: 0 10px 25px rgba(192, 132, 151, 0.12);
+}
+.media-device-button:hover { transform: translateY(-1px); }
+.media-picker-tabs button.active { background: color-mix(in srgb, var(--primary) 12%, var(--card)); }
+.media-drive-controls { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 9px; align-items: center; }
+.media-drive-controls a { grid-column: 1 / -1; color: var(--primary); font-weight: 800; font-size: 0.84rem; }
+.media-source-picker-compact { padding: 14px; }
+
+.salon-location-fields {
+  display: grid;
+  gap: 14px;
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: color-mix(in srgb, var(--secondary) 34%, var(--card));
+}
+.salon-location-heading > div { justify-content: flex-start; align-items: flex-start; }
+.salon-location-heading svg { flex: 0 0 auto; color: var(--primary); }
+.salon-location-heading .text-link { display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
+
+.salon-public-team-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.salon-public-employee {
+  display: grid;
+  grid-template-columns: 82px minmax(0, 1fr);
+  gap: 18px;
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 21px;
+  background: var(--card);
+  transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+}
+.salon-public-employee:hover { transform: translateY(-2px); border-color: var(--primary); box-shadow: 0 14px 30px rgba(192, 132, 151, 0.12); }
+.salon-employee-avatar { display: grid; width: 82px; height: 82px; place-items: center; overflow: hidden; border-radius: 24px; color: #fff; background: linear-gradient(145deg, var(--primary), var(--primary-dark)); font-size: 1.35rem; font-weight: 900; }
+.salon-employee-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.salon-employee-copy h3 { margin: 7px 0; font-size: 1.2rem; }
+.salon-employee-role,
+.salon-employee-experience,
+.salon-employee-services { display: flex; align-items: center; gap: 7px; }
+.salon-employee-role { color: var(--primary); font-size: 0.75rem; font-weight: 900; letter-spacing: 0.05em; text-transform: uppercase; }
+.salon-employee-experience,
+.salon-employee-bio,
+.salon-employee-services { margin: 8px 0; color: var(--muted); font-size: 0.88rem; line-height: 1.55; }
+.salon-employee-skills { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0; }
+.salon-employee-skills span { padding: 5px 9px; border-radius: 999px; color: var(--text); background: var(--secondary); font-size: 0.76rem; font-weight: 800; }
+.salon-team-empty { display: grid; justify-items: center; gap: 8px; padding: 36px 20px; border: 1px dashed var(--border); border-radius: 20px; color: var(--muted); text-align: center; }
+.salon-team-empty svg { color: var(--primary); }
+.salon-team-empty h3,
+.salon-team-empty p { margin: 0; }
+
+.salon-work-gallery-wrap { display: grid; gap: 22px; }
+.salon-work-publisher { display: grid; gap: 14px; padding: 20px; border: 1px solid color-mix(in srgb, var(--primary) 45%, var(--border)); border-radius: 22px; background: color-mix(in srgb, var(--primary) 7%, var(--card)); }
+.salon-work-publisher > div:first-child { display: flex; gap: 11px; align-items: flex-start; }
+.salon-work-publisher > div:first-child > svg { color: var(--primary); }
+.salon-work-publisher p { margin: 4px 0 0; color: var(--muted); }
+.salon-work-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.salon-work-card { overflow: hidden; border: 1px solid var(--border); border-radius: 20px; background: var(--card); }
+.salon-work-media { position: relative; aspect-ratio: 4 / 3; overflow: hidden; background: var(--secondary); }
+.salon-work-media img,
+.salon-work-media video { width: 100%; height: 100%; object-fit: cover; }
+.salon-work-media > span { position: absolute; top: 12px; left: 12px; display: inline-flex; align-items: center; gap: 5px; padding: 6px 9px; border-radius: 999px; color: #fff; background: rgba(20, 14, 21, 0.72); font-size: 0.7rem; font-weight: 900; text-transform: uppercase; }
+.salon-work-copy { display: grid; gap: 10px; padding: 15px; }
+.salon-work-copy strong,
+.salon-work-copy small { display: block; }
+.salon-work-copy small,
+.salon-work-copy p { color: var(--muted); }
+.salon-work-copy p { margin: 0; line-height: 1.55; }
+.salon-gallery-loading { padding: 30px; color: var(--muted); text-align: center; }
+
+@media (max-width: 760px) {
+  .salon-public-team-grid,
+  .salon-work-grid { grid-template-columns: 1fr; }
+  .salon-location-heading { align-items: flex-start; flex-direction: column; }
+}
+@media (max-width: 520px) {
+  .media-drive-controls { grid-template-columns: 1fr; }
+  .media-drive-controls a { grid-column: auto; }
+  .salon-public-employee { grid-template-columns: 1fr; }
+  .media-picker-tabs { grid-template-columns: 1fr; }
+}

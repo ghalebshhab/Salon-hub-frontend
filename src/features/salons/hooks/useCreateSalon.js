@@ -8,6 +8,10 @@ import {
 } from "../../../shared/notifications/toast.jsx";
 import { createSalonApi } from "../api/salonApi.js";
 import { toSalonPayload } from "../model/salonForm.js";
+import {
+  uploadSalonCoverApi,
+  uploadSalonCoverFromDriveApi,
+} from "../../media/api/mediaApi.js";
 
 const initialForm = {
   name: "",
@@ -19,6 +23,12 @@ const initialForm = {
   closeTime: "18:00:00",
   maxNumOfEmployees: 5,
   profilePictureUrl: "",
+  googleMapsUrl: "",
+  latitude: "",
+  longitude: "",
+  coverFile: null,
+  coverDriveUrl: "",
+  coverPreviewUrl: "",
 };
 
 export default function useCreateSalon() {
@@ -45,7 +55,21 @@ export default function useCreateSalon() {
         showErrorToast(response.message || "Failed to submit salon");
         return;
       }
-      showSuccessToast("Salon request submitted for review.");
+      let imageUploaded = true;
+      if (form.coverFile) {
+        const mediaResponse = await uploadSalonCoverApi(form.coverFile);
+        imageUploaded = mediaResponse.success;
+        if (!imageUploaded) showErrorToast(mediaResponse.message);
+      } else if (form.coverDriveUrl) {
+        const mediaResponse = await uploadSalonCoverFromDriveApi(form.coverDriveUrl);
+        imageUploaded = mediaResponse.success;
+        if (!imageUploaded) showErrorToast(mediaResponse.message);
+      }
+      showSuccessToast(
+        imageUploaded
+          ? "Salon request submitted for review."
+          : "Salon request was submitted, but its picture still needs to be uploaded.",
+      );
       navigate("/owner/my-salon");
     } catch (error) {
       showErrorToast(

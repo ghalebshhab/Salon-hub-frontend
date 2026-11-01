@@ -8,7 +8,7 @@ export const getMySalonEmployeesApi = async (config = {}) => {
 export const getSalonEmployeesApi = async (salonId, config = {}) => {
   const response = await httpClient.get(
     `/salon-employees/salon/${salonId}`,
-    config,
+    { ...config, skipAuth: true },
   );
   return response.data;
 };

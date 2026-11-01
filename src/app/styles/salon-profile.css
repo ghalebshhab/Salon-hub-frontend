@@ -484,9 +484,14 @@
   margin: 0;
   color: var(--muted);
   font-weight: 800;
+  line-height: 1.45;
+  margin-top: 6px;
 }
 
 .salon-details-location svg { color: var(--primary); }
+.salon-details-location-link { width: fit-content; color: var(--muted); text-decoration: none; }
+.salon-details-location-link:hover { color: var(--text); }
+.salon-info-list a { display: inline-flex; align-items: center; gap: 5px; color: var(--primary-dark); font-weight: 800; }
 
 .salon-details-description {
   max-width: 560px;

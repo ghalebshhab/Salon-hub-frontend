@@ -1,6 +1,7 @@
 import {
   CalendarDays,
   Clock3,
+  ExternalLink,
   Mail,
   MapPin,
   Phone,
@@ -15,11 +16,14 @@ import SalonServicesList from "../../services/components/SalonServicesList.jsx";
 import ReviewsList from "../../reviews/components/ReviewsList.jsx";
 import useAuth from "../../../shared/auth/useAuth.js";
 import useJoinSalonRequest from "../../employment/hooks/useJoinSalonRequest.js";
+import SalonEmployees from "../components/SalonEmployees.jsx";
+import SalonWorkGallery from "../../media/components/SalonWorkGallery.jsx";
+import { optimizedCloudinaryImage } from "../../media/model/cloudinaryMedia.js";
 
 const formatTime = (value) => value?.slice(0, 5) || "Not listed";
 
 function SalonDetails() {
-  const { salon, loading } = useSalonDetails();
+  const { salon, employees, loading } = useSalonDetails();
   const { loggedIn, user } = useAuth();
   const { joining, requestJoin } = useJoinSalonRequest();
 
@@ -54,13 +58,16 @@ function SalonDetails() {
   const image = salon.images?.[0];
   const salonPath = `/salons/${salonId}`;
   const bookingPath = `/salons/${salonId}/book`;
+  const ownsSalon = Number(user?.ownedSalonId) === Number(salonId);
+  const belongsToSalon = Number(user?.salonId) === Number(salonId);
+  const canRequestJoin = loggedIn && user?.role === "USER" && !ownsSalon && !belongsToSalon;
   return (
     <section className="salon-details-page">
       <div className="container section">
         <div className="salon-details-hero">
           <div className="salon-details-media">
             {image ? (
-              <img src={image} alt={`${salon.name} interior`} />
+              <img src={optimizedCloudinaryImage(image, { width: 1400, height: 1000 })} alt={`${salon.name} interior`} />
             ) : (
               <div className="salon-hero-placeholder">
                 <Scissors aria-hidden="true" />
@@ -79,10 +86,11 @@ function SalonDetails() {
               <SalonStatusBadge state={salon.state} />
             </div>
             <h1>{salon.name}</h1>
-            <p className="salon-details-location">
-              <MapPin aria-hidden="true" />
-              {salon.city || "Location not listed"}
-            </p>
+            {salon.googleMapsUrl ? (
+              <a className="salon-details-location salon-details-location-link" href={salon.googleMapsUrl} target="_blank" rel="noreferrer">
+                <MapPin aria-hidden="true" /><span>{salon.city || "View salon location"}</span><ExternalLink size={14} />
+              </a>
+            ) : <p className="salon-details-location"><MapPin aria-hidden="true" /><span>{salon.city || "Location not listed"}</span></p>}
             <p className="salon-details-description">
               {salon.description || "This salon has not added a description yet."}
             </p>
@@ -102,7 +110,7 @@ function SalonDetails() {
                   Call salon
                 </a>
               )}
-              {loggedIn && user?.role === "USER" && (
+              {canRequestJoin && (
                 <button
                   className="btn btn-secondary"
                   type="button"
@@ -165,7 +173,7 @@ function SalonDetails() {
                   <MapPin aria-hidden="true" />
                   <span>
                     <strong>Location</strong>
-                    {salon.city || "Not listed"}
+                    {salon.googleMapsUrl ? <a href={salon.googleMapsUrl} target="_blank" rel="noreferrer">{salon.city || "Open in Google Maps"} <ExternalLink size={12} /></a> : salon.city || "Not listed"}
                   </span>
                 </div>
                 <div>
@@ -248,6 +256,24 @@ function SalonDetails() {
                   </a>
                 )}
               </div>
+            </section>
+
+            <section className="salon-details-section" aria-labelledby="team-heading">
+              <div className="salon-section-heading">
+                <span className="eyebrow">Meet the professionals</span>
+                <h2 id="team-heading">The people behind {salon.name}</h2>
+                <p>Explore the team&apos;s specialties, experience, skills, and services without exposing their private contact information.</p>
+              </div>
+              <SalonEmployees employees={employees} />
+            </section>
+
+            <section className="salon-details-section" aria-labelledby="work-heading">
+              <div className="salon-section-heading">
+                <span className="eyebrow">Team portfolio</span>
+                <h2 id="work-heading">Recent work from the salon</h2>
+                <p>Photos and videos published by active employees who work at this salon.</p>
+              </div>
+              <SalonWorkGallery salonId={salonId} />
             </section>
 
             <section

@@ -1,5 +1,6 @@
 import { ExternalLink, MapPin } from "lucide-react";
 import MediaSourcePicker from "../../media/components/MediaSourcePicker.jsx";
+import GoogleMapsLocationPicker from "./GoogleMapsLocationPicker.jsx";
 
 const SALON_CITIES = [
   "Amman",
@@ -39,6 +40,15 @@ export default function SalonFormFields({ form, setForm, onChange }) {
         : {}),
     }));
   };
+
+  const setMapLocation = ({ latitude, longitude, googleMapsUrl, city }) =>
+    setForm((current) => ({
+      ...current,
+      latitude,
+      longitude,
+      googleMapsUrl,
+      ...(city ? { city } : {}),
+    }));
 
   return (
     <>
@@ -145,12 +155,17 @@ export default function SalonFormFields({ form, setForm, onChange }) {
         <div className="salon-location-heading">
           <div>
             <MapPin size={19} />
-            <div><strong>Google Maps location</strong><small>Paste a full Maps URL containing coordinates. Locations outside Jordan are rejected.</small></div>
+            <div><strong>Google Maps location</strong><small>Search, click or move the marker. The location fields are filled automatically.</small></div>
           </div>
           <a className="text-link" href="https://www.google.com/maps/search/salon+in+Jordan" target="_blank" rel="noreferrer">
             Choose on Google Maps <ExternalLink size={14} />
           </a>
         </div>
+        <GoogleMapsLocationPicker
+          latitude={form.latitude}
+          longitude={form.longitude}
+          onLocationChange={setMapLocation}
+        />
         <div className="form-group">
           <label htmlFor="salon-google-maps">Google Maps URL</label>
           <input

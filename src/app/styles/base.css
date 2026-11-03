@@ -2,6 +2,19 @@
   box-sizing: border-box;
 }
 
+html,
+body {
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+img,
+video,
+canvas,
+svg {
+  max-width: 100%;
+}
+
 :root {
   --primary: #76546f;
   --primary-dark: #5e4058;

@@ -460,7 +460,7 @@
     box-shadow: 0 32px 88px rgba(25, 20, 25, 0.26);
     opacity: 0;
     visibility: hidden;
-    transform: translateX(24px) scale(0.975);
+    transform: scale(0.975);
     transform-origin: top right;
     pointer-events: none;
     backdrop-filter: blur(24px);

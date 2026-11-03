@@ -366,6 +366,143 @@
   .prototype-booking-meta { grid-template-columns: 1fr; }
 }
 
+@media (max-width: 560px) {
+  .prototype-page :is(.prototype-header, .prototype-role-switcher, .prototype-workspace) {
+    width: min(100% - 24px, 1440px);
+  }
+
+  .prototype-header h1 {
+    font-size: clamp(2.2rem, 13vw, 2.65rem);
+    overflow-wrap: anywhere;
+  }
+
+  .prototype-sidebar {
+    padding: 12px;
+    overflow: visible;
+    border-radius: 18px;
+  }
+
+  .prototype-sidebar nav {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    overflow: visible;
+    padding-bottom: 0;
+  }
+
+  .prototype-sidebar nav button {
+    width: 100%;
+    min-width: 0;
+    min-height: 48px;
+    padding: 8px;
+    grid-template-columns: auto minmax(0, 1fr);
+    line-height: 1.25;
+  }
+
+  .prototype-canvas {
+    min-height: 0;
+    padding: 14px;
+    border-radius: 18px;
+  }
+
+  .prototype-view,
+  .prototype-card,
+  .prototype-job-main,
+  .prototype-candidate-main {
+    min-width: 0;
+  }
+
+  .prototype-card,
+  .prototype-booking-card,
+  .prototype-schedule-card,
+  .prototype-job-card,
+  .prototype-candidate-card,
+  .prototype-flow-panel {
+    padding: 14px;
+    border-radius: 17px;
+  }
+
+  .prototype-job-card,
+  .prototype-candidate-card {
+    grid-template-columns: 34px minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .prototype-rank {
+    width: 34px;
+    height: 34px;
+    border-radius: 11px;
+  }
+
+  .prototype-status {
+    max-width: 100%;
+    height: auto;
+    padding-block: 6px;
+    white-space: normal;
+    line-height: 1.25;
+    text-align: center;
+  }
+
+  .prototype-card-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .prototype-card-heading > * {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .prototype-card-heading :is(h3, p, .eyebrow),
+  .prototype-job-meta span,
+  .prototype-match-reason {
+    overflow-wrap: anywhere;
+  }
+
+  .prototype-card-actions,
+  .prototype-actions-stack {
+    width: 100%;
+  }
+
+  .prototype-card-actions > :is(button, a),
+  .prototype-actions-stack > :is(button, a) {
+    width: 100%;
+    white-space: normal;
+  }
+
+  .prototype-schedule-profile {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .prototype-periods,
+  .prototype-period {
+    width: 100%;
+  }
+
+  .prototype-period {
+    flex-wrap: wrap;
+  }
+
+  .prototype-period input {
+    min-width: 0;
+    flex: 1 1 82px;
+  }
+
+  .prototype-notification {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .prototype-notification > i {
+    display: none;
+  }
+}
+
+@media (max-width: 360px) {
+  .prototype-sidebar nav {
+    grid-template-columns: 1fr;
+  }
+}
+
 :root[data-theme="dark"] .prototype-overview-hero { background: linear-gradient(135deg, #251c26 0%, #432f42 58%, #5d403e 100%); }
 :root[data-theme="dark"] :is(.prototype-sidebar, .prototype-canvas, .prototype-card, .prototype-job-card, .prototype-candidate-card, .prototype-booking-card, .prototype-schedule-card, .prototype-profile-card, .prototype-metric, .prototype-notification, .prototype-role-switcher > button) { background-color: var(--card); border-color: var(--border); }
 

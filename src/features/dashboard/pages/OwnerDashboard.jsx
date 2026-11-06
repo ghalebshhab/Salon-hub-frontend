@@ -64,6 +64,7 @@ export default function OwnerDashboard() {
           onRangeChange={setRange}
           onRefresh={refetch}
           refreshing={loading}
+          workspaceActions
         />
         <DashboardStats summary={data.summary} />
         <PerformancePanels

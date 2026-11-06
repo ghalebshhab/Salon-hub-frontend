@@ -52,3 +52,117 @@
   .drawer-stats { grid-template-columns: 1fr; }
   .drawer-booking-status { align-items: flex-start; flex-direction: column; gap: 8px; }
 }
+
+/* v0 workspace refinement, adapted to the API-connected dashboard. */
+.owner-select {
+  text-decoration: none;
+  transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+}
+
+.owner-select:hover,
+.owner-select:focus-visible {
+  border-color: color-mix(in srgb, var(--primary) 62%, var(--border));
+  box-shadow: 0 8px 22px rgba(84, 42, 59, .09);
+  transform: translateY(-1px);
+}
+
+.owner-header-actions .btn {
+  white-space: nowrap;
+  transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+}
+
+.owner-header-actions .btn:hover {
+  box-shadow: 0 9px 24px rgba(84, 42, 59, .11);
+  transform: translateY(-2px);
+}
+
+.owner-dashboard-page :is(.owner-stat-card, .owner-panel, .owner-customer-card) {
+  transition:
+    transform .24s ease,
+    background-color .24s ease,
+    border-color .24s ease,
+    box-shadow .24s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .owner-dashboard-page :is(.owner-stat-card, .owner-panel, .owner-customer-card):hover {
+    color: var(--text);
+    border-color: color-mix(in srgb, var(--primary) 78%, var(--border));
+    background-color: color-mix(in srgb, var(--card) 90%, var(--primary-dark) 10%);
+    box-shadow:
+      0 22px 48px color-mix(in srgb, var(--primary) 16%, transparent),
+      inset 0 1px color-mix(in srgb, var(--primary) 18%, transparent);
+    transform: translateY(-4px);
+  }
+
+  :root[data-theme="dark"] .owner-dashboard-page :is(.owner-stat-card, .owner-panel, .owner-customer-card):hover {
+    border-color: color-mix(in srgb, var(--primary) 82%, var(--border));
+    background-color: color-mix(in srgb, var(--card) 88%, var(--primary) 12%);
+    box-shadow:
+      0 24px 54px rgba(0, 0, 0, .42),
+      0 0 0 1px color-mix(in srgb, var(--primary) 12%, transparent),
+      inset 0 1px color-mix(in srgb, var(--primary) 20%, transparent);
+  }
+}
+
+.owner-icon-button.is-refreshing svg {
+  animation: owner-dashboard-spin .8s linear infinite;
+}
+
+.owner-dashboard-page .owner-dashboard-shell > :is(
+  .owner-dashboard-header,
+  .owner-meta-row,
+  .owner-stats-grid,
+  .owner-section-grid,
+  .owner-bookings,
+  .owner-customers,
+  .owner-dashboard-footer
+) {
+  animation: owner-dashboard-enter .5s cubic-bezier(.22, 1, .36, 1) both;
+}
+
+.owner-dashboard-page .owner-dashboard-shell > :nth-child(2) { animation-delay: .04s; }
+.owner-dashboard-page .owner-dashboard-shell > :nth-child(3) { animation-delay: .08s; }
+.owner-dashboard-page .owner-dashboard-shell > :nth-child(4) { animation-delay: .12s; }
+.owner-dashboard-page .owner-dashboard-shell > :nth-child(5) { animation-delay: .16s; }
+.owner-dashboard-page .owner-dashboard-shell > :nth-child(n + 6) { animation-delay: .2s; }
+
+@keyframes owner-dashboard-enter {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes owner-dashboard-spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (max-width: 760px) {
+  .owner-header-actions {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .owner-header-actions .owner-select,
+  .owner-header-actions select,
+  .owner-header-actions .btn-primary {
+    grid-column: 1 / -1;
+  }
+
+  .owner-header-actions .btn-secondary {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .owner-header-actions .owner-select,
+  .owner-header-actions select,
+  .owner-header-actions .btn {
+    grid-column: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .owner-dashboard-page .owner-dashboard-shell > *,
+  .owner-icon-button.is-refreshing svg {
+    animation: none !important;
+  }
+}

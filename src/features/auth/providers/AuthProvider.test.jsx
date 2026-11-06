@@ -1,5 +1,5 @@
 import { act, renderHook, waitFor } from "@testing-library/react";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { clearAuthData, saveToken } from "../../../shared/auth/tokenStorage.js";
 import useAuth from "../../../shared/auth/useAuth.js";
 import AuthProvider from "./AuthProvider.jsx";
@@ -33,5 +33,26 @@ describe("AuthProvider", () => {
     await waitFor(() => expect(result.current.profileLoading).toBe(false));
     expect(result.current.isOwner).toBe(true);
     expect(result.current.role).toBe("OWNER");
+  });
+
+  it("refreshes a signed-in user's role when the application regains focus", async () => {
+    const refreshProfile = vi
+      .fn()
+      .mockResolvedValueOnce({ success: true, data: { id: 1, role: "USER" } })
+      .mockResolvedValueOnce({ success: true, data: { id: 1, role: "OWNER" } });
+    const refreshWrapper = ({ children }) => (
+      <AuthProvider loadProfile={refreshProfile}>{children}</AuthProvider>
+    );
+
+    saveToken("promoted-owner-token");
+    const { result } = renderHook(() => useAuth(), { wrapper: refreshWrapper });
+
+    await waitFor(() => expect(result.current.role).toBe("USER"));
+
+    act(() => window.dispatchEvent(new Event("focus")));
+
+    await waitFor(() => expect(result.current.role).toBe("OWNER"));
+    expect(result.current.isOwner).toBe(true);
+    expect(refreshProfile).toHaveBeenCalledTimes(2);
   });
 });

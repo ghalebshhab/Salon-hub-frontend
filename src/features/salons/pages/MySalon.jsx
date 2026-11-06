@@ -5,12 +5,12 @@ import {
   Clock,
   Edit3,
   Eye,
+  LayoutDashboard,
   Mail,
   MapPin,
   Phone,
   Plus,
   RefreshCw,
-  Scissors,
   Trash2,
   UsersRound,
 } from "lucide-react";
@@ -101,10 +101,10 @@ function MySalon() {
           </div>
         </div>
         <div className="my-salon-actions-grid">
-          <Link className="my-salon-action-card" to="/owner/services">
-            <Scissors />
-            <h3>Manage Services</h3>
-            <p>Keep your salon menu and booking prices up to date.</p>
+          <Link className="my-salon-action-card" to="/owner/dashboard">
+            <LayoutDashboard />
+            <h3>Owner Dashboard</h3>
+            <p>Open your salon performance, bookings, team, services, and customer insights.</p>
           </Link>
           <Link className="my-salon-action-card" to="/owner/employees">
             <CalendarClock />

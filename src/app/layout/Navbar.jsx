@@ -1,3 +1,4 @@
+import { LayoutDashboard } from "lucide-react";
 import { Link } from "react-router-dom";
 import useLogout from "../../features/auth/hooks/useLogout.js";
 import useAuth from "../../shared/auth/useAuth.js";
@@ -48,7 +49,7 @@ function Navbar() {
           )}
           <NavigationActions
             loggedIn={loggedIn}
-            hasSalon={hasSalon}
+            showMySalonLink={hasSalon && !isOwner}
             theme={theme}
             profileMenuOpen={menus.profileMenuOpen}
             onToggleTheme={toggleTheme}
@@ -57,6 +58,18 @@ function Navbar() {
             onLogout={() => void logout(menus.closeMenus)}
           />
         </nav>
+
+        {loggedIn && isOwner && (
+          <Link
+            className="owner-dashboard-header-link"
+            to="/owner/dashboard"
+            onClick={menus.closeMenus}
+            aria-label="Open owner dashboard"
+          >
+            <LayoutDashboard size={17} />
+            <span>Owner dashboard</span>
+          </Link>
+        )}
 
         <MobileMenuButton
           open={menus.mobileOpen}

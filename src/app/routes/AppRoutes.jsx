@@ -127,27 +127,27 @@ export default function AppRoutes() {
           <Route element={<OwnerRoute />}>
             <Route path="/owner/dashboard" element={<OwnerDashboard />} />
             <Route path="/owner/employment" element={<OwnerEmployment />} />
+            <Route
+              path="/owner/create-hiring-post"
+              element={<CreateHiringPost />}
+            />
+            <Route path="/owner/applications" element={<HiringApplications />} />
+            <Route path="/owner/employees" element={<ManageSalonEmployees />} />
+            <Route
+              path="/owner/employees/:employeeId/setup"
+              element={<ManageEmployeeSetup />}
+            />
+            <Route path="/owner/services" element={<MySalonServices />} />
+            <Route path="/owner/create-service" element={<AddSalonService />} />
+            <Route
+              path="/owner/services/:serviceId/edit"
+              element={<EditSalonService />}
+            />
+            <Route path="/owner/bookings" element={<SalonBookings />} />
           </Route>
           <Route path="/owner/create-salon" element={<CreateSalon />} />
           <Route path="/owner/my-salon" element={<MySalon />} />
           <Route path="/owner/my-salon/edit" element={<EditSalon />} />
-          <Route
-            path="/owner/create-hiring-post"
-            element={<CreateHiringPost />}
-          />
-          <Route path="/owner/applications" element={<HiringApplications />} />
-          <Route path="/owner/employees" element={<ManageSalonEmployees />} />
-          <Route
-            path="/owner/employees/:employeeId/setup"
-            element={<ManageEmployeeSetup />}
-          />
-          <Route path="/owner/services" element={<MySalonServices />} />
-          <Route path="/owner/create-service" element={<AddSalonService />} />
-          <Route
-            path="/owner/services/:serviceId/edit"
-            element={<EditSalonService />}
-          />
-          <Route path="/owner/bookings" element={<SalonBookings />} />
           <Route path="/employee/bookings" element={<EmployeeBookings />} />
         </Route>
         <Route path="*" element={<NotFound />} />

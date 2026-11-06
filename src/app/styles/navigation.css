@@ -293,6 +293,35 @@
   background: var(--primary);
 }
 
+.owner-navigation-menu .dropdown-primary-action {
+  grid-column: 1 / -1;
+}
+
+.owner-dashboard-header-link {
+  display: inline-flex;
+  min-height: 42px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 14px;
+  border: 1px solid color-mix(in srgb, var(--primary) 42%, var(--border));
+  border-radius: 12px;
+  color: var(--primary-dark);
+  background: var(--primary-soft);
+  font-size: .78rem;
+  font-weight: 900;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+}
+
+.owner-dashboard-header-link:hover,
+.owner-dashboard-header-link:focus-visible {
+  border-color: var(--primary);
+  box-shadow: 0 10px 24px rgba(84, 42, 59, .12);
+  transform: translateY(-1px);
+}
+
 .profile-menu-button {
   padding-right: 10px;
 }
@@ -432,6 +461,10 @@
 @media (max-width: 1180px) {
   .creative-navbar-inner {
     min-height: 72px;
+  }
+
+  .owner-dashboard-header-link {
+    margin-left: auto;
   }
 
   .mobile-menu-button {
@@ -673,6 +706,16 @@
   .mobile-menu-button {
     width: 44px;
     height: 44px;
+  }
+
+  .owner-dashboard-header-link {
+    width: 44px;
+    min-height: 44px;
+    padding: 0;
+  }
+
+  .owner-dashboard-header-link span {
+    display: none;
   }
 
   .hamburger-line {

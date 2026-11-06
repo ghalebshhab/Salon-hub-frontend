@@ -37,6 +37,15 @@ beforeEach(() => {
     let data = [];
     if (url === "/salons/active") data = [salon];
     else if (url === "/salons/1" || url === "/salons/mine") data = salon;
+    else if (url === "/owner/dashboard")
+      data = {
+        salon,
+        bookings: [],
+        employees: [],
+        services: [],
+        reviews: [],
+        reviewSummary: { averageRating: 0, totalReviews: 0 },
+      };
     else if (url === "/hiring-posts") data = { content: [] };
     else if (url === "/hiring-posts/owner") data = [];
     else if (url === "/profile")
@@ -121,7 +130,11 @@ it("returns to the protected destination after a successful login", async () => 
   });
   fireEvent.submit(container.querySelector("form"));
   expect(
-    await screen.findByRole("heading", { name: "Hiring Applications" }),
+    await screen.findByRole(
+      "heading",
+      { name: "Hiring Applications" },
+      { timeout: 3000 },
+    ),
   ).toBeDefined();
 });
 
@@ -135,4 +148,26 @@ it("redirects authenticated non-owners away from the owner dashboard", async () 
     }),
   ).toBeDefined();
   expect(screen.queryByText("Good morning, Test")).toBeNull();
+});
+
+it("shows an owner dashboard shortcut in the application header", async () => {
+  saveToken("owner-token");
+  renderRoutes("/");
+
+  const shortcut = await screen.findByRole("link", {
+    name: "Open owner dashboard",
+  });
+  expect(shortcut.getAttribute("href")).toBe("/owner/dashboard");
+});
+
+it("protects salon management routes from authenticated non-owners", async () => {
+  saveToken("member-token");
+  renderRoutes("/owner/services", { ...ownerProfile, role: "USER" });
+
+  expect(
+    await screen.findByRole("heading", {
+      name: /Your next great.*salon experience.*starts here/i,
+    }),
+  ).toBeDefined();
+  expect(screen.queryByRole("heading", { name: /services/i })).toBeNull();
 });

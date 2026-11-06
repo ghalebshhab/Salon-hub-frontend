@@ -5,7 +5,7 @@ import AccountMenu from "./AccountMenu.jsx";
 
 export default function NavigationActions({
   loggedIn,
-  hasSalon,
+  showMySalonLink,
   theme,
   profileMenuOpen,
   onToggleTheme,
@@ -30,7 +30,7 @@ export default function NavigationActions({
 
       {loggedIn ? (
         <>
-          {hasSalon && (
+          {showMySalonLink && (
             <NavLink
               to="/owner/my-salon"
               className="creative-nav-link"

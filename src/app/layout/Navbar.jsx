@@ -1,91 +1,124 @@
-import { LayoutDashboard } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Menu, Moon, PanelLeftClose, PanelLeftOpen, Sun } from "lucide-react";
+import { useState } from "react";
+import { Link, NavLink } from "react-router-dom";
+import NotificationBell from "../../features/notifications/components/NotificationBell.jsx";
 import useLogout from "../../features/auth/hooks/useLogout.js";
 import useAuth from "../../shared/auth/useAuth.js";
 import BrandLogo from "../../shared/components/BrandLogo.jsx";
 import useTheme from "../../shared/theme/useTheme.js";
-import ExploreNavigation from "./navigation/ExploreNavigation.jsx";
-import MobileMenuButton from "./navigation/MobileMenuButton.jsx";
-import NavigationActions from "./navigation/NavigationActions.jsx";
-import OwnerWorkspaceMenu from "./navigation/OwnerWorkspaceMenu.jsx";
-import useNavigationMenus from "./navigation/useNavigationMenus.js";
 
-function Navbar() {
-  const { loggedIn, isOwner, user } = useAuth();
-  const hasSalon = Boolean(user?.ownedSalonId);
+function getInitials(user) {
+  const initials = [user?.firstName, user?.lastName]
+    .filter(Boolean)
+    .map((part) => part.charAt(0))
+    .join("");
+  return initials.slice(0, 2).toUpperCase() || "SH";
+}
+
+function Navbar({ onOpenMobile, onToggle, collapsed }) {
+  const { loggedIn, user } = useAuth();
   const { theme, toggleTheme } = useTheme();
+  const [profileOpen, setProfileOpen] = useState(false);
   const logout = useLogout();
-  const menus = useNavigationMenus();
 
   return (
     <header className="creative-navbar">
-      <div className="container creative-navbar-inner">
-        <Link to="/" className="creative-brand" onClick={menus.closeMenus}>
+      <div className="creative-navbar-inner">
+        <button
+          className="sidebar-toggle-button"
+          type="button"
+          onClick={onToggle}
+          aria-label={collapsed ? "Expand navigation" : "Collapse navigation"}
+          aria-controls="primary-navigation"
+          aria-expanded={!collapsed}
+        >
+          {collapsed ? (
+            <PanelLeftOpen aria-hidden="true" />
+          ) : (
+            <PanelLeftClose aria-hidden="true" />
+          )}
+        </button>
+
+        <Link to="/" className="creative-brand" aria-label="SalonHub home">
           <BrandLogo />
         </Link>
 
-        <nav
-          id="primary-navigation"
-          className={menus.mobileOpen ? "creative-nav open" : "creative-nav"}
-          aria-label="Primary navigation"
-        >
-          <div className="nav-mobile-heading">
-            <div>
-              <span>Navigate SalonHub</span>
-              <strong>Where would you like to go?</strong>
-            </div>
-          </div>
+        <div className="navbar-spacer" />
 
-          <ExploreNavigation
-            loggedIn={loggedIn}
-            onNavigate={menus.closeMenus}
-          />
-          {loggedIn && isOwner && (
-            <OwnerWorkspaceMenu
-              open={menus.ownerMenuOpen}
-              onToggle={menus.toggleOwnerMenu}
-              onNavigate={menus.closeMenus}
-            />
-          )}
-          <NavigationActions
-            loggedIn={loggedIn}
-            showMySalonLink={hasSalon && !isOwner}
-            theme={theme}
-            profileMenuOpen={menus.profileMenuOpen}
-            onToggleTheme={toggleTheme}
-            onToggleProfileMenu={menus.toggleProfileMenu}
-            onNavigate={menus.closeMenus}
-            onLogout={() => void logout(menus.closeMenus)}
-          />
-        </nav>
-
-        {loggedIn && isOwner && (
-          <Link
-            className="owner-dashboard-header-link"
-            to="/owner/dashboard"
-            onClick={menus.closeMenus}
-            aria-label="Open owner dashboard"
+        <div className="navbar-actions">
+          <button
+            className="header-icon-button"
+            type="button"
+            onClick={toggleTheme}
+            aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+            aria-pressed={theme === "dark"}
           >
-            <LayoutDashboard size={17} />
-            <span>Owner dashboard</span>
-          </Link>
-        )}
+            {theme === "dark" ? (
+              <Sun aria-hidden="true" />
+            ) : (
+              <Moon aria-hidden="true" />
+            )}
+          </button>
 
-        <MobileMenuButton
-          open={menus.mobileOpen}
-          onToggle={menus.toggleMobileMenu}
-        />
+          {loggedIn && <NotificationBell />}
+
+          {loggedIn ? (
+            <div className="header-profile-wrap">
+              <button
+                className="header-avatar-button"
+                type="button"
+                onClick={() => setProfileOpen((value) => !value)}
+                aria-label="Open account menu"
+                aria-expanded={profileOpen}
+              >
+                <span aria-hidden="true">{getInitials(user)}</span>
+              </button>
+              {profileOpen && (
+                <div className="header-profile-menu">
+                  <NavLink
+                    to="/profile/career"
+                    onClick={() => setProfileOpen(false)}
+                  >
+                    Career profile
+                  </NavLink>
+                  <NavLink
+                    to="/my-bookings"
+                    onClick={() => setProfileOpen(false)}
+                  >
+                    My bookings
+                  </NavLink>
+                  <NavLink
+                    to="/account/security"
+                    onClick={() => setProfileOpen(false)}
+                  >
+                    Account security
+                  </NavLink>
+                  <button
+                    type="button"
+                    onClick={() => void logout(() => setProfileOpen(false))}
+                  >
+                    Log out
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <NavLink to="/login" className="header-login-link">
+              Log in
+            </NavLink>
+          )}
+
+          <button
+            className="mobile-menu-button"
+            type="button"
+            onClick={onOpenMobile}
+            aria-label="Open navigation"
+            aria-controls="primary-navigation"
+          >
+            <Menu aria-hidden="true" />
+          </button>
+        </div>
       </div>
-
-      <button
-        className={
-          menus.mobileOpen ? "navigation-backdrop show" : "navigation-backdrop"
-        }
-        type="button"
-        onClick={menus.closeMenus}
-        aria-label="Close navigation"
-        tabIndex={menus.mobileOpen ? 0 : -1}
-      />
     </header>
   );
 }

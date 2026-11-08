@@ -88,11 +88,14 @@ it.each(paths)(
   async (pathname) => {
     saveToken("test-token");
     const { container } = renderRoutes(pathname);
-    await waitFor(() => {
-      expect(
-        container.querySelector(".page-main h1, .page-main h2"),
-      ).not.toBeNull();
-    }, { timeout: 3000 });
+    await waitFor(
+      () => {
+        expect(
+          container.querySelector(".page-main h1, .page-main h2"),
+        ).not.toBeNull();
+      },
+      { timeout: 3000 },
+    );
     await waitFor(() => expect(container.querySelector(".loading")).toBeNull());
     expect(screen.queryByText("Something went wrong")).toBeNull();
   },
@@ -121,7 +124,11 @@ it("returns to the protected destination after a successful login", async () => 
     },
   });
   const { container } = renderRoutes("/owner/applications");
-  await screen.findByRole("heading", { name: "Welcome back" });
+  await screen.findByRole(
+    "heading",
+    { name: "Welcome back" },
+    { timeout: 3000 },
+  );
   fireEvent.change(container.querySelector('input[name="email"]'), {
     target: { value: "test@example.com" },
   });

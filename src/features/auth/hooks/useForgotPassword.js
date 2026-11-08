@@ -18,12 +18,16 @@ export default function useForgotPassword() {
       setLoading(true);
       const response = await forgotPasswordApi({ email: email.trim() });
       if (!response.success) throw new Error(response.message);
-      showSuccessToast(response.message || "Check your email for a reset code.");
+      showSuccessToast(
+        response.message || "Check your email for a reset code.",
+      );
       navigate("/verify-reset-code", {
         state: { email: email.trim() },
       });
     } catch (error) {
-      showErrorToast(getApiErrorMessage(error, "Password recovery could not start."));
+      showErrorToast(
+        getApiErrorMessage(error, "Password recovery could not start."),
+      );
     } finally {
       setLoading(false);
     }

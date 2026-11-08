@@ -4,7 +4,12 @@ import PasswordField from "./PasswordField.jsx";
 
 it("reveals the password with a clear animated visibility control", () => {
   render(
-    <PasswordField id="password" label="Password" value="SalonHub2026!" readOnly />,
+    <PasswordField
+      id="password"
+      label="Password"
+      value="SalonHub2026!"
+      readOnly
+    />,
   );
 
   const input = screen.getByLabelText("Password");

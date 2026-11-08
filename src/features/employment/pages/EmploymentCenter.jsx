@@ -7,7 +7,8 @@ import useEmploymentCenter from "../hooks/useEmploymentCenter.js";
 
 export default function EmploymentCenter() {
   const employment = useEmploymentCenter();
-  if (employment.loading) return <Loading message="Loading your employment center…" />;
+  if (employment.loading)
+    return <Loading message="Loading your employment center…" />;
 
   return (
     <section className="container section employment-page">
@@ -65,7 +66,9 @@ export default function EmploymentCenter() {
                               className="btn btn-primary btn-small"
                               type="button"
                               disabled={employment.acting}
-                              onClick={() => employment.acceptRequest(request.requestId)}
+                              onClick={() =>
+                                employment.acceptRequest(request.requestId)
+                              }
                             >
                               Accept invitation
                             </button>
@@ -89,7 +92,9 @@ export default function EmploymentCenter() {
                             className="btn btn-secondary btn-small"
                             type="button"
                             disabled={employment.acting}
-                            onClick={() => employment.cancelRequest(request.requestId)}
+                            onClick={() =>
+                              employment.cancelRequest(request.requestId)
+                            }
                           >
                             Cancel request
                           </button>
@@ -152,20 +157,24 @@ export default function EmploymentCenter() {
           </div>
         </div>
         {employment.role === "Employee" &&
-          !employment.leaveRequests.some((item) => item.status === "Requested") && (
+          !employment.leaveRequests.some(
+            (item) => item.status === "Requested",
+          ) && (
             <div className="employment-leave-form">
               <LogOut size={22} />
               <div>
                 <h3>Request to leave your current salon</h3>
                 <p>
-                  The owner must release the employment relationship. If this
-                  is a transfer, your accepted destination remains reserved.
+                  The owner must release the employment relationship. If this is
+                  a transfer, your accepted destination remains reserved.
                 </p>
               </div>
               <textarea
                 rows="3"
                 value={employment.leaveReason}
-                onChange={(event) => employment.setLeaveReason(event.target.value)}
+                onChange={(event) =>
+                  employment.setLeaveReason(event.target.value)
+                }
                 placeholder="Optional reason for leaving"
               />
               <button

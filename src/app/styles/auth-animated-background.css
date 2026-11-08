@@ -24,18 +24,33 @@
 }
 
 .auth-animated-bg-silk .auth-bg-layer-one {
-  background: repeating-radial-gradient(ellipse at 30% 40%, rgba(239,195,148,.48) 0 4%, rgba(118,84,111,.06) 10% 16%, rgba(31,17,27,.36) 22% 29%);
+  background: repeating-radial-gradient(
+    ellipse at 30% 40%,
+    rgba(239, 195, 148, 0.48) 0 4%,
+    rgba(118, 84, 111, 0.06) 10% 16%,
+    rgba(31, 17, 27, 0.36) 22% 29%
+  );
   animation: silkDrift 15s ease-in-out infinite alternate;
 }
 
 .auth-animated-bg-silk .auth-bg-layer-two {
-  background: repeating-radial-gradient(ellipse at 75% 58%, rgba(197,142,186,.35) 0 5%, rgba(255,255,255,.04) 11% 18%, rgba(35,20,31,.45) 24% 31%);
+  background: repeating-radial-gradient(
+    ellipse at 75% 58%,
+    rgba(197, 142, 186, 0.35) 0 5%,
+    rgba(255, 255, 255, 0.04) 11% 18%,
+    rgba(35, 20, 31, 0.45) 24% 31%
+  );
   animation: silkDrift 20s -6s ease-in-out infinite alternate-reverse;
 }
 
 .auth-animated-bg-silk .auth-bg-layer-three {
   inset: 0;
-  background: linear-gradient(112deg, transparent 20%, rgba(255,224,190,.16) 43%, transparent 59%);
+  background: linear-gradient(
+    112deg,
+    transparent 20%,
+    rgba(255, 224, 190, 0.16) 43%,
+    transparent 59%
+  );
   animation: silkSheen 8s ease-in-out infinite;
 }
 
@@ -48,7 +63,7 @@
   height: 60%;
   border-radius: 50%;
   filter: blur(45px);
-  opacity: .62;
+  opacity: 0.62;
 }
 
 .auth-animated-bg-aurora .auth-bg-layer-one {
@@ -81,7 +96,7 @@
   inset: 0;
   width: 100%;
   height: 100%;
-  opacity: .62;
+  opacity: 0.62;
 }
 
 .auth-bg-threads path {
@@ -95,7 +110,11 @@
 
 .auth-animated-bg-threads .auth-bg-layer-one {
   inset: 0;
-  background: radial-gradient(circle at 30% 55%, rgba(225,185,120,.18), transparent 42%);
+  background: radial-gradient(
+    circle at 30% 55%,
+    rgba(225, 185, 120, 0.18),
+    transparent 42%
+  );
   animation: threadGlow 8s ease-in-out infinite alternate;
 }
 
@@ -108,7 +127,11 @@
   height: 135%;
   top: -75%;
   right: -75%;
-  background: repeating-conic-gradient(from 210deg, rgba(241,204,151,.28) 0 4deg, transparent 7deg 19deg);
+  background: repeating-conic-gradient(
+    from 210deg,
+    rgba(241, 204, 151, 0.28) 0 4deg,
+    transparent 7deg 19deg
+  );
   filter: blur(5px);
   transform-origin: top right;
   animation: raysSway 13s ease-in-out infinite alternate;
@@ -116,39 +139,65 @@
 
 .auth-animated-bg-rays .auth-bg-layer-two {
   inset: 0;
-  background: radial-gradient(circle at 100% 0%, rgba(255,225,180,.45), transparent 34%);
+  background: radial-gradient(
+    circle at 100% 0%,
+    rgba(255, 225, 180, 0.45),
+    transparent 34%
+  );
   animation: rayGlow 6s ease-in-out infinite alternate;
 }
 
 @keyframes silkDrift {
-  to { transform: translate(8%, -5%) rotate(8deg) scale(1.08); }
+  to {
+    transform: translate(8%, -5%) rotate(8deg) scale(1.08);
+  }
 }
 
 @keyframes silkSheen {
-  0%, 100% { transform: translateX(-22%); opacity: .25; }
-  50% { transform: translateX(22%); opacity: .7; }
+  0%,
+  100% {
+    transform: translateX(-22%);
+    opacity: 0.25;
+  }
+  50% {
+    transform: translateX(22%);
+    opacity: 0.7;
+  }
 }
 
 @keyframes auroraFloat {
-  to { transform: translate(18%, 14%) scale(1.18) rotate(12deg); }
+  to {
+    transform: translate(18%, 14%) scale(1.18) rotate(12deg);
+  }
 }
 
 @keyframes threadFlow {
-  to { stroke-dashoffset: -270; }
+  to {
+    stroke-dashoffset: -270;
+  }
 }
 
 @keyframes threadGlow {
-  to { transform: translate(18%, -12%) scale(1.2); }
+  to {
+    transform: translate(18%, -12%) scale(1.2);
+  }
 }
 
 @keyframes raysSway {
-  to { transform: rotate(7deg) scale(1.08); }
+  to {
+    transform: rotate(7deg) scale(1.08);
+  }
 }
 
 @keyframes rayGlow {
-  to { opacity: .55; transform: scale(1.08); }
+  to {
+    opacity: 0.55;
+    transform: scale(1.08);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .auth-animated-bg * { animation: none !important; }
+  .auth-animated-bg * {
+    animation: none !important;
+  }
 }

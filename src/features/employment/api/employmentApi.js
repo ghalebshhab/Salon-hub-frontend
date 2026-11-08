@@ -3,7 +3,9 @@ import httpClient from "../../../shared/api/httpClient.js";
 const data = (response) => response.data;
 
 export const getMyEmploymentRequestsApi = (config = {}) =>
-  httpClient.get("/employment/me", { params: { page: 0, size: 100 }, ...config }).then(data);
+  httpClient
+    .get("/employment/me", { params: { page: 0, size: 100 }, ...config })
+    .then(data);
 
 export const getOwnedSalonEmploymentRequestsApi = (config = {}) =>
   httpClient

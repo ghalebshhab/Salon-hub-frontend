@@ -20,7 +20,10 @@ describe("Jordan map location", () => {
   it("maps Google address components to supported salon cities", () => {
     expect(
       cityFromAddressComponents([
-        { long_name: "Amman Governorate", types: ["administrative_area_level_1"] },
+        {
+          long_name: "Amman Governorate",
+          types: ["administrative_area_level_1"],
+        },
       ]),
     ).toBe("Amman");
   });

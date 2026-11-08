@@ -1,42 +1,42 @@
-import { expect, it } from "vitest";
+import { describe, expect, it } from "vitest";
 import { getNavigationSections } from "./navigationConfig.js";
 
-function labelsFor(options) {
-  return getNavigationSections(options).map(({ label }) => label);
+function linksFor(options) {
+  return getNavigationSections(options).flatMap((section) =>
+    section.items.map((item) => item.to),
+  );
 }
 
-it("shows only discovery navigation to guests", () => {
-  expect(
-    labelsFor({ loggedIn: false, user: null, isOwner: false }),
-  ).toEqual(["Discover"]);
-});
-
-it("adds employee operations without exposing owner management", () => {
-  const labels = labelsFor({
-    loggedIn: true,
-    user: { salonId: 8 },
-    isOwner: false,
+describe("getNavigationSections", () => {
+  it("keeps the public discovery section available to guests", () => {
+    expect(
+      linksFor({ loggedIn: false, isOwner: false, hasSalon: false }),
+    ).toEqual(["/", "/community", "/hiring-posts"]);
   });
 
-  expect(labels).toContain("Employee");
-  expect(labels).not.toContain("Owner overview");
-  expect(labels).not.toContain("Salon management");
-});
-
-it("groups every owner operation into focused sections", () => {
-  expect(
-    labelsFor({
+  it("adds authenticated activity and account destinations", () => {
+    const links = linksFor({
       loggedIn: true,
-      user: { ownedSalonId: 4 },
+      isOwner: false,
+      hasSalon: false,
+    });
+
+    expect(links).toContain("/my-bookings");
+    expect(links).toContain("/profile/career");
+    expect(links).toContain("/account/security");
+    expect(links).not.toContain("/owner/dashboard");
+  });
+
+  it("uses existing production routes for the owner workspace", () => {
+    const links = linksFor({
+      loggedIn: true,
       isOwner: true,
-    }),
-  ).toEqual([
-    "Discover",
-    "My activity",
-    "Career",
-    "Owner overview",
-    "Salon management",
-    "Create & update",
-    "Account",
-  ]);
+      hasSalon: true,
+    });
+
+    expect(links).toContain("/owner/dashboard");
+    expect(links).toContain("/owner/my-salon/edit");
+    expect(links).toContain("/owner/create-service");
+    expect(links).toContain("/owner/create-hiring-post");
+  });
 });

@@ -15,7 +15,10 @@ export default function useResetPassword() {
   const [loading, setLoading] = useState(false);
 
   const handleChange = (event) => {
-    setForm((current) => ({ ...current, [event.target.name]: event.target.value }));
+    setForm((current) => ({
+      ...current,
+      [event.target.name]: event.target.value,
+    }));
   };
 
   const handleSubmit = async (event) => {
@@ -32,7 +35,9 @@ export default function useResetPassword() {
       showSuccessToast(response.message || "Password updated successfully.");
       navigate("/login", { replace: true });
     } catch (error) {
-      showErrorToast(getApiErrorMessage(error, "The password could not be reset."));
+      showErrorToast(
+        getApiErrorMessage(error, "The password could not be reset."),
+      );
     } finally {
       setLoading(false);
     }

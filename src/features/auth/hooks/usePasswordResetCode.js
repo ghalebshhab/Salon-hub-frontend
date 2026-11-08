@@ -42,7 +42,9 @@ export default function usePasswordResetCode() {
         },
       });
     } catch (error) {
-      showErrorToast(getApiErrorMessage(error, "The reset code could not be verified."));
+      showErrorToast(
+        getApiErrorMessage(error, "The reset code could not be verified."),
+      );
     } finally {
       setLoading(false);
     }

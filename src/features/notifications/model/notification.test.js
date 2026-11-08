@@ -18,4 +18,16 @@ describe("notification titles", () => {
     expect(getNotificationTitle("SALON_BLOCKED")).toBe("Salon blocked");
     expect(getNotificationTitle("SALON_UNBLOCKED")).toBe("Salon restored");
   });
+
+  it("labels friend request events clearly", () => {
+    expect(getNotificationTitle("FRIEND_REQUEST_RECEIVED")).toBe(
+      "New friend request",
+    );
+    expect(getNotificationTitle("FRIEND_REQUEST_ACCEPTED")).toBe(
+      "Friend request accepted",
+    );
+    expect(getNotificationTitle("FRIEND_REQUEST_DECLINED")).toBe(
+      "Friend request declined",
+    );
+  });
 });

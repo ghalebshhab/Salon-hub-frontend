@@ -14,7 +14,8 @@ import useOwnerEmployment from "../hooks/useOwnerEmployment.js";
 
 export default function OwnerEmployment() {
   const employment = useOwnerEmployment();
-  if (employment.loading) return <Loading message="Loading employment workflows…" />;
+  if (employment.loading)
+    return <Loading message="Loading employment workflows…" />;
 
   const joinRequests = employment.requests.filter(
     (request) => request.requestType === "User_Request",
@@ -35,9 +36,31 @@ export default function OwnerEmployment() {
           </p>
         </div>
         <div className="employment-summary-grid">
-          <span><strong>{joinRequests.filter((item) => item.status === "Requested").length}</strong> pending joins</span>
-          <span><strong>{invitations.filter((item) => item.status === "Requested").length}</strong> open invitations</span>
-          <span><strong>{employment.leaveRequests.filter((item) => item.status === "Requested").length}</strong> leave decisions</span>
+          <span>
+            <strong>
+              {
+                joinRequests.filter((item) => item.status === "Requested")
+                  .length
+              }
+            </strong>{" "}
+            pending joins
+          </span>
+          <span>
+            <strong>
+              {invitations.filter((item) => item.status === "Requested").length}
+            </strong>{" "}
+            open invitations
+          </span>
+          <span>
+            <strong>
+              {
+                employment.leaveRequests.filter(
+                  (item) => item.status === "Requested",
+                ).length
+              }
+            </strong>{" "}
+            leave decisions
+          </span>
         </div>
       </header>
 
@@ -47,11 +70,16 @@ export default function OwnerEmployment() {
             <span className="eyebrow">Candidate discovery</span>
             <h2>Invite a professional</h2>
           </div>
-          <form className="employment-search" onSubmit={employment.submitSearch}>
+          <form
+            className="employment-search"
+            onSubmit={employment.submitSearch}
+          >
             <Search size={18} />
             <input
               value={employment.searchInput}
-              onChange={(event) => employment.setSearchInput(event.target.value)}
+              onChange={(event) =>
+                employment.setSearchInput(event.target.value)
+              }
               placeholder="Search by name, username, skill, or location"
               maxLength={100}
             />
@@ -74,7 +102,10 @@ export default function OwnerEmployment() {
                   request.status === "Requested",
               );
               return (
-                <article className="candidate-directory-card" key={candidate.userId}>
+                <article
+                  className="candidate-directory-card"
+                  key={candidate.userId}
+                >
                   <div className="candidate-directory-heading">
                     <span className="candidate-directory-avatar">
                       <UserRoundSearch size={23} />
@@ -85,7 +116,8 @@ export default function OwnerEmployment() {
                     </div>
                   </div>
                   <p className="candidate-directory-bio">
-                    {candidate.professionalBio || "No professional biography added."}
+                    {candidate.professionalBio ||
+                      "No professional biography added."}
                   </p>
                   <div className="candidate-directory-skills">
                     {(candidate.skills || []).slice(0, 5).map((skill) => (
@@ -93,7 +125,9 @@ export default function OwnerEmployment() {
                     ))}
                   </div>
                   <div className="candidate-directory-meta">
-                    <span>{candidate.yearsOfExperience ?? 0} years experience</span>
+                    <span>
+                      {candidate.yearsOfExperience ?? 0} years experience
+                    </span>
                     <span>
                       {candidate.currentSalonName
                         ? `Currently at ${candidate.currentSalonName}`
@@ -115,7 +149,9 @@ export default function OwnerEmployment() {
                       className="btn btn-primary btn-small"
                       type="button"
                       disabled={employment.acting || pendingInvitation}
-                      onClick={() => employment.inviteCandidate(candidate.userId)}
+                      onClick={() =>
+                        employment.inviteCandidate(candidate.userId)
+                      }
                     >
                       <Send size={16} />
                       {pendingInvitation ? "Invitation pending" : "Invite"}
@@ -130,10 +166,16 @@ export default function OwnerEmployment() {
 
       <section className="employment-section">
         <div className="employment-section-heading">
-          <div><span className="eyebrow">Incoming</span><h2>Join requests</h2></div>
+          <div>
+            <span className="eyebrow">Incoming</span>
+            <h2>Join requests</h2>
+          </div>
         </div>
         {joinRequests.length === 0 ? (
-          <EmptyState title="No join requests" message="Direct requests from users will appear here." />
+          <EmptyState
+            title="No join requests"
+            message="Direct requests from users will appear here."
+          />
         ) : (
           <div className="employment-grid">
             {joinRequests.map((request) => (
@@ -141,16 +183,35 @@ export default function OwnerEmployment() {
                 perspective="owner"
                 request={request}
                 key={request.requestId}
-                actions={request.status === "Requested" && (
-                  <>
-                    <button className="btn btn-primary btn-small" type="button" disabled={employment.acting} onClick={() => employment.acceptRequest(request.requestId)}>
-                      <CheckCircle2 size={16} /> Accept
-                    </button>
-                    <button className="btn btn-secondary btn-small" type="button" disabled={employment.acting} onClick={() => employment.setRejection({ requestId: request.requestId, reason: "" })}>
-                      <XCircle size={16} /> Reject
-                    </button>
-                  </>
-                )}
+                actions={
+                  request.status === "Requested" && (
+                    <>
+                      <button
+                        className="btn btn-primary btn-small"
+                        type="button"
+                        disabled={employment.acting}
+                        onClick={() =>
+                          employment.acceptRequest(request.requestId)
+                        }
+                      >
+                        <CheckCircle2 size={16} /> Accept
+                      </button>
+                      <button
+                        className="btn btn-secondary btn-small"
+                        type="button"
+                        disabled={employment.acting}
+                        onClick={() =>
+                          employment.setRejection({
+                            requestId: request.requestId,
+                            reason: "",
+                          })
+                        }
+                      >
+                        <XCircle size={16} /> Reject
+                      </button>
+                    </>
+                  )
+                }
               />
             ))}
           </div>
@@ -159,19 +220,56 @@ export default function OwnerEmployment() {
 
       {employment.rejection.requestId && (
         <section className="employment-decision-panel">
-          <div><span className="eyebrow">Owner decision</span><h2>Explain the rejection</h2></div>
-          <textarea rows="3" value={employment.rejection.reason} onChange={(event) => employment.setRejection((current) => ({ ...current, reason: event.target.value }))} placeholder="Reason shown to the applicant" />
+          <div>
+            <span className="eyebrow">Owner decision</span>
+            <h2>Explain the rejection</h2>
+          </div>
+          <textarea
+            rows="3"
+            value={employment.rejection.reason}
+            onChange={(event) =>
+              employment.setRejection((current) => ({
+                ...current,
+                reason: event.target.value,
+              }))
+            }
+            placeholder="Reason shown to the applicant"
+          />
           <div className="employment-card-actions">
-            <button className="btn btn-primary" type="button" disabled={employment.acting} onClick={employment.submitRejection}>Send rejection</button>
-            <button className="btn btn-secondary" type="button" disabled={employment.acting} onClick={() => employment.setRejection({ requestId: null, reason: "" })}>Cancel</button>
+            <button
+              className="btn btn-primary"
+              type="button"
+              disabled={employment.acting}
+              onClick={employment.submitRejection}
+            >
+              Send rejection
+            </button>
+            <button
+              className="btn btn-secondary"
+              type="button"
+              disabled={employment.acting}
+              onClick={() =>
+                employment.setRejection({ requestId: null, reason: "" })
+              }
+            >
+              Cancel
+            </button>
           </div>
         </section>
       )}
 
       <section className="employment-section">
-        <div className="employment-section-heading"><div><span className="eyebrow">Outgoing</span><h2>Invitation history</h2></div></div>
+        <div className="employment-section-heading">
+          <div>
+            <span className="eyebrow">Outgoing</span>
+            <h2>Invitation history</h2>
+          </div>
+        </div>
         {invitations.length === 0 ? (
-          <EmptyState title="No invitations sent" message="Invite a career-ready candidate from the directory above." />
+          <EmptyState
+            title="No invitations sent"
+            message="Invite a career-ready candidate from the directory above."
+          />
         ) : (
           <div className="employment-grid">
             {invitations.map((request) => (
@@ -179,9 +277,20 @@ export default function OwnerEmployment() {
                 perspective="owner"
                 request={request}
                 key={request.requestId}
-                actions={request.status === "Requested" && (
-                  <button className="btn btn-secondary btn-small" type="button" disabled={employment.acting} onClick={() => employment.cancelInvitation(request.requestId)}>Cancel invitation</button>
-                )}
+                actions={
+                  request.status === "Requested" && (
+                    <button
+                      className="btn btn-secondary btn-small"
+                      type="button"
+                      disabled={employment.acting}
+                      onClick={() =>
+                        employment.cancelInvitation(request.requestId)
+                      }
+                    >
+                      Cancel invitation
+                    </button>
+                  )
+                }
               />
             ))}
           </div>
@@ -189,21 +298,40 @@ export default function OwnerEmployment() {
       </section>
 
       <section className="employment-section">
-        <div className="employment-section-heading"><div><span className="eyebrow">Employee rights</span><h2>Leave requests</h2></div></div>
-        <p className="employment-policy-note">Employees cannot be forced to remain. Owners confirm the release so schedules, service capabilities, employee counts, and any approved transfer update atomically.</p>
+        <div className="employment-section-heading">
+          <div>
+            <span className="eyebrow">Employee rights</span>
+            <h2>Leave requests</h2>
+          </div>
+        </div>
+        <p className="employment-policy-note">
+          Employees cannot be forced to remain. Owners confirm the release so
+          schedules, service capabilities, employee counts, and any approved
+          transfer update atomically.
+        </p>
         {employment.leaveRequests.length === 0 ? (
-          <EmptyState title="No leave requests" message="Employee leave and transfer approvals will appear here." />
+          <EmptyState
+            title="No leave requests"
+            message="Employee leave and transfer approvals will appear here."
+          />
         ) : (
           <div className="employment-grid">
             {employment.leaveRequests.map((request) => (
               <LeaveRequestCard
                 request={request}
                 key={request.requestId}
-                actions={request.status === "Requested" && (
-                  <button className="btn btn-primary btn-small" type="button" disabled={employment.acting} onClick={() => employment.acceptLeave(request.requestId)}>
-                    <CheckCircle2 size={16} /> Confirm release
-                  </button>
-                )}
+                actions={
+                  request.status === "Requested" && (
+                    <button
+                      className="btn btn-primary btn-small"
+                      type="button"
+                      disabled={employment.acting}
+                      onClick={() => employment.acceptLeave(request.requestId)}
+                    >
+                      <CheckCircle2 size={16} /> Confirm release
+                    </button>
+                  )
+                }
               />
             ))}
           </div>

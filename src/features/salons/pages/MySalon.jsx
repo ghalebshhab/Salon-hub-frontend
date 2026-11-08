@@ -58,7 +58,13 @@ function MySalon() {
         <div className="my-salon-hero">
           <div className="my-salon-cover">
             {image ? (
-              <img src={optimizedCloudinaryImage(image, { width: 1400, height: 700 })} alt={salon.name} />
+              <img
+                src={optimizedCloudinaryImage(image, {
+                  width: 1400,
+                  height: 700,
+                })}
+                alt={salon.name}
+              />
             ) : (
               <div className="my-salon-cover-placeholder">
                 {salon.name?.[0]}
@@ -68,19 +74,29 @@ function MySalon() {
               <SalonStatusBadge state={salon.state} />
             </div>
             <div className="my-salon-cover-edit">
-              <SalonCoverEditor currentUrl={image} onUploaded={setUploadedImage} />
+              <SalonCoverEditor
+                currentUrl={image}
+                onUploaded={setUploadedImage}
+              />
             </div>
           </div>
           <div className="my-salon-hero-content">
             <h1>{salon.name}</h1>
             {salon.googleMapsUrl ? (
-              <a className="my-salon-location" href={salon.googleMapsUrl} target="_blank" rel="noreferrer">
+              <a
+                className="my-salon-location"
+                href={salon.googleMapsUrl}
+                target="_blank"
+                rel="noreferrer"
+              >
                 <MapPin size={17} /> {salon.city}
               </a>
-            ) : <p className="my-salon-location">
-              <MapPin size={17} />
-              {salon.city}
-            </p>}
+            ) : (
+              <p className="my-salon-location">
+                <MapPin size={17} />
+                {salon.city}
+              </p>
+            )}
             <div className="my-salon-hero-actions">
               <Link className="btn btn-secondary" to="/owner/my-salon/edit">
                 <Edit3 size={18} />

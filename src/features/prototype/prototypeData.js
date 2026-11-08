@@ -1,7 +1,20 @@
 export const prototypeRoles = [
-  { id: "customer", label: "Customer & candidate", description: "Explore careers, applications, invitations, and bookings." },
-  { id: "owner", label: "Salon owner", description: "Review appointments, candidates, invitations, and team setup." },
-  { id: "employee", label: "Salon employee", description: "See assigned appointments and the weekly work schedule." },
+  {
+    id: "customer",
+    label: "Customer & candidate",
+    description: "Explore careers, applications, invitations, and bookings.",
+  },
+  {
+    id: "owner",
+    label: "Salon owner",
+    description:
+      "Review appointments, candidates, invitations, and team setup.",
+  },
+  {
+    id: "employee",
+    label: "Salon employee",
+    description: "See assigned appointments and the weekly work schedule.",
+  },
 ];
 
 export const prototypeSections = {
@@ -212,7 +225,13 @@ export const initialBookings = [
     note: "I can come later if the salon is busy.",
     ownerNote: "We can serve you at 14:30 instead.",
     rescheduleProposals: [
-      { id: 8801, proposedDate: "2026-10-29", proposedTime: "14:30", status: "PENDING", note: "The color station is free at 14:30." },
+      {
+        id: 8801,
+        proposedDate: "2026-10-29",
+        proposedTime: "14:30",
+        status: "PENDING",
+        note: "The color station is free at 14:30.",
+      },
     ],
   },
   {
@@ -307,8 +326,18 @@ export const initialInvitations = [
 ];
 
 export const employees = [
-  { id: 501, fullName: "Lina Haddad", specialty: "Hair stylist & colorist", services: [1, 2] },
-  { id: 502, fullName: "Rami Qasem", specialty: "Color specialist", services: [1, 2] },
+  {
+    id: 501,
+    fullName: "Lina Haddad",
+    specialty: "Hair stylist & colorist",
+    services: [1, 2],
+  },
+  {
+    id: 502,
+    fullName: "Rami Qasem",
+    specialty: "Color specialist",
+    services: [1, 2],
+  },
   { id: 503, fullName: "Ahmad Darwish", specialty: "Barber", services: [1, 3] },
 ];
 
@@ -316,17 +345,68 @@ export const initialSchedule = {
   MONDAY: [{ start: "09:00", end: "17:00" }],
   TUESDAY: [{ start: "09:00", end: "17:00" }],
   WEDNESDAY: [{ start: "11:00", end: "19:00" }],
-  THURSDAY: [{ start: "09:00", end: "14:00" }, { start: "16:00", end: "20:00" }],
+  THURSDAY: [
+    { start: "09:00", end: "14:00" },
+    { start: "16:00", end: "20:00" },
+  ],
   FRIDAY: [],
   SATURDAY: [{ start: "10:00", end: "18:00" }],
   SUNDAY: [],
 };
 
 export const initialNotifications = [
-  { id: 1, type: "BOOKING_ACCEPTED", title: "Booking accepted", message: "Maison Rose Salon confirmed booking #2102 with Lina Haddad.", time: "4 min ago", read: false, roles: ["customer"] },
-  { id: 2, type: "BOOKING_RESCHEDULED", title: "New time suggested", message: "The salon suggested 29 October at 14:30 for booking #2103.", time: "18 min ago", read: false, roles: ["customer"] },
-  { id: 3, type: "NEW_BOOKING", title: "New booking request", message: "Noor requested Haircut & style and Color refresh.", time: "25 min ago", read: false, roles: ["owner"] },
-  { id: 4, type: "EMPLOYEE_ASSIGNED", title: "Appointment assigned", message: "You were assigned to Yazan's appointment on 28 October.", time: "1 hr ago", read: true, roles: ["employee"] },
-  { id: 5, type: "HIRING_APPLICATION", title: "New suggested candidate", message: "Lina matches 94% of your Hair stylist requirements.", time: "2 hr ago", read: true, roles: ["owner"] },
-  { id: 6, type: "SALON_INVITATION", title: "Salon invitation", message: "Maison Rose Salon invited you to join its team.", time: "Today · 10:20", read: false, roles: ["customer"] },
+  {
+    id: 1,
+    type: "BOOKING_ACCEPTED",
+    title: "Booking accepted",
+    message: "Maison Rose Salon confirmed booking #2102 with Lina Haddad.",
+    time: "4 min ago",
+    read: false,
+    roles: ["customer"],
+  },
+  {
+    id: 2,
+    type: "BOOKING_RESCHEDULED",
+    title: "New time suggested",
+    message: "The salon suggested 29 October at 14:30 for booking #2103.",
+    time: "18 min ago",
+    read: false,
+    roles: ["customer"],
+  },
+  {
+    id: 3,
+    type: "NEW_BOOKING",
+    title: "New booking request",
+    message: "Noor requested Haircut & style and Color refresh.",
+    time: "25 min ago",
+    read: false,
+    roles: ["owner"],
+  },
+  {
+    id: 4,
+    type: "EMPLOYEE_ASSIGNED",
+    title: "Appointment assigned",
+    message: "You were assigned to Yazan's appointment on 28 October.",
+    time: "1 hr ago",
+    read: true,
+    roles: ["employee"],
+  },
+  {
+    id: 5,
+    type: "HIRING_APPLICATION",
+    title: "New suggested candidate",
+    message: "Lina matches 94% of your Hair stylist requirements.",
+    time: "2 hr ago",
+    read: true,
+    roles: ["owner"],
+  },
+  {
+    id: 6,
+    type: "SALON_INVITATION",
+    title: "Salon invitation",
+    message: "Maison Rose Salon invited you to join its team.",
+    time: "Today · 10:20",
+    read: false,
+    roles: ["customer"],
+  },
 ];

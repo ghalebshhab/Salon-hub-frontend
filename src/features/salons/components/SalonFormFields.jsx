@@ -30,8 +30,9 @@ export default function SalonFormFields({ form, setForm, onChange }) {
     }));
 
   const setMapUrl = (value) => {
-    const coordinateMatch = value.match(/@(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/)
-      || value.match(/[?&](?:q|query)=(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/);
+    const coordinateMatch =
+      value.match(/@(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/) ||
+      value.match(/[?&](?:q|query)=(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/);
     setForm((current) => ({
       ...current,
       googleMapsUrl: value,
@@ -155,9 +156,20 @@ export default function SalonFormFields({ form, setForm, onChange }) {
         <div className="salon-location-heading">
           <div>
             <MapPin size={19} />
-            <div><strong>Google Maps location</strong><small>Search, click or move the marker. The location fields are filled automatically.</small></div>
+            <div>
+              <strong>Google Maps location</strong>
+              <small>
+                Search, click or move the marker. The location fields are filled
+                automatically.
+              </small>
+            </div>
           </div>
-          <a className="text-link" href="https://www.google.com/maps/search/salon+in+Jordan" target="_blank" rel="noreferrer">
+          <a
+            className="text-link"
+            href="https://www.google.com/maps/search/salon+in+Jordan"
+            target="_blank"
+            rel="noreferrer"
+          >
             Choose on Google Maps <ExternalLink size={14} />
           </a>
         </div>
@@ -179,11 +191,27 @@ export default function SalonFormFields({ form, setForm, onChange }) {
         <div className="form-row">
           <div className="form-group">
             <label htmlFor="salon-latitude">Latitude</label>
-            <input id="salon-latitude" name="latitude" type="number" step="any" value={form.latitude} onChange={onChange} placeholder="31.9539" />
+            <input
+              id="salon-latitude"
+              name="latitude"
+              type="number"
+              step="any"
+              value={form.latitude}
+              onChange={onChange}
+              placeholder="31.9539"
+            />
           </div>
           <div className="form-group">
             <label htmlFor="salon-longitude">Longitude</label>
-            <input id="salon-longitude" name="longitude" type="number" step="any" value={form.longitude} onChange={onChange} placeholder="35.9106" />
+            <input
+              id="salon-longitude"
+              name="longitude"
+              type="number"
+              step="any"
+              value={form.longitude}
+              onChange={onChange}
+              placeholder="35.9106"
+            />
           </div>
         </div>
       </div>

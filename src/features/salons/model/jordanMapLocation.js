@@ -47,7 +47,11 @@ export function googleMapsLink(latitude, longitude) {
 }
 
 const componentName = (component) =>
-  component?.longText || component?.long_name || component?.shortText || component?.short_name || "";
+  component?.longText ||
+  component?.long_name ||
+  component?.shortText ||
+  component?.short_name ||
+  "";
 
 export function cityFromAddressComponents(components = []) {
   const preferredTypes = [
@@ -58,7 +62,10 @@ export function cityFromAddressComponents(components = []) {
 
   for (const type of preferredTypes) {
     const component = components.find((item) => item.types?.includes(type));
-    const normalized = componentName(component).toLowerCase().replace(/ governorate$/, "").trim();
+    const normalized = componentName(component)
+      .toLowerCase()
+      .replace(/ governorate$/, "")
+      .trim();
     if (CITY_ALIASES.has(normalized)) return CITY_ALIASES.get(normalized);
   }
 

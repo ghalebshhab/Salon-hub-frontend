@@ -1,25 +1,24 @@
 import { Menu, Moon, PanelLeftClose, PanelLeftOpen, Sun } from "lucide-react";
 import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-import NotificationBell from "../../features/notifications/components/NotificationBell.jsx";
 import useLogout from "../../features/auth/hooks/useLogout.js";
+import NotificationBell from "../../features/notifications/components/NotificationBell.jsx";
 import useAuth from "../../shared/auth/useAuth.js";
 import BrandLogo from "../../shared/components/BrandLogo.jsx";
 import useTheme from "../../shared/theme/useTheme.js";
 
-function getInitials(user) {
-  const initials = [user?.firstName, user?.lastName]
-    .filter(Boolean)
-    .map((part) => part.charAt(0))
-    .join("");
-  return initials.slice(0, 2).toUpperCase() || "SH";
-}
-
 function Navbar({ onOpenMobile, onToggle, collapsed }) {
   const { loggedIn, user } = useAuth();
   const { theme, toggleTheme } = useTheme();
-  const [profileOpen, setProfileOpen] = useState(false);
   const logout = useLogout();
+  const [profileOpen, setProfileOpen] = useState(false);
+  const initials =
+    [user?.firstName, user?.lastName]
+      .filter(Boolean)
+      .map((part) => part[0])
+      .join("")
+      .slice(0, 2)
+      .toUpperCase() || "SH";
 
   return (
     <header className="creative-navbar">
@@ -32,19 +31,12 @@ function Navbar({ onOpenMobile, onToggle, collapsed }) {
           aria-controls="primary-navigation"
           aria-expanded={!collapsed}
         >
-          {collapsed ? (
-            <PanelLeftOpen aria-hidden="true" />
-          ) : (
-            <PanelLeftClose aria-hidden="true" />
-          )}
+          {collapsed ? <PanelLeftOpen /> : <PanelLeftClose />}
         </button>
-
         <Link to="/" className="creative-brand" aria-label="SalonHub home">
           <BrandLogo />
         </Link>
-
         <div className="navbar-spacer" />
-
         <div className="navbar-actions">
           <button
             className="header-icon-button"
@@ -53,15 +45,9 @@ function Navbar({ onOpenMobile, onToggle, collapsed }) {
             aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
             aria-pressed={theme === "dark"}
           >
-            {theme === "dark" ? (
-              <Sun aria-hidden="true" />
-            ) : (
-              <Moon aria-hidden="true" />
-            )}
+            {theme === "dark" ? <Sun /> : <Moon />}
           </button>
-
           {loggedIn && <NotificationBell />}
-
           {loggedIn ? (
             <div className="header-profile-wrap">
               <button
@@ -71,7 +57,7 @@ function Navbar({ onOpenMobile, onToggle, collapsed }) {
                 aria-label="Open account menu"
                 aria-expanded={profileOpen}
               >
-                <span aria-hidden="true">{getInitials(user)}</span>
+                <span aria-hidden="true">{initials}</span>
               </button>
               {profileOpen && (
                 <div className="header-profile-menu">
@@ -107,15 +93,13 @@ function Navbar({ onOpenMobile, onToggle, collapsed }) {
               Log in
             </NavLink>
           )}
-
           <button
             className="mobile-menu-button"
             type="button"
             onClick={onOpenMobile}
             aria-label="Open navigation"
-            aria-controls="primary-navigation"
           >
-            <Menu aria-hidden="true" />
+            <Menu />
           </button>
         </div>
       </div>

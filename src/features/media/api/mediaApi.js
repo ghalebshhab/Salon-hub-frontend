@@ -8,12 +8,18 @@ export const createMediaPostApi = async (data) => {
 };
 
 export const getSalonMediaApi = async (salonId, config = {}) => {
-  const response = await httpClient.get(`/salon-media/salon/${salonId}`, config);
+  const response = await httpClient.get(
+    `/salon-media/salon/${salonId}`,
+    config,
+  );
   return response.data;
 };
 
 export const getSalonVideosApi = async (salonId, config = {}) => {
-  const response = await httpClient.get(`/salon-media/salon/${salonId}/videos`, config);
+  const response = await httpClient.get(
+    `/salon-media/salon/${salonId}/videos`,
+    config,
+  );
   return response.data;
 };
 
@@ -22,15 +28,19 @@ export const deleteMediaPostApi = async (mediaPostId) => {
   return response.data;
 };
 
-export async function uploadSalonCoverApi(file) {
+export async function uploadSalonCoverApi(file, config = {}) {
   const body = new FormData();
   body.append("file", file);
-  const response = await httpClient.post("/media/salon-cover", body);
+  const response = await httpClient.post("/media/salon-cover", body, config);
   return response.data;
 }
 
-export async function uploadSalonCoverFromDriveApi(url) {
-  const response = await httpClient.post("/media/salon-cover/drive", { url });
+export async function uploadSalonCoverFromDriveApi(url, config = {}) {
+  const response = await httpClient.post(
+    "/media/salon-cover/drive",
+    { url },
+    config,
+  );
   return response.data;
 }
 

@@ -13,6 +13,7 @@ import {
   SquarePen,
   UserPlus,
   UsersRound,
+  MessagesSquare,
 } from "lucide-react";
 
 export const exploreLinks = [
@@ -20,6 +21,7 @@ export const exploreLinks = [
   { to: "/prototype", label: "Prototype", icon: Sparkles, public: true },
   { to: "/my-bookings", label: "My bookings", icon: CalendarDays },
   { to: "/hiring-posts", label: "Careers", icon: BriefcaseBusiness },
+  { to: "/community", label: "Community", icon: MessagesSquare },
 ];
 
 export const ownerLinks = [

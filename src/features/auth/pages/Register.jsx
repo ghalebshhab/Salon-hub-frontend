@@ -81,7 +81,10 @@ function Register() {
         <p className="auth-hint">
           Use the password rules required by your SalonHub account.
         </p>
-        <AuthSubmitButton loading={loading} loadingLabel="Creating your account…">
+        <AuthSubmitButton
+          loading={loading}
+          loadingLabel="Creating your account…"
+        >
           Create account
         </AuthSubmitButton>
       </form>

@@ -48,9 +48,9 @@ export default function NotificationsPage() {
             <Bell size={22} />
           </span>
           <div>
-            <p className="notifications-eyebrow">SALONHUP UPDATES</p>
+            <p className="notifications-eyebrow">SALONHUB UPDATES</p>
             <h1>Notifications</h1>
-            <p>Keep up with changes to your bookings and salon.</p>
+            <p>Keep up with bookings, salon news, and friend activity.</p>
           </div>
         </div>
         <button
@@ -75,7 +75,7 @@ export default function NotificationsPage() {
         <div className="notifications-page-empty">
           <Bell size={27} />
           <h2>Nothing new yet</h2>
-          <p>Booking decisions and salon-request updates will show here.</p>
+          <p>Booking, salon, and friend updates will show here.</p>
         </div>
       ) : (
         <div className="notifications-page-list">
@@ -97,9 +97,11 @@ export default function NotificationsPage() {
                   </time>
                 </span>
                 <span>{notification.message}</span>
-                <span className="notifications-page-salon">
-                  {notification.salonName}
-                </span>
+                {notification.salonName && (
+                  <span className="notifications-page-salon">
+                    {notification.salonName}
+                  </span>
+                )}
               </span>
               <ChevronDown size={17} className="notifications-page-arrow" />
             </button>

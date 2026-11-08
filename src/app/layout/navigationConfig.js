@@ -1,30 +1,30 @@
 import {
   Bell,
   BriefcaseBusiness,
-  Building2,
   CalendarDays,
   ClipboardList,
-  Compass,
   FileEdit,
-  Handshake,
   Home,
-  LayoutDashboard,
   LockKeyhole,
+  MessageSquareText,
   Scissors,
   Store,
   UserPlus,
   UsersRound,
 } from "lucide-react";
 
-export function getNavigationSections({ loggedIn, user, isOwner }) {
-  const isEmployee = Boolean(user?.salonId);
-  const hasOwnedSalon = Boolean(user?.ownedSalonId);
+export function getNavigationSections({ loggedIn, isOwner, hasSalon }) {
   const sections = [
     {
       label: "Discover",
       items: [
-        { label: "Home", to: "/", icon: Home },
-        { label: "Explore the platform", to: "/prototype", icon: Compass },
+        { label: "Home", to: "/", icon: Home, end: true },
+        { label: "Community", to: "/community", icon: MessageSquareText },
+        {
+          label: "Career opportunities",
+          to: "/hiring-posts",
+          icon: BriefcaseBusiness,
+        },
       ],
     },
   ];
@@ -42,45 +42,23 @@ export function getNavigationSections({ loggedIn, user, isOwner }) {
     {
       label: "Career",
       items: [
-        {
-          label: "Career opportunities",
-          to: "/hiring-posts",
-          icon: BriefcaseBusiness,
-        },
         { label: "Career profile", to: "/profile/career", icon: UsersRound },
         {
           label: "My applications",
           to: "/my-applications",
           icon: ClipboardList,
         },
-        { label: "Employment center", to: "/employment", icon: Handshake },
+        { label: "Employment center", to: "/employment", icon: Store },
       ],
     },
   );
-
-  if (isEmployee) {
-    sections.push({
-      label: "Employee",
-      items: [
-        {
-          label: "My appointments",
-          to: "/employee/bookings",
-          icon: CalendarDays,
-        },
-      ],
-    });
-  }
 
   if (isOwner) {
     sections.push(
       {
         label: "Owner overview",
         items: [
-          {
-            label: "Dashboard",
-            to: "/owner/dashboard",
-            icon: LayoutDashboard,
-          },
+          { label: "Dashboard", to: "/owner/dashboard", icon: Store },
           { label: "My salon", to: "/owner/my-salon", icon: Store },
           {
             label: "Booking requests",
@@ -101,7 +79,7 @@ export function getNavigationSections({ loggedIn, user, isOwner }) {
           {
             label: "Employment",
             to: "/owner/employment",
-            icon: Handshake,
+            icon: BriefcaseBusiness,
           },
           {
             label: "Hiring applications",
@@ -114,8 +92,8 @@ export function getNavigationSections({ loggedIn, user, isOwner }) {
         label: "Create & update",
         items: [
           {
-            label: "Edit salon",
-            to: "/owner/my-salon/edit",
+            label: hasSalon ? "Edit salon" : "Create salon",
+            to: hasSalon ? "/owner/my-salon/edit" : "/owner/create-salon",
             icon: FileEdit,
           },
           {
@@ -131,19 +109,16 @@ export function getNavigationSections({ loggedIn, user, isOwner }) {
         ],
       },
     );
-  } else if (hasOwnedSalon) {
+  }
+
+  if (hasSalon && !isOwner) {
     sections.push({
-      label: "Salon",
-      items: [{ label: "My salon", to: "/owner/my-salon", icon: Store }],
-    });
-  } else {
-    sections.push({
-      label: "For salon owners",
+      label: "Employee",
       items: [
         {
-          label: "Create a salon",
-          to: "/owner/create-salon",
-          icon: Building2,
+          label: "My appointments",
+          to: "/employee/bookings",
+          icon: CalendarDays,
         },
       ],
     });
@@ -152,11 +127,7 @@ export function getNavigationSections({ loggedIn, user, isOwner }) {
   sections.push({
     label: "Account",
     items: [
-      {
-        label: "Account security",
-        to: "/account/security",
-        icon: LockKeyhole,
-      },
+      { label: "Account security", to: "/account/security", icon: LockKeyhole },
     ],
   });
 

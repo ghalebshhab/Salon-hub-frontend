@@ -13,6 +13,9 @@ const TITLES = {
   SALON_REQUEST_REJECTED: "Salon request rejected",
   SALON_BLOCKED: "Salon blocked",
   SALON_UNBLOCKED: "Salon restored",
+  FRIEND_REQUEST_RECEIVED: "New friend request",
+  FRIEND_REQUEST_ACCEPTED: "Friend request accepted",
+  FRIEND_REQUEST_DECLINED: "Friend request declined",
 };
 
 export function getNotificationTitle(eventType) {

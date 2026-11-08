@@ -50,7 +50,7 @@
   transform-origin: left center;
   transition:
     color 300ms ease,
-    transform 300ms cubic-bezier(.2,.8,.2,1),
+    transform 300ms cubic-bezier(0.2, 0.8, 0.2, 1),
     margin 300ms ease,
     padding 300ms ease,
     background-color 300ms ease;
@@ -68,7 +68,8 @@
 }
 
 .ui-floating-field:has(> :is(input, textarea):focus) > :is(input, textarea),
-.ui-floating-field:has(> :is(input, textarea):not(:placeholder-shown)) > :is(input, textarea),
+.ui-floating-field:has(> :is(input, textarea):not(:placeholder-shown))
+  > :is(input, textarea),
 .auth-input-wrap:has(> input:focus) > input,
 .auth-input-wrap:has(> input:not(:placeholder-shown)) > input {
   border-color: var(--primary);

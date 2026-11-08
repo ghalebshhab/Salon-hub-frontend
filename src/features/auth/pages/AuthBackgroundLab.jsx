@@ -46,7 +46,9 @@ export default function AuthBackgroundLab() {
     <main className="auth-background-lab">
       <header className="auth-background-lab-header container">
         <div>
-          <span className="auth-background-eyebrow"><Sparkles size={15} /> Auth background studio</span>
+          <span className="auth-background-eyebrow">
+            <Sparkles size={15} /> Auth background studio
+          </span>
           <h1>Choose the atmosphere behind your welcome.</h1>
           <p>
             Four React Bits-inspired backgrounds, tuned to SalonHub’s plum and
@@ -54,10 +56,15 @@ export default function AuthBackgroundLab() {
             story panel carries the motion.
           </p>
         </div>
-        <span className="auth-background-live"><span /> Live preview</span>
+        <span className="auth-background-live">
+          <span /> Live preview
+        </span>
       </header>
 
-      <nav className="auth-background-options container" aria-label="Authentication background choices">
+      <nav
+        className="auth-background-options container"
+        aria-label="Authentication background choices"
+      >
         {backgrounds.map((background, index) => (
           <button
             key={background.id}
@@ -77,7 +84,10 @@ export default function AuthBackgroundLab() {
         ))}
       </nav>
 
-      <section className="auth-background-preview container" data-background={selected}>
+      <section
+        className="auth-background-preview container"
+        data-background={selected}
+      >
         <div className="auth-background-story">
           <AuthAnimatedBackground variant={selected} />
           <div className="auth-background-story-copy">
@@ -89,7 +99,9 @@ export default function AuthBackgroundLab() {
             </p>
           </div>
           <div className="auth-background-story-footer">
-            <span>Approved salons</span><span>Protected accounts</span><span>Made for Jordan</span>
+            <span>Approved salons</span>
+            <span>Protected accounts</span>
+            <span>Made for Jordan</span>
           </div>
         </div>
 
@@ -116,18 +128,29 @@ export default function AuthBackgroundLab() {
                 aria-pressed={passwordVisible}
                 onClick={() => setPasswordVisible((current) => !current)}
               >
-                <span className="auth-password-toggle-pulse" aria-hidden="true" />
+                <span
+                  className="auth-password-toggle-pulse"
+                  aria-hidden="true"
+                />
                 <Eye className="auth-password-eye-open" aria-hidden="true" />
-                <EyeOff className="auth-password-eye-closed" aria-hidden="true" />
+                <EyeOff
+                  className="auth-password-eye-closed"
+                  aria-hidden="true"
+                />
               </button>
             </div>
-            <button className="auth-background-signin" type="button">Sign in</button>
+            <button className="auth-background-signin" type="button">
+              Sign in
+            </button>
           </div>
         </div>
       </section>
 
       <section className="auth-background-choice container" aria-live="polite">
-        <div><span>Current direction</span><h2>{active.name}</h2></div>
+        <div>
+          <span>Current direction</span>
+          <h2>{active.name}</h2>
+        </div>
         <p>{active.description}</p>
         <span>{active.source}</span>
       </section>

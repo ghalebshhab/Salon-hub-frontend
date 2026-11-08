@@ -356,8 +356,16 @@
 .salon-details-page {
   min-height: calc(100vh - 76px);
   background:
-    radial-gradient(circle at 8% 2%, rgba(192, 132, 151, 0.16), transparent 30%),
-    radial-gradient(circle at 92% 10%, rgba(247, 231, 206, 0.72), transparent 24%),
+    radial-gradient(
+      circle at 8% 2%,
+      rgba(192, 132, 151, 0.16),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 92% 10%,
+      rgba(247, 231, 206, 0.72),
+      transparent 24%
+    ),
     var(--bg);
 }
 
@@ -439,7 +447,9 @@
   opacity: 0.78;
 }
 
-.salon-media-caption strong { font-size: 1.1rem; }
+.salon-media-caption strong {
+  font-size: 1.1rem;
+}
 
 .salon-details-hero-copy {
   display: flex;
@@ -488,10 +498,24 @@
   margin-top: 6px;
 }
 
-.salon-details-location svg { color: var(--primary); }
-.salon-details-location-link { width: fit-content; color: var(--muted); text-decoration: none; }
-.salon-details-location-link:hover { color: var(--text); }
-.salon-info-list a { display: inline-flex; align-items: center; gap: 5px; color: var(--primary-dark); font-weight: 800; }
+.salon-details-location svg {
+  color: var(--primary);
+}
+.salon-details-location-link {
+  width: fit-content;
+  color: var(--muted);
+  text-decoration: none;
+}
+.salon-details-location-link:hover {
+  color: var(--text);
+}
+.salon-info-list a {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--primary-dark);
+  font-weight: 800;
+}
 
 .salon-details-description {
   max-width: 560px;
@@ -544,7 +568,9 @@
   text-transform: uppercase;
 }
 
-.salon-details-hero-meta strong { font-size: 0.91rem; }
+.salon-details-hero-meta strong {
+  font-size: 0.91rem;
+}
 
 .salon-details-grid {
   display: grid;
@@ -602,7 +628,9 @@
   text-transform: uppercase;
 }
 
-.salon-info-card .btn { gap: 8px; }
+.salon-info-card .btn {
+  gap: 8px;
+}
 
 .salon-details-content {
   display: grid;
@@ -619,7 +647,9 @@
   animation: salon-fade-up 0.55s 0.16s ease both;
 }
 
-.salon-details-page .salon-section-heading { margin-bottom: 24px; }
+.salon-details-page .salon-section-heading {
+  margin-bottom: 24px;
+}
 
 .salon-details-page .salon-section-heading h2 {
   margin: 8px 0;
@@ -658,7 +688,9 @@
   font-weight: 800;
 }
 
-.salon-about-contact svg { color: var(--primary); }
+.salon-about-contact svg {
+  color: var(--primary);
+}
 
 .salon-details-page .services-grid {
   gap: 14px;
@@ -672,7 +704,10 @@
   border-radius: 20px;
   background: var(--card);
   box-shadow: none;
-  transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease;
 }
 
 .salon-details-page .service-card:hover {
@@ -682,8 +717,12 @@
   transform: translateY(-2px);
 }
 
-.salon-details-page .service-card h3 { color: var(--text); }
-.salon-details-page .service-card p { color: var(--muted); }
+.salon-details-page .service-card h3 {
+  color: var(--text);
+}
+.salon-details-page .service-card p {
+  color: var(--muted);
+}
 .salon-details-page .service-meta span {
   color: var(--text);
   background: var(--secondary);
@@ -696,7 +735,9 @@
 }
 
 .salon-details-page .review-card {
-  transition: transform 180ms ease, border-color 180ms ease;
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease;
 }
 
 .salon-details-page .review-card:hover {
@@ -705,7 +746,9 @@
   transform: translateY(-2px);
 }
 
-.salon-details-page .review-comment { color: var(--muted); }
+.salon-details-page .review-comment {
+  color: var(--muted);
+}
 
 .salon-not-found {
   display: grid;
@@ -715,9 +758,15 @@
   gap: 12px;
 }
 
-.salon-not-found svg { color: var(--primary); }
-.salon-not-found h1 { margin: 0; }
-.salon-not-found p { margin: 0 0 12px; }
+.salon-not-found svg {
+  color: var(--primary);
+}
+.salon-not-found h1 {
+  margin: 0;
+}
+.salon-not-found p {
+  margin: 0 0 12px;
+}
 
 .salon-details-skeleton {
   display: grid;
@@ -738,42 +787,80 @@
   animation: salon-shimmer 1.5s infinite;
 }
 
-.salon-skeleton-hero { min-height: 460px; }
-.salon-skeleton-copy { height: 120px; }
-.salon-skeleton-section { height: 300px; }
-
-@keyframes salon-fade-up {
-  from { opacity: 0; transform: translateY(12px); }
-  to { opacity: 1; transform: translateY(0); }
+.salon-skeleton-hero {
+  min-height: 460px;
+}
+.salon-skeleton-copy {
+  height: 120px;
+}
+.salon-skeleton-section {
+  height: 300px;
 }
 
-@keyframes salon-shimmer { to { background-position: -200% 0; } }
+@keyframes salon-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes salon-shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
 
 @media (max-width: 900px) {
-  .salon-details-hero { grid-template-columns: 1fr; }
+  .salon-details-hero {
+    grid-template-columns: 1fr;
+  }
   .salon-details-media,
-  .salon-details-page .salon-hero-placeholder { min-height: 380px; }
-  .salon-details-grid { grid-template-columns: 1fr; }
-  .salon-details-aside { position: static; }
-  .salon-info-card { max-width: none; }
+  .salon-details-page .salon-hero-placeholder {
+    min-height: 380px;
+  }
+  .salon-details-grid {
+    grid-template-columns: 1fr;
+  }
+  .salon-details-aside {
+    position: static;
+  }
+  .salon-info-card {
+    max-width: none;
+  }
 }
 
 @media (max-width: 600px) {
-  .salon-details-page .section { padding-top: 22px; }
+  .salon-details-page .section {
+    padding-top: 22px;
+  }
   .salon-details-media,
   .salon-details-page .salon-hero-placeholder {
     min-height: 300px;
     border-radius: 24px;
   }
-  .salon-media-caption { inset: auto 18px 18px; }
+  .salon-media-caption {
+    inset: auto 18px 18px;
+  }
   .salon-details-hero-copy h1 {
     margin-top: 18px;
     font-size: clamp(2.75rem, 15vw, 4.2rem);
   }
-  .salon-details-hero-meta { grid-template-columns: 1fr; }
-  .salon-details-actions { flex-direction: column; }
-  .salon-details-actions .btn { width: 100%; }
-  .salon-details-section { border-radius: 22px; }
+  .salon-details-hero-meta {
+    grid-template-columns: 1fr;
+  }
+  .salon-details-actions {
+    flex-direction: column;
+  }
+  .salon-details-actions .btn {
+    width: 100%;
+  }
+  .salon-details-section {
+    border-radius: 22px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

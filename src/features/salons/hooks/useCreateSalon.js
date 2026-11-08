@@ -61,7 +61,9 @@ export default function useCreateSalon() {
         imageUploaded = mediaResponse.success;
         if (!imageUploaded) showErrorToast(mediaResponse.message);
       } else if (form.coverDriveUrl) {
-        const mediaResponse = await uploadSalonCoverFromDriveApi(form.coverDriveUrl);
+        const mediaResponse = await uploadSalonCoverFromDriveApi(
+          form.coverDriveUrl,
+        );
         imageUploaded = mediaResponse.success;
         if (!imageUploaded) showErrorToast(mediaResponse.message);
       }

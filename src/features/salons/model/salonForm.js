@@ -6,8 +6,14 @@ export function toSalonPayload(form) {
     salonEmail: form.email.trim(),
     salonCity: form.city,
     googleMapsUrl: (form.googleMapsUrl || "").trim() || null,
-    latitude: form.latitude == null || form.latitude === "" ? null : Number(form.latitude),
-    longitude: form.longitude == null || form.longitude === "" ? null : Number(form.longitude),
+    latitude:
+      form.latitude == null || form.latitude === ""
+        ? null
+        : Number(form.latitude),
+    longitude:
+      form.longitude == null || form.longitude === ""
+        ? null
+        : Number(form.longitude),
     maxNumberOfEmployees: Number(form.maxNumOfEmployees),
     openingTime: form.openTime,
     closingTime: form.closeTime,

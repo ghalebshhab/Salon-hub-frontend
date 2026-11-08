@@ -113,6 +113,25 @@ Pages are lazy-loaded. The app has route-loading, not-found, and render-error fa
 
 ## Verification scope
 
+The My Salon picture editor reports device-to-backend transfer progress, then waits for
+the backend to confirm saving. Google Drive imports use an indeterminate indicator because
+the browser cannot measure the provider's download. Uploads use the authenticated media
+adapters with a two-minute request timeout and inline loading so Cancel upload stays reachable.
+Cancelling or navigating away aborts the browser request and ignores late responses; it does
+not roll back work already accepted by the backend. Refresh the salon before retrying a
+cancelled request. Configuration/network errors keep the selected image available for retry.
+Creation-form and employee-gallery upload progress/cancellation remain follow-up work.
+
+For staging review, configure Cloudinary only in the backend environment, sign in as an owner,
+open My Salon > Change picture, and test Device and Google Drive. On a throttled connection,
+verify measured progress, the server-confirmation stage, cancellation, and retry after a
+configuration/network error. No live Cloudinary or Google credential acceptance is implied
+by mocked tests. Never put the Cloudinary secret in a frontend environment variable.
+
+November 7 verification for implementation `ca3dc09`: `npm run check` passed ESLint,
+83 tests (including eight new upload regressions), and the production build. Backend
+`mvn.cmd -B verify` also passed 185 tests and packaged the executable JAR.
+
 Tests cover active routes with mocked API responses, login redirects, authentication subscriptions, 401/403 handling, stale request cancellation, and salon payload contracts. They do not replace acceptance testing against a running backend with real accounts.
 
 ## Project status and related repository

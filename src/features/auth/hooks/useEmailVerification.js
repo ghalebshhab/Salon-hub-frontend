@@ -1,9 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import {
-  resendEmailVerificationApi,
-  verifyEmailApi,
-} from "../api/authApi.js";
+import { resendEmailVerificationApi, verifyEmailApi } from "../api/authApi.js";
 import { getApiErrorMessage } from "../../../shared/api/response.js";
 import {
   showErrorToast,
@@ -50,7 +47,10 @@ export default function useEmailVerification() {
       });
       if (!response.success) throw new Error(response.message);
       showSuccessToast(response.message || "Email verified successfully.");
-      navigate("/login", { replace: true, state: { email: form.email.trim() } });
+      navigate("/login", {
+        replace: true,
+        state: { email: form.email.trim() },
+      });
     } catch (error) {
       showErrorToast(getApiErrorMessage(error, "Email verification failed."));
     } finally {
@@ -69,7 +69,9 @@ export default function useEmailVerification() {
       setCooldown(60);
       showSuccessToast(response.message || "A new verification code was sent.");
     } catch (error) {
-      showErrorToast(getApiErrorMessage(error, "The code could not be resent."));
+      showErrorToast(
+        getApiErrorMessage(error, "The code could not be resent."),
+      );
     } finally {
       setResending(false);
     }

@@ -20,7 +20,9 @@ it("uses the main logo for navigation loading", () => {
     />,
   );
 
-  expect(container.querySelector('img[src="/salonhub-mark.svg"]')).not.toBeNull();
+  expect(
+    container.querySelector('img[src="/salonhub-mark.svg"]'),
+  ).not.toBeNull();
   expect(container.querySelector(".salon-snip-scissors")).toBeNull();
 });
 

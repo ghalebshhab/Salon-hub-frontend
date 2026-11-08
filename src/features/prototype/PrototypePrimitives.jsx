@@ -10,7 +10,9 @@ import {
 
 export function StatusPill({ value }) {
   return (
-    <span className={`prototype-status prototype-status-${String(value).toLowerCase().replaceAll("_", "-")}`}>
+    <span
+      className={`prototype-status prototype-status-${String(value).toLowerCase().replaceAll("_", "-")}`}
+    >
       {String(value).replaceAll("_", " ")}
     </span>
   );
@@ -19,7 +21,9 @@ export function StatusPill({ value }) {
 export function MetricCard({ icon: Icon, value, label, tone = "primary" }) {
   return (
     <article className={`prototype-metric prototype-tone-${tone}`}>
-      <span><Icon size={20} /></span>
+      <span>
+        <Icon size={20} />
+      </span>
       <strong>{value}</strong>
       <p>{label}</p>
     </article>
@@ -30,14 +34,29 @@ export function BookingSummary({ booking }) {
   return (
     <>
       <div className="prototype-booking-meta">
-        <span><CalendarDays size={15} />{booking.bookingDate}</span>
-        <span><Clock3 size={15} />{booking.bookingTime}</span>
-        <span><MapPin size={15} />{booking.customerLocation}</span>
-        <span><UserRound size={15} />{booking.assignedEmployeeName || "Unassigned"}</span>
+        <span>
+          <CalendarDays size={15} />
+          {booking.bookingDate}
+        </span>
+        <span>
+          <Clock3 size={15} />
+          {booking.bookingTime}
+        </span>
+        <span>
+          <MapPin size={15} />
+          {booking.customerLocation}
+        </span>
+        <span>
+          <UserRound size={15} />
+          {booking.assignedEmployeeName || "Unassigned"}
+        </span>
       </div>
       <div className="prototype-chips">
         {booking.services.map((service) => (
-          <span key={service.id}><Scissors size={13} />{service.name} · {service.price} JD</span>
+          <span key={service.id}>
+            <Scissors size={13} />
+            {service.name} · {service.price} JD
+          </span>
         ))}
       </div>
       <div className="prototype-total">
@@ -68,12 +87,19 @@ export function ProfileSnapshot({ profile }) {
       <div className="prototype-profile-copy">
         <span className="eyebrow">Career profile</span>
         <h3>{profile.name}</h3>
-        <p>{profile.title} · {profile.location}</p>
+        <p>
+          {profile.title} · {profile.location}
+        </p>
         <div className="prototype-chips">
-          {profile.skills.map((skill) => <span key={skill}>{skill}</span>)}
+          {profile.skills.map((skill) => (
+            <span key={skill}>{skill}</span>
+          ))}
         </div>
       </div>
-      <div className="prototype-completion" style={{ "--completion": `${profile.completion}%` }}>
+      <div
+        className="prototype-completion"
+        style={{ "--completion": `${profile.completion}%` }}
+      >
         <strong>{profile.completion}%</strong>
         <span>complete</span>
       </div>
@@ -82,7 +108,12 @@ export function ProfileSnapshot({ profile }) {
 }
 
 export function FeatureNote({ children }) {
-  return <div className="prototype-feature-note"><CheckCircle2 size={17} />{children}</div>;
+  return (
+    <div className="prototype-feature-note">
+      <CheckCircle2 size={17} />
+      {children}
+    </div>
+  );
 }
 
 export function EmptyPrototype({ title, description }) {

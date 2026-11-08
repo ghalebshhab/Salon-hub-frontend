@@ -25,17 +25,41 @@ export default function SalonEmployees({ employees = [] }) {
       {employees.map((employee) => (
         <article className="salon-public-employee" key={employee.id}>
           <div className="salon-employee-avatar">
-            {employee.imageUrl ? <img src={employee.imageUrl} alt={employee.fullName} /> : <span>{initials(employee.fullName)}</span>}
+            {employee.imageUrl ? (
+              <img src={employee.imageUrl} alt={employee.fullName} />
+            ) : (
+              <span>{initials(employee.fullName)}</span>
+            )}
           </div>
           <div className="salon-employee-copy">
-            <span className="salon-employee-role"><Sparkles size={13} /> {employee.specialty || "Salon professional"}</span>
+            <span className="salon-employee-role">
+              <Sparkles size={13} />{" "}
+              {employee.specialty || "Salon professional"}
+            </span>
             <h3>{employee.fullName}</h3>
-            {employee.yearsOfExperience != null && <p className="salon-employee-experience"><BriefcaseBusiness size={15} /> {employee.yearsOfExperience} years of experience</p>}
-            {employee.professionalBio && <p className="salon-employee-bio">{employee.professionalBio}</p>}
-            <div className="salon-employee-skills" aria-label={`${employee.fullName} skills`}>
-              {(employee.skills || []).slice(0, 5).map((skill) => <span key={skill}>{skill}</span>)}
+            {employee.yearsOfExperience != null && (
+              <p className="salon-employee-experience">
+                <BriefcaseBusiness size={15} /> {employee.yearsOfExperience}{" "}
+                years of experience
+              </p>
+            )}
+            {employee.professionalBio && (
+              <p className="salon-employee-bio">{employee.professionalBio}</p>
+            )}
+            <div
+              className="salon-employee-skills"
+              aria-label={`${employee.fullName} skills`}
+            >
+              {(employee.skills || []).slice(0, 5).map((skill) => (
+                <span key={skill}>{skill}</span>
+              ))}
             </div>
-            {!!employee.serviceNames?.length && <div className="salon-employee-services"><Scissors size={15} /><span>{employee.serviceNames.join(" · ")}</span></div>}
+            {!!employee.serviceNames?.length && (
+              <div className="salon-employee-services">
+                <Scissors size={15} />
+                <span>{employee.serviceNames.join(" · ")}</span>
+              </div>
+            )}
           </div>
         </article>
       ))}

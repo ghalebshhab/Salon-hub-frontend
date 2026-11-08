@@ -6,10 +6,10 @@ export const createSalonServiceApi = async (serviceData) => {
 };
 
 export const getActiveSalonServicesApi = async (salonId, config = {}) => {
-  const response = await httpClient.get(
-    `/salon-services/salon/${salonId}`,
-    { ...config, skipAuth: true },
-  );
+  const response = await httpClient.get(`/salon-services/salon/${salonId}`, {
+    ...config,
+    skipAuth: true,
+  });
   return response.data;
 };
 

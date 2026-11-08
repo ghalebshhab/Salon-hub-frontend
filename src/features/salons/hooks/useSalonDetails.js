@@ -14,12 +14,19 @@ export default function useSalonDetails() {
         getSalonByIdApi(salonId, { signal }),
         getSalonEmployeesApi(salonId, { signal }),
       ]);
-      return { salon: requireData(salonResponse), employees: requireData(employeeResponse) || [] };
+      return {
+        salon: requireData(salonResponse),
+        employees: requireData(employeeResponse) || [],
+      };
     },
     [salonId],
   );
   const { data, loading } = useQuery(loader, {
     onError: showErrorToast,
   });
-  return { salon: data?.salon || null, employees: data?.employees || [], loading };
+  return {
+    salon: data?.salon || null,
+    employees: data?.employees || [],
+    loading,
+  };
 }

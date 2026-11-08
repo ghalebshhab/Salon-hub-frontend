@@ -8,6 +8,7 @@ import {
   Scissors,
   UserPlus,
   UsersRound,
+  Heart,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import useSalonDetails from "../hooks/useSalonDetails.js";
@@ -19,6 +20,7 @@ import useJoinSalonRequest from "../../employment/hooks/useJoinSalonRequest.js";
 import SalonEmployees from "../components/SalonEmployees.jsx";
 import SalonWorkGallery from "../../media/components/SalonWorkGallery.jsx";
 import { optimizedCloudinaryImage } from "../../media/model/cloudinaryMedia.js";
+import useSalonFollow from "../../community/hooks/useSalonFollow.js";
 
 const formatTime = (value) => value?.slice(0, 5) || "Not listed";
 
@@ -26,10 +28,18 @@ function SalonDetails() {
   const { salon, employees, loading } = useSalonDetails();
   const { loggedIn, user } = useAuth();
   const { joining, requestJoin } = useJoinSalonRequest();
+  const visibleSalonId = salon?.salonId ?? salon?.id;
+  const salonFollow = useSalonFollow(
+    visibleSalonId,
+    loggedIn && Boolean(salon),
+  );
 
   if (loading) {
     return (
-      <section className="salon-details-page" aria-label="Loading salon profile">
+      <section
+        className="salon-details-page"
+        aria-label="Loading salon profile"
+      >
         <div className="container salon-details-skeleton">
           <div className="skeleton-block salon-skeleton-hero" />
           <div className="skeleton-block salon-skeleton-copy" />
@@ -60,14 +70,21 @@ function SalonDetails() {
   const bookingPath = `/salons/${salonId}/book`;
   const ownsSalon = Number(user?.ownedSalonId) === Number(salonId);
   const belongsToSalon = Number(user?.salonId) === Number(salonId);
-  const canRequestJoin = loggedIn && user?.role === "USER" && !ownsSalon && !belongsToSalon;
+  const canRequestJoin =
+    loggedIn && user?.role === "USER" && !ownsSalon && !belongsToSalon;
   return (
     <section className="salon-details-page">
       <div className="container section">
         <div className="salon-details-hero">
           <div className="salon-details-media">
             {image ? (
-              <img src={optimizedCloudinaryImage(image, { width: 1400, height: 1000 })} alt={`${salon.name} interior`} />
+              <img
+                src={optimizedCloudinaryImage(image, {
+                  width: 1400,
+                  height: 1000,
+                })}
+                alt={`${salon.name} interior`}
+              />
             ) : (
               <div className="salon-hero-placeholder">
                 <Scissors aria-hidden="true" />
@@ -87,12 +104,25 @@ function SalonDetails() {
             </div>
             <h1>{salon.name}</h1>
             {salon.googleMapsUrl ? (
-              <a className="salon-details-location salon-details-location-link" href={salon.googleMapsUrl} target="_blank" rel="noreferrer">
-                <MapPin aria-hidden="true" /><span>{salon.city || "View salon location"}</span><ExternalLink size={14} />
+              <a
+                className="salon-details-location salon-details-location-link"
+                href={salon.googleMapsUrl}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <MapPin aria-hidden="true" />
+                <span>{salon.city || "View salon location"}</span>
+                <ExternalLink size={14} />
               </a>
-            ) : <p className="salon-details-location"><MapPin aria-hidden="true" /><span>{salon.city || "Location not listed"}</span></p>}
+            ) : (
+              <p className="salon-details-location">
+                <MapPin aria-hidden="true" />
+                <span>{salon.city || "Location not listed"}</span>
+              </p>
+            )}
             <p className="salon-details-description">
-              {salon.description || "This salon has not added a description yet."}
+              {salon.description ||
+                "This salon has not added a description yet."}
             </p>
 
             <div className="salon-details-actions">
@@ -105,10 +135,27 @@ function SalonDetails() {
                 {loggedIn ? "Book appointment" : "Sign in to book"}
               </Link>
               {salon.phoneNumber && (
-                <a className="btn btn-secondary" href={`tel:${salon.phoneNumber}`}>
+                <a
+                  className="btn btn-secondary"
+                  href={`tel:${salon.phoneNumber}`}
+                >
                   <Phone aria-hidden="true" />
                   Call salon
                 </a>
+              )}
+              {loggedIn && !ownsSalon && (
+                <button
+                  className="btn btn-secondary"
+                  type="button"
+                  disabled={salonFollow.busy}
+                  onClick={salonFollow.toggle}
+                >
+                  <Heart
+                    aria-hidden="true"
+                    fill={salonFollow.followed ? "currentColor" : "none"}
+                  />
+                  {salonFollow.followed ? "Following salon" : "Follow salon"}
+                </button>
               )}
               {canRequestJoin && (
                 <button
@@ -173,7 +220,18 @@ function SalonDetails() {
                   <MapPin aria-hidden="true" />
                   <span>
                     <strong>Location</strong>
-                    {salon.googleMapsUrl ? <a href={salon.googleMapsUrl} target="_blank" rel="noreferrer">{salon.city || "Open in Google Maps"} <ExternalLink size={12} /></a> : salon.city || "Not listed"}
+                    {salon.googleMapsUrl ? (
+                      <a
+                        href={salon.googleMapsUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        {salon.city || "Open in Google Maps"}{" "}
+                        <ExternalLink size={12} />
+                      </a>
+                    ) : (
+                      salon.city || "Not listed"
+                    )}
                   </span>
                 </div>
                 <div>
@@ -223,8 +281,8 @@ function SalonDetails() {
                 <span className="eyebrow">The menu</span>
                 <h2 id="services-heading">Services for your next visit</h2>
                 <p>
-                  Explore the salon&apos;s available services, timing, and pricing
-                  before you book.
+                  Explore the salon&apos;s available services, timing, and
+                  pricing before you book.
                 </p>
               </div>
               <SalonServicesList salonId={salonId} />
@@ -258,20 +316,32 @@ function SalonDetails() {
               </div>
             </section>
 
-            <section className="salon-details-section" aria-labelledby="team-heading">
+            <section
+              className="salon-details-section"
+              aria-labelledby="team-heading"
+            >
               <div className="salon-section-heading">
                 <span className="eyebrow">Meet the professionals</span>
                 <h2 id="team-heading">The people behind {salon.name}</h2>
-                <p>Explore the team&apos;s specialties, experience, skills, and services without exposing their private contact information.</p>
+                <p>
+                  Explore the team&apos;s specialties, experience, skills, and
+                  services without exposing their private contact information.
+                </p>
               </div>
               <SalonEmployees employees={employees} />
             </section>
 
-            <section className="salon-details-section" aria-labelledby="work-heading">
+            <section
+              className="salon-details-section"
+              aria-labelledby="work-heading"
+            >
               <div className="salon-section-heading">
                 <span className="eyebrow">Team portfolio</span>
                 <h2 id="work-heading">Recent work from the salon</h2>
-                <p>Photos and videos published by active employees who work at this salon.</p>
+                <p>
+                  Photos and videos published by active employees who work at
+                  this salon.
+                </p>
               </div>
               <SalonWorkGallery salonId={salonId} />
             </section>

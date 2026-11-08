@@ -98,7 +98,9 @@ export default function GoogleMapsLocationPicker({
           let addressComponents = placeDetails.addressComponents || [];
           if (!address || !addressComponents.length) {
             try {
-              const response = await geocoder.geocode({ location: { lat, lng } });
+              const response = await geocoder.geocode({
+                location: { lat, lng },
+              });
               const result = response.results?.[0];
               address ||= result?.formatted_address || "";
               addressComponents = result?.address_components || [];
@@ -113,7 +115,9 @@ export default function GoogleMapsLocationPicker({
           const city = cityFromAddressComponents(addressComponents);
           setSelectedAddress(address || `${lat.toFixed(6)}, ${lng.toFixed(6)}`);
           setState("selected");
-          setMessage("Location selected. The form fields were filled automatically.");
+          setMessage(
+            "Location selected. The form fields were filled automatically.",
+          );
           callbackRef.current?.({
             latitude: lat.toFixed(7),
             longitude: lng.toFixed(7),
@@ -135,13 +139,21 @@ export default function GoogleMapsLocationPicker({
           const place = event.placePrediction?.toPlace();
           if (!place) return;
           await place.fetchFields({
-            fields: ["displayName", "formattedAddress", "location", "addressComponents"],
+            fields: [
+              "displayName",
+              "formattedAddress",
+              "location",
+              "addressComponents",
+            ],
           });
           if (!place.location) return;
           applyLocation(place.location.toJSON(), place);
         };
         autocomplete.addEventListener("gmp-select", onPlaceSelect);
-        listeners.push({ remove: () => autocomplete.removeEventListener("gmp-select", onPlaceSelect) });
+        listeners.push({
+          remove: () =>
+            autocomplete.removeEventListener("gmp-select", onPlaceSelect),
+        });
 
         const hasInitialLocation = isInsideJordan(
           Number(initialLocation.latitude),
@@ -172,13 +184,35 @@ export default function GoogleMapsLocationPicker({
       <div className="google-map-search" ref={searchNodeRef}>
         {state === "loading" && <span>Preparing location search…</span>}
       </div>
-      <div className="google-map-canvas" ref={mapNodeRef} aria-label="Choose salon location on Google Maps" />
-      <div className="google-map-status" role={state === "error" ? "alert" : "status"}>
-        {state === "selected" ? <CheckCircle2 /> : state === "error" || state === "configuration" ? <AlertCircle /> : <LocateFixed />}
+      <div
+        className="google-map-canvas"
+        ref={mapNodeRef}
+        aria-label="Choose salon location on Google Maps"
+      />
+      <div
+        className="google-map-status"
+        role={state === "error" ? "alert" : "status"}
+      >
+        {state === "selected" ? (
+          <CheckCircle2 />
+        ) : state === "error" || state === "configuration" ? (
+          <AlertCircle />
+        ) : (
+          <LocateFixed />
+        )}
         <div>
-          <strong>{state === "selected" ? "Salon location selected" : "Choose the salon location"}</strong>
+          <strong>
+            {state === "selected"
+              ? "Salon location selected"
+              : "Choose the salon location"}
+          </strong>
           <span>{message}</span>
-          {selectedAddress && <small><MapPin size={13} />{selectedAddress}</small>}
+          {selectedAddress && (
+            <small>
+              <MapPin size={13} />
+              {selectedAddress}
+            </small>
+          )}
         </div>
       </div>
     </div>

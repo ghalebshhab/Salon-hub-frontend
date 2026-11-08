@@ -81,7 +81,9 @@ export default function useEditSalon() {
           return;
         }
       } else if (form.coverDriveUrl) {
-        const mediaResponse = await uploadSalonCoverFromDriveApi(form.coverDriveUrl);
+        const mediaResponse = await uploadSalonCoverFromDriveApi(
+          form.coverDriveUrl,
+        );
         if (!mediaResponse.success) {
           showErrorToast(mediaResponse.message);
           return;

@@ -14,10 +14,10 @@ export const getSalonReviewsApi = async (salonId, config = {}) => {
 };
 
 export const getSalonReviewSummaryApi = async (salonId, config = {}) => {
-  const response = await httpClient.get(
-    `/reviews/salon/${salonId}/summary`,
-    { ...config, skipAuth: true },
-  );
+  const response = await httpClient.get(`/reviews/salon/${salonId}/summary`, {
+    ...config,
+    skipAuth: true,
+  });
   return response.data;
 };
 

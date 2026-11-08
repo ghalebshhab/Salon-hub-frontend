@@ -16,7 +16,9 @@ export default function LeaveRequestCard({ request, actions }) {
         <ArrowRight size={18} />
         <span>{request.targetSalonName || "Independent departure"}</span>
       </div>
-      <p className="employment-context">{request.reason || "No reason provided."}</p>
+      <p className="employment-context">
+        {request.reason || "No reason provided."}
+      </p>
       <div className="employment-card-meta">
         <span>
           <CalendarDays size={15} />

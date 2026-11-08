@@ -126,7 +126,8 @@
   .candidate-directory-card:hover {
     border-color: color-mix(in srgb, var(--primary) 54%, var(--border));
     background: color-mix(in srgb, var(--primary) 4%, var(--card));
-    box-shadow: 0 22px 52px color-mix(in srgb, var(--primary-dark) 14%, transparent);
+    box-shadow: 0 22px 52px
+      color-mix(in srgb, var(--primary-dark) 14%, transparent);
     transform: translateY(-3px);
   }
 }

@@ -14,10 +14,14 @@ export default function useJoinSalonRequest() {
       setJoining(true);
       const response = await requestToJoinSalonApi(salonId);
       if (!response.success) {
-        showErrorToast(response.message || "The join request could not be sent.");
+        showErrorToast(
+          response.message || "The join request could not be sent.",
+        );
         return false;
       }
-      showSuccessToast(response.message || "Join request sent to the salon owner.");
+      showSuccessToast(
+        response.message || "Join request sent to the salon owner.",
+      );
       return true;
     } catch (error) {
       showApiErrorToast(error, "The join request could not be sent.");

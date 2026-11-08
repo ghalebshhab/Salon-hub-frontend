@@ -28,14 +28,30 @@ describe("HTTP authentication policy", () => {
 
     await http.post("/auth/login", {}, { adapter: inspect(undefined) });
     await http.post("/auth/email/verify", {}, { adapter: inspect(undefined) });
-    await http.post("/auth/password/forgot", {}, { adapter: inspect(undefined) });
-    await http.post("/auth/password/verify-code", {}, {
-      adapter: inspect(undefined),
-    });
-    await http.post("/auth/password/reset", {}, { adapter: inspect(undefined) });
-    await http.post("/auth/password/change", {}, {
-      adapter: inspect("Bearer valid"),
-    });
+    await http.post(
+      "/auth/password/forgot",
+      {},
+      { adapter: inspect(undefined) },
+    );
+    await http.post(
+      "/auth/password/verify-code",
+      {},
+      {
+        adapter: inspect(undefined),
+      },
+    );
+    await http.post(
+      "/auth/password/reset",
+      {},
+      { adapter: inspect(undefined) },
+    );
+    await http.post(
+      "/auth/password/change",
+      {},
+      {
+        adapter: inspect("Bearer valid"),
+      },
+    );
     await http.post("/auth/logout", {}, { adapter: inspect("Bearer valid") });
   });
 
@@ -135,12 +151,12 @@ describe("HTTP authentication policy", () => {
   });
 
   it("uses an action-specific loading message", () => {
-    expect(
-      loadingMessageFor({ method: "post", url: "/auth/login" }),
-    ).toBe("Signing you in…");
-    expect(
-      loadingMessageFor({ method: "post", url: "/auth/logout" }),
-    ).toBe("Signing you out…");
+    expect(loadingMessageFor({ method: "post", url: "/auth/login" })).toBe(
+      "Signing you in…",
+    );
+    expect(loadingMessageFor({ method: "post", url: "/auth/logout" })).toBe(
+      "Signing you out…",
+    );
     expect(
       loadingMessageFor({ method: "post", url: "/auth/email/verify" }),
     ).toBe("Verifying your email…");
@@ -153,9 +169,9 @@ describe("HTTP authentication policy", () => {
     expect(
       loadingMessageFor({ method: "post", url: "/auth/password/change" }),
     ).toBe("Changing your password securely…");
-    expect(
-      loadingMessageFor({ method: "post", url: "/employment/join" }),
-    ).toBe("Sending your join request…");
+    expect(loadingMessageFor({ method: "post", url: "/employment/join" })).toBe(
+      "Sending your join request…",
+    );
     expect(
       loadingMessageFor({
         method: "post",

@@ -37,14 +37,11 @@ export function loadingMessageFor(config) {
   if (url === "/auth/register" || url === "/auth/rigester")
     return "Creating your SalonHub account…";
   if (url === "/auth/email/verify") return "Verifying your email…";
-  if (url === "/auth/email/resend")
-    return "Sending a new verification code…";
+  if (url === "/auth/email/resend") return "Sending a new verification code…";
   if (url === "/auth/password/forgot")
     return "Sending password reset instructions…";
-  if (url === "/auth/password/verify-code")
-    return "Verifying your reset code…";
-  if (url === "/auth/password/reset")
-    return "Securing your new password…";
+  if (url === "/auth/password/verify-code") return "Verifying your reset code…";
+  if (url === "/auth/password/reset") return "Securing your new password…";
   if (url === "/auth/password/change")
     return "Changing your password securely…";
   if (url === "/profile/career") return "Updating your career profile…";
@@ -74,7 +71,9 @@ export function loadingMessageFor(config) {
     return "Updating your booking…";
   }
   if (url.startsWith("/reviews"))
-    return method === "delete" ? "Removing your review…" : "Publishing your review…";
+    return method === "delete"
+      ? "Removing your review…"
+      : "Publishing your review…";
   if (url.startsWith("/salon-services")) {
     if (method === "post") return "Adding the service…";
     if (method === "delete") return "Removing the service…";
@@ -85,15 +84,32 @@ export function loadingMessageFor(config) {
     if (url.endsWith("/services")) return "Updating employee services…";
   }
   if (url.startsWith("/salon-media"))
-    return method === "delete" ? "Removing the salon post…" : "Publishing the salon post…";
+    return method === "delete"
+      ? "Removing the salon post…"
+      : "Publishing the salon post…";
   if (url.startsWith("/notifications")) return "Updating your notifications…";
+  if (url.startsWith("/community")) {
+    if (url.endsWith("/like"))
+      return method === "delete"
+        ? "Removing your reaction…"
+        : "Sharing your reaction…";
+    if (url.includes("/comments"))
+      return method === "delete"
+        ? "Removing the comment…"
+        : "Adding your comment…";
+    if (url.includes("/friends")) return "Updating your connections…";
+    if (url.includes("/follow")) return "Updating salon following…";
+    if (method === "delete") return "Removing your post…";
+    if (method === "post") return "Publishing to the community…";
+  }
   if (url.startsWith("/employment")) {
     if (url.includes("/invite/")) return "Sending the salon invitation…";
     if (url.endsWith("/join")) return "Sending your join request…";
     if (url.endsWith("/accept")) return "Accepting the employment request…";
     if (url.endsWith("/reject")) return "Saving the employment decision…";
     if (url.endsWith("/cancel")) return "Cancelling the employment request…";
-    if (url.includes("/leave/accept/")) return "Confirming the employee release…";
+    if (url.includes("/leave/accept/"))
+      return "Confirming the employee release…";
     if (url.includes("/leave/cancel/")) return "Cancelling the leave request…";
     if (url.endsWith("/leave/request")) return "Sending the leave request…";
   }

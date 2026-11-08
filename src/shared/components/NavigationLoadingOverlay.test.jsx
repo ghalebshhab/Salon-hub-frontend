@@ -36,15 +36,15 @@ it("shows the main logo after every router navigation", () => {
   expect(
     screen.getByRole("status", { name: "Opening your salon dashboard…" }),
   ).toBeDefined();
-  expect(container.querySelector('img[src="/salonhub-mark.svg"]')).not.toBeNull();
+  expect(
+    container.querySelector('img[src="/salonhub-mark.svg"]'),
+  ).not.toBeNull();
 
   act(() => vi.advanceTimersByTime(651));
   expect(screen.queryByRole("status")).toBeNull();
 });
 
 it("provides a meaningful message for known and unknown destinations", () => {
-  expect(navigationMessageFor("/my-bookings")).toBe(
-    "Opening your bookings…",
-  );
+  expect(navigationMessageFor("/my-bookings")).toBe("Opening your bookings…");
   expect(navigationMessageFor("/somewhere-new")).toBe("Opening the page…");
 });

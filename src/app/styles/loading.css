@@ -103,7 +103,9 @@
   z-index: 2;
   width: 88px;
   height: 88px;
-  filter: drop-shadow(0 13px 20px color-mix(in srgb, var(--primary) 28%, transparent));
+  filter: drop-shadow(
+    0 13px 20px color-mix(in srgb, var(--primary) 28%, transparent)
+  );
 }
 
 .salon-snip-blade {
@@ -164,7 +166,9 @@
   z-index: 2;
   width: 76px;
   height: 76px;
-  filter: drop-shadow(0 14px 22px color-mix(in srgb, var(--primary) 32%, transparent));
+  filter: drop-shadow(
+    0 14px 22px color-mix(in srgb, var(--primary) 32%, transparent)
+  );
   animation: salonNavigationLogo 1.8s ease-in-out infinite;
 }
 

@@ -88,6 +88,9 @@ const MyBookings = lazy(
 const NotificationsPage = lazy(
   () => import("../../features/notifications/pages/NotificationsPage.jsx"),
 );
+const Community = lazy(
+  () => import("../../features/community/pages/Community.jsx"),
+);
 const EmploymentCenter = lazy(
   () => import("../../features/employment/pages/EmploymentCenter.jsx"),
 );
@@ -106,6 +109,7 @@ export default function AppRoutes() {
           <Route path="/salons/:salonId/book" element={<CreateBooking />} />
           <Route path="/my-bookings" element={<MyBookings />} />
           <Route path="/notifications" element={<NotificationsPage />} />
+          <Route path="/community" element={<Community />} />
           <Route path="/account/security" element={<AccountSecurity />} />
           <Route path="/employment" element={<EmploymentCenter />} />
         </Route>

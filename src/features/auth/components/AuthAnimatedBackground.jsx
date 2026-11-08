@@ -1,11 +1,18 @@
 export default function AuthAnimatedBackground({ variant }) {
   return (
-    <div className={`auth-animated-bg auth-animated-bg-${variant}`} aria-hidden="true">
+    <div
+      className={`auth-animated-bg auth-animated-bg-${variant}`}
+      aria-hidden="true"
+    >
       <span className="auth-bg-layer auth-bg-layer-one" />
       <span className="auth-bg-layer auth-bg-layer-two" />
       <span className="auth-bg-layer auth-bg-layer-three" />
       {variant === "threads" && (
-        <svg className="auth-bg-threads" viewBox="0 0 800 700" preserveAspectRatio="none">
+        <svg
+          className="auth-bg-threads"
+          viewBox="0 0 800 700"
+          preserveAspectRatio="none"
+        >
           {Array.from({ length: 12 }, (_, index) => (
             <path
               key={index}

@@ -48,7 +48,10 @@ export default function AccountSecurity() {
           Use at least eight characters with an uppercase letter, a number, and
           a special character.
         </p>
-        <AuthSubmitButton loading={loading} loadingLabel="Changing your password…">
+        <AuthSubmitButton
+          loading={loading}
+          loadingLabel="Changing your password…"
+        >
           Change password
         </AuthSubmitButton>
       </form>

@@ -51,7 +51,9 @@ export default function useLogin() {
         { replace: true },
       );
     } catch (error) {
-      showErrorToast(getApiErrorMessage(error, "Sign in could not be completed."));
+      showErrorToast(
+        getApiErrorMessage(error, "Sign in could not be completed."),
+      );
     } finally {
       setLoading(false);
     }

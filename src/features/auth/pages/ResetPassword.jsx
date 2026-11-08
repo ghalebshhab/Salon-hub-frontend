@@ -5,13 +5,8 @@ import PasswordField from "../components/PasswordField.jsx";
 import useResetPassword from "../hooks/useResetPassword.js";
 
 export default function ResetPassword() {
-  const {
-    form,
-    loading,
-    hasResetAuthorization,
-    handleChange,
-    handleSubmit,
-  } = useResetPassword();
+  const { form, loading, hasResetAuthorization, handleChange, handleSubmit } =
+    useResetPassword();
 
   return (
     <AuthShell

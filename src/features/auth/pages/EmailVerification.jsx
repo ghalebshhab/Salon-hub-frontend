@@ -48,7 +48,10 @@ export default function EmailVerification() {
           hint="The code contains exactly six digits and expires after 10 minutes."
           required
         />
-        <AuthSubmitButton loading={loading} loadingLabel="Verifying your email…">
+        <AuthSubmitButton
+          loading={loading}
+          loadingLabel="Verifying your email…"
+        >
           Verify email
         </AuthSubmitButton>
         <button

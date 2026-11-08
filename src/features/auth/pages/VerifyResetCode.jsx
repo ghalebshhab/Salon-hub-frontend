@@ -40,7 +40,10 @@ export default function VerifyResetCode() {
           hint="The code expires after 10 minutes and can only be used once."
           required
         />
-        <AuthSubmitButton loading={loading} loadingLabel="Verifying your reset code…">
+        <AuthSubmitButton
+          loading={loading}
+          loadingLabel="Verifying your reset code…"
+        >
           Verify code
         </AuthSubmitButton>
       </form>

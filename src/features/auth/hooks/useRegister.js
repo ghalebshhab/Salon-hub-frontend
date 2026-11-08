@@ -40,7 +40,9 @@ export default function useRegister() {
         return;
       }
 
-      showSuccessToast(response.message || "Account created. Check your email.");
+      showSuccessToast(
+        response.message || "Account created. Check your email.",
+      );
       navigate("/verify-email", {
         replace: true,
         state: {
@@ -50,7 +52,9 @@ export default function useRegister() {
         },
       });
     } catch (error) {
-      showErrorToast(getApiErrorMessage(error, "Registration could not be completed."));
+      showErrorToast(
+        getApiErrorMessage(error, "Registration could not be completed."),
+      );
     } finally {
       setLoading(false);
     }

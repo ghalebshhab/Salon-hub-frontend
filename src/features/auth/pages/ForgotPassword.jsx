@@ -25,7 +25,10 @@ export default function ForgotPassword() {
           autoComplete="email"
           required
         />
-        <AuthSubmitButton loading={loading} loadingLabel="Sending reset instructions…">
+        <AuthSubmitButton
+          loading={loading}
+          loadingLabel="Sending reset instructions…"
+        >
           Continue
         </AuthSubmitButton>
       </form>

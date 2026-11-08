@@ -5,8 +5,18 @@ const raw = {
   profile: { firstName: "Maya" },
   salon: { salonId: 1, name: "Salon" },
   employees: [
-    { id: 10, fullName: "Top Stylist", status: "ACTIVE", serviceNames: ["Cut"] },
-    { id: 11, fullName: "New Stylist", status: "ACTIVE", serviceNames: ["Color"] },
+    {
+      id: 10,
+      fullName: "Top Stylist",
+      status: "ACTIVE",
+      serviceNames: ["Cut"],
+    },
+    {
+      id: 11,
+      fullName: "New Stylist",
+      status: "ACTIVE",
+      serviceNames: ["Color"],
+    },
   ],
   services: [
     { id: 1, name: "Cut", price: 20 },
@@ -39,12 +49,24 @@ const raw = {
       services: [{ id: 1, name: "Cut", price: 20 }],
     },
   ],
-  reviews: [{ id: 1, bookingId: 100, customerName: "Customer One", rating: 5, createdAt: "2026-10-23T12:00:00" }],
+  reviews: [
+    {
+      id: 1,
+      bookingId: 100,
+      customerName: "Customer One",
+      rating: 5,
+      createdAt: "2026-10-23T12:00:00",
+    },
+  ],
   reviewSummary: { averageRating: 5, totalReviews: 1 },
 };
 
 it("derives owner metrics and ranks employees from booking and review data", () => {
-  const result = buildOwnerDashboard(raw, "Last 7 days", new Date("2026-10-24T12:00:00"));
+  const result = buildOwnerDashboard(
+    raw,
+    "Last 7 days",
+    new Date("2026-10-24T12:00:00"),
+  );
   expect(result.summary.revenue).toBe(60);
   expect(result.summary.completed).toBe(1);
   expect(result.summary.pending).toBe(1);

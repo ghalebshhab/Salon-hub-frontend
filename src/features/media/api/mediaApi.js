@@ -8,12 +8,18 @@ export const createMediaPostApi = async (data) => {
 };
 
 export const getSalonMediaApi = async (salonId, config = {}) => {
-  const response = await httpClient.get(`/salon-media/salon/${salonId}`, config);
+  const response = await httpClient.get(
+    `/salon-media/salon/${salonId}`,
+    config,
+  );
   return response.data;
 };
 
 export const getSalonVideosApi = async (salonId, config = {}) => {
-  const response = await httpClient.get(`/salon-media/salon/${salonId}/videos`, config);
+  const response = await httpClient.get(
+    `/salon-media/salon/${salonId}/videos`,
+    config,
+  );
   return response.data;
 };
 
@@ -30,7 +36,11 @@ export async function uploadSalonCoverApi(file, config = {}) {
 }
 
 export async function uploadSalonCoverFromDriveApi(url, config = {}) {
-  const response = await httpClient.post("/media/salon-cover/drive", { url }, config);
+  const response = await httpClient.post(
+    "/media/salon-cover/drive",
+    { url },
+    config,
+  );
   return response.data;
 }
 

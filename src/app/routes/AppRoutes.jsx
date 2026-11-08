@@ -68,11 +68,15 @@ const NotificationsPage = lazy(
 const DesignLab = lazy(
   () => import("../../features/designLab/pages/DesignLab.jsx"),
 );
+const CommunityPage = lazy(
+  () => import("../../features/community/pages/CommunityPage.jsx"),
+);
 
 export default function AppRoutes() {
   return (
     <Routes>
       <Route path="/design-lab" element={<DesignLab />} />
+      <Route path="/community" element={<CommunityPage />} />
       <Route element={<AppLayout />}>
         <Route path="/" element={<Home />} />
         <Route path="/salons/:salonId" element={<SalonDetails />} />

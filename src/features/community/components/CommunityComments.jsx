@@ -1,6 +1,7 @@
-import { Send } from "lucide-react";
+import { Flag, Send } from "lucide-react";
 import { useState } from "react";
-import CommunityAvatar from "./CommunityAvatar.jsx";
+import CommunityProfileLink from "./CommunityProfileLink.jsx";
+import ReportDialog from "../../moderation/components/ReportDialog.jsx";
 
 export default function CommunityComments({
   postId,
@@ -9,6 +10,7 @@ export default function CommunityComments({
   onAddComment,
 }) {
   const [draft, setDraft] = useState("");
+  const [reporting, setReporting] = useState(null);
 
   const submit = async (event) => {
     event.preventDefault();
@@ -20,13 +22,29 @@ export default function CommunityComments({
     <section className="community-comments" aria-label="Comments">
       {comments.map((comment) => (
         <div className="community-comment" key={comment.id}>
-          <CommunityAvatar name={comment.author.displayName} size="small" />
+          <CommunityProfileLink user={comment.author} size="small" />
           <div>
-            <strong>
-              {comment.author.displayName || comment.author.userName}
-            </strong>
+            <CommunityProfileLink
+              className="community-comment-author-name"
+              user={comment.author}
+              showAvatar={false}
+            >
+              <strong>
+                {comment.author.displayName || comment.author.userName}
+              </strong>
+            </CommunityProfileLink>
             <p>{comment.content}</p>
           </div>
+          {!comment.ownedByMe && (
+            <button
+              className="community-comment-report"
+              type="button"
+              aria-label={`Report comment by ${comment.author.displayName || comment.author.userName}`}
+              onClick={() => setReporting(comment)}
+            >
+              <Flag size={14} />
+            </button>
+          )}
         </div>
       ))}
       {comments.length === 0 && (
@@ -48,6 +66,14 @@ export default function CommunityComments({
           <Send size={17} />
         </button>
       </form>
+      {reporting && (
+        <ReportDialog
+          targetType="COMMENT"
+          targetId={reporting.id}
+          targetLabel="comment"
+          onClose={() => setReporting(null)}
+        />
+      )}
     </section>
   );
 }

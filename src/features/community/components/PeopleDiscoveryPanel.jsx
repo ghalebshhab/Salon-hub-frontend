@@ -1,6 +1,6 @@
 import { Search, UsersRound } from "lucide-react";
 import { useState } from "react";
-import CommunityAvatar from "./CommunityAvatar.jsx";
+import CommunityProfileLink from "./CommunityProfileLink.jsx";
 import FriendshipActions from "./FriendshipActions.jsx";
 
 export default function PeopleDiscoveryPanel({
@@ -34,11 +34,7 @@ export default function PeopleDiscoveryPanel({
       </form>
       {people.map((member) => (
         <div className="community-person-row" key={member.user.id}>
-          <CommunityAvatar name={member.user.displayName} size="small" />
-          <div>
-            <strong>{member.user.displayName}</strong>
-            <small>@{member.user.userName}</small>
-          </div>
+          <CommunityProfileLink user={member.user} size="small" />
           <FriendshipActions
             member={member}
             busy={busy}

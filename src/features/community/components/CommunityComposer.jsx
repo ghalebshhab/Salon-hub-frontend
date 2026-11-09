@@ -1,10 +1,11 @@
-import { ImagePlus } from "lucide-react";
+import { ChevronDown, Globe2, ImagePlus, Store } from "lucide-react";
 import { useState } from "react";
 import CommunityAvatar from "./CommunityAvatar.jsx";
 
 export default function CommunityComposer({ user, busy, onPublish }) {
   const [content, setContent] = useState("");
   const [mediaUrl, setMediaUrl] = useState("");
+  const [mediaOpen, setMediaOpen] = useState(false);
   const [publishAsSalon, setPublishAsSalon] = useState(false);
   const displayName = `${user?.firstName || ""} ${user?.lastName || ""}`;
 
@@ -25,8 +26,10 @@ export default function CommunityComposer({ user, busy, onPublish }) {
     <form className="community-composer" onSubmit={submit}>
       <header className="community-composer-heading">
         <div>
-          <span className="community-card-kicker">Create / Share</span>
-          <strong>Start a conversation</strong>
+          <strong>Create a post</strong>
+          <span className="community-composer-audience">
+            <Globe2 size={13} /> SalonHub community <ChevronDown size={13} />
+          </span>
         </div>
         <span>{content.length} / 5000</span>
       </header>
@@ -36,33 +39,43 @@ export default function CommunityComposer({ user, busy, onPublish }) {
           value={content}
           onChange={(event) => setContent(event.target.value)}
           maxLength={5000}
-          placeholder="Share a style, a story, or something useful…"
+          placeholder={`What would you like to share, ${user?.firstName || "today"}?`}
           aria-label="Post content"
         />
       </div>
-      <div className="community-media-input">
-        <ImagePlus size={18} />
-        <input
-          type="url"
-          value={mediaUrl}
-          onChange={(event) => setMediaUrl(event.target.value)}
-          placeholder="Optional image or video URL"
-          aria-label="Media URL"
-        />
-      </div>
+      {mediaOpen && (
+        <div className="community-media-input">
+          <ImagePlus size={18} />
+          <input
+            type="url"
+            value={mediaUrl}
+            onChange={(event) => setMediaUrl(event.target.value)}
+            placeholder="Paste an image or video URL"
+            aria-label="Media URL"
+            autoFocus
+          />
+        </div>
+      )}
       <footer>
-        {user?.ownedSalonId ? (
-          <label>
-            <input
-              type="checkbox"
-              checked={publishAsSalon}
-              onChange={(event) => setPublishAsSalon(event.target.checked)}
-            />
-            Publish as my salon
-          </label>
-        ) : (
-          <span />
-        )}
+        <div className="community-composer-tools">
+          <button
+            className={mediaOpen ? "is-active" : ""}
+            type="button"
+            onClick={() => setMediaOpen((open) => !open)}
+          >
+            <ImagePlus size={18} /> Media
+          </button>
+          {user?.ownedSalonId && (
+            <label className={publishAsSalon ? "is-active" : ""}>
+              <input
+                type="checkbox"
+                checked={publishAsSalon}
+                onChange={(event) => setPublishAsSalon(event.target.checked)}
+              />
+              <Store size={17} /> Post as salon
+            </label>
+          )}
+        </div>
         <button
           className="btn btn-primary"
           type="submit"

@@ -31,7 +31,6 @@ body.navigation-drawer-open {
   width: 42px;
   height: 42px;
 }
-.sidebar-toggle-button,
 .header-icon-button,
 .header-avatar-button {
   display: inline-grid;
@@ -44,13 +43,11 @@ body.navigation-drawer-open {
   background: transparent;
   cursor: pointer;
 }
-.sidebar-toggle-button:hover,
 .header-icon-button:hover,
 .header-avatar-button:hover {
   color: var(--primary);
   background: var(--primary-soft);
 }
-.sidebar-toggle-button svg,
 .header-icon-button svg {
   width: 19px;
   height: 19px;
@@ -391,9 +388,6 @@ body:has(.app-sidebar.is-collapsed) .footer {
     display: block;
     border: 0;
     background: rgba(15, 11, 18, 0.52);
-  }
-  .sidebar-toggle-button {
-    display: none;
   }
   .mobile-menu-button {
     display: inline-flex;

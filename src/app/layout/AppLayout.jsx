@@ -15,11 +15,7 @@ export default function AppLayout() {
   return (
     <NotificationProvider key={token || "anonymous"} enabled={Boolean(token)}>
       <ScrollManager />
-      <Navbar
-        onOpenMobile={navigation.openMobile}
-        onToggle={navigation.toggleCollapsed}
-        collapsed={navigation.collapsed}
-      />
+      <Navbar onOpenMobile={navigation.openMobile} />
       <SidebarNavigation {...navigation} />
       <main className="page-main">
         <Suspense fallback={<Loading />}>

@@ -25,7 +25,14 @@ import useSalonFollow from "../../community/hooks/useSalonFollow.js";
 const formatTime = (value) => value?.slice(0, 5) || "Not listed";
 
 function SalonDetails() {
-  const { salon, employees, loading } = useSalonDetails();
+  const {
+    salon,
+    employees,
+    loading,
+    employeesLoading,
+    employeesError,
+    retryEmployees,
+  } = useSalonDetails();
   const { loggedIn, user } = useAuth();
   const { joining, requestJoin } = useJoinSalonRequest();
   const visibleSalonId = salon?.salonId ?? salon?.id;
@@ -328,7 +335,12 @@ function SalonDetails() {
                   services without exposing their private contact information.
                 </p>
               </div>
-              <SalonEmployees employees={employees} />
+              <SalonEmployees
+                employees={employees}
+                loading={employeesLoading}
+                error={employeesError}
+                onRetry={retryEmployees}
+              />
             </section>
 
             <section

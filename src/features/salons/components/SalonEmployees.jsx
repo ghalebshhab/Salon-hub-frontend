@@ -9,7 +9,32 @@ const initials = (name) =>
     .slice(0, 2)
     .toUpperCase();
 
-export default function SalonEmployees({ employees = [] }) {
+export default function SalonEmployees({
+  employees = [],
+  loading = false,
+  error = "",
+  onRetry,
+}) {
+  if (loading) {
+    return (
+      <div className="salon-team-empty" role="status" aria-live="polite">
+        <p>Loading salon team…</p>
+      </div>
+    );
+  }
+  if (error) {
+    return (
+      <div className="salon-team-empty">
+        <div role="alert">
+          <h3>The salon team could not be loaded</h3>
+          <p>{error}</p>
+        </div>
+        <button className="btn btn-secondary" type="button" onClick={onRetry}>
+          Retry loading team
+        </button>
+      </div>
+    );
+  }
   if (!employees.length) {
     return (
       <div className="salon-team-empty">

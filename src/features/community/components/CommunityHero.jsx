@@ -9,9 +9,7 @@ export default function CommunityHero({ friendCount, followedSalonCount }) {
             <Sparkles size={15} /> SalonHub community
           </span>
           <h1>
-            Find your people.
-            <br />
-            <em>Share your craft.</em>
+            Your beauty community, <em>all in one place.</em>
           </h1>
           <p>
             Share your work, celebrate ideas, meet professionals, and stay close

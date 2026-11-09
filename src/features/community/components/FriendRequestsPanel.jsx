@@ -1,4 +1,4 @@
-import CommunityAvatar from "./CommunityAvatar.jsx";
+import CommunityProfileLink from "./CommunityProfileLink.jsx";
 
 export default function FriendRequestsPanel({
   requests,
@@ -15,11 +15,7 @@ export default function FriendRequestsPanel({
       </header>
       {requests.map((request) => (
         <div className="community-person-row" key={request.id}>
-          <CommunityAvatar name={request.user.displayName} size="small" />
-          <div>
-            <strong>{request.user.displayName}</strong>
-            <small>@{request.user.userName}</small>
-          </div>
+          <CommunityProfileLink user={request.user} size="small" />
           <span className="community-friend-actions">
             <button
               className="community-friend-button is-primary"

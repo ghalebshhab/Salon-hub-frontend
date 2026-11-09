@@ -9,7 +9,9 @@ import {
   UserPlus,
   UsersRound,
   Heart,
+  Flag,
 } from "lucide-react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import useSalonDetails from "../hooks/useSalonDetails.js";
 import SalonStatusBadge from "../components/SalonStatusBadge.jsx";
@@ -21,10 +23,12 @@ import SalonEmployees from "../components/SalonEmployees.jsx";
 import SalonWorkGallery from "../../media/components/SalonWorkGallery.jsx";
 import { optimizedCloudinaryImage } from "../../media/model/cloudinaryMedia.js";
 import useSalonFollow from "../../community/hooks/useSalonFollow.js";
+import ReportDialog from "../../moderation/components/ReportDialog.jsx";
 
 const formatTime = (value) => value?.slice(0, 5) || "Not listed";
 
 function SalonDetails() {
+  const [reportOpen, setReportOpen] = useState(false);
   const {
     salon,
     employees,
@@ -173,6 +177,15 @@ function SalonDetails() {
                 >
                   <UserPlus aria-hidden="true" />
                   {joining ? "Sending request…" : "Request to join team"}
+                </button>
+              )}
+              {loggedIn && !ownsSalon && (
+                <button
+                  className="btn btn-secondary"
+                  type="button"
+                  onClick={() => setReportOpen(true)}
+                >
+                  <Flag aria-hidden="true" /> Report salon
                 </button>
               )}
               {!loggedIn && (
@@ -375,6 +388,14 @@ function SalonDetails() {
           </main>
         </div>
       </div>
+      {reportOpen && (
+        <ReportDialog
+          targetType="SALON"
+          targetId={salonId}
+          targetLabel={salon.name}
+          onClose={() => setReportOpen(false)}
+        />
+      )}
     </section>
   );
 }

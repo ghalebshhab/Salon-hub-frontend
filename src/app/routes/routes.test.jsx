@@ -41,6 +41,16 @@ beforeEach(() => {
     else if (url === "/hiring-posts/owner") data = [];
     else if (url === "/profile")
       data = { firstName: "Test", lastName: "User", skills: [] };
+    else if (url === "/community/people/2")
+      data = {
+        member: {
+          user: { id: 2, displayName: "Maya Ali", userName: "maya" },
+          relationship: "NONE",
+        },
+        role: "USER",
+        skills: [],
+        preferredWorkLocations: [],
+      };
     return {
       config,
       status: 200,
@@ -64,6 +74,7 @@ const paths = [
   "/auth-background-lab",
   "/account/security",
   "/employment",
+  "/community/people/2",
   "/hiring-posts/1/apply",
   "/profile/career",
   "/owner/dashboard",

@@ -91,6 +91,9 @@ const NotificationsPage = lazy(
 const Community = lazy(
   () => import("../../features/community/pages/Community.jsx"),
 );
+const CommunityProfile = lazy(
+  () => import("../../features/community/pages/CommunityProfile.jsx"),
+);
 const EmploymentCenter = lazy(
   () => import("../../features/employment/pages/EmploymentCenter.jsx"),
 );
@@ -110,6 +113,10 @@ export default function AppRoutes() {
           <Route path="/my-bookings" element={<MyBookings />} />
           <Route path="/notifications" element={<NotificationsPage />} />
           <Route path="/community" element={<Community />} />
+          <Route
+            path="/community/people/:userId"
+            element={<CommunityProfile />}
+          />
           <Route path="/account/security" element={<AccountSecurity />} />
           <Route path="/employment" element={<EmploymentCenter />} />
         </Route>

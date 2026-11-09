@@ -29,6 +29,16 @@ export async function setCommunityPostLikeApi(postId, liked) {
   );
 }
 
+export async function getCommunityPostLikesApi(postId, config = {}) {
+  return payload(
+    await httpClient.get(`/community/posts/${postId}/likes`, config),
+  );
+}
+
+export async function getCommunityProfileApi(userId, config = {}) {
+  return payload(await httpClient.get(`/community/people/${userId}`, config));
+}
+
 export async function getCommunityCommentsApi(postId, config = {}) {
   return payload(
     await httpClient.get(`/community/posts/${postId}/comments`, {

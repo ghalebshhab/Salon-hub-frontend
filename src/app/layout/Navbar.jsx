@@ -1,4 +1,4 @@
-import { Menu, Moon, PanelLeftClose, PanelLeftOpen, Sun } from "lucide-react";
+import { Menu, Moon, Sun } from "lucide-react";
 import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import useLogout from "../../features/auth/hooks/useLogout.js";
@@ -7,7 +7,7 @@ import useAuth from "../../shared/auth/useAuth.js";
 import BrandLogo from "../../shared/components/BrandLogo.jsx";
 import useTheme from "../../shared/theme/useTheme.js";
 
-function Navbar({ onOpenMobile, onToggle, collapsed }) {
+function Navbar({ onOpenMobile }) {
   const { loggedIn, user } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const logout = useLogout();
@@ -23,16 +23,6 @@ function Navbar({ onOpenMobile, onToggle, collapsed }) {
   return (
     <header className="creative-navbar">
       <div className="creative-navbar-inner">
-        <button
-          className="sidebar-toggle-button"
-          type="button"
-          onClick={onToggle}
-          aria-label={collapsed ? "Expand navigation" : "Collapse navigation"}
-          aria-controls="primary-navigation"
-          aria-expanded={!collapsed}
-        >
-          {collapsed ? <PanelLeftOpen /> : <PanelLeftClose />}
-        </button>
         <Link to="/" className="creative-brand" aria-label="SalonHub home">
           <BrandLogo />
         </Link>

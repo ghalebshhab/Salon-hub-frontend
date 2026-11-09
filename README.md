@@ -143,3 +143,27 @@ Backend: [Salon Hub Backend](https://github.com/ghalebshhab/Salon-hub-backend)
 ## Author
 
 **Ghaleb Shhab** — [GitHub](https://github.com/ghalebshhab) · [LinkedIn](https://www.linkedin.com/in/ghaleb-shhab/)
+
+## November 9 - Public team recovery
+
+Implementation `4e115d0` decouples public salon and employee requests. A slow or failed
+team request no longer hides the salon profile. The team section announces local loading,
+shows an inline API/network error with a keyboard-accessible Retry loading team button,
+and shows the growing-team empty state only after a successful empty response. Retry
+reloads only the directory, with no global loading overlay. Existing query cancellation
+prevents old-salon results or unmounted requests from changing the current view.
+
+Review: open a public salon, throttle or fail only /salon-employees/salon/{salonId}, and
+confirm salon details remain visible. Restore that endpoint and use Retry loading team;
+confirm the team appears without reloading the salon. Test a genuinely empty team and
+navigation between salons while a directory request is pending. Repeat in light/dark
+modes and at mobile width. No backend/API/schema or public-data contract changes.
+
+Verification: npm.cmd run check passed ESLint with zero warnings, 97 tests (six new team
+regressions), and the production build. Backend mvn.cmd -B verify passed 199 tests with
+zero failures/errors/skips and packaged the JAR. Mocked tests do not imply live acceptance.
+Cloudinary credentials were absent from the process and original backend local config;
+no live provider requests were made. No Google credentials were added or verified; Drive
+share-link and external Maps fallback limitations remain. Configure the three backend
+Cloudinary environment variables and restart for separate live-media staging acceptance.
+The coordinated profile/media priority is still IN PROGRESS; see backend status docs.

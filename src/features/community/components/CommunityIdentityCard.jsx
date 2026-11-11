@@ -5,7 +5,7 @@ export default function CommunityIdentityCard({ user, friendCount, followedSalon
 
   return (
     <section className="community-panel identity-card" aria-labelledby="community-profile-name">
-      <span className="community-card-kicker">Your profile</span>
+      <span className="community-card-kicker">Your community profile</span>
       <div className="community-profile-preview">
         <CommunityAvatar name={displayName || user?.userName || "SalonHub member"} size="large" />
         <div>
@@ -15,7 +15,7 @@ export default function CommunityIdentityCard({ user, friendCount, followedSalon
       </div>
       <dl className="community-profile-stats">
         <div><dt>Friends</dt><dd>{loading ? "—" : friendCount}</dd></div>
-        <div><dt>Salons followed</dt><dd>{loading ? "—" : followedSalonCount}</dd></div>
+        <div><dt>Following</dt><dd>{loading ? "—" : followedSalonCount}</dd></div>
       </dl>
     </section>
   );

@@ -4,6 +4,7 @@ import {
   getPostAuthorName,
   getRelationshipLabel,
   isVideoMedia,
+  normalizeCommunitySearch,
 } from "./communityPresentation.js";
 
 describe("community presentation model", () => {
@@ -33,5 +34,9 @@ describe("community presentation model", () => {
       "Requested you",
     );
     expect(getRelationshipLabel({ relationship: "PENDING" })).toBe("Pending");
+  });
+
+  it("normalizes people searches for case-insensitive matching", () => {
+    expect(normalizeCommunitySearch("  Maya   ALI ")).toBe("maya ali");
   });
 });

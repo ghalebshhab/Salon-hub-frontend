@@ -16,7 +16,7 @@ export default function useCommunityPosts() {
   const feedControllerRef = useRef(null);
   const { busyAction, runAction } = useCommunityAction();
 
-  const retryFeed = useCallback(() => {
+  const loadFeed = useCallback(() => {
     feedControllerRef.current?.abort();
     const controller = new AbortController();
     feedControllerRef.current = controller;
@@ -41,29 +41,12 @@ export default function useCommunityPosts() {
       });
   }, []);
 
+  const retryFeed = useCallback(() => loadFeed(), [loadFeed]);
+
   useEffect(() => {
-    const controller = new AbortController();
-    feedControllerRef.current = controller;
-
-    getCommunityFeedApi({}, { signal: controller.signal })
-      .then((response) => {
-        if (!controller.signal.aborted) setPosts(requireData(response)?.content || []);
-      })
-      .catch((error) => {
-        if (!controller.signal.aborted) {
-          setFeedError(true);
-          showApiErrorToast(error, "The community feed could not be loaded.");
-        }
-      })
-      .finally(() => {
-        if (!controller.signal.aborted && feedControllerRef.current === controller) {
-          setLoading(false);
-          feedControllerRef.current = null;
-        }
-      });
-
-    return () => controller.abort();
-  }, []);
+    Promise.resolve().then(loadFeed);
+    return () => feedControllerRef.current?.abort();
+  }, [loadFeed]);
 
   const createPost = useCallback(
     async (postDraft) => {

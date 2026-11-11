@@ -20,6 +20,8 @@ export default function useCommunityAction() {
       setBusyAction((current) => new Set(current).add(key));
       try {
         const response = await action();
+        if (response?.success === false)
+          throw new Error(response.message || errorMessage);
         if (successMessage) showSuccessToast(successMessage);
         return response;
       } catch (error) {

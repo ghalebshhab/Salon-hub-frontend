@@ -113,6 +113,10 @@ export default function AppRoutes() {
           <Route path="/my-bookings" element={<MyBookings />} />
           <Route path="/notifications" element={<NotificationsPage />} />
           <Route path="/community" element={<Community />} />
+          <Route path="/community/discover" element={<Community />} />
+          <Route path="/community/requests" element={<Community />} />
+          <Route path="/community/following" element={<Community />} />
+          <Route path="/community/new" element={<Community />} />
           <Route
             path="/community/people/:userId"
             element={<CommunityProfile />}

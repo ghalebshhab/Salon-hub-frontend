@@ -31,3 +31,7 @@ export function getRelationshipLabel(member) {
   if (member.incomingRequest) return "Requested you";
   return "Pending";
 }
+
+export function normalizeCommunitySearch(value = "") {
+  return value.trim().replace(/\s+/g, " ").toLowerCase();
+}

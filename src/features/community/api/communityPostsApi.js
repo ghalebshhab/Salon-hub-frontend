@@ -39,6 +39,19 @@ export async function getCommunityProfileApi(userId, config = {}) {
   return payload(await httpClient.get(`/community/people/${userId}`, config));
 }
 
+export async function getCommunityMemberPostsApi(
+  userId,
+  { page = 0, size = 10 } = {},
+  config = {},
+) {
+  return payload(
+    await httpClient.get(`/community/people/${userId}/posts`, {
+      ...config,
+      params: { page, size },
+    }),
+  );
+}
+
 export async function getCommunityCommentsApi(postId, config = {}) {
   return payload(
     await httpClient.get(`/community/posts/${postId}/comments`, {

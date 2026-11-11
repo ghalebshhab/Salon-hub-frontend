@@ -1,23 +1,41 @@
-import { useEffect, useState } from "react";
-import { getCommunityProfileApi } from "../api/communityPostsApi.js";
+import { useCallback } from "react";
+import { mergeCommunityActions } from "./useCommunityAction.js";
+import useCommunityMember from "./useCommunityMember.js";
+import useCommunityMemberPosts from "./useCommunityMemberPosts.js";
+import useCommunityRelationshipActions from "./useCommunityRelationshipActions.js";
 
 export default function useCommunityProfile(userId) {
-  const [profile, setProfile] = useState(null);
-  const [error, setError] = useState("");
+  const member = useCommunityMember(userId);
+  const { decrementPostCount, refresh } = member;
+  const handlePostDelete = useCallback(
+    () => decrementPostCount(),
+    [decrementPostCount],
+  );
+  const posts = useCommunityMemberPosts(userId, { onDelete: handlePostDelete });
+  const relationships = useCommunityRelationshipActions({
+    afterSuccess: refresh,
+  });
 
-  useEffect(() => {
-    const controller = new AbortController();
-    getCommunityProfileApi(userId, { signal: controller.signal })
-      .then((response) => {
-        if (!response.success) throw new Error(response.message);
-        setProfile(response.data);
-      })
-      .catch((requestError) => {
-        if (requestError.name !== "CanceledError")
-          setError(requestError.message || "This profile could not be loaded.");
-      });
-    return () => controller.abort();
-  }, [userId]);
-
-  return { profile, error };
+  return {
+    profile: member.profile,
+    loading: member.loading,
+    error: member.error,
+    posts: posts.posts,
+    postPage: posts.postPage,
+    postsLoading: posts.loading,
+    postsError: posts.error,
+    busyAction: mergeCommunityActions(
+      posts.busyAction,
+      relationships.busyAction,
+    ),
+    connect: relationships.connect,
+    accept: relationships.accept,
+    decline: relationships.decline,
+    remove: relationships.remove,
+    toggleLike: posts.toggleLike,
+    deletePost: posts.deletePost,
+    incrementCommentCount: posts.incrementCommentCount,
+    loadMorePosts: posts.loadMore,
+    retryPosts: posts.retry,
+  };
 }

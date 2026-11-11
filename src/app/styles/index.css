@@ -23,7 +23,9 @@
 @import "./auth-animated-background.css";
 @import "./auth-background-lab.css";
 @import "./navigation.css";
+@import "./app-background.css";
 @import "./scroll-story.css";
 @import "./floating-inputs.css";
 @import "./community.css";
+@import "./community-background.css";
 @import "../../features/prototype/prototype.css";

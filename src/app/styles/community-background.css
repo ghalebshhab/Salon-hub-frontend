@@ -1,0 +1,75 @@
+.community-page {
+  position: relative;
+  isolation: isolate;
+  min-height: 100vh;
+  overflow: clip;
+  background:
+    radial-gradient(circle at 8% 4%, color-mix(in srgb, var(--primary) 13%, transparent), transparent 27rem),
+    radial-gradient(circle at 94% 16%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 31rem),
+    radial-gradient(ellipse at 48% 74%, color-mix(in srgb, var(--primary) 6%, transparent), transparent 42rem),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--surface) 58%, var(--bg)) 0%,
+      var(--bg) 34%,
+      color-mix(in srgb, var(--surface) 38%, var(--bg)) 100%
+    );
+}
+
+.community-page::before {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  content: "";
+  opacity: 0.38;
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--border) 42%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--border) 42%, transparent) 1px, transparent 1px);
+  background-size: 76px 76px;
+  mask-image: linear-gradient(to bottom, black, transparent 76%);
+}
+
+.community-page::after {
+  position: absolute;
+  top: 29rem;
+  right: -19rem;
+  z-index: -1;
+  width: 40rem;
+  height: 40rem;
+  border: 1px solid color-mix(in srgb, var(--primary) 15%, transparent);
+  border-radius: 44% 56% 63% 37%;
+  pointer-events: none;
+  content: "";
+  opacity: 0.48;
+  background: radial-gradient(
+    circle at 38% 36%,
+    color-mix(in srgb, var(--accent) 17%, transparent),
+    transparent 62%
+  );
+  transform: rotate(-18deg);
+}
+
+:root[data-theme="dark"] .community-page::before {
+  opacity: 0.2;
+}
+
+:root[data-theme="dark"] .community-page::after {
+  opacity: 0.32;
+}
+
+.community-page .community-mobile-nav a.active {
+  border-color: color-mix(in srgb, var(--primary) 28%, var(--border));
+  color: var(--primary);
+  background: color-mix(in srgb, var(--primary) 10%, var(--surface));
+  box-shadow: 0 8px 22px color-mix(in srgb, var(--primary) 10%, transparent);
+}
+
+@media (max-width: 680px) {
+  .community-page::before {
+    background-size: 54px 54px;
+  }
+
+  .community-page::after {
+    right: -28rem;
+  }
+}

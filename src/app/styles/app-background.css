@@ -1,0 +1,51 @@
+.app-shell {
+  position: relative;
+  min-height: 100vh;
+  isolation: isolate;
+}
+
+.app-side-rays-layer {
+  position: fixed;
+  inset: 70px 0 0 78px;
+  z-index: 20;
+  pointer-events: none;
+  opacity: 0.34;
+  mix-blend-mode: multiply;
+  mask-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(0, 0, 0, 0.38) 28%,
+    #000 58%,
+    #000 100%
+  );
+}
+
+:root[data-theme="dark"] .app-side-rays-layer {
+  opacity: 0.3;
+  mix-blend-mode: screen;
+}
+
+@media (max-width: 1050px) {
+  .app-side-rays-layer {
+    left: 0;
+    opacity: 0.27;
+  }
+}
+
+@media (max-width: 680px) {
+  .app-side-rays-layer {
+    opacity: 0.22;
+    mask-image: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(0, 0, 0, 0.65) 20%,
+      #000 100%
+    );
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-side-rays-layer {
+    opacity: 0.18;
+  }
+}

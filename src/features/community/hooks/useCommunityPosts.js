@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { requireData } from "../../../shared/api/response.js";
 import { showApiErrorToast } from "../../../shared/notifications/toast.jsx";
 import {
@@ -12,26 +12,56 @@ import useCommunityAction from "./useCommunityAction.js";
 export default function useCommunityPosts() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [feedError, setFeedError] = useState(false);
+  const feedControllerRef = useRef(null);
   const { busyAction, runAction } = useCommunityAction();
+
+  const retryFeed = useCallback(() => {
+    feedControllerRef.current?.abort();
+    const controller = new AbortController();
+    feedControllerRef.current = controller;
+    setLoading(true);
+    setFeedError(false);
+
+    getCommunityFeedApi({}, { signal: controller.signal })
+      .then((response) => {
+        if (!controller.signal.aborted) setPosts(requireData(response)?.content || []);
+      })
+      .catch((error) => {
+        if (!controller.signal.aborted) {
+          setFeedError(true);
+          showApiErrorToast(error, "The community feed could not be loaded.");
+        }
+      })
+      .finally(() => {
+        if (!controller.signal.aborted && feedControllerRef.current === controller) {
+          setLoading(false);
+          feedControllerRef.current = null;
+        }
+      });
+  }, []);
 
   useEffect(() => {
     const controller = new AbortController();
-    async function loadPosts() {
-      try {
-        const response = await getCommunityFeedApi(
-          {},
-          { signal: controller.signal },
-        );
-        if (!controller.signal.aborted)
-          setPosts(requireData(response)?.content || []);
-      } catch (error) {
-        if (!controller.signal.aborted)
+    feedControllerRef.current = controller;
+
+    getCommunityFeedApi({}, { signal: controller.signal })
+      .then((response) => {
+        if (!controller.signal.aborted) setPosts(requireData(response)?.content || []);
+      })
+      .catch((error) => {
+        if (!controller.signal.aborted) {
+          setFeedError(true);
           showApiErrorToast(error, "The community feed could not be loaded.");
-      } finally {
-        if (!controller.signal.aborted) setLoading(false);
-      }
-    }
-    loadPosts();
+        }
+      })
+      .finally(() => {
+        if (!controller.signal.aborted && feedControllerRef.current === controller) {
+          setLoading(false);
+          feedControllerRef.current = null;
+        }
+      });
+
     return () => controller.abort();
   }, []);
 
@@ -90,6 +120,8 @@ export default function useCommunityPosts() {
   return {
     posts,
     loading,
+    feedError,
+    retryFeed,
     busyAction,
     createPost,
     deletePost,

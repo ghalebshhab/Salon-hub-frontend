@@ -1,5 +1,6 @@
 import { Flag, Send } from "lucide-react";
 import { useState } from "react";
+import { isCommunityActionBusy } from "../hooks/useCommunityAction.js";
 import CommunityProfileLink from "./CommunityProfileLink.jsx";
 import ReportDialog from "../../moderation/components/ReportDialog.jsx";
 
@@ -61,7 +62,7 @@ export default function CommunityComments({
         <button
           type="submit"
           aria-label="Send comment"
-          disabled={!draft.trim() || busy === `comment-${postId}`}
+          disabled={!draft.trim() || isCommunityActionBusy(busy, `comment-${postId}`)}
         >
           <Send size={17} />
         </button>

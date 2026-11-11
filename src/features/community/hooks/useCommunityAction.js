@@ -4,12 +4,20 @@ import {
   showSuccessToast,
 } from "../../../shared/notifications/toast.jsx";
 
+export function isCommunityActionBusy(actions, key) {
+  return actions instanceof Set ? actions.has(key) : actions === key;
+}
+
+export function mergeCommunityActions(...actionSets) {
+  return new Set(actionSets.flatMap((actions) => [...(actions || [])]));
+}
+
 export default function useCommunityAction() {
-  const [busyAction, setBusyAction] = useState(null);
+  const [busyAction, setBusyAction] = useState(() => new Set());
 
   const runAction = useCallback(
     async ({ key, action, successMessage, errorMessage }) => {
-      setBusyAction(key);
+      setBusyAction((current) => new Set(current).add(key));
       try {
         const response = await action();
         if (successMessage) showSuccessToast(successMessage);
@@ -21,7 +29,11 @@ export default function useCommunityAction() {
         );
         return null;
       } finally {
-        setBusyAction(null);
+        setBusyAction((current) => {
+          const next = new Set(current);
+          next.delete(key);
+          return next;
+        });
       }
     },
     [],

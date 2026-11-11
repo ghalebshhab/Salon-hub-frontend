@@ -9,6 +9,7 @@ import CommunityComments from "./CommunityComments.jsx";
 import CommunityLikesDialog from "./CommunityLikesDialog.jsx";
 import CommunityProfileLink from "./CommunityProfileLink.jsx";
 import ReportDialog from "../../moderation/components/ReportDialog.jsx";
+import { isCommunityActionBusy } from "../hooks/useCommunityAction.js";
 
 export default function CommunityPostCard({
   post,
@@ -69,7 +70,7 @@ export default function CommunityPostCard({
             className="community-icon-button danger"
             type="button"
             aria-label="Delete post"
-            disabled={busy === `delete-${post.id}`}
+            disabled={isCommunityActionBusy(busy, `delete-${post.id}`)}
             onClick={() => onDelete(post.id)}
           >
             <Trash2 size={17} />
@@ -123,7 +124,7 @@ export default function CommunityPostCard({
           type="button"
           aria-label={post.likedByMe ? "Unlike post" : "Like post"}
           aria-pressed={post.likedByMe}
-          disabled={busy === `like-${post.id}`}
+          disabled={isCommunityActionBusy(busy, `like-${post.id}`)}
           onClick={() => onLike(post)}
         >
           <Heart size={19} fill={post.likedByMe ? "currentColor" : "none"} />

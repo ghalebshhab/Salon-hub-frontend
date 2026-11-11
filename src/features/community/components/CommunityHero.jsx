@@ -1,34 +1,27 @@
-import { Sparkles } from "lucide-react";
+import { ArrowRight, PenLine, UsersRound } from "lucide-react";
 
 export default function CommunityHero({ friendCount, followedSalonCount }) {
   return (
-    <section className="community-hero">
+    <header className="community-hero">
       <div className="container community-hero-inner">
         <div className="community-hero-copy">
-          <span className="community-eyebrow">
-            <Sparkles size={15} /> SalonHub community
-          </span>
-          <h1>
-            Your beauty community, <em>all in one place.</em>
-          </h1>
-          <p>
-            Share your work, celebrate ideas, meet professionals, and stay close
-            to the salons you love.
-          </p>
+          <span className="community-eyebrow">SalonHub / Community</span>
+          <h1>Good work grows <em>together.</em></h1>
+          <p>Share your craft, find your people, and keep inspiration close.</p>
         </div>
-        <div className="community-hero-stats" aria-label="Community summary">
-          <div className="community-hero-stat">
-            <span>Your network</span>
-            <strong>{friendCount}</strong>
-            <small>professional connections</small>
+        <div className="community-hero-actions">
+          <div className="community-hero-stats" aria-label="Your network summary">
+            <span><UsersRound size={16} aria-hidden="true" /> <strong>{friendCount ?? "—"}</strong> friends</span>
+            <span><strong>{followedSalonCount ?? "—"}</strong> salons followed</span>
           </div>
-          <div className="community-hero-stat">
-            <span>Salon inspiration</span>
-            <strong>{followedSalonCount}</strong>
-            <small>studios in your circle</small>
-          </div>
+          <a className="community-hero-link" href="#discover">
+            Find people <ArrowRight size={16} aria-hidden="true" />
+          </a>
+          <a className="community-hero-create" href="#community-composer">
+            <PenLine size={16} aria-hidden="true" /> Create post
+          </a>
         </div>
       </div>
-    </section>
+    </header>
   );
 }

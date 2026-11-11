@@ -5,6 +5,7 @@ import babel from "@rolldown/plugin-babel";
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
+  const allowedHosts = [".vercel.run"];
   const apiProxy = {
     "/api": {
       target: env.VITE_API_PROXY_TARGET || "http://localhost:8080",
@@ -14,7 +15,7 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins: [react(), babel({ presets: [reactCompilerPreset()] })],
-    server: { proxy: apiProxy },
-    preview: { proxy: apiProxy },
+    server: { allowedHosts, proxy: apiProxy },
+    preview: { allowedHosts, proxy: apiProxy },
   };
 });

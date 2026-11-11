@@ -25,10 +25,13 @@ export const getOwnedSalonLeaveRequestsApi = (config = {}) =>
     })
     .then(data);
 
-export const searchEmploymentCandidatesApi = (search = "", config = {}) =>
+export const searchEmploymentCandidatesApi = (
+  search = "",
+  { page = 0, size = 100, ...config } = {},
+) =>
   httpClient
     .get("/employment/candidates", {
-      params: { search, page: 0, size: 50 },
+      params: { search, page, size },
       ...config,
     })
     .then(data);

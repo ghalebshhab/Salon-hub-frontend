@@ -5,7 +5,10 @@ import {
   Send,
   UserRoundSearch,
   XCircle,
+  X,
+  ArrowUpRight,
 } from "lucide-react";
+import { Link } from "react-router-dom";
 import EmptyState from "../../../shared/components/EmptyState.jsx";
 import Loading from "../../../shared/components/Loading.jsx";
 import EmploymentRequestCard from "../components/EmploymentRequestCard.jsx";
@@ -70,9 +73,10 @@ export default function OwnerEmployment() {
             <span className="eyebrow">Candidate discovery</span>
             <h2>Invite a professional</h2>
           </div>
-          <form
+          <div
             className="employment-search"
-            onSubmit={employment.submitSearch}
+            role="search"
+            aria-label="Search career-ready professionals"
           >
             <Search size={18} />
             <input
@@ -82,13 +86,32 @@ export default function OwnerEmployment() {
               }
               placeholder="Search by name, username, skill, or location"
               maxLength={100}
+              aria-label="Search professionals"
             />
-            <button className="btn btn-secondary btn-small" type="submit">
-              Search
-            </button>
-          </form>
+            {employment.searchInput && (
+              <button
+                className="employment-search-clear"
+                type="button"
+                onClick={employment.clearSearch}
+                aria-label="Clear candidate search"
+              >
+                <X size={16} />
+              </button>
+            )}
+            <span className="employment-search-status" aria-live="polite">
+              {employment.candidatesSearching
+                ? "Searching…"
+                : `${employment.candidates.length} found`}
+            </span>
+          </div>
         </div>
-        {employment.candidates.length === 0 ? (
+        <p className="employment-search-hint">
+          Results update as you type. Search is case-insensitive and matches the
+          beginning of names, usernames, skills, and locations.
+        </p>
+        {employment.candidatesLoading ? (
+          <Loading message="Finding career-ready professionals…" />
+        ) : employment.candidates.length === 0 ? (
           <EmptyState
             title="No matching career profiles"
             message="Try another name or skill. Only active career profiles can be invited."
@@ -107,11 +130,19 @@ export default function OwnerEmployment() {
                   key={candidate.userId}
                 >
                   <div className="candidate-directory-heading">
-                    <span className="candidate-directory-avatar">
+                    <Link
+                      className="candidate-directory-avatar"
+                      to={`/community/people/${candidate.userId}`}
+                      aria-label={`View ${candidate.fullName}'s profile`}
+                    >
                       <UserRoundSearch size={23} />
-                    </span>
+                    </Link>
                     <div>
-                      <h3>{candidate.fullName}</h3>
+                      <h3>
+                        <Link to={`/community/people/${candidate.userId}`}>
+                          {candidate.fullName}
+                        </Link>
+                      </h3>
                       <p>@{candidate.userName}</p>
                     </div>
                   </div>
@@ -135,6 +166,12 @@ export default function OwnerEmployment() {
                     </span>
                   </div>
                   <div className="employment-card-actions">
+                    <Link
+                      className="btn btn-secondary btn-small"
+                      to={`/community/people/${candidate.userId}`}
+                    >
+                      Profile <ArrowUpRight size={16} />
+                    </Link>
                     {candidate.resumeUrl && (
                       <a
                         className="btn btn-secondary btn-small"

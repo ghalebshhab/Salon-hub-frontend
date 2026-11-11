@@ -15,33 +15,27 @@ import {
   getOwnedSalonLeaveRequestsApi,
   inviteEmploymentCandidateApi,
   rejectEmploymentRequestApi,
-  searchEmploymentCandidatesApi,
 } from "../api/employmentApi.js";
+import useEmploymentCandidateSearch from "./useEmploymentCandidateSearch.js";
 
 export default function useOwnerEmployment() {
   const { user } = useAuth();
-  const [searchInput, setSearchInput] = useState("");
-  const [search, setSearch] = useState("");
   const [rejection, setRejection] = useState({ requestId: null, reason: "" });
   const [acting, setActing] = useState(false);
+  const candidateSearch = useEmploymentCandidateSearch();
 
-  const loader = useCallback(
-    async (signal) => {
-      const [employment, leave, candidates] = await Promise.all([
-        getOwnedSalonEmploymentRequestsApi({ signal }).then(requireData),
-        getOwnedSalonLeaveRequestsApi({ signal }).then(requireData),
-        searchEmploymentCandidatesApi(search, { signal }).then(requireData),
-      ]);
-      return {
-        requests: employment?.content || [],
-        leaveRequests: leave?.content || [],
-        candidates: candidates?.content || [],
-      };
-    },
-    [search],
-  );
+  const loader = useCallback(async (signal) => {
+    const [employment, leave] = await Promise.all([
+      getOwnedSalonEmploymentRequestsApi({ signal }).then(requireData),
+      getOwnedSalonLeaveRequestsApi({ signal }).then(requireData),
+    ]);
+    return {
+      requests: employment?.content || [],
+      leaveRequests: leave?.content || [],
+    };
+  }, []);
   const { data, loading, refetch } = useQuery(loader, {
-    initialData: { requests: [], leaveRequests: [], candidates: [] },
+    initialData: { requests: [], leaveRequests: [] },
     onError: showErrorToast,
   });
 
@@ -64,14 +58,13 @@ export default function useOwnerEmployment() {
     }
   };
 
-  const submitSearch = (event) => {
-    event.preventDefault();
-    setSearch(searchInput.trim());
-  };
-
   const inviteCandidate = (userId) =>
     perform(
-      () => inviteEmploymentCandidateApi(user?.salonId, userId),
+      () =>
+        inviteEmploymentCandidateApi(
+          user?.ownedSalonId ?? user?.salonId,
+          userId,
+        ),
       "The invitation could not be sent.",
     );
 
@@ -112,12 +105,14 @@ export default function useOwnerEmployment() {
   return {
     requests: data.requests,
     leaveRequests: data.leaveRequests,
-    candidates: data.candidates,
+    candidates: candidateSearch.candidates,
+    candidatesLoading: candidateSearch.loading,
+    candidatesSearching: candidateSearch.searching,
     loading,
     acting,
-    searchInput,
-    setSearchInput,
-    submitSearch,
+    searchInput: candidateSearch.searchInput,
+    setSearchInput: candidateSearch.setSearchInput,
+    clearSearch: candidateSearch.clearSearch,
     rejection,
     setRejection,
     inviteCandidate,

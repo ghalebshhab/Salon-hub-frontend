@@ -298,12 +298,62 @@
   background: transparent;
 }
 
+.employment-search:focus-within {
+  border-color: color-mix(in srgb, var(--primary) 68%, var(--border));
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary) 12%, transparent);
+}
+
+.employment-search-clear {
+  display: grid;
+  width: 30px;
+  height: 30px;
+  flex: 0 0 30px;
+  place-items: center;
+  border: 0;
+  border-radius: 999px;
+  color: var(--muted);
+  background: var(--surface-elevated);
+  cursor: pointer;
+}
+
+.employment-search-status {
+  min-width: 74px;
+  padding: 7px 9px;
+  border-radius: 10px;
+  color: var(--primary-dark);
+  background: var(--secondary);
+  font-size: 0.72rem;
+  font-weight: 900;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.employment-search-hint {
+  margin: -9px 0 20px;
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
 .candidate-directory-heading {
   gap: 12px;
 }
 
 .candidate-directory-heading h3 {
   margin: 0;
+}
+
+.candidate-directory-heading h3 a {
+  color: var(--text);
+  text-decoration: none;
+}
+
+.candidate-directory-heading h3 a:hover {
+  color: var(--primary-dark);
+}
+
+.candidate-directory-avatar {
+  text-decoration: none;
 }
 
 .candidate-directory-heading p {

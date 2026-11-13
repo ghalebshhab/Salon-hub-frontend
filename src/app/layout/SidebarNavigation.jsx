@@ -1,4 +1,10 @@
-import { LogOut, PanelLeftClose, PanelLeftOpen, X } from "lucide-react";
+import {
+  LogIn,
+  LogOut,
+  PanelLeftClose,
+  PanelLeftOpen,
+  X,
+} from "lucide-react";
 import { NavLink } from "react-router-dom";
 import useLogout from "../../features/auth/hooks/useLogout.js";
 import useAuth from "../../shared/auth/useAuth.js";
@@ -54,17 +60,49 @@ export default function SidebarNavigation({
             <X />
           </button>
         </div>
-        <div className="sidebar-identity">
-          <div className="sidebar-avatar" aria-hidden="true">
-            {initials || "SH"}
+        {loggedIn ? (
+          <div className="sidebar-identity">
+            <div className="sidebar-avatar" aria-hidden="true">
+              {initials || "SH"}
+            </div>
+            <div className="sidebar-identity-copy">
+              <strong>{name}</strong>
+              <span>{isOwner ? "Salon owner" : "Salon member"}</span>
+            </div>
           </div>
-          <div className="sidebar-identity-copy">
-            <strong>{name}</strong>
-            <span>
-              {loggedIn ? (isOwner ? "Salon owner" : "Salon member") : "Guest"}
-            </span>
+        ) : (
+          <div className="sidebar-guest">
+            <div className="sidebar-guest-full">
+              <strong>Your salon world, in one place</strong>
+              <p>Book visits, follow salons, and grow your beauty career.</p>
+              <div className="sidebar-guest-actions">
+                <NavLink
+                  to="/register"
+                  className="sidebar-guest-join"
+                  onClick={closeMobile}
+                >
+                  Join SalonHub
+                </NavLink>
+                <NavLink
+                  to="/login"
+                  className="sidebar-guest-login"
+                  onClick={closeMobile}
+                >
+                  Log in
+                </NavLink>
+              </div>
+            </div>
+            <NavigationTooltip label="Log in">
+              <NavLink
+                to="/login"
+                className="sidebar-link sidebar-guest-compact"
+                aria-label="Log in"
+              >
+                <LogIn />
+              </NavLink>
+            </NavigationTooltip>
           </div>
-        </div>
+        )}
         <nav className="sidebar-nav">
           {sections.map((section) => (
             <section className="sidebar-section" key={section.label}>

@@ -427,3 +427,92 @@ body:has(.app-sidebar.is-collapsed) .footer {
 .app-shell.is-auth-layout :is(.page-main, .footer) {
   margin-left: 0;
 }
+
+/* Guest welcome card replaces the identity block for signed-out visitors. */
+.sidebar-guest {
+  margin-bottom: 14px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+.sidebar-guest-full {
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  border: 1px solid color-mix(in srgb, var(--primary) 18%, var(--border));
+  border-radius: var(--radius-lg);
+  background:
+    radial-gradient(
+      circle at 100% 0%,
+      color-mix(in srgb, var(--accent) 18%, transparent),
+      transparent 55%
+    ),
+    var(--primary-soft);
+}
+.sidebar-guest-full strong {
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-snug);
+}
+.sidebar-guest-full p {
+  margin: 0;
+  color: var(--muted);
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+}
+.sidebar-guest-actions {
+  display: grid;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+.sidebar-guest-actions a {
+  display: grid;
+  min-height: 40px;
+  place-items: center;
+  border-radius: var(--radius-md);
+  font-size: var(--text-md);
+  font-weight: var(--weight-semibold);
+  transition:
+    background-color var(--duration-base) var(--ease-standard),
+    border-color var(--duration-base) var(--ease-standard);
+}
+.sidebar-guest-join {
+  color: #fff;
+  background: var(--primary);
+}
+.sidebar-guest-join:hover {
+  background: var(--primary-dark);
+}
+:root[data-theme="dark"] .sidebar-guest-join {
+  color: #1d161c;
+}
+.sidebar-guest-login {
+  border: 1px solid var(--border);
+  color: var(--primary);
+  background: var(--card);
+}
+.sidebar-guest-login:hover {
+  border-color: var(--primary);
+}
+.sidebar-guest-compact {
+  display: none;
+}
+.app-sidebar.is-collapsed .sidebar-guest {
+  padding-bottom: 8px;
+}
+.app-sidebar.is-collapsed .sidebar-guest-full {
+  display: none;
+}
+.app-sidebar.is-collapsed .sidebar-guest-compact {
+  display: flex;
+  justify-content: center;
+}
+@media (max-width: 1180px) {
+  .app-sidebar.is-collapsed .sidebar-guest-full {
+    display: grid;
+  }
+  .app-sidebar.is-collapsed .sidebar-guest-compact {
+    display: none;
+  }
+}

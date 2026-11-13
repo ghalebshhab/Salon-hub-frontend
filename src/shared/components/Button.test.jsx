@@ -16,7 +16,13 @@ it("renders a non-submitting primary button by default", () => {
 
 it("maps variant, size, width and extra classes", () => {
   render(
-    <Button variant="danger" size="sm" fullWidth className="extra" type="submit">
+    <Button
+      variant="danger"
+      size="sm"
+      fullWidth
+      className="extra"
+      type="submit"
+    >
       Disable
     </Button>,
   );

@@ -8,14 +8,31 @@ import AuthProvider from "../features/auth/providers/AuthProvider.jsx";
 import GlobalLoadingOverlay from "../shared/components/GlobalLoadingOverlay.jsx";
 import NavigationLoadingOverlay from "../shared/components/NavigationLoadingOverlay.jsx";
 
+const SPLASH_SESSION_KEY = "salonhub_splash_seen";
+const SPLASH_MS = 600;
+
+// The brand splash greets the first load of a browser session only;
+// reloads and later visits in the same session go straight to the app.
+function splashDuration() {
+  if (import.meta.env.MODE === "test") return 0;
+  try {
+    if (window.sessionStorage.getItem(SPLASH_SESSION_KEY)) return 0;
+    window.sessionStorage.setItem(SPLASH_SESSION_KEY, "1");
+  } catch {
+    // Storage can be unavailable (private mode); fall back to the short splash.
+  }
+  return SPLASH_MS;
+}
+
 function App() {
-  const [showSplash, setShowSplash] = useState(true);
+  const [splashMs] = useState(splashDuration);
+  const [showSplash, setShowSplash] = useState(splashMs > 0);
 
   useEffect(() => {
-    const duration = import.meta.env.MODE === "test" ? 0 : 1800;
-    const timer = window.setTimeout(() => setShowSplash(false), duration);
+    if (splashMs === 0) return undefined;
+    const timer = window.setTimeout(() => setShowSplash(false), splashMs);
     return () => window.clearTimeout(timer);
-  }, []);
+  }, [splashMs]);
 
   if (showSplash) return <StartupSplash />;
 

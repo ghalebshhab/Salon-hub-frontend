@@ -2,6 +2,7 @@ import useSalonShowcase from "../hooks/useSalonShowcase.js";
 
 import { Link } from "react-router-dom";
 import { MapPin, Clock, ArrowRight } from "lucide-react";
+import SalonCoverPlaceholder from "./SalonCoverPlaceholder.jsx";
 
 function SalonShowcase() {
   const { getImages, formatTime, salons, loading } = useSalonShowcase();
@@ -52,9 +53,7 @@ function SalonShowcase() {
               {coverImage ? (
                 <img src={coverImage} alt={salon.name} />
               ) : (
-                <div className="salon-showcase-placeholder">
-                  {salon.name?.charAt(0)?.toUpperCase() || "S"}
-                </div>
+                <SalonCoverPlaceholder name={salon.name} />
               )}
 
               <span

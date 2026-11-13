@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import SalonCoverPlaceholder from "../components/SalonCoverPlaceholder.jsx";
 import useSalonDetails from "../hooks/useSalonDetails.js";
 import SalonStatusBadge from "../components/SalonStatusBadge.jsx";
 import SalonServicesList from "../../services/components/SalonServicesList.jsx";
@@ -90,10 +91,7 @@ function SalonDetails() {
                 alt={`${salon.name} interior`}
               />
             ) : (
-              <div className="salon-hero-placeholder">
-                <Scissors aria-hidden="true" />
-                <span aria-hidden="true">{salon.name?.[0] || "S"}</span>
-              </div>
+              <SalonCoverPlaceholder name={salon.name} variant="hero" />
             )}
             <div className="salon-media-caption">
               <span>SalonHub spaces</span>

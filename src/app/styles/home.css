@@ -645,12 +645,6 @@
   );
 }
 
-.editorial-home .salon-showcase-placeholder {
-  color: var(--primary);
-  font-family: var(--font-display);
-  font-weight: var(--weight-medium);
-}
-
 .editorial-home .salon-showcase-body {
   padding: 22px;
 }

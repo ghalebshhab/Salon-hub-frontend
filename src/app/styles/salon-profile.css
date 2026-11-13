@@ -40,26 +40,6 @@
   object-fit: cover;
 }
 
-.salon-hero-placeholder {
-  height: 100%;
-  min-height: 470px;
-  display: grid;
-  place-items: center;
-  color: #ffffff;
-  text-align: center;
-}
-
-.salon-hero-placeholder span {
-  width: 112px;
-  height: 112px;
-  display: grid;
-  place-items: center;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.18);
-  font-size: var(--text-6xl);
-  font-weight: var(--weight-bold);
-}
-
 .salon-hero-overlay {
   position: absolute;
   inset: 0;
@@ -306,10 +286,6 @@
   }
 
   .salon-hero-image,
-  .salon-hero-placeholder {
-    min-height: 360px;
-  }
-
   .salon-profile-layout {
     grid-template-columns: 1fr;
   }
@@ -400,33 +376,6 @@
   content: "";
   background: linear-gradient(180deg, transparent 48%, rgba(20, 14, 21, 0.62));
   pointer-events: none;
-}
-
-.salon-details-page .salon-hero-placeholder {
-  position: relative;
-  display: grid;
-  min-height: 500px;
-  height: 100%;
-  place-items: center;
-  color: #fff;
-}
-
-.salon-details-page .salon-hero-placeholder svg {
-  position: absolute;
-  top: 34%;
-  opacity: 0.7;
-}
-
-.salon-details-page .salon-hero-placeholder span {
-  display: grid;
-  width: 128px;
-  height: 128px;
-  place-items: center;
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.16);
-  font-size: var(--text-6xl);
-  font-weight: var(--weight-bold);
 }
 
 .salon-media-caption {
@@ -825,9 +774,6 @@
     grid-template-columns: 1fr;
   }
   .salon-details-media,
-  .salon-details-page .salon-hero-placeholder {
-    min-height: 380px;
-  }
   .salon-details-grid {
     grid-template-columns: 1fr;
   }
@@ -844,10 +790,6 @@
     padding-top: 22px;
   }
   .salon-details-media,
-  .salon-details-page .salon-hero-placeholder {
-    min-height: 300px;
-    border-radius: 24px;
-  }
   .salon-media-caption {
     inset: auto 18px 18px;
   }

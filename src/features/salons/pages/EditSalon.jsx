@@ -4,12 +4,12 @@ import {
   Mail,
   MapPin,
   Phone,
-  Scissors,
   Settings2,
   UsersRound,
 } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import SalonCoverPlaceholder from "../components/SalonCoverPlaceholder.jsx";
 import Loading from "../../../shared/components/Loading.jsx";
 import SalonWorkGallery from "../../media/components/SalonWorkGallery.jsx";
 import { optimizedCloudinaryImage } from "../../media/model/cloudinaryMedia.js";
@@ -89,10 +89,7 @@ export default function EditSalon() {
                 alt={`${salon.name} salon`}
               />
             ) : (
-              <div className="salon-hero-placeholder">
-                <Scissors aria-hidden="true" />
-                <span>{salon.name?.[0] || "S"}</span>
-              </div>
+              <SalonCoverPlaceholder name={salon.name} variant="hero" />
             )}
             <div className="owner-editor-cover-control">
               <SalonCoverEditor

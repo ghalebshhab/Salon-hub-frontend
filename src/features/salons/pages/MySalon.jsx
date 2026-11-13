@@ -15,6 +15,7 @@ import {
   UsersRound,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import SalonCoverPlaceholder from "../components/SalonCoverPlaceholder.jsx";
 import { useState } from "react";
 import ConfirmDialog from "../../../shared/components/ConfirmDialog.jsx";
 import EmptyState from "../../../shared/components/EmptyState.jsx";
@@ -66,9 +67,7 @@ function MySalon() {
                 alt={salon.name}
               />
             ) : (
-              <div className="my-salon-cover-placeholder">
-                {salon.name?.[0]}
-              </div>
+              <SalonCoverPlaceholder name={salon.name} variant="banner" />
             )}
             <div className="my-salon-floating-status">
               <SalonStatusBadge state={salon.state} />

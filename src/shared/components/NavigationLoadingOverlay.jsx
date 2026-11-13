@@ -3,7 +3,8 @@ import { useLocation } from "react-router-dom";
 import BrandedLoadingOverlay from "./BrandedLoadingOverlay.jsx";
 import { navigationMessageFor } from "../loading/navigationLoading.js";
 
-const NAVIGATION_VISIBLE_MS = 650;
+// Long enough to register as intentional, short enough not to delay the next page.
+const NAVIGATION_VISIBLE_MS = 320;
 
 export default function NavigationLoadingOverlay() {
   const location = useLocation();

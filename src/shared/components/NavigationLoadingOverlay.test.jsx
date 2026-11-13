@@ -40,7 +40,7 @@ it("shows the main logo after every router navigation", () => {
     container.querySelector('img[src="/salonhub-mark.svg"]'),
   ).not.toBeNull();
 
-  act(() => vi.advanceTimersByTime(651));
+  act(() => vi.advanceTimersByTime(321));
   expect(screen.queryByRole("status")).toBeNull();
 });
 

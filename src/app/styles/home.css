@@ -69,7 +69,7 @@
   font-size: clamp(3.35rem, 6.5vw, 6.65rem);
   font-weight: var(--weight-medium);
   line-height: 0.93;
-  letter-spacing: -0.065em;
+  letter-spacing: -0.03em;
 }
 
 .editorial-hero-copy h1 em {
@@ -162,7 +162,7 @@
   font-size: clamp(1.65rem, 3vw, 2.25rem);
   font-weight: var(--weight-medium);
   line-height: 1.08;
-  letter-spacing: -0.035em;
+  letter-spacing: -0.02em;
 }
 
 .editorial-icon-tile {
@@ -285,7 +285,7 @@
   font-size: clamp(2.35rem, 4.8vw, 4.7rem);
   font-weight: var(--weight-medium);
   line-height: 1;
-  letter-spacing: -0.05em;
+  letter-spacing: -0.025em;
 }
 
 .editorial-section-heading p,

@@ -99,7 +99,7 @@
 .auth-heading h2 {
   margin: 0;
   font-family: var(--font-display);
-  letter-spacing: -0.04em;
+  letter-spacing: -0.02em;
   font-weight: var(--weight-medium);
 }
 .auth-story h1 {

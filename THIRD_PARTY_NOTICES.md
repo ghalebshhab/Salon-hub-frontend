@@ -25,3 +25,15 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+## Inter and Fraunces typefaces
+
+The application self-hosts the variable fonts [Inter](https://github.com/rsms/inter)
+(Copyright (c) 2016 The Inter Project Authors) and
+[Fraunces](https://github.com/undercasetype/Fraunces)
+(Copyright (c) 2020 The Fraunces Project Authors) through the
+`@fontsource-variable/inter` and `@fontsource-variable/fraunces` packages.
+
+Both typefaces are licensed under the SIL Open Font License, Version 1.1
+(https://openfontlicense.org). The full license text ships with each package in
+`node_modules/@fontsource-variable/*/LICENSE`.

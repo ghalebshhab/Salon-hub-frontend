@@ -33,19 +33,23 @@ html:has(.editorial-home) {
   width: 100%;
 }
 
-/* Short, blur-free reveal: content reads as soon as it enters the viewport. */
+/* Signature editorial reveal: a soft blur, rise and settle as sections scroll in. */
 .scroll-reveal {
   opacity: 0;
-  transform: translate3d(0, 16px, 0);
+  filter: blur(8px);
+  transform: translate3d(0, clamp(28px, 5vw, 64px), 0) scale(0.985);
+  transform-origin: center bottom;
   transition:
-    opacity 360ms var(--ease-standard) var(--reveal-delay, 0ms),
-    transform 420ms var(--ease-standard) var(--reveal-delay, 0ms);
-  will-change: opacity, transform;
+    opacity 760ms var(--motion-ease) var(--reveal-delay, 0ms),
+    transform 920ms var(--motion-ease) var(--reveal-delay, 0ms),
+    filter 680ms ease var(--reveal-delay, 0ms);
+  will-change: opacity, transform, filter;
 }
 
 .scroll-reveal.is-visible {
   opacity: 1;
-  transform: none;
+  filter: blur(0);
+  transform: translate3d(0, 0, 0) scale(1);
   will-change: auto;
 }
 
@@ -128,7 +132,8 @@ html:has(.editorial-home) {
   }
 
   .scroll-reveal {
-    transform: translate3d(0, 12px, 0);
+    filter: blur(5px);
+    transform: translate3d(0, 34px, 0) scale(0.99);
   }
 }
 

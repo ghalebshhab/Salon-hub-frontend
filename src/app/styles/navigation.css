@@ -422,3 +422,8 @@ body:has(.app-sidebar.is-collapsed) .footer {
     transition: none;
   }
 }
+
+/* Authentication routes render without the sidebar. */
+.app-shell.is-auth-layout :is(.page-main, .footer) {
+  margin-left: 0;
+}

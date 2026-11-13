@@ -14,14 +14,23 @@ export default function AppLayout() {
   const location = useLocation();
   const { token } = useAuth();
   const navigation = useNavigationState();
-  const showAppBackground = !isAuthenticationRoute(location.pathname);
+  // Sign-in and recovery pages are focused tasks: no app sidebar or background.
+  const authLayout = isAuthenticationRoute(location.pathname);
+  const showAppBackground = !authLayout;
+  const shellClass = [
+    "app-shell",
+    showAppBackground && "has-side-rays",
+    authLayout && "is-auth-layout",
+  ]
+    .filter(Boolean)
+    .join(" ");
   return (
     <NotificationProvider key={token || "anonymous"} enabled={Boolean(token)}>
-      <div className={showAppBackground ? "app-shell has-side-rays" : "app-shell"}>
+      <div className={shellClass}>
         <ScrollManager />
         {showAppBackground && <AppBackground />}
-        <Navbar onOpenMobile={navigation.openMobile} />
-        <SidebarNavigation {...navigation} />
+        <Navbar onOpenMobile={authLayout ? undefined : navigation.openMobile} />
+        {!authLayout && <SidebarNavigation {...navigation} />}
         <main className="page-main">
           <Suspense fallback={<Loading />}>
             <div className="page-route-transition" key={location.pathname}>

@@ -83,14 +83,16 @@ function Navbar({ onOpenMobile }) {
               Log in
             </NavLink>
           )}
-          <button
-            className="mobile-menu-button"
-            type="button"
-            onClick={onOpenMobile}
-            aria-label="Open navigation"
-          >
-            <Menu />
-          </button>
+          {onOpenMobile && (
+            <button
+              className="mobile-menu-button"
+              type="button"
+              onClick={onOpenMobile}
+              aria-label="Open navigation"
+            >
+              <Menu />
+            </button>
+          )}
         </div>
       </div>
     </header>

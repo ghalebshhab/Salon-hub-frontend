@@ -22,7 +22,7 @@
   margin: 0;
   color: var(--muted);
   line-height: 1.65;
-  font-weight: 650;
+  font-weight: var(--weight-semibold);
 }
 
 .application-filter-bar {
@@ -48,7 +48,7 @@
   background: transparent;
   font: inherit;
   font-size: 0.88rem;
-  font-weight: 800;
+  font-weight: var(--weight-bold);
   cursor: pointer;
   transition: 0.2s ease;
 }
@@ -159,7 +159,7 @@
   border: 1px solid transparent;
   border-radius: 999px;
   font-size: 0.78rem;
-  font-weight: 900;
+  font-weight: var(--weight-bold);
 }
 
 .application-status-pill.status-in-progress {
@@ -186,7 +186,7 @@
   margin-top: 20px;
   color: var(--muted);
   font-size: 0.85rem;
-  font-weight: 750;
+  font-weight: var(--weight-bold);
 }
 
 .candidate-application-meta span {
@@ -241,7 +241,7 @@
   margin-top: 17px;
   color: var(--primary-dark);
   text-decoration: none;
-  font-weight: 850;
+  font-weight: var(--weight-bold);
 }
 
 .application-resume-link:hover {

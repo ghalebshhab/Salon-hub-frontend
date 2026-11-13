@@ -88,7 +88,7 @@
   margin: 0 0 14px;
   color: var(--auth-plum);
   font-size: 0.72rem;
-  font-weight: 800;
+  font-weight: var(--weight-bold);
   letter-spacing: 0.15em;
   text-transform: uppercase;
 }
@@ -100,7 +100,7 @@
   margin: 0;
   font-family: var(--font-display);
   letter-spacing: -0.04em;
-  font-weight: 500;
+  font-weight: var(--weight-medium);
 }
 .auth-story h1 {
   max-width: 560px;
@@ -190,7 +190,7 @@
 }
 .auth-field label {
   font-size: 0.84rem;
-  font-weight: 800;
+  font-weight: var(--weight-bold);
   color: var(--auth-text);
 }
 .auth-field input {
@@ -220,7 +220,7 @@
   letter-spacing: 0.42em;
   text-align: center;
   font-size: 1.18rem;
-  font-weight: 800;
+  font-weight: var(--weight-bold);
 }
 .auth-input-wrap {
   position: relative;
@@ -353,7 +353,7 @@
   color: var(--auth-plum);
   font: inherit;
   font-size: 0.86rem;
-  font-weight: 800;
+  font-weight: var(--weight-bold);
   cursor: pointer;
   transition:
     border-color 0.2s,
@@ -382,7 +382,7 @@
 }
 .auth-link {
   color: var(--auth-plum);
-  font-weight: 800;
+  font-weight: var(--weight-bold);
 }
 .auth-link:hover {
   color: var(--auth-plum-hover);

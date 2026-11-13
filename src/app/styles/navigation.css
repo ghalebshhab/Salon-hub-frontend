@@ -69,7 +69,7 @@ body.navigation-drawer-open {
   color: var(--primary);
   background: var(--primary-soft);
   font-size: 0.72rem;
-  font-weight: 900;
+  font-weight: var(--weight-bold);
 }
 .header-profile-wrap {
   position: relative;
@@ -99,7 +99,7 @@ body.navigation-drawer-open {
   background: transparent;
   font: inherit;
   font-size: 0.8rem;
-  font-weight: 700;
+  font-weight: var(--weight-bold);
   text-align: left;
   cursor: pointer;
 }
@@ -110,7 +110,7 @@ body.navigation-drawer-open {
 }
 .header-login-link {
   color: var(--muted);
-  font-weight: 700;
+  font-weight: var(--weight-bold);
 }
 .header-login-link:hover {
   color: var(--primary);
@@ -182,7 +182,7 @@ body:has(.app-sidebar.is-collapsed) .footer {
   color: var(--primary);
   background: var(--primary-soft);
   font-size: 0.74rem;
-  font-weight: 900;
+  font-weight: var(--weight-bold);
 }
 .sidebar-identity-copy {
   display: grid;
@@ -215,7 +215,7 @@ body:has(.app-sidebar.is-collapsed) .footer {
   margin: 0 10px 3px;
   color: var(--muted);
   font-size: 0.66rem;
-  font-weight: 800;
+  font-weight: var(--weight-bold);
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
@@ -236,7 +236,7 @@ body:has(.app-sidebar.is-collapsed) .footer {
   background: transparent;
   font: inherit;
   font-size: 0.82rem;
-  font-weight: 700;
+  font-weight: var(--weight-bold);
   text-align: left;
   text-decoration: none;
   cursor: pointer;
@@ -309,7 +309,7 @@ body:has(.app-sidebar.is-collapsed) .footer {
   color: var(--bg);
   background: var(--text);
   font-size: 0.78rem;
-  font-weight: 700;
+  font-weight: var(--weight-bold);
   opacity: 0;
   transform: translateY(-50%);
   pointer-events: none;

@@ -106,7 +106,7 @@
 .salon-toast-content h4 {
   margin: 0 0 5px;
   font-size: 0.98rem;
-  font-weight: 900;
+  font-weight: var(--weight-bold);
   color: var(--toast-color);
   letter-spacing: 0.2px;
 }
@@ -115,7 +115,7 @@
   margin: 0;
   color: #e7d8d0;
   font-size: 0.88rem;
-  font-weight: 600;
+  font-weight: var(--weight-semibold);
   line-height: 1.45;
 }
 

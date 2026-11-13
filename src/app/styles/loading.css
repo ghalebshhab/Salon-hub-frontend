@@ -180,7 +180,7 @@
 .salon-loading-copy span {
   color: var(--primary);
   font-size: 0.72rem;
-  font-weight: 900;
+  font-weight: var(--weight-bold);
   letter-spacing: 0.18em;
   text-transform: uppercase;
 }

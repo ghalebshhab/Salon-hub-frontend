@@ -57,7 +57,7 @@
   gap: 8px;
   color: var(--primary);
   font-size: 0.75rem;
-  font-weight: 900;
+  font-weight: var(--weight-bold);
   letter-spacing: 0.14em;
   text-transform: uppercase;
 }
@@ -67,14 +67,14 @@
   margin: 22px 0 24px;
   font-family: var(--font-display);
   font-size: clamp(3.35rem, 6.5vw, 6.65rem);
-  font-weight: 500;
+  font-weight: var(--weight-medium);
   line-height: 0.93;
   letter-spacing: -0.065em;
 }
 
 .editorial-hero-copy h1 em {
   color: var(--primary);
-  font-weight: 400;
+  font-weight: var(--weight-regular);
 }
 
 .editorial-hero-copy > p {
@@ -82,7 +82,7 @@
   margin: 0;
   color: var(--muted);
   font-size: clamp(1.02rem, 1.5vw, 1.18rem);
-  font-weight: 600;
+  font-weight: var(--weight-semibold);
   line-height: 1.85;
 }
 
@@ -109,7 +109,7 @@
   gap: 7px;
   color: var(--muted);
   font-size: 0.84rem;
-  font-weight: 800;
+  font-weight: var(--weight-bold);
 }
 
 .editorial-trust-row svg {
@@ -160,7 +160,7 @@
   margin: 10px 0 0;
   font-family: var(--font-display);
   font-size: clamp(1.65rem, 3vw, 2.25rem);
-  font-weight: 500;
+  font-weight: var(--weight-medium);
   line-height: 1.08;
   letter-spacing: -0.035em;
 }
@@ -194,7 +194,7 @@
   gap: 9px;
   color: var(--muted);
   font-size: 0.9rem;
-  font-weight: 700;
+  font-weight: var(--weight-bold);
 }
 
 .editorial-appointment-line strong {
@@ -244,14 +244,14 @@
 .editorial-mini-stats small {
   color: var(--muted);
   font-size: 0.72rem;
-  font-weight: 700;
+  font-weight: var(--weight-bold);
 }
 
 .editorial-mini-stats strong {
   color: var(--primary);
   font-family: var(--font-display);
   font-size: 1.7rem;
-  font-weight: 500;
+  font-weight: var(--weight-medium);
 }
 
 .editorial-section {
@@ -283,7 +283,7 @@
   margin: 14px 0 13px;
   font-family: var(--font-display);
   font-size: clamp(2.35rem, 4.8vw, 4.7rem);
-  font-weight: 500;
+  font-weight: var(--weight-medium);
   line-height: 1;
   letter-spacing: -0.05em;
 }
@@ -293,7 +293,7 @@
 .editorial-career-copy > p {
   margin: 0;
   color: var(--muted);
-  font-weight: 600;
+  font-weight: var(--weight-semibold);
   line-height: 1.8;
 }
 
@@ -333,7 +333,7 @@
 .editorial-feature-top span {
   color: var(--muted);
   font-size: 0.72rem;
-  font-weight: 900;
+  font-weight: var(--weight-bold);
   letter-spacing: 0.12em;
 }
 
@@ -341,7 +341,7 @@
   margin: 72px 0 12px;
   font-family: var(--font-display);
   font-size: 1.45rem;
-  font-weight: 500;
+  font-weight: var(--weight-medium);
 }
 
 .editorial-feature-card p {
@@ -370,7 +370,7 @@
   gap: 11px;
   color: var(--muted);
   font-size: 0.92rem;
-  font-weight: 700;
+  font-weight: var(--weight-bold);
   line-height: 1.5;
 }
 
@@ -387,7 +387,7 @@
   gap: 7px;
   color: var(--primary);
   font-size: 0.9rem;
-  font-weight: 900;
+  font-weight: var(--weight-bold);
   text-decoration: none;
 }
 
@@ -427,7 +427,7 @@
   color: #fff;
   background: var(--primary);
   font-family: var(--font-display);
-  font-weight: 700;
+  font-weight: var(--weight-bold);
 }
 
 .editorial-candidate div {
@@ -444,7 +444,7 @@
   color: var(--success);
   background: var(--success-soft);
   font-size: 0.72rem;
-  font-weight: 900;
+  font-weight: var(--weight-bold);
 }
 
 .editorial-tags {
@@ -460,7 +460,7 @@
   color: var(--muted);
   background: var(--card);
   font-size: 0.73rem;
-  font-weight: 800;
+  font-weight: var(--weight-bold);
 }
 
 .editorial-ranking {
@@ -557,7 +557,7 @@
 .editorial-faq-card > span {
   color: var(--primary);
   font-size: 0.72rem;
-  font-weight: 900;
+  font-weight: var(--weight-bold);
   letter-spacing: 0.1em;
 }
 
@@ -565,7 +565,7 @@
   margin: 0 0 10px;
   font-family: var(--font-display);
   font-size: 1.24rem;
-  font-weight: 500;
+  font-weight: var(--weight-medium);
 }
 
 .editorial-faq-card p {
@@ -648,7 +648,7 @@
 .editorial-home .salon-showcase-placeholder {
   color: var(--primary);
   font-family: var(--font-display);
-  font-weight: 500;
+  font-weight: var(--weight-medium);
 }
 
 .editorial-home .salon-showcase-body {
@@ -658,7 +658,7 @@
 .editorial-home .salon-showcase-body h3 {
   font-family: var(--font-display);
   font-size: 1.4rem;
-  font-weight: 500;
+  font-weight: var(--weight-medium);
 }
 
 .editorial-home :is(.salon-location, .salon-time) {

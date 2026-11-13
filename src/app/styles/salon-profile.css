@@ -57,7 +57,7 @@
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.18);
   font-size: 4rem;
-  font-weight: 950;
+  font-weight: var(--weight-bold);
 }
 
 .salon-hero-overlay {
@@ -86,7 +86,7 @@
   background: rgba(43, 43, 43, 0.52);
   backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.22);
-  font-weight: 900;
+  font-weight: var(--weight-bold);
 }
 
 .salon-hero-content {
@@ -128,7 +128,7 @@
   gap: 8px;
   margin: 0;
   color: var(--muted);
-  font-weight: 800;
+  font-weight: var(--weight-bold);
   line-height: 1.5;
 }
 
@@ -164,7 +164,7 @@
 
 .salon-stat-card span {
   color: var(--muted);
-  font-weight: 800;
+  font-weight: var(--weight-bold);
   font-size: 0.86rem;
 }
 
@@ -201,7 +201,7 @@
   gap: 9px;
   margin: 12px 0;
   color: #4b5563;
-  font-weight: 700;
+  font-weight: var(--weight-bold);
   line-height: 1.5;
   word-break: break-word;
 }
@@ -227,7 +227,7 @@
   color: #ffffff;
   background: linear-gradient(135deg, var(--primary), var(--primary-dark));
   box-shadow: 0 14px 26px rgba(192, 132, 151, 0.24);
-  font-weight: 950;
+  font-weight: var(--weight-bold);
 }
 
 .owner-mini-profile strong {
@@ -271,7 +271,7 @@
   margin: 0;
   color: var(--muted);
   line-height: 1.7;
-  font-weight: 700;
+  font-weight: var(--weight-bold);
 }
 
 .salon-modern-gallery {
@@ -426,7 +426,7 @@
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.16);
   font-size: 4.5rem;
-  font-weight: 900;
+  font-weight: var(--weight-bold);
 }
 
 .salon-media-caption {
@@ -495,7 +495,7 @@
   gap: 8px;
   margin: 0;
   color: var(--muted);
-  font-weight: 800;
+  font-weight: var(--weight-bold);
   line-height: 1.45;
   margin-top: 6px;
 }
@@ -516,7 +516,7 @@
   align-items: center;
   gap: 5px;
   color: var(--primary-dark);
-  font-weight: 800;
+  font-weight: var(--weight-bold);
 }
 
 .salon-details-description {
@@ -565,7 +565,7 @@
 .salon-details-hero-meta span {
   color: var(--muted);
   font-size: 0.75rem;
-  font-weight: 800;
+  font-weight: var(--weight-bold);
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -691,7 +691,7 @@
   align-items: center;
   gap: 8px;
   color: var(--primary-dark);
-  font-weight: 800;
+  font-weight: var(--weight-bold);
 }
 
 .salon-about-contact svg {

@@ -56,7 +56,7 @@
 .team-owner-card p {
   margin: 0;
   color: var(--muted);
-  font-weight: 800;
+  font-weight: var(--weight-bold);
 }
 
 .team-employee-node {
@@ -95,7 +95,7 @@
 
 .team-employee-avatar span {
   color: var(--primary-dark);
-  font-weight: 900;
+  font-weight: var(--weight-bold);
 }
 
 .team-employee-node h4 {
@@ -107,7 +107,7 @@
   margin: 3px 0 0;
   color: var(--muted);
   font-size: 0.78rem;
-  font-weight: 700;
+  font-weight: var(--weight-bold);
 }
 
 .team-hover-card {
@@ -141,7 +141,7 @@
 .team-hover-card span {
   display: block;
   color: var(--primary-dark);
-  font-weight: 800;
+  font-weight: var(--weight-bold);
   margin-bottom: 8px;
 }
 
@@ -159,7 +159,7 @@
   padding: 6px 10px;
   border-radius: 999px;
   font-size: 0.72rem;
-  font-weight: 900;
+  font-weight: var(--weight-bold);
   text-transform: uppercase;
 }
 
@@ -317,7 +317,7 @@
   margin: 0;
   color: var(--muted);
   line-height: 1.7;
-  font-weight: 600;
+  font-weight: var(--weight-semibold);
 }
 
 .team-orbit-wrapper {
@@ -422,7 +422,7 @@
 .team-owner-card p {
   margin: 0;
   color: var(--muted);
-  font-weight: 900;
+  font-weight: var(--weight-bold);
 }
 
 .owner-premium-badge {
@@ -435,7 +435,7 @@
   color: var(--primary-dark);
   background: var(--secondary);
   font-size: 0.75rem;
-  font-weight: 950;
+  font-weight: var(--weight-bold);
 }
 
 .team-employee-node {
@@ -483,7 +483,7 @@
 
 .team-employee-avatar span {
   color: var(--primary-dark);
-  font-weight: 950;
+  font-weight: var(--weight-bold);
   font-size: 1.05rem;
 }
 
@@ -509,7 +509,7 @@
 .team-employee-node h4 {
   margin: 0;
   font-size: 0.92rem;
-  font-weight: 950;
+  font-weight: var(--weight-bold);
   color: var(--text);
 }
 
@@ -517,7 +517,7 @@
   margin: 4px 0 0;
   color: var(--muted);
   font-size: 0.78rem;
-  font-weight: 800;
+  font-weight: var(--weight-bold);
 }
 
 .team-hover-card {
@@ -591,13 +591,13 @@
   display: block;
   margin-bottom: 4px;
   color: var(--text);
-  font-weight: 950;
+  font-weight: var(--weight-bold);
 }
 
 .team-hover-card span {
   display: block;
   color: var(--primary-dark);
-  font-weight: 850;
+  font-weight: var(--weight-bold);
   font-size: 0.86rem;
 }
 
@@ -608,7 +608,7 @@
   color: var(--muted);
   margin-bottom: 8px;
   font-size: 0.82rem;
-  font-weight: 700;
+  font-weight: var(--weight-bold);
 }
 
 .employee-status-pill {
@@ -617,7 +617,7 @@
   padding: 7px 11px;
   border-radius: 999px;
   font-size: 0.72rem;
-  font-weight: 950;
+  font-weight: var(--weight-bold);
   text-transform: uppercase;
   font-style: normal;
 }

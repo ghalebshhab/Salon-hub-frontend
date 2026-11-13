@@ -60,7 +60,7 @@ html:has(.editorial-home) {
   margin-top: 30px;
   color: var(--muted);
   font-size: 0.72rem;
-  font-weight: 900;
+  font-weight: var(--weight-bold);
   letter-spacing: 0.12em;
   text-decoration: none;
   text-transform: uppercase;

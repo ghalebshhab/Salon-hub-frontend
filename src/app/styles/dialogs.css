@@ -78,7 +78,7 @@
   margin: 0;
   color: var(--muted);
   line-height: 1.7;
-  font-weight: 700;
+  font-weight: var(--weight-bold);
 }
 
 .confirm-dialog-actions {

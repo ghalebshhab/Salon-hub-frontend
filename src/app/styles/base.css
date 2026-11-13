@@ -257,7 +257,7 @@ body,
   place-items: center;
   background: rgba(255, 255, 255, 0.18);
   font-size: 4rem;
-  font-weight: 900;
+  font-weight: var(--weight-bold);
 }
 
 .profile-header-overlap {
@@ -349,7 +349,7 @@ body,
   display: grid;
   place-items: center;
   font-size: 1.3rem;
-  font-weight: 900;
+  font-weight: var(--weight-bold);
 }
 
 .employee-card h3 {
@@ -398,7 +398,7 @@ body,
   display: inline-flex;
   padding: 8px 12px;
   border-radius: 999px;
-  font-weight: 900;
+  font-weight: var(--weight-bold);
   font-size: 0.82rem;
 }
 
@@ -420,7 +420,7 @@ body,
   border-radius: 999px;
   padding: 5px 10px;
   font-size: 0.78rem;
-  font-weight: 800;
+  font-weight: var(--weight-bold);
 }
 
 .empty-state,
@@ -944,7 +944,7 @@ select {
 }
 
 .brand {
-  font-weight: 900;
+  font-weight: var(--weight-bold);
   font-size: 1.55rem;
   color: var(--primary);
 }
@@ -958,7 +958,7 @@ select {
 
 .nav-link {
   color: #4b5563;
-  font-weight: 700;
+  font-weight: var(--weight-bold);
   transition: 0.2s ease;
 }
 
@@ -971,7 +971,7 @@ select {
   border: 0;
   border-radius: 999px;
   padding: 12px 20px;
-  font-weight: 800;
+  font-weight: var(--weight-bold);
   cursor: pointer;
   transition: 0.2s ease;
   display: inline-flex;
@@ -1066,7 +1066,7 @@ select {
   padding: 0.35rem 0.7rem;
   border-radius: 999px;
   font-size: 0.85rem;
-  font-weight: 600;
+  font-weight: var(--weight-semibold);
 }
 
 .active-tag {
@@ -1101,7 +1101,7 @@ select {
 .form-group label {
   display: block;
   margin-bottom: 0.45rem;
-  font-weight: 700;
+  font-weight: var(--weight-bold);
   color: #222;
 }
 
@@ -1132,7 +1132,7 @@ select {
   align-items: center;
   gap: 0.6rem;
   margin: 1rem 0;
-  font-weight: 600;
+  font-weight: var(--weight-semibold);
 }
 
 .btn-danger {
@@ -1180,7 +1180,7 @@ select {
 .eyebrow {
   display: inline-flex;
   color: var(--primary);
-  font-weight: 900;
+  font-weight: var(--weight-bold);
   background: white;
   border: 1px solid var(--border);
   border-radius: 999px;
@@ -1234,7 +1234,7 @@ select {
 
 .hero-image-placeholder p {
   color: white;
-  font-weight: 900;
+  font-weight: var(--weight-bold);
 }
 
 .section {
@@ -1325,7 +1325,7 @@ select {
   margin: 0;
   text-align: center;
   font-size: 0.9rem;
-  font-weight: 700;
+  font-weight: var(--weight-bold);
 }
 
 @media (max-width: 640px) {
@@ -1376,7 +1376,7 @@ select {
 .form-group label {
   display: block;
   margin-bottom: 8px;
-  font-weight: 800;
+  font-weight: var(--weight-bold);
 }
 
 .form-group input,
@@ -1412,7 +1412,7 @@ select {
 
 .auth-switch a {
   color: var(--primary);
-  font-weight: 900;
+  font-weight: var(--weight-bold);
 }
 
 .dashboard-header {
@@ -1464,7 +1464,7 @@ select {
   display: inline-flex;
   padding: 8px 12px;
   border-radius: 999px;
-  font-weight: 900;
+  font-weight: var(--weight-bold);
   font-size: 0.82rem;
 }
 
@@ -1486,7 +1486,7 @@ select {
   border-radius: 999px;
   padding: 5px 10px;
   font-size: 0.78rem;
-  font-weight: 800;
+  font-weight: var(--weight-bold);
 }
 
 .profile-header {
@@ -1549,7 +1549,7 @@ select {
   display: grid;
   place-items: center;
   font-size: 1.3rem;
-  font-weight: 900;
+  font-weight: var(--weight-bold);
 }
 
 .employee-card h3 {
@@ -1623,7 +1623,7 @@ select {
   min-height: 240px;
   display: grid;
   place-items: center;
-  font-weight: 800;
+  font-weight: var(--weight-bold);
 }
 
 @media (max-width: 920px) {
@@ -1733,7 +1733,7 @@ select {
   display: grid;
   place-items: center;
   font-size: 4rem;
-  font-weight: 800;
+  font-weight: var(--weight-bold);
   color: #8a5a44;
 }
 
@@ -1745,7 +1745,7 @@ select {
   border-radius: 999px;
   color: white;
   font-size: 0.8rem;
-  font-weight: 800;
+  font-weight: var(--weight-bold);
   letter-spacing: 0.5px;
 }
 
@@ -1784,7 +1784,7 @@ select {
   justify-content: space-between;
   align-items: center;
   color: #8a5a44;
-  font-weight: 800;
+  font-weight: var(--weight-bold);
 }
 
 @media (max-width: 700px) {
@@ -1888,7 +1888,7 @@ select {
   border-radius: 12px;
   background: #f9fafb;
   border: 1px solid #e5e7eb;
-  font-weight: 600;
+  font-weight: var(--weight-semibold);
 }
 
 .booking-note {
@@ -1917,7 +1917,7 @@ select {
 
 .booking-total-box p {
   font-size: 22px;
-  font-weight: 800;
+  font-weight: var(--weight-bold);
 }
 
 .booking-total-box span {
@@ -1929,7 +1929,7 @@ select {
   align-items: center;
   gap: 10px;
   margin-top: 12px;
-  font-weight: 600;
+  font-weight: var(--weight-semibold);
 }
 
 .checkbox-row input {
@@ -1949,7 +1949,7 @@ select {
   background: #fef3c7;
   color: #92400e;
   font-size: 13px;
-  font-weight: 700;
+  font-weight: var(--weight-bold);
 }
 
 @media (max-width: 900px) {
@@ -2053,7 +2053,7 @@ select {
   align-items: center;
   gap: 8px;
   color: #374151;
-  font-weight: 700;
+  font-weight: var(--weight-bold);
   font-size: 14px;
 }
 
@@ -2139,7 +2139,7 @@ select {
   background: #f3f4f6;
   color: #111827;
   font-size: 13px;
-  font-weight: 700;
+  font-weight: var(--weight-bold);
 }
 
 .booking-submit-row {
@@ -2202,7 +2202,7 @@ select {
   border-radius: 999px;
   font: inherit;
   font-size: 0.85rem;
-  font-weight: 700;
+  font-weight: var(--weight-bold);
   cursor: pointer;
   transition:
     background-color 180ms ease,
@@ -2282,7 +2282,7 @@ select {
 
 .brand-logo-name {
   font-size: 1.45rem;
-  font-weight: 950;
+  font-weight: var(--weight-bold);
   line-height: 1;
   letter-spacing: -0.75px;
 }
@@ -2295,7 +2295,7 @@ select {
   margin-top: 5px;
   color: var(--muted);
   font-size: 0.58rem;
-  font-weight: 900;
+  font-weight: var(--weight-bold);
   letter-spacing: 1.25px;
   text-transform: uppercase;
 }
@@ -2333,7 +2333,7 @@ select {
   border-radius: 999px;
   text-decoration: none;
   color: #4b5563;
-  font-weight: 800;
+  font-weight: var(--weight-bold);
   font-size: 0.92rem;
   transition: 0.2s ease;
   white-space: nowrap;
@@ -2364,7 +2364,7 @@ select {
   border-radius: 999px;
   background: #ffffff;
   color: var(--text);
-  font-weight: 900;
+  font-weight: var(--weight-bold);
   cursor: pointer;
   box-shadow: 0 12px 30px rgba(43, 43, 43, 0.06);
   transition: 0.2s ease;
@@ -2415,7 +2415,7 @@ select {
   border-radius: 16px;
   color: #374151;
   text-decoration: none;
-  font-weight: 800;
+  font-weight: var(--weight-bold);
   transition: 0.2s ease;
 }
 
@@ -2455,7 +2455,7 @@ select {
   border-radius: 999px;
   border: none;
   text-decoration: none;
-  font-weight: 900;
+  font-weight: var(--weight-bold);
   cursor: pointer;
   transition: 0.2s ease;
   white-space: nowrap;
@@ -2716,7 +2716,7 @@ select {
 }
 
 .reject-input-group label {
-  font-weight: 900;
+  font-weight: var(--weight-bold);
   color: #374151;
 }
 

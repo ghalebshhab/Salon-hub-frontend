@@ -42,7 +42,7 @@
   color: #fff;
   background: #d94b75;
   font-size: 0.65rem;
-  font-weight: 800;
+  font-weight: var(--weight-bold);
   line-height: 1;
 }
 
@@ -93,7 +93,7 @@
   background: transparent;
   font: inherit;
   font-size: 0.78rem;
-  font-weight: 750;
+  font-weight: var(--weight-bold);
   cursor: pointer;
 }
 
@@ -228,7 +228,7 @@
   margin: 0 0 5px;
   color: var(--primary-dark);
   font-size: 0.7rem;
-  font-weight: 850;
+  font-weight: var(--weight-bold);
   letter-spacing: 0.11em;
 }
 

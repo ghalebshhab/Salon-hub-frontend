@@ -73,7 +73,7 @@
 .reviews-summary-card p {
   margin: 8px 0 0;
   color: var(--muted);
-  font-weight: 700;
+  font-weight: var(--weight-bold);
 }
 
 .reviews-grid {
@@ -244,7 +244,7 @@
 }
 
 .review-input-group label {
-  font-weight: 900;
+  font-weight: var(--weight-bold);
   color: #374151;
 }
 
@@ -335,7 +335,7 @@
 .employee-summary-card span {
   display: block;
   font-size: 1.2rem;
-  font-weight: 900;
+  font-weight: var(--weight-bold);
   color: var(--primary-dark);
 }
 

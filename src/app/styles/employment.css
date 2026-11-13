@@ -30,7 +30,7 @@
   max-width: 680px;
   margin: 0;
   color: var(--muted);
-  font-weight: 650;
+  font-weight: var(--weight-semibold);
   line-height: 1.7;
 }
 
@@ -60,7 +60,7 @@
 .employment-summary-grid span {
   color: var(--muted);
   font-size: 0.82rem;
-  font-weight: 800;
+  font-weight: var(--weight-bold);
 }
 
 .employment-summary-grid {
@@ -169,7 +169,7 @@
   color: var(--muted);
   background: var(--surface-elevated);
   font-size: 0.7rem;
-  font-weight: 900;
+  font-weight: var(--weight-bold);
   text-transform: uppercase;
 }
 
@@ -219,7 +219,7 @@
   margin-top: 18px;
   color: var(--muted);
   font-size: 0.82rem;
-  font-weight: 750;
+  font-weight: var(--weight-bold);
 }
 
 .employment-card-meta span {
@@ -277,7 +277,7 @@
   margin-top: 18px;
   color: var(--primary-dark);
   font-size: 0.88rem;
-  font-weight: 850;
+  font-weight: var(--weight-bold);
 }
 
 .employment-search {
@@ -323,7 +323,7 @@
   color: var(--primary-dark);
   background: var(--secondary);
   font-size: 0.72rem;
-  font-weight: 900;
+  font-weight: var(--weight-bold);
   text-align: center;
   white-space: nowrap;
 }
@@ -332,7 +332,7 @@
   margin: -9px 0 20px;
   color: var(--muted);
   font-size: 0.82rem;
-  font-weight: 700;
+  font-weight: var(--weight-bold);
 }
 
 .candidate-directory-heading {
@@ -377,7 +377,7 @@
   color: var(--primary-dark);
   background: var(--secondary);
   font-size: 0.74rem;
-  font-weight: 850;
+  font-weight: var(--weight-bold);
 }
 
 @media (max-width: 820px) {

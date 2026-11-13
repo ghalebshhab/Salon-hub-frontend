@@ -28,6 +28,8 @@ import {
 import OwnerDashboardPrototype from "./OwnerDashboardPrototype.jsx";
 import { prototypeRoles } from "./prototypeData.js";
 import usePrototypeWorkspace from "./usePrototypeWorkspace.js";
+// Loaded with this lazy route only, not in the global stylesheet.
+import "./prototype.css";
 
 const sectionIcons = {
   overview: LayoutDashboard,

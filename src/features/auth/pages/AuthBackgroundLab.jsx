@@ -1,6 +1,8 @@
 import { Check, Eye, EyeOff, Sparkles } from "lucide-react";
 import { useState } from "react";
 import AuthAnimatedBackground from "../components/AuthAnimatedBackground.jsx";
+// Loaded with this lazy route only, not in the global stylesheet.
+import "../styles/auth-background-lab.css";
 
 const backgrounds = [
   {

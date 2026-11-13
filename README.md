@@ -71,7 +71,7 @@ These boundaries apply single responsibility without adding inheritance or specu
 
 Page modules compose feature sections and connect them to feature hooks. They do not contain endpoint calls, large static content collections, or reusable dialogs. Components own one visible responsibility, while hooks coordinate state and side effects. Pure selectors and business decisions live in `model/`; editable display copy lives in `content/`; route and menu metadata stays close to the app layout that consumes it.
 
-The navigation illustrates dependency inversion in practice: `Navbar` composes the layout, `useNavigationMenus` owns menu state, the auth feature owns logout, and leaf components receive callbacks rather than importing session or API infrastructure. The booking management page follows the same pattern with a page orchestrator, a booking card, focused action dialogs, and a pure employee-eligibility selector.
+The navigation illustrates dependency inversion in practice: `AppLayout` composes `Navbar` and `SidebarNavigation`, `useNavigationState` owns menu state, the auth feature owns logout, and leaf components receive callbacks rather than importing session or API infrastructure. The booking management page follows the same pattern with a page orchestrator, a booking card, focused action dialogs, and a pure employee-eligibility selector.
 
 Prefer composition over configurable all-purpose components. When a page starts coordinating an unrelated workflow or a component gains its own independent state, extract that responsibility into the corresponding feature layer. Keep public props about user intent, such as `onSubmit` and `onClose`, instead of transport details.
 

@@ -1,4 +1,5 @@
 import useSalonServicesList from "../hooks/useSalonServicesList.js";
+import Button from "../../../shared/components/Button.jsx";
 
 import { CalendarDays } from "lucide-react";
 
@@ -33,13 +34,10 @@ function SalonServicesList({ salonId }) {
             <span>{service.durationMinutes} min</span>
           </div>
 
-          <button
-            className="btn btn-primary btn-small"
-            onClick={() => handleBookNow(service)}
-          >
+          <Button size="sm" onClick={() => handleBookNow(service)}>
             <CalendarDays size={16} />
             Book Now
-          </button>
+          </Button>
         </div>
       ))}
     </div>

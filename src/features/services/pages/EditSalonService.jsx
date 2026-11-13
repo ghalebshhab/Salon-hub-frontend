@@ -1,4 +1,5 @@
 import useEditSalonService from "../hooks/useEditSalonService.js";
+import Button from "../../../shared/components/Button.jsx";
 
 import { Link } from "react-router-dom";
 
@@ -30,9 +31,9 @@ function EditSalonService() {
           <p>Edit service information shown in your salon profile.</p>
         </div>
 
-        <Link className="btn btn-secondary" to="/owner/services">
+        <Button variant="secondary" to="/owner/services">
           Back to Services
-        </Link>
+        </Button>
       </div>
 
       <form className="form-card" onSubmit={handleSubmit}>
@@ -95,9 +96,9 @@ function EditSalonService() {
           Active service
         </label>
 
-        <button className="btn btn-primary" type="submit" disabled={submitting}>
+        <Button type="submit" disabled={submitting}>
           {submitting ? "Saving..." : "Save Changes"}
-        </button>
+        </Button>
       </form>
     </section>
   );

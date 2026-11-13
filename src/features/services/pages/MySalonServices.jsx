@@ -1,6 +1,5 @@
 import useMySalonServices from "../hooks/useMySalonServices.js";
-
-import { Link } from "react-router-dom";
+import Button from "../../../shared/components/Button.jsx";
 
 import { Edit, Trash2, Plus } from "lucide-react";
 
@@ -20,10 +19,10 @@ function MySalonServices() {
           <p>Add, update, or disable the services that your salon provides.</p>
         </div>
 
-        <Link className="btn btn-primary" to="/owner/create-service">
+        <Button to="/owner/create-service">
           <Plus size={18} />
           Add Service
-        </Link>
+        </Button>
       </div>
 
       {services.length === 0 ? (
@@ -31,9 +30,7 @@ function MySalonServices() {
           <h3>No services found</h3>
           <p>You have not added any salon services yet.</p>
 
-          <Link className="btn btn-primary" to="/owner/create-service">
-            Add First Service
-          </Link>
+          <Button to="/owner/create-service">Add First Service</Button>
         </div>
       ) : (
         <div className="services-grid">
@@ -55,22 +52,24 @@ function MySalonServices() {
               </div>
 
               <div className="service-actions">
-                <Link
-                  className="btn btn-secondary btn-small"
+                <Button
+                  variant="secondary"
+                  size="sm"
                   to={`/owner/services/${service.id}/edit`}
                   state={{ service }}
                 >
                   <Edit size={16} />
                   Edit
-                </Link>
+                </Button>
 
-                <button
-                  className="btn btn-danger btn-small"
+                <Button
+                  variant="danger"
+                  size="sm"
                   onClick={() => handleDelete(service.id)}
                 >
                   <Trash2 size={16} />
                   Disable
-                </button>
+                </Button>
               </div>
             </div>
           ))}

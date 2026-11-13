@@ -1,6 +1,5 @@
 import useCreateSalonService from "../hooks/useCreateSalonService.js";
-
-import { Link } from "react-router-dom";
+import Button from "../../../shared/components/Button.jsx";
 
 function CreateSalonService() {
   const { formData, submitting, handleChange, handleSubmit } =
@@ -15,9 +14,9 @@ function CreateSalonService() {
           <p>Create a service that customers can see in your salon profile.</p>
         </div>
 
-        <Link className="btn btn-secondary" to="/owner/services">
+        <Button variant="secondary" to="/owner/services">
           Back to Services
-        </Link>
+        </Button>
       </div>
 
       <form className="form-card" onSubmit={handleSubmit}>
@@ -70,9 +69,9 @@ function CreateSalonService() {
           </div>
         </div>
 
-        <button className="btn btn-primary" type="submit" disabled={submitting}>
+        <Button type="submit" disabled={submitting}>
           {submitting ? "Creating..." : "Create Service"}
-        </button>
+        </Button>
       </form>
     </section>
   );

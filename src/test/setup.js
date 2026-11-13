@@ -1,5 +1,10 @@
 import { afterEach } from "vitest";
 import { cleanup } from "@testing-library/react";
+
+// jsdom does not implement scrolling; route and community tests trigger it.
+if (typeof Element !== "undefined" && !Element.prototype.scrollIntoView) {
+  Element.prototype.scrollIntoView = function scrollIntoView() {};
+}
 afterEach(() => {
   cleanup();
   if (typeof localStorage !== "undefined") localStorage.clear();

@@ -98,7 +98,7 @@
 .auth-story h1,
 .auth-heading h2 {
   margin: 0;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--font-display);
   letter-spacing: -0.04em;
   font-weight: 500;
 }
@@ -136,7 +136,7 @@
   display: grid;
   place-items: center;
   color: var(--auth-plum);
-  font-family: Georgia, serif;
+  font-family: var(--font-display);
   font-size: 2rem;
   transform: rotate(-12deg);
   opacity: 0.8;

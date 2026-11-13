@@ -88,7 +88,6 @@
   padding-inline: 9px 2px;
   color: var(--primary-dark);
   border-color: color-mix(in srgb, var(--primary) 55%, var(--border));
-  outline: none;
 }
 
 .footer-links a svg {

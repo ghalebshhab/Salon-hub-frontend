@@ -33,7 +33,7 @@ html {
 }
 
 :where(a, button, input, textarea, select, [role="button"]):focus-visible {
-  outline: 3px solid color-mix(in srgb, var(--primary) 55%, transparent);
+  outline: 2px solid var(--focus-outline);
   outline-offset: 3px;
 }
 

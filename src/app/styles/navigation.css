@@ -339,7 +339,7 @@ body:has(.app-sidebar.is-collapsed) .footer {
 }
 .creative-navbar :is(button, a):focus-visible,
 .app-sidebar :is(button, a):focus-visible {
-  outline: 3px solid var(--focus-ring);
+  outline: 2px solid var(--focus-outline);
   outline-offset: 2px;
 }
 @media (max-width: 1180px) {
@@ -513,3 +513,4 @@ body:has(.app-sidebar.is-collapsed) .footer {
     display: none;
   }
 }
+

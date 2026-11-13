@@ -365,7 +365,6 @@
   border-color: var(--auth-plum);
   background: color-mix(in srgb, var(--auth-plum) 8%, var(--auth-elevated));
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--auth-plum) 14%, transparent);
-  outline: none;
 }
 .auth-form-row {
   display: grid;

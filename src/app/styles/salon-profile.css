@@ -482,9 +482,11 @@
   max-width: 680px;
   margin: 22px 0 12px;
   color: var(--text);
+  font-family: var(--font-display);
   font-size: clamp(3rem, 7vw, 6.4rem);
-  line-height: 0.92;
-  letter-spacing: -0.065em;
+  font-weight: var(--weight-semibold);
+  line-height: 0.98;
+  letter-spacing: -0.03em;
 }
 
 .salon-details-location {
@@ -594,8 +596,10 @@
 
 .salon-info-card h2 {
   margin: 10px 0 22px;
+  font-family: var(--font-display);
   font-size: 1.55rem;
-  letter-spacing: -0.04em;
+  font-weight: var(--weight-semibold);
+  letter-spacing: -0.02em;
 }
 
 .salon-info-list {
@@ -653,8 +657,10 @@
 
 .salon-details-page .salon-section-heading h2 {
   margin: 8px 0;
+  font-family: var(--font-display);
   font-size: clamp(1.7rem, 3vw, 2.5rem);
-  letter-spacing: -0.055em;
+  font-weight: var(--weight-semibold);
+  letter-spacing: -0.02em;
 }
 
 .salon-details-page .salon-section-heading p {

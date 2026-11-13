@@ -110,11 +110,14 @@ it.each(paths)(
           container.querySelector(".page-main h1, .page-main h2"),
         ).not.toBeNull();
       },
-      { timeout: 3000 },
+      // The first visit transforms the lazy route chunk; under a full parallel
+      // run that can exceed a few seconds for the large community feature.
+      { timeout: 8000 },
     );
     await waitFor(() => expect(container.querySelector(".loading")).toBeNull());
     expect(screen.queryByText("Something went wrong")).toBeNull();
   },
+  10000,
 );
 it("redirects protected routes to login and retains the destination", async () => {
   clearAuthData();

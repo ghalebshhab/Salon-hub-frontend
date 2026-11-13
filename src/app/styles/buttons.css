@@ -1,0 +1,68 @@
+/*
+ * Button system. Single source for .btn and its variants.
+ * Use the shared <Button> component (src/shared/components/Button.jsx)
+ * rather than composing these classes by hand.
+ */
+.btn {
+  display: inline-flex;
+  min-height: 46px;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 21px;
+  border: 0;
+  border-radius: 4px;
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  color: #ffffff;
+  background: var(--primary);
+  box-shadow: 0 12px 28px color-mix(in srgb, var(--primary) 24%, transparent);
+}
+
+.btn-primary:hover {
+  color: #ffffff;
+  background: var(--primary-dark);
+  box-shadow: 0 16px 34px color-mix(in srgb, var(--primary) 31%, transparent);
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  color: var(--primary);
+  border: 1px solid var(--border);
+  background: var(--card);
+}
+
+.btn-secondary:hover {
+  border-color: var(--primary);
+  background: var(--primary-soft);
+  transform: translateY(-1px);
+}
+
+.btn-danger {
+  color: white;
+  border: none;
+  background: #d93636;
+}
+
+.btn-danger:hover {
+  background: #b92d2d;
+}
+
+.btn-success {
+  color: white;
+  border: none;
+  background: var(--success);
+}
+
+.btn-success:hover {
+  background: #11813b;
+}

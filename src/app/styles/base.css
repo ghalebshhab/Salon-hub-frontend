@@ -1712,20 +1712,37 @@ select {
   position: absolute;
   top: 1rem;
   right: 1rem;
-  padding: 0.4rem 0.8rem;
-  border-radius: 999px;
-  color: white;
-  font-size: var(--text-sm);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0.35rem 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: var(--radius-full);
+  color: #fff;
+  background: rgba(33, 24, 32, 0.56);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  font-size: var(--text-2xs);
   font-weight: var(--weight-bold);
-  letter-spacing: 0.5px;
+  letter-spacing: 0.08em;
 }
 
-.salon-state-badge.open {
-  background: #16a34a;
+/* Status reads from the dot; the pill stays calm on any cover image. */
+.salon-state-badge::before {
+  width: 7px;
+  height: 7px;
+  border-radius: var(--radius-full);
+  content: "";
 }
 
-.salon-state-badge.closed {
-  background: #dc2626;
+.salon-state-badge.open::before {
+  background: #6fd39b;
+  box-shadow: 0 0 0 3px rgba(111, 211, 155, 0.22);
+}
+
+.salon-state-badge.closed::before {
+  background: #f2a7b3;
+  box-shadow: 0 0 0 3px rgba(242, 167, 179, 0.2);
 }
 
 .salon-showcase-body {

@@ -761,3 +761,14 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* Touch devices: standalone text CTAs get a 44px hit area without changing their look. */
+@media (pointer: coarse) {
+  .editorial-text-link,
+  .editorial-ghost-link,
+  .editorial-scroll-cue {
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
+  }
+}

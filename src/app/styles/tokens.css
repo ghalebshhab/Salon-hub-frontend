@@ -81,9 +81,13 @@
   --duration-base: 200ms;
   --duration-slow: 320ms;
   --ease-standard: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Text on filled brand/status surfaces (AA contrast in both themes) */
+  --on-primary: #ffffff;
 }
 
 :root[data-theme="dark"] {
+  --on-primary: #1d161c;
   --elevation-1: 0 1px 2px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.35);
   --elevation-2: 0 6px 16px rgba(0, 0, 0, 0.32);
   --elevation-3: 0 14px 36px rgba(0, 0, 0, 0.36);

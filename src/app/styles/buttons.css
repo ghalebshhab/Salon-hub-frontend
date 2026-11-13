@@ -30,13 +30,13 @@
 }
 
 .btn-primary {
-  color: #ffffff;
+  color: var(--on-primary);
   background: var(--primary);
   box-shadow: 0 12px 28px color-mix(in srgb, var(--primary) 24%, transparent);
 }
 
 .btn-primary:hover {
-  color: #ffffff;
+  color: var(--on-primary);
   background: var(--primary-dark);
   box-shadow: 0 16px 34px color-mix(in srgb, var(--primary) 31%, transparent);
   transform: translateY(-1px);
@@ -65,11 +65,11 @@
 }
 
 .btn-success {
-  color: white;
+  color: var(--on-primary);
   border: none;
   background: var(--success);
 }
 
 .btn-success:hover {
-  background: #11813b;
+  background: color-mix(in srgb, var(--success) 86%, #000);
 }

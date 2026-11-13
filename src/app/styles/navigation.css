@@ -478,14 +478,11 @@ body:has(.app-sidebar.is-collapsed) .footer {
     border-color var(--duration-base) var(--ease-standard);
 }
 .sidebar-guest-join {
-  color: #fff;
+  color: var(--on-primary);
   background: var(--primary);
 }
 .sidebar-guest-join:hover {
   background: var(--primary-dark);
-}
-:root[data-theme="dark"] .sidebar-guest-join {
-  color: #1d161c;
 }
 .sidebar-guest-login {
   border: 1px solid var(--border);

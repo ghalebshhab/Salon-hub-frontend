@@ -514,3 +514,24 @@ body:has(.app-sidebar.is-collapsed) .footer {
   }
 }
 
+/* Keyboard users can bypass the header and sidebar. */
+.skip-link {
+  position: fixed;
+  z-index: var(--z-toast);
+  top: var(--space-3);
+  left: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  color: var(--on-primary);
+  background: var(--primary);
+  box-shadow: var(--elevation-3);
+  font-weight: var(--weight-semibold);
+  transform: translateY(-160%);
+  transition: transform var(--duration-base) var(--ease-standard);
+}
+.skip-link:focus-visible {
+  transform: none;
+}
+.page-main:focus {
+  outline: none;
+}

@@ -27,11 +27,23 @@ export default function AppLayout() {
   return (
     <NotificationProvider key={token || "anonymous"} enabled={Boolean(token)}>
       <div className={shellClass}>
+        <a
+          className="skip-link"
+          href="#main-content"
+          onClick={(event) => {
+            // Move focus without a hash navigation, which the router would
+            // treat as a page change and show the transition overlay.
+            event.preventDefault();
+            document.getElementById("main-content")?.focus();
+          }}
+        >
+          Skip to main content
+        </a>
         <ScrollManager />
         {showAppBackground && <AppBackground />}
         <Navbar onOpenMobile={authLayout ? undefined : navigation.openMobile} />
         {!authLayout && <SidebarNavigation {...navigation} />}
-        <main className="page-main">
+        <main className="page-main" id="main-content" tabIndex={-1}>
           <Suspense fallback={<Loading />}>
             <div className="page-route-transition" key={location.pathname}>
               <Outlet />

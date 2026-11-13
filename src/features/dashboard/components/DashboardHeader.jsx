@@ -1,4 +1,10 @@
-import { ChevronDown, Eye, RefreshCw, Settings2 } from "lucide-react";
+import {
+  CalendarDays,
+  ChevronDown,
+  Eye,
+  RefreshCw,
+  Settings2,
+} from "lucide-react";
 import { Link } from "react-router-dom";
 
 export default function DashboardHeader({
@@ -7,12 +13,16 @@ export default function DashboardHeader({
   onRangeChange,
   onRefresh,
   refreshing,
+  workspaceActions = false,
 }) {
   const firstName = data.profile?.firstName || "Owner";
   const salonName = data.salon?.name || data.salon?.salonName || "My salon";
   const isOpen =
     String(data.salon?.state || data.salon?.openningStatus).toUpperCase() ===
     "OPEN";
+  const salonId = data.salon?.salonId ?? data.salon?.id;
+  const publicSalonPath =
+    workspaceActions && salonId != null ? `/salons/${salonId}` : null;
   return (
     <>
       <header className="owner-dashboard-header">
@@ -25,11 +35,23 @@ export default function DashboardHeader({
           </p>
         </div>
         <div className="owner-header-actions">
-          <button className="owner-select" type="button">
-            <span className="owner-live-dot" />
-            {salonName}
-            <ChevronDown size={15} />
-          </button>
+          {workspaceActions ? (
+            <Link
+              className="owner-select"
+              to="/owner/my-salon"
+              aria-label={`Open ${salonName} workspace`}
+            >
+              <span className="owner-live-dot" />
+              {salonName}
+              <ChevronDown size={15} />
+            </Link>
+          ) : (
+            <button className="owner-select" type="button">
+              <span className="owner-live-dot" />
+              {salonName}
+              <ChevronDown size={15} />
+            </button>
+          )}
           <select
             aria-label="Date range"
             value={range}
@@ -41,10 +63,17 @@ export default function DashboardHeader({
               ),
             )}
           </select>
-          <Link className="btn btn-primary" to="/owner/my-salon">
-            <Eye size={16} />
-            View salon
-          </Link>
+          {publicSalonPath ? (
+            <Link className="btn btn-primary" to={publicSalonPath}>
+              <Eye size={16} />
+              View public salon
+            </Link>
+          ) : (
+            <Link className="btn btn-primary" to="/owner/my-salon">
+              <Eye size={16} />
+              View salon
+            </Link>
+          )}
         </div>
       </header>
       <div className="owner-meta-row">
@@ -73,6 +102,16 @@ export default function DashboardHeader({
         >
           <Settings2 size={15} />
         </Link>
+        {workspaceActions && (
+          <Link
+            className="owner-icon-button"
+            title="Manage bookings"
+            aria-label="Manage bookings"
+            to="/owner/bookings"
+          >
+            <CalendarDays size={15} />
+          </Link>
+        )}
       </div>
     </>
   );

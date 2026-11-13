@@ -66,7 +66,7 @@
 
 .reviews-summary-card h2 {
   margin: 4px 0 8px;
-  font-size: 2.4rem;
+  font-size: var(--text-4xl);
   color: var(--primary-dark);
 }
 
@@ -116,13 +116,13 @@
 
 .review-user h3 {
   margin: 0 0 4px;
-  font-size: 1rem;
+  font-size: var(--text-base);
 }
 
 .review-user p {
   margin: 0;
   color: var(--muted);
-  font-size: 0.85rem;
+  font-size: var(--text-md);
 }
 
 .review-comment {
@@ -199,7 +199,7 @@
 
 .review-modal h2 {
   margin: 8px 0 8px;
-  font-size: 2rem;
+  font-size: var(--text-3xl);
   letter-spacing: -0.8px;
   color: var(--text);
 }
@@ -228,12 +228,12 @@
   display: block;
   margin-bottom: 6px;
   color: var(--text);
-  font-size: 0.88rem;
+  font-size: var(--text-md);
 }
 
 .review-booking-summary span {
   color: var(--muted);
-  font-size: 0.92rem;
+  font-size: var(--text-md);
 }
 
 .review-input-group {
@@ -334,7 +334,7 @@
 
 .employee-summary-card span {
   display: block;
-  font-size: 1.2rem;
+  font-size: var(--text-xl);
   font-weight: var(--weight-bold);
   color: var(--primary-dark);
 }
@@ -342,5 +342,5 @@
 .employee-summary-card p {
   margin: 4px 0 0;
   color: var(--muted);
-  font-size: 0.88rem;
+  font-size: var(--text-md);
 }

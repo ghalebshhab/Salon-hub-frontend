@@ -10,7 +10,7 @@
 }
 .google-map-search > span {
   color: var(--muted);
-  font-size: 0.82rem;
+  font-size: var(--text-sm);
   font-weight: var(--weight-bold);
 }
 .google-map-search gmp-place-autocomplete {
@@ -55,10 +55,10 @@
 }
 .google-map-status strong {
   color: var(--text);
-  font-size: 0.84rem;
+  font-size: var(--text-sm);
 }
 .google-map-status span {
-  font-size: 0.76rem;
+  font-size: var(--text-xs);
   line-height: 1.45;
 }
 .google-map-status small {

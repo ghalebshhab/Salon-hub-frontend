@@ -256,7 +256,7 @@ body,
   display: grid;
   place-items: center;
   background: rgba(255, 255, 255, 0.18);
-  font-size: 4rem;
+  font-size: var(--text-6xl);
   font-weight: var(--weight-bold);
 }
 
@@ -280,7 +280,7 @@ body,
 
 .profile-header h1 {
   margin: 0 0 10px;
-  font-size: 3rem;
+  font-size: var(--text-5xl);
   color: var(--primary);
 }
 
@@ -348,7 +348,7 @@ body,
   color: var(--primary-dark);
   display: grid;
   place-items: center;
-  font-size: 1.3rem;
+  font-size: var(--text-xl);
   font-weight: var(--weight-bold);
 }
 
@@ -399,7 +399,7 @@ body,
   padding: 8px 12px;
   border-radius: 999px;
   font-weight: var(--weight-bold);
-  font-size: 0.82rem;
+  font-size: var(--text-sm);
 }
 
 .badge-open {
@@ -419,7 +419,7 @@ body,
   color: #374151;
   border-radius: 999px;
   padding: 5px 10px;
-  font-size: 0.78rem;
+  font-size: var(--text-xs);
   font-weight: var(--weight-bold);
 }
 
@@ -459,7 +459,7 @@ body,
 }
 
 .loading .brand-logo-name {
-  font-size: 1.8rem;
+  font-size: var(--text-3xl);
 }
 
 @media (max-width: 1000px) {
@@ -493,7 +493,7 @@ body,
   }
 
   .profile-header h1 {
-    font-size: 2.2rem;
+    font-size: var(--text-3xl);
   }
 }
 .barber-animation {
@@ -945,7 +945,7 @@ select {
 
 .brand {
   font-weight: var(--weight-bold);
-  font-size: 1.55rem;
+  font-size: var(--text-2xl);
   color: var(--primary);
 }
 
@@ -1044,7 +1044,7 @@ select {
 
 .service-card h3 {
   margin: 0 0 0.5rem;
-  font-size: 1.15rem;
+  font-size: var(--text-lg);
   color: #222;
 }
 
@@ -1065,7 +1065,7 @@ select {
   color: #333;
   padding: 0.35rem 0.7rem;
   border-radius: 999px;
-  font-size: 0.85rem;
+  font-size: var(--text-md);
   font-weight: var(--weight-semibold);
 }
 
@@ -1111,7 +1111,7 @@ select {
   border: 1px solid #dddddd;
   border-radius: 12px;
   padding: 0.85rem 1rem;
-  font-size: 1rem;
+  font-size: var(--text-base);
   outline: none;
   background: #ffffff;
 }
@@ -1196,7 +1196,7 @@ select {
 }
 
 .hero p {
-  font-size: 1.18rem;
+  font-size: var(--text-lg);
   color: #4b5563;
   line-height: 1.75;
   max-width: 620px;
@@ -1253,7 +1253,7 @@ select {
 
 .section-title h1,
 .section-title h2 {
-  font-size: 2.2rem;
+  font-size: var(--text-3xl);
   margin: 0 0 8px;
 }
 
@@ -1324,7 +1324,7 @@ select {
 .footer p {
   margin: 0;
   text-align: center;
-  font-size: 0.9rem;
+  font-size: var(--text-md);
   font-weight: var(--weight-bold);
 }
 
@@ -1365,7 +1365,7 @@ select {
 .auth-card h1,
 .form-card h1 {
   margin: 0 0 8px;
-  font-size: 2.2rem;
+  font-size: var(--text-3xl);
   color: var(--primary);
 }
 
@@ -1387,7 +1387,7 @@ select {
   background: #fffdfb;
   border-radius: 14px;
   padding: 13px 15px;
-  font-size: 1rem;
+  font-size: var(--text-base);
   color: var(--text);
   outline: none;
 }
@@ -1421,7 +1421,7 @@ select {
 
 .dashboard-header h1 {
   margin: 0 0 8px;
-  font-size: 2.6rem;
+  font-size: var(--text-4xl);
 }
 
 .hiring-grid {
@@ -1455,7 +1455,7 @@ select {
   justify-content: space-between;
   gap: 12px;
   color: var(--muted);
-  font-size: 0.92rem;
+  font-size: var(--text-md);
   margin: 18px 0;
   flex-wrap: wrap;
 }
@@ -1465,7 +1465,7 @@ select {
   padding: 8px 12px;
   border-radius: 999px;
   font-weight: var(--weight-bold);
-  font-size: 0.82rem;
+  font-size: var(--text-sm);
 }
 
 .badge-open {
@@ -1485,7 +1485,7 @@ select {
   color: #374151;
   border-radius: 999px;
   padding: 5px 10px;
-  font-size: 0.78rem;
+  font-size: var(--text-xs);
   font-weight: var(--weight-bold);
 }
 
@@ -1503,7 +1503,7 @@ select {
 
 .profile-header h1 {
   margin: 0 0 10px;
-  font-size: 3rem;
+  font-size: var(--text-5xl);
   color: var(--primary);
 }
 
@@ -1548,7 +1548,7 @@ select {
   color: var(--primary-dark);
   display: grid;
   place-items: center;
-  font-size: 1.3rem;
+  font-size: var(--text-xl);
   font-weight: var(--weight-bold);
 }
 
@@ -1677,7 +1677,7 @@ select {
   }
 
   .profile-header h1 {
-    font-size: 2.2rem;
+    font-size: var(--text-3xl);
   }
 
   .auth-card,
@@ -1732,7 +1732,7 @@ select {
   height: 100%;
   display: grid;
   place-items: center;
-  font-size: 4rem;
+  font-size: var(--text-6xl);
   font-weight: var(--weight-bold);
   color: #8a5a44;
 }
@@ -1744,7 +1744,7 @@ select {
   padding: 0.4rem 0.8rem;
   border-radius: 999px;
   color: white;
-  font-size: 0.8rem;
+  font-size: var(--text-sm);
   font-weight: var(--weight-bold);
   letter-spacing: 0.5px;
 }
@@ -1763,7 +1763,7 @@ select {
 
 .salon-showcase-body h3 {
   margin: 0 0 0.7rem;
-  font-size: 1.25rem;
+  font-size: var(--text-xl);
 }
 
 .salon-location,
@@ -1773,7 +1773,7 @@ select {
   gap: 0.45rem;
   color: #666;
   margin: 0.45rem 0;
-  font-size: 0.95rem;
+  font-size: var(--text-base);
 }
 
 .salon-showcase-footer {
@@ -2201,7 +2201,7 @@ select {
   border: 1px solid var(--border);
   border-radius: 999px;
   font: inherit;
-  font-size: 0.85rem;
+  font-size: var(--text-md);
   font-weight: var(--weight-bold);
   cursor: pointer;
   transition:
@@ -2281,7 +2281,7 @@ select {
 }
 
 .brand-logo-name {
-  font-size: 1.45rem;
+  font-size: var(--text-2xl);
   font-weight: var(--weight-bold);
   line-height: 1;
   letter-spacing: -0.75px;
@@ -2294,7 +2294,7 @@ select {
 .brand-logo-tagline {
   margin-top: 5px;
   color: var(--muted);
-  font-size: 0.58rem;
+  font-size: var(--text-2xs);
   font-weight: var(--weight-bold);
   letter-spacing: 1.25px;
   text-transform: uppercase;
@@ -2334,7 +2334,7 @@ select {
   text-decoration: none;
   color: #4b5563;
   font-weight: var(--weight-bold);
-  font-size: 0.92rem;
+  font-size: var(--text-md);
   transition: 0.2s ease;
   white-space: nowrap;
 }
@@ -2570,7 +2570,7 @@ select {
 
 @media (max-width: 520px) {
   .brand-logo-name {
-    font-size: 1.22rem;
+    font-size: var(--text-xl);
   }
 
   .brand-logo-mark {
@@ -2671,7 +2671,7 @@ select {
 
 .reject-modal h2 {
   margin: 8px 0 8px;
-  font-size: 2rem;
+  font-size: var(--text-3xl);
   letter-spacing: -0.8px;
   color: var(--text);
 }
@@ -2700,12 +2700,12 @@ select {
   display: block;
   margin-bottom: 6px;
   color: var(--text);
-  font-size: 0.88rem;
+  font-size: var(--text-md);
 }
 
 .reject-booking-summary span {
   color: var(--muted);
-  font-size: 0.92rem;
+  font-size: var(--text-md);
 }
 
 .reject-input-group {
@@ -2859,7 +2859,7 @@ select {
   min-height: 40px;
   border-radius: 4px;
   color: var(--muted);
-  font-size: 0.86rem;
+  font-size: var(--text-md);
 }
 
 .creative-nav-link:hover {

@@ -35,7 +35,7 @@
 .community-card-kicker {
   display: block;
   color: var(--primary);
-  font-size: 0.72rem;
+  font-size: var(--text-xs);
   font-weight: var(--weight-bold);
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -88,7 +88,7 @@
 .community-hero-stat span,
 .community-hero-stat small {
   color: var(--muted);
-  font-size: 0.78rem;
+  font-size: var(--text-xs);
   font-weight: var(--weight-bold);
 }
 
@@ -103,7 +103,7 @@
   grid-column: 2;
   color: var(--text);
   font-family: var(--font-display);
-  font-size: 2.4rem;
+  font-size: var(--text-4xl);
   font-weight: var(--weight-regular);
   line-height: 1;
 }
@@ -152,7 +152,7 @@
 
 .community-feed-heading > span:last-child {
   color: var(--muted);
-  font-size: 0.78rem;
+  font-size: var(--text-xs);
   font-weight: var(--weight-bold);
 }
 
@@ -178,7 +178,7 @@
 .community-panel > h2,
 .community-panel > h3 {
   margin: 0 0 16px;
-  font-size: 1rem;
+  font-size: var(--text-base);
   letter-spacing: -0.02em;
 }
 
@@ -226,7 +226,7 @@
 
 .identity-card p {
   color: var(--muted);
-  font-size: 0.86rem;
+  font-size: var(--text-md);
 }
 
 .identity-card > div:last-child {
@@ -242,13 +242,13 @@
   display: grid;
   gap: 2px;
   color: var(--text);
-  font-size: 1rem;
+  font-size: var(--text-base);
   font-weight: var(--weight-bold);
 }
 
 .identity-card > div:last-child small {
   color: var(--muted);
-  font-size: 0.7rem;
+  font-size: var(--text-2xs);
   font-weight: var(--weight-semibold);
 }
 
@@ -262,7 +262,7 @@
   border-radius: 13px;
   color: var(--primary-dark);
   background: var(--primary-soft);
-  font-size: 0.75rem;
+  font-size: var(--text-xs);
   font-weight: var(--weight-bold);
 }
 
@@ -271,7 +271,7 @@
   height: 58px;
   flex-basis: 58px;
   border-radius: 17px;
-  font-size: 0.92rem;
+  font-size: var(--text-md);
 }
 
 .community-avatar.profile {
@@ -279,7 +279,7 @@
   height: 92px;
   flex-basis: 92px;
   border-radius: 26px;
-  font-size: 1.35rem;
+  font-size: var(--text-xl);
 }
 
 .community-avatar.small {
@@ -287,7 +287,7 @@
   height: 32px;
   flex-basis: 32px;
   border-radius: 10px;
-  font-size: 0.64rem;
+  font-size: var(--text-2xs);
 }
 
 .community-avatar.is-salon {
@@ -322,13 +322,13 @@
   gap: 4px;
   align-items: center;
   color: var(--muted);
-  font-size: 0.72rem;
+  font-size: var(--text-xs);
   font-weight: var(--weight-semibold);
 }
 
 .community-composer-heading > span {
   color: var(--muted);
-  font-size: 0.75rem;
+  font-size: var(--text-xs);
 }
 
 .community-composer-top {
@@ -398,7 +398,7 @@
   color: var(--muted);
   background: transparent;
   font: inherit;
-  font-size: 0.82rem;
+  font-size: var(--text-sm);
   font-weight: var(--weight-bold);
   cursor: pointer;
 }
@@ -442,7 +442,7 @@
 }
 
 .community-post-header strong {
-  font-size: 0.92rem;
+  font-size: var(--text-md);
 }
 
 .community-profile-link {
@@ -475,7 +475,7 @@
 
 .community-profile-link-copy small {
   color: var(--muted);
-  font-size: 0.72rem;
+  font-size: var(--text-xs);
 }
 
 .community-post-header > .community-profile-link {
@@ -493,7 +493,7 @@
   border-radius: 999px;
   color: var(--primary);
   background: var(--primary-soft);
-  font-size: 0.62rem;
+  font-size: var(--text-2xs);
   font-weight: var(--weight-bold);
   letter-spacing: 0.03em;
   text-transform: uppercase;
@@ -502,7 +502,7 @@
 .community-post-header span {
   overflow: hidden;
   color: var(--muted);
-  font-size: 0.76rem;
+  font-size: var(--text-xs);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -568,7 +568,7 @@
   min-height: 38px;
   margin: 0 22px;
   color: var(--muted);
-  font-size: 0.76rem;
+  font-size: var(--text-xs);
 }
 
 .community-like-summary {
@@ -625,7 +625,7 @@
   color: var(--muted);
   background: transparent;
   font: inherit;
-  font-size: 0.82rem;
+  font-size: var(--text-sm);
   font-weight: var(--weight-bold);
   cursor: pointer;
 }
@@ -701,12 +701,12 @@
 }
 
 .community-comment strong {
-  font-size: 0.79rem;
+  font-size: var(--text-sm);
 }
 
 .community-comment p {
   margin: 3px 0 0;
-  font-size: 0.86rem;
+  font-size: var(--text-md);
   line-height: 1.5;
 }
 
@@ -714,7 +714,7 @@
 .community-muted {
   margin: 0;
   color: var(--muted);
-  font-size: 0.82rem;
+  font-size: var(--text-sm);
 }
 
 .community-comment-form,
@@ -785,7 +785,7 @@
 .community-person-row strong,
 .community-salon-row strong {
   overflow: hidden;
-  font-size: 0.82rem;
+  font-size: var(--text-sm);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -794,7 +794,7 @@
 .community-salon-row span,
 .community-relationship {
   color: var(--muted);
-  font-size: 0.72rem;
+  font-size: var(--text-xs);
 }
 
 .community-person-row button,
@@ -806,7 +806,7 @@
   color: var(--primary);
   background: var(--card);
   font: inherit;
-  font-size: 0.72rem;
+  font-size: var(--text-xs);
   font-weight: var(--weight-bold);
   cursor: pointer;
 }
@@ -916,14 +916,14 @@
 }
 
 .community-likes-dialog h2 {
-  font-size: 1.05rem;
+  font-size: var(--text-base);
   letter-spacing: -0.02em;
 }
 
 .community-likes-dialog header p {
   margin-top: 4px;
   color: var(--muted);
-  font-size: 0.76rem;
+  font-size: var(--text-xs);
 }
 
 .community-likes-mark {
@@ -972,7 +972,7 @@
   border-radius: 9px;
   color: var(--primary);
   background: var(--primary-soft);
-  font-size: 0.7rem;
+  font-size: var(--text-2xs);
   font-weight: var(--weight-bold);
 }
 
@@ -991,7 +991,7 @@
   border-radius: 10px;
   color: var(--danger);
   background: var(--danger-soft);
-  font-size: 0.82rem;
+  font-size: var(--text-sm);
 }
 
 /* Feed-first community layout */
@@ -1031,12 +1031,12 @@
 }
 
 .community-page .community-hero-copy p {
-  font-size: 0.95rem;
+  font-size: var(--text-base);
   line-height: 1.5;
 }
 
 .community-page .community-eyebrow {
-  font-size: 0.68rem;
+  font-size: var(--text-2xs);
 }
 
 .community-page .community-hero-actions {
@@ -1061,14 +1061,14 @@
   gap: 6px;
   align-items: center;
   color: var(--muted);
-  font-size: 0.78rem;
+  font-size: var(--text-xs);
   font-weight: var(--weight-bold);
   white-space: nowrap;
 }
 
 .community-page .community-hero-stats strong {
   color: var(--text);
-  font-size: 0.95rem;
+  font-size: var(--text-base);
   font-variant-numeric: tabular-nums;
 }
 
@@ -1084,7 +1084,7 @@
   border-radius: 12px;
   color: var(--text);
   background: var(--card);
-  font-size: 0.82rem;
+  font-size: var(--text-sm);
   font-weight: var(--weight-bold);
   text-decoration: none;
   transition: background 160ms ease, border-color 160ms ease, transform 160ms ease;
@@ -1152,7 +1152,7 @@
 
 .community-page .community-feed-heading small {
   color: var(--muted);
-  font-size: 0.76rem;
+  font-size: var(--text-xs);
   white-space: nowrap;
 }
 
@@ -1189,7 +1189,7 @@
   overflow: hidden;
   margin: 0;
   color: var(--text);
-  font-size: 0.95rem;
+  font-size: var(--text-base);
   font-weight: var(--weight-bold);
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -1199,7 +1199,7 @@
   overflow: hidden;
   margin: 3px 0 0;
   color: var(--muted);
-  font-size: 0.76rem;
+  font-size: var(--text-xs);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -1220,13 +1220,13 @@
 
 .community-page .community-profile-stats dt {
   color: var(--muted);
-  font-size: 0.68rem;
+  font-size: var(--text-2xs);
 }
 
 .community-page .community-profile-stats dd {
   margin: 0;
   color: var(--text);
-  font-size: 1rem;
+  font-size: var(--text-base);
   font-weight: var(--weight-bold);
   font-variant-numeric: tabular-nums;
 }
@@ -1242,7 +1242,7 @@
   border-radius: var(--community-radius);
   color: var(--danger);
   background: color-mix(in srgb, var(--danger-soft) 70%, var(--card));
-  font-size: 0.88rem;
+  font-size: var(--text-md);
 }
 
 .community-page .community-feed-error button,
@@ -1258,7 +1258,7 @@
   color: var(--text);
   background: var(--card);
   font: inherit;
-  font-size: 0.8rem;
+  font-size: var(--text-sm);
   font-weight: var(--weight-bold);
   cursor: pointer;
 }
@@ -1414,7 +1414,7 @@
     border-radius: 9px;
     color: var(--muted);
     background: var(--surface-elevated);
-    font-size: 0.76rem;
+    font-size: var(--text-xs);
     font-weight: var(--weight-bold);
     text-decoration: none;
   }
@@ -1445,7 +1445,7 @@
 
   .community-page .community-hero-copy p {
     max-width: 34ch;
-    font-size: 0.88rem;
+    font-size: var(--text-md);
   }
 
   .community-page .community-hero-actions {
@@ -1461,7 +1461,7 @@
   .community-page .community-hero-create {
     min-height: 40px;
     padding-inline: 11px;
-    font-size: 0.76rem;
+    font-size: var(--text-xs);
   }
 
   .community-page .community-left-rail {
@@ -1485,7 +1485,7 @@
   }
 
   .community-page .community-feed-heading h2 {
-    font-size: 1.2rem;
+    font-size: var(--text-xl);
   }
 }
 
@@ -1535,7 +1535,7 @@
   align-items: center;
   margin-bottom: 18px;
   color: var(--muted);
-  font-size: 0.82rem;
+  font-size: var(--text-sm);
   font-weight: var(--weight-bold);
   text-decoration: none;
 }
@@ -1604,7 +1604,7 @@
 
 .community-public-profile-title p {
   color: var(--muted);
-  font-size: 0.86rem;
+  font-size: var(--text-md);
 }
 
 .community-relationship-pill {
@@ -1615,7 +1615,7 @@
   border-radius: 999px;
   color: var(--primary);
   background: var(--primary-soft);
-  font-size: 0.75rem;
+  font-size: var(--text-xs);
   font-weight: var(--weight-bold);
 }
 
@@ -1635,7 +1635,7 @@
   color: var(--muted);
   background: transparent;
   font: inherit;
-  font-size: 0.7rem;
+  font-size: var(--text-2xs);
   font-weight: var(--weight-bold);
   cursor: pointer;
 }
@@ -1694,7 +1694,7 @@
 
 .report-dialog header p {
   color: var(--primary);
-  font-size: 0.66rem;
+  font-size: var(--text-2xs);
   font-weight: var(--weight-bold);
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -1702,7 +1702,7 @@
 
 .report-dialog header h2 {
   margin-top: 2px;
-  font-size: 1.1rem;
+  font-size: var(--text-lg);
 }
 
 .report-dialog header button {
@@ -1721,7 +1721,7 @@
   margin: 0;
   padding: 18px 22px 4px;
   color: var(--muted);
-  font-size: 0.8rem;
+  font-size: var(--text-sm);
   line-height: 1.55;
 }
 
@@ -1738,7 +1738,7 @@
 .report-details-label {
   margin-bottom: 9px;
   color: var(--text);
-  font-size: 0.76rem;
+  font-size: var(--text-xs);
   font-weight: var(--weight-bold);
 }
 
@@ -1751,7 +1751,7 @@
   border: 1px solid var(--border);
   border-radius: 10px;
   color: var(--muted);
-  font-size: 0.75rem;
+  font-size: var(--text-xs);
   cursor: pointer;
 }
 
@@ -1810,7 +1810,7 @@
 
 .community-profile-about h2 {
   margin: 8px 0 12px;
-  font-size: 1.45rem;
+  font-size: var(--text-2xl);
   letter-spacing: -0.035em;
 }
 
@@ -1843,12 +1843,12 @@
 }
 
 .community-profile-facts strong {
-  font-size: 0.84rem;
+  font-size: var(--text-sm);
 }
 
 .community-profile-facts small {
   color: var(--muted);
-  font-size: 0.68rem;
+  font-size: var(--text-2xs);
 }
 
 .community-portfolio-link {
@@ -1857,7 +1857,7 @@
   align-items: center;
   margin-top: 22px;
   color: var(--primary);
-  font-size: 0.82rem;
+  font-size: var(--text-sm);
   font-weight: var(--weight-bold);
 }
 
@@ -1890,7 +1890,7 @@
 .community-profile-details > a small,
 .community-profile-details p {
   color: var(--muted);
-  font-size: 0.75rem;
+  font-size: var(--text-xs);
 }
 
 .community-profile-details h3 {
@@ -1898,7 +1898,7 @@
   gap: 6px;
   align-items: center;
   margin: 0 0 10px;
-  font-size: 0.86rem;
+  font-size: var(--text-md);
 }
 
 .community-profile-details p {
@@ -1917,7 +1917,7 @@
   border-radius: 999px;
   color: var(--primary);
   background: var(--primary-soft);
-  font-size: 0.72rem;
+  font-size: var(--text-xs);
   font-weight: var(--weight-bold);
 }
 
@@ -2150,7 +2150,7 @@
   max-width: 660px;
   margin: 0;
   color: var(--muted);
-  font-size: 1rem;
+  font-size: var(--text-base);
   line-height: 1.65;
 }
 
@@ -2173,7 +2173,7 @@
   gap: 8px 18px;
   margin-top: 14px;
   color: var(--muted);
-  font-size: 0.88rem;
+  font-size: var(--text-md);
 }
 
 .community-page .community-hero-summary strong {
@@ -2211,7 +2211,7 @@
   display: block;
   margin-bottom: 5px;
   color: var(--primary);
-  font-size: 0.72rem;
+  font-size: var(--text-xs);
   font-weight: var(--weight-bold);
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -2225,7 +2225,7 @@
   gap: 8px;
   margin: 0;
   color: var(--text);
-  font-size: 1.05rem;
+  font-size: var(--text-base);
   line-height: 1.35;
 }
 
@@ -2237,7 +2237,7 @@
 .community-page .community-discovery-heading p {
   margin: 5px 0 0;
   color: var(--muted);
-  font-size: 0.9rem;
+  font-size: var(--text-md);
   line-height: 1.5;
 }
 
@@ -2247,7 +2247,7 @@
   border: 1px solid var(--border);
   border-radius: 999px;
   color: var(--muted);
-  font-size: 0.8rem;
+  font-size: var(--text-sm);
   font-weight: var(--weight-semibold);
 }
 
@@ -2281,7 +2281,7 @@
   color: var(--text);
   background: transparent;
   font: inherit;
-  font-size: 0.98rem;
+  font-size: var(--text-base);
 }
 
 .community-page .community-search input:focus-visible {
@@ -2326,7 +2326,7 @@
 .community-page .community-discovery-caption {
   margin: 0 0 9px;
   color: var(--muted);
-  font-size: 0.79rem;
+  font-size: var(--text-sm);
   font-weight: var(--weight-semibold);
 }
 
@@ -2337,7 +2337,7 @@
   border-radius: 10px;
   color: var(--muted);
   background: var(--bg);
-  font-size: 0.9rem;
+  font-size: var(--text-md);
   line-height: 1.5;
 }
 
@@ -2364,7 +2364,7 @@
   color: var(--primary-dark);
   background: var(--card);
   font: inherit;
-  font-size: 0.86rem;
+  font-size: var(--text-md);
   font-weight: var(--weight-bold);
   cursor: pointer;
 }
@@ -2415,7 +2415,7 @@
   border-radius: 8px;
   color: var(--muted);
   background: var(--bg);
-  font-size: 0.78rem;
+  font-size: var(--text-xs);
   font-weight: var(--weight-semibold);
   white-space: nowrap;
 }
@@ -2438,7 +2438,7 @@
   color: var(--text);
   background: var(--card);
   font: inherit;
-  font-size: 0.8rem;
+  font-size: var(--text-sm);
   font-weight: var(--weight-bold);
   white-space: nowrap;
   cursor: pointer;
@@ -2504,7 +2504,7 @@
   border-radius: 999px;
   color: var(--muted);
   background: var(--bg);
-  font-size: 0.82rem;
+  font-size: var(--text-sm);
   font-weight: var(--weight-bold);
 }
 
@@ -2551,7 +2551,7 @@
   min-width: 0;
   min-height: 40px;
   color: var(--text);
-  font-size: 0.89rem;
+  font-size: var(--text-md);
   font-weight: var(--weight-semibold);
 }
 
@@ -2575,7 +2575,7 @@
   align-items: flex-start;
   gap: 9px;
   color: var(--muted);
-  font-size: 0.88rem;
+  font-size: var(--text-md);
   line-height: 1.55;
 }
 
@@ -2594,7 +2594,7 @@
   gap: 6px;
   min-height: 44px;
   color: var(--primary-dark);
-  font-size: 0.86rem;
+  font-size: var(--text-md);
   font-weight: var(--weight-bold);
 }
 
@@ -2612,7 +2612,7 @@
 .community-page .community-feed-heading h2 {
   margin: 0;
   color: var(--text);
-  font-size: 1.32rem;
+  font-size: var(--text-xl);
   line-height: 1.35;
 }
 
@@ -2638,7 +2638,7 @@
   gap: 12px;
   margin-bottom: 12px;
   color: var(--muted);
-  font-size: 0.78rem;
+  font-size: var(--text-xs);
 }
 
 .community-page .community-composer-heading > div {
@@ -2649,7 +2649,7 @@
 
 .community-page .community-composer-heading strong {
   color: var(--text);
-  font-size: 0.96rem;
+  font-size: var(--text-base);
 }
 
 .community-page .community-composer-audience {
@@ -2720,7 +2720,7 @@
   color: var(--muted);
   background: var(--card);
   font: inherit;
-  font-size: 0.82rem;
+  font-size: var(--text-sm);
   font-weight: var(--weight-semibold);
   cursor: pointer;
 }
@@ -2749,7 +2749,7 @@
   padding: 0 16px;
   border-radius: 9px;
   font: inherit;
-  font-size: 0.86rem;
+  font-size: var(--text-md);
   font-weight: var(--weight-bold);
 }
 
@@ -2795,7 +2795,7 @@
 .community-page .community-composer-error {
   margin: 10px 0 0 44px;
   color: var(--danger);
-  font-size: 0.86rem;
+  font-size: var(--text-md);
 }
 
 .community-page .community-feed-error {
@@ -2946,7 +2946,7 @@
 
   .community-page .community-discovery-heading p {
     max-width: 32ch;
-    font-size: 0.86rem;
+    font-size: var(--text-md);
   }
 
   .community-page .community-mobile-nav {
@@ -2967,7 +2967,7 @@
     border-radius: 9px;
     color: var(--text);
     background: var(--card);
-    font-size: 0.82rem;
+    font-size: var(--text-sm);
     font-weight: var(--weight-bold);
   }
 
@@ -3018,7 +3018,7 @@
 
   .community-page .community-discovery-count {
     padding: 5px 8px;
-    font-size: 0.74rem;
+    font-size: var(--text-xs);
   }
 
   .community-page .community-people-grid {
@@ -3083,7 +3083,7 @@
   .community-page .community-composer-tools label {
     flex: 1 1 auto;
     padding: 0 8px;
-    font-size: 0.76rem;
+    font-size: var(--text-xs);
   }
 }
 
@@ -3133,7 +3133,7 @@
   padding: 0;
   border: 0;
   color: var(--muted);
-  font-size: 0.82rem;
+  font-size: var(--text-sm);
 }
 
 .community-page .community-hero-stats span {
@@ -3144,7 +3144,7 @@
 
 .community-page .community-hero-stats strong {
   color: var(--text);
-  font-size: 0.88rem;
+  font-size: var(--text-md);
   font-variant-numeric: tabular-nums;
 }
 
@@ -3160,7 +3160,7 @@
 .community-page .community-network-loading {
   margin: 0;
   color: var(--muted);
-  font-size: 0.82rem;
+  font-size: var(--text-sm);
 }
 
 .community-page .community-media-input[hidden] {
@@ -3210,7 +3210,7 @@
   }
 
   .community-page .community-discovery-heading h2 {
-    font-size: 1rem;
+    font-size: var(--text-base);
   }
 }
 
@@ -3284,7 +3284,7 @@
   align-items: center;
   margin-bottom: 12px;
   color: var(--primary);
-  font-size: 0.72rem;
+  font-size: var(--text-xs);
   font-weight: var(--weight-bold);
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -3310,7 +3310,7 @@
   max-width: 620px;
   margin: 18px 0 0;
   color: var(--muted);
-  font-size: 0.98rem;
+  font-size: var(--text-base);
   line-height: 1.65;
 }
 
@@ -3347,7 +3347,7 @@
 
 .community-page .community-overview-stats strong {
   color: var(--text);
-  font-size: 1.02rem;
+  font-size: var(--text-base);
   font-variant-numeric: tabular-nums;
   line-height: 1.1;
 }
@@ -3355,7 +3355,7 @@
 .community-page .community-overview-stats small {
   overflow: hidden;
   color: var(--muted);
-  font-size: 0.67rem;
+  font-size: var(--text-2xs);
   font-weight: var(--weight-semibold);
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -3384,7 +3384,7 @@
   border-radius: 11px;
   color: var(--text);
   background: var(--card);
-  font-size: 0.84rem;
+  font-size: var(--text-sm);
   font-weight: var(--weight-bold);
   transition:
     transform 180ms ease,
@@ -3460,7 +3460,7 @@
 .community-page .community-feed-heading p {
   margin: 7px 0 0;
   color: var(--muted);
-  font-size: 0.88rem;
+  font-size: var(--text-md);
   line-height: 1.5;
 }
 
@@ -3471,7 +3471,7 @@
   border-radius: 999px;
   color: var(--muted);
   background: var(--card);
-  font-size: 0.76rem;
+  font-size: var(--text-xs);
   font-weight: var(--weight-bold);
 }
 
@@ -3531,7 +3531,7 @@
   display: block;
   margin-bottom: 2px;
   color: var(--primary);
-  font-size: 0.66rem;
+  font-size: var(--text-2xs);
   font-weight: var(--weight-bold);
   letter-spacing: 0.11em;
   text-transform: uppercase;
@@ -3540,7 +3540,7 @@
 .community-page .community-discovery-heading h2 {
   margin: 0;
   color: var(--text);
-  font-size: 1rem;
+  font-size: var(--text-base);
   letter-spacing: -0.02em;
   line-height: 1.25;
 }
@@ -3552,7 +3552,7 @@
   border-radius: 999px;
   color: var(--muted);
   background: var(--bg);
-  font-size: 0.7rem;
+  font-size: var(--text-2xs);
   font-weight: var(--weight-bold);
 }
 
@@ -3589,7 +3589,7 @@
   color: var(--text);
   background: transparent;
   font: inherit;
-  font-size: 0.87rem;
+  font-size: var(--text-md);
 }
 
 .community-page .community-discovery-results {
@@ -3603,7 +3603,7 @@
 .community-page .community-discovery-caption {
   margin: 0 0 8px;
   color: var(--muted);
-  font-size: 0.72rem;
+  font-size: var(--text-xs);
   font-weight: var(--weight-bold);
 }
 
@@ -3661,7 +3661,7 @@
   min-height: 36px;
   padding: 0 10px;
   border-radius: 9px;
-  font-size: 0.75rem;
+  font-size: var(--text-xs);
 }
 
 .community-page .community-person-row > .community-friend-button {
@@ -3704,7 +3704,7 @@
   overflow: hidden;
   margin: 0;
   color: var(--text);
-  font-size: 0.98rem;
+  font-size: var(--text-base);
   letter-spacing: -0.02em;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -3714,7 +3714,7 @@
   overflow: hidden;
   margin: 3px 0 0;
   color: var(--muted);
-  font-size: 0.78rem;
+  font-size: var(--text-xs);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -3740,14 +3740,14 @@
 
 .community-page .community-profile-stats dt {
   color: var(--muted);
-  font-size: 0.72rem;
+  font-size: var(--text-xs);
   font-weight: var(--weight-semibold);
 }
 
 .community-page .community-profile-stats dd {
   margin: 0;
   color: var(--text);
-  font-size: 0.9rem;
+  font-size: var(--text-md);
   font-weight: var(--weight-bold);
 }
 
@@ -3763,7 +3763,7 @@
 .community-page .community-following-panel h2 {
   margin: 0;
   color: var(--text);
-  font-size: 0.94rem;
+  font-size: var(--text-base);
   letter-spacing: -0.02em;
 }
 
@@ -3817,7 +3817,7 @@
 }
 
 .community-page .community-composer-heading strong {
-  font-size: 1rem;
+  font-size: var(--text-base);
 }
 
 .community-page .community-composer textarea {
@@ -3965,7 +3965,7 @@
     border-radius: 999px;
     color: var(--text);
     background: var(--card);
-    font-size: 0.78rem;
+    font-size: var(--text-xs);
     font-weight: var(--weight-bold);
   }
 
@@ -4031,7 +4031,7 @@
   }
 
   .community-page .community-overview-stats small {
-    font-size: 0.62rem;
+    font-size: var(--text-2xs);
   }
 
   .community-page .community-composer-top > .community-avatar {
@@ -4075,7 +4075,7 @@
   gap: 7px;
   margin-bottom: 14px;
   color: var(--muted);
-  font-size: 0.82rem;
+  font-size: var(--text-sm);
   font-weight: var(--weight-bold);
 }
 
@@ -4156,7 +4156,7 @@
   margin-top: -52px;
   border: 5px solid var(--card);
   box-shadow: 0 12px 28px rgba(38, 26, 35, 0.22);
-  font-size: 1.75rem;
+  font-size: var(--text-2xl);
 }
 
 .community-profile-title-block {
@@ -4181,7 +4181,7 @@
   border-radius: 999px;
   color: var(--primary);
   background: var(--primary-soft);
-  font-size: 0.69rem;
+  font-size: var(--text-2xs);
   font-weight: var(--weight-bold);
 }
 
@@ -4203,7 +4203,7 @@
 .community-profile-title-block > p {
   margin: 5px 0 0;
   color: var(--muted);
-  font-size: 0.86rem;
+  font-size: var(--text-md);
 }
 
 .community-profile-salon-inline {
@@ -4213,7 +4213,7 @@
   gap: 7px;
   margin-top: 9px;
   color: var(--text);
-  font-size: 0.79rem;
+  font-size: var(--text-sm);
   font-weight: var(--weight-bold);
 }
 
@@ -4253,7 +4253,7 @@
   border: 1px solid var(--border);
   border-radius: 11px;
   font: inherit;
-  font-size: 0.79rem;
+  font-size: var(--text-sm);
   font-weight: var(--weight-bold);
 }
 
@@ -4306,7 +4306,7 @@
   color: var(--muted);
   background: transparent;
   font: inherit;
-  font-size: 0.7rem;
+  font-size: var(--text-2xs);
   font-weight: var(--weight-bold);
   cursor: pointer;
 }
@@ -4333,7 +4333,7 @@
 
 .community-profile-community-stats dt {
   color: var(--muted);
-  font-size: 0.72rem;
+  font-size: var(--text-xs);
   font-weight: var(--weight-bold);
 }
 
@@ -4341,7 +4341,7 @@
   order: -1;
   margin: 0;
   color: var(--text);
-  font-size: 1rem;
+  font-size: var(--text-base);
   font-weight: var(--weight-bold);
   font-variant-numeric: tabular-nums;
 }
@@ -4372,7 +4372,7 @@
 .community-profile-page .community-card-kicker {
   display: block;
   color: var(--primary);
-  font-size: 0.67rem;
+  font-size: var(--text-2xs);
   font-weight: var(--weight-bold);
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -4380,7 +4380,7 @@
 
 .community-profile-introduction > h2 {
   margin: 7px 0 10px;
-  font-size: 1.55rem;
+  font-size: var(--text-2xl);
   letter-spacing: -0.04em;
 }
 
@@ -4388,7 +4388,7 @@
   max-width: 65ch;
   margin: 0;
   color: var(--muted);
-  font-size: 0.93rem;
+  font-size: var(--text-md);
   line-height: 1.7;
 }
 
@@ -4419,14 +4419,14 @@
 
 .community-profile-highlights strong {
   overflow: hidden;
-  font-size: 0.78rem;
+  font-size: var(--text-xs);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .community-profile-highlights small {
   color: var(--muted);
-  font-size: 0.65rem;
+  font-size: var(--text-2xs);
 }
 
 .community-profile-posts {
@@ -4444,7 +4444,7 @@
 
 .community-profile-section-heading h2 {
   margin: 5px 0 0;
-  font-size: 1.55rem;
+  font-size: var(--text-2xl);
   letter-spacing: -0.04em;
 }
 
@@ -4458,7 +4458,7 @@
   border-radius: 999px;
   color: var(--muted);
   background: var(--card);
-  font-size: 0.75rem;
+  font-size: var(--text-xs);
   font-weight: var(--weight-bold);
 }
 
@@ -4506,12 +4506,12 @@
 
 .community-profile-post-state h3 {
   color: var(--text);
-  font-size: 1rem;
+  font-size: var(--text-base);
 }
 
 .community-profile-post-state p {
   max-width: 42ch;
-  font-size: 0.83rem;
+  font-size: var(--text-sm);
   line-height: 1.55;
 }
 
@@ -4533,7 +4533,7 @@
   color: var(--text);
   background: var(--card);
   font: inherit;
-  font-size: 0.79rem;
+  font-size: var(--text-sm);
   font-weight: var(--weight-bold);
   cursor: pointer;
 }
@@ -4583,7 +4583,7 @@
 .community-profile-inline-error {
   margin: 0;
   color: var(--danger);
-  font-size: 0.78rem;
+  font-size: var(--text-xs);
   text-align: center;
 }
 
@@ -4631,14 +4631,14 @@
 
 .community-profile-detail-card h2 {
   margin: 4px 0 5px;
-  font-size: 0.95rem;
+  font-size: var(--text-base);
 }
 
 .community-profile-detail-card p,
 .community-profile-network-note p {
   margin: 0;
   color: var(--muted);
-  font-size: 0.78rem;
+  font-size: var(--text-xs);
   line-height: 1.55;
 }
 
@@ -4648,7 +4648,7 @@
 
 .community-profile-page .community-skill-list span {
   padding: 6px 8px;
-  font-size: 0.66rem;
+  font-size: var(--text-2xs);
 }
 
 .community-profile-salon-card {
@@ -4670,12 +4670,12 @@
 
 .community-profile-salon-card small {
   color: var(--muted);
-  font-size: 0.66rem;
+  font-size: var(--text-2xs);
 }
 
 .community-profile-salon-card strong {
   overflow: hidden;
-  font-size: 0.86rem;
+  font-size: var(--text-md);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -4686,7 +4686,7 @@
   gap: 4px;
   margin-top: 4px;
   color: var(--primary);
-  font-size: 0.68rem;
+  font-size: var(--text-2xs);
   font-style: normal;
   font-weight: var(--weight-bold);
 }
@@ -4698,7 +4698,7 @@
 .community-profile-portfolio-card strong {
   min-width: 0;
   flex: 1 1 auto;
-  font-size: 0.78rem;
+  font-size: var(--text-xs);
 }
 
 .community-profile-portfolio-card > svg {
@@ -4764,7 +4764,7 @@
     width: 88px;
     height: 88px;
     margin-top: -42px;
-    font-size: 1.35rem;
+    font-size: var(--text-xl);
   }
 
   .community-profile-title-block {
@@ -4772,7 +4772,7 @@
   }
 
   .community-profile-title-block h1 {
-    font-size: 2rem;
+    font-size: var(--text-3xl);
   }
 
   .community-profile-hero-actions {
@@ -4799,7 +4799,7 @@
   }
 
   .community-profile-community-stats dt {
-    font-size: 0.64rem;
+    font-size: var(--text-2xs);
   }
 
   .community-profile-highlights {

@@ -70,7 +70,7 @@
 .confirm-dialog h2 {
   margin: 0 0 10px;
   color: var(--text);
-  font-size: 1.7rem;
+  font-size: var(--text-2xl);
   letter-spacing: -0.5px;
 }
 

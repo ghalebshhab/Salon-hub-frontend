@@ -41,7 +41,7 @@
   border-radius: 999px;
   color: #fff;
   background: #d94b75;
-  font-size: 0.65rem;
+  font-size: var(--text-2xs);
   font-weight: var(--weight-bold);
   line-height: 1;
 }
@@ -72,13 +72,13 @@
 
 .notification-popover-header h2 {
   margin: 0 0 4px;
-  font-size: 1rem;
+  font-size: var(--text-base);
 }
 
 .notification-popover-header span,
 .notification-item-copy time {
   color: var(--muted);
-  font-size: 0.76rem;
+  font-size: var(--text-xs);
 }
 
 .notification-mark-all,
@@ -92,7 +92,7 @@
   color: var(--primary-dark);
   background: transparent;
   font: inherit;
-  font-size: 0.78rem;
+  font-size: var(--text-xs);
   font-weight: var(--weight-bold);
   cursor: pointer;
 }
@@ -152,14 +152,14 @@
 }
 
 .notification-item-copy strong {
-  font-size: 0.86rem;
+  font-size: var(--text-md);
 }
 
 .notification-item-copy > span {
   display: -webkit-box;
   overflow: hidden;
   color: var(--muted);
-  font-size: 0.8rem;
+  font-size: var(--text-sm);
   line-height: 1.45;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
@@ -169,7 +169,7 @@
   margin: 0;
   padding: 24px 20px;
   color: var(--muted);
-  font-size: 0.88rem;
+  font-size: var(--text-md);
   text-align: center;
 }
 
@@ -183,7 +183,7 @@
   min-height: 47px;
   border-top: 1px solid var(--border);
   color: var(--primary-dark);
-  font-size: 0.84rem;
+  font-size: var(--text-sm);
 }
 
 .notification-view-all:hover,
@@ -227,7 +227,7 @@
 .notifications-eyebrow {
   margin: 0 0 5px;
   color: var(--primary-dark);
-  font-size: 0.7rem;
+  font-size: var(--text-2xs);
   font-weight: var(--weight-bold);
   letter-spacing: 0.11em;
 }
@@ -282,7 +282,7 @@
   flex: 1;
   gap: 6px;
   color: var(--muted);
-  font-size: 0.9rem;
+  font-size: var(--text-md);
   line-height: 1.5;
 }
 
@@ -295,13 +295,13 @@
 }
 
 .notifications-page-item-heading strong {
-  font-size: 0.98rem;
+  font-size: var(--text-base);
 }
 
 .notifications-page-item-heading time,
 .notifications-page-salon {
   color: var(--muted);
-  font-size: 0.78rem;
+  font-size: var(--text-xs);
 }
 
 .notifications-page-arrow {
@@ -331,7 +331,7 @@
 
 .notifications-page-empty h2 {
   color: var(--text);
-  font-size: 1.15rem;
+  font-size: var(--text-lg);
 }
 
 .notifications-page-error {

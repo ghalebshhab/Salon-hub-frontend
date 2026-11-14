@@ -1,5 +1,6 @@
 :root {
-  --motion-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  /* Aliases of the token scale in tokens.css. */
+  --motion-ease: var(--ease-standard);
   --motion-fast: 180ms;
 }
 
@@ -35,6 +36,23 @@ html {
 :where(a, button, input, textarea, select, [role="button"]):focus-visible {
   outline: 2px solid var(--focus-outline);
   outline-offset: 3px;
+}
+
+/*
+ * Form fields that remove the outline still need a clear focus state:
+ * a brand border and a soft ring, the same in every form.
+ */
+:is(
+    .form-group,
+    .booking-input-group,
+    .reject-input-group,
+    .review-input-group,
+    .owner-editor-fields
+  )
+  :is(input, textarea, select):focus-visible {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px
+    color-mix(in srgb, var(--focus-outline) 26%, transparent);
 }
 
 .page-route-transition {

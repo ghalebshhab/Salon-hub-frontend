@@ -1,9 +1,30 @@
 import { ArrowUpRight, Heart, MapPin } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import useAuth from "../../shared/auth/useAuth.js";
+import { isWorkspaceRoute } from "./footerRoutes.js";
 
 function Footer() {
   const { loggedIn, isOwner } = useAuth();
+  const { pathname } = useLocation();
+
+  // Work screens get a quiet one-line footer; public pages get the full one.
+  if (isWorkspaceRoute(pathname)) {
+    return (
+      <footer className="footer footer-slim">
+        <div className="container footer-slim-inner">
+          <span>© {new Date().getFullYear()} SalonHub</span>
+          <span className="footer-location">
+            <MapPin size={14} aria-hidden="true" /> Built for Jordan
+          </span>
+          <nav className="footer-slim-links" aria-label="Footer navigation">
+            <Link to="/">Home</Link>
+            <Link to="/community">Community</Link>
+            <Link to="/hiring-posts">Careers</Link>
+          </nav>
+        </div>
+      </footer>
+    );
+  }
 
   return (
     <footer className="footer">

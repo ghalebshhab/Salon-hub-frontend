@@ -54,7 +54,12 @@ export function getNavigationSections({
       label: "My activity",
       items: [
         { label: "My bookings", to: "/my-bookings", icon: CalendarCheck },
-        { label: "Notifications", to: "/notifications", icon: Bell },
+        {
+          label: "Notifications",
+          to: "/notifications",
+          icon: Bell,
+          badge: "unreadNotifications",
+        },
       ],
     },
     {
@@ -86,7 +91,12 @@ export function getNavigationSections({
       items: [
         { label: "Dashboard", to: "/owner/dashboard", icon: LayoutDashboard },
         { label: "My salon", to: "/owner/my-salon", icon: Store, end: true },
-        { label: "Booking requests", to: "/owner/bookings", icon: Inbox },
+        {
+          label: "Booking requests",
+          to: "/owner/bookings",
+          icon: Inbox,
+          badge: "pendingBookings",
+        },
         { label: "Services", to: "/owner/services", icon: Scissors },
         {
           label: "Team & schedules",

@@ -11,6 +11,8 @@ import { NavLink } from "react-router-dom";
 import useLogout from "../../features/auth/hooks/useLogout.js";
 import useAuth from "../../shared/auth/useAuth.js";
 import BrandLogo from "../../shared/components/BrandLogo.jsx";
+import usePendingBookingCount from "../../features/bookings/hooks/usePendingBookingCount.js";
+import { useNotifications } from "../../features/notifications/context/NotificationContext.js";
 import { getNavigationSections } from "./navigationConfig.js";
 import NavigationTooltip from "./NavigationTooltip.jsx";
 import SidebarCreateMenu from "./SidebarCreateMenu.jsx";
@@ -22,6 +24,11 @@ export default function SidebarNavigation({
   toggleCollapsed,
 }) {
   const { loggedIn, isOwner, role, user } = useAuth();
+  const { unreadCount } = useNotifications();
+  const badgeCounts = {
+    unreadNotifications: unreadCount,
+    pendingBookings: usePendingBookingCount(loggedIn && isOwner),
+  };
   const asideRef = useRef(null);
   const closeButtonRef = useRef(null);
 
@@ -154,20 +161,28 @@ export default function SidebarNavigation({
                   />
                 )}
               </div>
-              {section.items.map(({ label, to, icon: Icon, end }) => (
-                <NavigationTooltip key={to} label={label}>
-                  <NavLink
-                    to={to}
-                    end={end}
-                    className="sidebar-link"
-                    onClick={closeMobile}
-                    aria-label={label}
-                  >
-                    <Icon />
-                    <span className="sidebar-link-label">{label}</span>
-                  </NavLink>
-                </NavigationTooltip>
-              ))}
+              {section.items.map(({ label, to, icon: Icon, end, badge }) => {
+                const count = badge ? Number(badgeCounts[badge]) || 0 : 0;
+                return (
+                  <NavigationTooltip key={to} label={label}>
+                    <NavLink
+                      to={to}
+                      end={end}
+                      className="sidebar-link"
+                      onClick={closeMobile}
+                      aria-label={count > 0 ? `${label}, ${count} new` : label}
+                    >
+                      <Icon />
+                      <span className="sidebar-link-label">{label}</span>
+                      {count > 0 && (
+                        <span className="sidebar-badge" aria-hidden="true">
+                          {count > 99 ? "99+" : count}
+                        </span>
+                      )}
+                    </NavLink>
+                  </NavigationTooltip>
+                );
+              })}
             </section>
           ))}
         </nav>

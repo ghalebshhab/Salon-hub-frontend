@@ -812,3 +812,37 @@ body:has(.creative-navbar.is-scrolled) .app-sidebar {
     display: none;
   }
 }
+
+/* Live counts on sidebar links (unread notifications, pending requests). */
+.sidebar-badge {
+  display: inline-grid;
+  min-width: 22px;
+  height: 20px;
+  margin-left: auto;
+  padding: 0 6px;
+  place-items: center;
+  border-radius: var(--radius-full);
+  color: var(--on-primary);
+  background: var(--primary);
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-bold);
+  line-height: 1;
+}
+.app-sidebar.is-collapsed .sidebar-badge {
+  position: absolute;
+  top: 6px;
+  right: 10px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  box-shadow: 0 0 0 2px var(--card);
+}
+@media (max-width: 1180px) {
+  .app-sidebar.is-collapsed .sidebar-badge {
+    position: static;
+    min-width: 22px;
+    height: 20px;
+    padding: 0 6px;
+    box-shadow: none;
+  }
+}

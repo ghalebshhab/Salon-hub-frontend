@@ -544,3 +544,112 @@ body:has(.app-sidebar.is-collapsed) .footer {
 .page-main:focus {
   outline: none;
 }
+
+/* Section heading row with the owner "New" menu. */
+.sidebar-section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  margin-bottom: 3px;
+}
+.sidebar-section-head h2 {
+  margin-bottom: 0;
+}
+.sidebar-create {
+  display: contents;
+}
+.sidebar-create-toggle {
+  display: inline-flex;
+  min-height: 28px;
+  align-items: center;
+  gap: 4px;
+  margin-right: 4px;
+  padding: 0 8px 0 6px;
+  border: 1px solid color-mix(in srgb, var(--primary) 26%, var(--border));
+  border-radius: var(--radius-full);
+  color: var(--primary);
+  background: var(--card);
+  font: inherit;
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  cursor: pointer;
+  transition:
+    background-color var(--duration-base) var(--ease-standard),
+    border-color var(--duration-base) var(--ease-standard);
+}
+.sidebar-create-toggle:hover,
+.sidebar-create.is-open .sidebar-create-toggle {
+  border-color: var(--primary);
+  background: var(--primary-soft);
+}
+.sidebar-create-toggle svg {
+  width: 14px;
+  height: 14px;
+}
+.sidebar-create-chevron {
+  transition: transform var(--duration-base) var(--ease-standard);
+}
+.sidebar-create.is-open .sidebar-create-chevron {
+  transform: rotate(180deg);
+}
+.sidebar-create-list {
+  display: grid;
+  order: 1;
+  gap: 2px;
+  margin: 2px 0 8px;
+  padding: 6px;
+  border: 1px dashed color-mix(in srgb, var(--primary) 30%, var(--border));
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--primary-soft) 55%, transparent);
+}
+.sidebar-create-item {
+  display: flex;
+  min-height: 38px;
+  align-items: center;
+  gap: 10px;
+  padding: 0 10px;
+  border-radius: 8px;
+  color: var(--text);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+}
+.sidebar-create-item:hover {
+  color: var(--primary);
+  background: var(--card);
+}
+.sidebar-create-item svg {
+  width: 16px;
+  height: 16px;
+  color: var(--primary);
+}
+.app-sidebar.is-collapsed .sidebar-create {
+  display: none;
+}
+
+/* Calmer link weight; the active page gets a gold accent bar. */
+.sidebar-link {
+  font-weight: var(--weight-medium);
+}
+.sidebar-link.active {
+  font-weight: var(--weight-semibold);
+}
+.sidebar-link.active::before {
+  background: var(--accent);
+}
+
+@media (max-width: 1180px) {
+  .app-sidebar.is-collapsed .sidebar-create {
+    display: contents;
+  }
+  /* Collapsing only applies to the desktop sidebar, not the phone drawer. */
+  .sidebar-collapse-button {
+    display: none;
+  }
+}
+.sidebar-section-head {
+  flex-wrap: wrap;
+}
+.sidebar-create-list {
+  flex-basis: 100%;
+}

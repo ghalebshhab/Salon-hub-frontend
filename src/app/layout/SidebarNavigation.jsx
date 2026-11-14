@@ -1,4 +1,11 @@
-import { LogIn, LogOut, PanelLeftClose, PanelLeftOpen, X } from "lucide-react";
+import {
+  LogIn,
+  LogOut,
+  PanelLeftClose,
+  PanelLeftOpen,
+  ShieldCheck,
+  X,
+} from "lucide-react";
 import { useEffect, useRef } from "react";
 import { NavLink } from "react-router-dom";
 import useLogout from "../../features/auth/hooks/useLogout.js";
@@ -6,6 +13,7 @@ import useAuth from "../../shared/auth/useAuth.js";
 import BrandLogo from "../../shared/components/BrandLogo.jsx";
 import { getNavigationSections } from "./navigationConfig.js";
 import NavigationTooltip from "./NavigationTooltip.jsx";
+import SidebarCreateMenu from "./SidebarCreateMenu.jsx";
 
 export default function SidebarNavigation({
   collapsed,
@@ -137,7 +145,15 @@ export default function SidebarNavigation({
         <nav className="sidebar-nav">
           {sections.map((section) => (
             <section className="sidebar-section" key={section.label}>
-              <h2>{section.label}</h2>
+              <div className="sidebar-section-head">
+                <h2>{section.label}</h2>
+                {section.actions && (
+                  <SidebarCreateMenu
+                    actions={section.actions}
+                    onNavigate={closeMobile}
+                  />
+                )}
+              </div>
               {section.items.map(({ label, to, icon: Icon, end }) => (
                 <NavigationTooltip key={to} label={label}>
                   <NavLink
@@ -156,6 +172,19 @@ export default function SidebarNavigation({
           ))}
         </nav>
         <div className="sidebar-footer">
+          {loggedIn && (
+            <NavigationTooltip label="Account security">
+              <NavLink
+                to="/account/security"
+                className="sidebar-link"
+                onClick={closeMobile}
+                aria-label="Account security"
+              >
+                <ShieldCheck />
+                <span className="sidebar-link-label">Account security</span>
+              </NavLink>
+            </NavigationTooltip>
+          )}
           {loggedIn && (
             <button
               className="sidebar-link sidebar-logout"

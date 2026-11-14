@@ -1,7 +1,9 @@
-/* Shared interaction language for cards and information panels. */
+/*
+ * Shared hover language for cards a user can open or act on.
+ * Forms and layout panels are not in this list: they must not move
+ * under the pointer while the user types or reads.
+ */
 :is(
-  .auth-card,
-  .form-card,
   .feature-card,
   .dashboard-card,
   .info-card,
@@ -11,40 +13,28 @@
   .hiring-card,
   .service-card,
   .booking-card,
-  .booking-form-panel,
-  .booking-section-box,
-  .booking-total-box,
   .booking-service-option,
   .employee-booking-card,
-  .booking-assigned-employee-box,
-  .employee-count-box,
   .employee-invite-card,
   .salon-showcase-card,
-  .salon-side-card,
   .salon-stat-card,
   .review-card,
-  .reviews-summary-card,
   .employee-summary-card,
   .my-salon-action-card,
-  .my-salon-panel,
-  .my-salon-side-card,
   .editorial-feature-card,
   .editorial-faq-card,
   .editorial-candidate-card,
-  .editorial-appointment-card,
-  .empty-state
+  .editorial-appointment-card
 ) {
   transition:
-    transform 0.24s ease,
-    background-color 0.24s ease,
-    border-color 0.24s ease,
-    box-shadow 0.24s ease;
+    transform var(--duration-base) var(--ease-standard),
+    background-color var(--duration-base) var(--ease-standard),
+    border-color var(--duration-base) var(--ease-standard),
+    box-shadow var(--duration-base) var(--ease-standard);
 }
 
 @media (hover: hover) and (pointer: fine) {
   :is(
-    .auth-card,
-    .form-card,
     .feature-card,
     .dashboard-card,
     .info-card,
@@ -54,41 +44,29 @@
     .hiring-card,
     .service-card,
     .booking-card,
-    .booking-form-panel,
-    .booking-section-box,
-    .booking-total-box,
     .booking-service-option,
     .employee-booking-card,
-    .booking-assigned-employee-box,
-    .employee-count-box,
     .employee-invite-card,
     .salon-showcase-card,
-    .salon-side-card,
     .salon-stat-card,
     .review-card,
-    .reviews-summary-card,
     .employee-summary-card,
     .my-salon-action-card,
-    .my-salon-panel,
-    .my-salon-side-card,
     .editorial-feature-card,
     .editorial-faq-card,
     .editorial-candidate-card,
-    .editorial-appointment-card,
-    .empty-state
+    .editorial-appointment-card
   ):hover {
     border-color: color-mix(in srgb, var(--primary) 52%, var(--border));
     background-color: color-mix(in srgb, var(--card) 96%, var(--primary));
     box-shadow:
-      0 22px 50px color-mix(in srgb, var(--primary) 13%, transparent),
+      0 16px 36px color-mix(in srgb, var(--primary) 12%, transparent),
       inset 0 1px color-mix(in srgb, var(--primary) 12%, transparent);
-    transform: translateY(-4px);
+    transform: translateY(-3px);
   }
 
   :root[data-theme="dark"]
     :is(
-      .auth-card,
-      .form-card,
       .feature-card,
       .dashboard-card,
       .info-card,
@@ -98,28 +76,18 @@
       .hiring-card,
       .service-card,
       .booking-card,
-      .booking-form-panel,
-      .booking-section-box,
-      .booking-total-box,
       .booking-service-option,
       .employee-booking-card,
-      .booking-assigned-employee-box,
-      .employee-count-box,
       .employee-invite-card,
       .salon-showcase-card,
-      .salon-side-card,
       .salon-stat-card,
       .review-card,
-      .reviews-summary-card,
       .employee-summary-card,
       .my-salon-action-card,
-      .my-salon-panel,
-      .my-salon-side-card,
       .editorial-feature-card,
       .editorial-faq-card,
       .editorial-candidate-card,
-      .editorial-appointment-card,
-      .empty-state
+      .editorial-appointment-card
     ):hover {
     color: var(--text);
     background-color: color-mix(in srgb, var(--card) 94%, var(--primary) 6%);
@@ -132,8 +100,6 @@
 
 @media (prefers-reduced-motion: reduce) {
   :is(
-    .auth-card,
-    .form-card,
     .feature-card,
     .dashboard-card,
     .info-card,
@@ -143,28 +109,18 @@
     .hiring-card,
     .service-card,
     .booking-card,
-    .booking-form-panel,
-    .booking-section-box,
-    .booking-total-box,
     .booking-service-option,
     .employee-booking-card,
-    .booking-assigned-employee-box,
-    .employee-count-box,
     .employee-invite-card,
     .salon-showcase-card,
-    .salon-side-card,
     .salon-stat-card,
     .review-card,
-    .reviews-summary-card,
     .employee-summary-card,
     .my-salon-action-card,
-    .my-salon-panel,
-    .my-salon-side-card,
     .editorial-feature-card,
     .editorial-faq-card,
     .editorial-candidate-card,
-    .editorial-appointment-card,
-    .empty-state
+    .editorial-appointment-card
   ) {
     transition: none;
   }

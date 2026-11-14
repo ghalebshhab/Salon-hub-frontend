@@ -1,0 +1,487 @@
+/*
+ * Community workspace (v2): compact header, section tabs, one active
+ * section beside a slim context rail. Scoped to .community-workspace-v2
+ * so the legacy community.css only styles the panels' insides.
+ */
+.community-workspace-v2 {
+  padding-top: var(--space-6);
+}
+
+/* Header */
+.community-workspace-v2 .community-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-6);
+  padding: var(--space-6) 0 var(--space-5);
+}
+
+.community-header-eyebrow {
+  display: inline-block;
+  margin-bottom: var(--space-2);
+  color: var(--primary);
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.community-workspace-v2 .community-header h1 {
+  margin: 0;
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: clamp(1.9rem, 3.2vw, 2.75rem);
+  font-weight: var(--weight-semibold);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+}
+
+.community-workspace-v2 .community-header h1 em {
+  color: var(--primary);
+  font-weight: var(--weight-medium);
+}
+
+.community-workspace-v2 .community-header p {
+  max-width: 560px;
+  margin: var(--space-2) 0 0;
+  color: var(--muted);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+}
+
+.community-header-action {
+  display: inline-flex;
+  min-height: 46px;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0 var(--space-5);
+  border-radius: var(--radius-full);
+  color: var(--on-primary);
+  background: var(--primary);
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--primary) 26%, transparent);
+  font-weight: var(--weight-semibold);
+  transition:
+    background-color var(--duration-base) var(--ease-standard),
+    transform var(--duration-base) var(--ease-standard);
+}
+
+.community-header-action:hover {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+}
+
+.community-header-action svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Section tabs: always visible, sticky under the app header. */
+.community-tabs {
+  position: sticky;
+  z-index: var(--z-sticky);
+  top: 78px;
+  display: flex;
+  gap: var(--space-1);
+  margin-bottom: var(--space-6);
+  padding: 6px;
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: color-mix(in srgb, var(--card) 92%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: var(--elevation-1);
+  scrollbar-width: none;
+  transition: top var(--duration-slow) var(--ease-standard);
+}
+
+.community-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+body:has(.creative-navbar.is-scrolled) .community-tabs {
+  top: 68px;
+}
+
+.community-tab {
+  display: inline-flex;
+  min-height: 44px;
+  flex: 1 0 auto;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: 0 var(--space-4);
+  border-radius: var(--radius-md);
+  color: var(--muted);
+  font-size: var(--text-md);
+  font-weight: var(--weight-medium);
+  white-space: nowrap;
+  transition:
+    background-color var(--duration-base) var(--ease-standard),
+    color var(--duration-base) var(--ease-standard);
+}
+
+.community-tab:hover {
+  color: var(--text);
+  background: color-mix(in srgb, var(--primary-soft) 60%, transparent);
+}
+
+.community-tab.is-active {
+  color: var(--primary);
+  background: var(--primary-soft);
+  font-weight: var(--weight-semibold);
+  box-shadow: inset 0 -2px 0 var(--accent);
+}
+
+.community-tab svg {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+}
+
+.community-tab-short {
+  display: none;
+}
+
+.community-tab-count {
+  display: inline-grid;
+  min-width: 22px;
+  height: 20px;
+  padding: 0 6px;
+  place-items: center;
+  border-radius: var(--radius-full);
+  color: var(--muted);
+  background: color-mix(in srgb, var(--border) 70%, transparent);
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-bold);
+}
+
+.community-tab-count.is-alert {
+  color: var(--on-primary);
+  background: var(--primary);
+}
+
+/* Layout: active section + context rail */
+.community-v2-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  align-items: start;
+  gap: var(--space-6);
+}
+
+.community-v2-main {
+  display: grid;
+  min-width: 0;
+  gap: var(--space-5);
+}
+
+.community-v2-aside {
+  position: sticky;
+  top: 150px;
+  display: grid;
+  gap: var(--space-4);
+}
+
+/* Shared card language for every section and rail card */
+.community-workspace-v2 :is(.community-v2-main > .community-panel, .community-aside-card),
+.community-workspace-v2 .community-feed > :is(.community-composer, .community-post-card, .community-panel) {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--card);
+  box-shadow: var(--elevation-1);
+}
+
+.community-workspace-v2 .community-v2-main > .community-panel {
+  padding: var(--space-6);
+}
+
+.community-workspace-v2 .community-v2-main .community-panel h2,
+.community-workspace-v2 .community-feed-heading h2 {
+  font-family: var(--font-display);
+  font-weight: var(--weight-semibold);
+  letter-spacing: -0.01em;
+}
+
+/* The Feed tab and page header already name this section; keep the
+   heading for screen readers (it labels the feed region) but hide it. */
+.community-workspace-v2 .community-feed-heading {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* Rail: profile card */
+.community-me {
+  overflow: hidden;
+  text-align: center;
+}
+
+.community-me-cover {
+  height: 64px;
+  background:
+    radial-gradient(
+      circle at 80% 20%,
+      color-mix(in srgb, var(--accent) 40%, transparent),
+      transparent 55%
+    ),
+    linear-gradient(135deg, var(--primary), var(--primary-dark));
+}
+
+.community-me-body {
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  margin-top: -32px;
+  padding: 0 var(--space-5) var(--space-4);
+}
+
+.community-me-body .community-avatar {
+  box-shadow: 0 0 0 4px var(--card);
+}
+
+.community-me-body h2 {
+  margin: var(--space-2) 0 0;
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: var(--weight-semibold);
+}
+
+.community-me-body p {
+  margin: 0;
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+
+.community-me-link {
+  margin-top: var(--space-2);
+  color: var(--primary);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+}
+
+.community-me-link:hover {
+  text-decoration: underline;
+}
+
+.community-me-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin: 0;
+  border-top: 1px solid var(--border);
+}
+
+.community-me-stats div {
+  padding: var(--space-3) var(--space-2);
+}
+
+.community-me-stats div + div {
+  border-left: 1px solid var(--border);
+}
+
+.community-me-stats dt {
+  color: var(--muted);
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.community-me-stats dd {
+  margin: 2px 0 0;
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: var(--weight-semibold);
+}
+
+/* Rail: requests nudge */
+.community-nudge {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border-color: color-mix(in srgb, var(--primary) 30%, var(--border));
+  background: color-mix(in srgb, var(--primary-soft) 70%, var(--card));
+  transition:
+    border-color var(--duration-base) var(--ease-standard),
+    transform var(--duration-base) var(--ease-standard);
+}
+
+.community-nudge:hover {
+  border-color: var(--primary);
+  transform: translateY(-1px);
+}
+
+.community-nudge-icon {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: var(--radius-md);
+  color: var(--on-primary);
+  background: var(--primary);
+}
+
+.community-nudge-icon svg {
+  width: 19px;
+  height: 19px;
+}
+
+.community-nudge > span:nth-child(2) {
+  display: grid;
+  flex: 1;
+}
+
+.community-nudge strong {
+  color: var(--text);
+  font-size: var(--text-md);
+}
+
+.community-nudge small {
+  color: var(--muted);
+  font-size: var(--text-xs);
+}
+
+.community-nudge-arrow {
+  width: 18px;
+  height: 18px;
+  color: var(--primary);
+}
+
+/* Rail: suggestions */
+.community-aside-card:not(.community-me):not(.community-nudge) {
+  padding: var(--space-4) var(--space-4) var(--space-3);
+}
+
+.community-aside-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+
+.community-aside-heading h2 {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+  color: var(--text);
+  font-size: var(--text-md);
+  font-weight: var(--weight-semibold);
+}
+
+.community-aside-heading h2 svg {
+  width: 16px;
+  height: 16px;
+  color: var(--accent);
+}
+
+.community-aside-heading a {
+  color: var(--primary);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+}
+
+.community-suggestion-list {
+  display: grid;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.community-suggestion-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: var(--space-2) 0;
+}
+
+.community-suggestion-list li + li {
+  border-top: 1px solid var(--border);
+}
+
+.community-suggestion-list .community-profile-link {
+  min-width: 0;
+}
+
+/* Responsive */
+@media (max-width: 1100px) {
+  .community-v2-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .community-v2-aside {
+    position: static;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    order: -1;
+  }
+
+  .community-v2-aside .community-me {
+    display: none;
+  }
+
+  .community-v2-aside:empty,
+  .community-v2-aside:not(:has(.community-aside-card:not(.community-me))) {
+    display: none;
+  }
+}
+
+@media (max-width: 700px) {
+  .community-workspace-v2 {
+    padding-top: var(--space-2);
+  }
+
+  .community-workspace-v2 .community-header {
+    align-items: stretch;
+    flex-direction: column;
+    gap: var(--space-4);
+    padding-top: var(--space-4);
+  }
+
+  .community-header-action {
+    justify-content: center;
+  }
+
+  .community-tabs {
+    top: 72px;
+  }
+
+  .community-tab {
+    flex: 1 0 auto;
+    padding: 0 var(--space-3);
+  }
+
+  .community-tab-label {
+    display: none;
+  }
+
+  .community-tab-short {
+    display: inline;
+  }
+
+  .community-tab:not([aria-current="page"]) .community-tab-short {
+    display: none;
+  }
+
+  .community-workspace-v2 .community-v2-main > .community-panel {
+    padding: var(--space-4);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .community-header-action,
+  .community-tab,
+  .community-nudge,
+  .community-tabs {
+    transition: none;
+  }
+}

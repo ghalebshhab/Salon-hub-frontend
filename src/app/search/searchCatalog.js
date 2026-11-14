@@ -112,9 +112,11 @@ export function collectPageSections(root) {
   if (!root) return [];
   const seen = new Set();
   return [...root.querySelectorAll("h1, h2, h3")]
-    .filter(
-      (heading) =>
-        heading.offsetParent !== null || heading.getClientRects().length,
+    .filter((heading) =>
+      // Skip headings in hidden panels; assume visible where the API is missing.
+      typeof heading.checkVisibility === "function"
+        ? heading.checkVisibility()
+        : true,
     )
     .map((heading, index) => {
       const title = (heading.innerText || heading.textContent)

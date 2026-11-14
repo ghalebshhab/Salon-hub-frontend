@@ -1,4 +1,5 @@
 import { LogIn, LogOut, PanelLeftClose, PanelLeftOpen, X } from "lucide-react";
+import { useEffect, useRef } from "react";
 import { NavLink } from "react-router-dom";
 import useLogout from "../../features/auth/hooks/useLogout.js";
 import useAuth from "../../shared/auth/useAuth.js";
@@ -13,6 +14,33 @@ export default function SidebarNavigation({
   toggleCollapsed,
 }) {
   const { loggedIn, isOwner, role, user } = useAuth();
+  const asideRef = useRef(null);
+  const closeButtonRef = useRef(null);
+
+  // Mobile drawer: move focus inside when it opens and keep Tab within it.
+  useEffect(() => {
+    if (!mobileOpen) return undefined;
+    closeButtonRef.current?.focus();
+    const aside = asideRef.current;
+    const trapFocus = (event) => {
+      if (event.key !== "Tab" || !aside) return;
+      const focusable = [
+        ...aside.querySelectorAll("a[href], button:not([disabled])"),
+      ].filter((element) => element.offsetParent !== null);
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+    document.addEventListener("keydown", trapFocus);
+    return () => document.removeEventListener("keydown", trapFocus);
+  }, [mobileOpen]);
   const logout = useLogout();
   const hasSalon = Boolean(user?.ownedSalonId);
   // Employees have an employer salon (salonId); owners have ownedSalonId.
@@ -44,6 +72,7 @@ export default function SidebarNavigation({
         tabIndex={mobileOpen ? 0 : -1}
       />
       <aside
+        ref={asideRef}
         id="primary-navigation"
         className={`app-sidebar ${collapsed ? "is-collapsed" : ""} ${
           mobileOpen ? "is-mobile-open" : ""
@@ -53,6 +82,7 @@ export default function SidebarNavigation({
         <div className="sidebar-mobile-head">
           <BrandLogo />
           <button
+            ref={closeButtonRef}
             className="sidebar-icon-button"
             type="button"
             onClick={closeMobile}

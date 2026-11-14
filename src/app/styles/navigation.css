@@ -347,9 +347,18 @@ body:has(.app-sidebar.is-collapsed) .footer {
     width: min(320px, calc(100vw - 32px));
     box-shadow: 18px 0 40px rgba(0, 0, 0, 0.16);
     transform: translateX(-100%);
+    /* Closed drawer leaves the tab order and accessibility tree after sliding out. */
+    visibility: hidden;
+    transition:
+      transform 180ms ease,
+      visibility 0s linear 180ms;
   }
   .app-sidebar.is-mobile-open {
     transform: translateX(0);
+    visibility: visible;
+    transition:
+      transform 180ms ease,
+      visibility 0s;
   }
   .app-sidebar.is-collapsed {
     width: min(320px, calc(100vw - 32px));

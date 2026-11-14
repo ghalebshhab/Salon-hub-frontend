@@ -41,7 +41,10 @@ export default function AppLayout() {
         </a>
         <ScrollManager />
         {showAppBackground && <AppBackground />}
-        <Navbar onOpenMobile={authLayout ? undefined : navigation.openMobile} />
+        <Navbar
+          onOpenMobile={authLayout ? undefined : navigation.openMobile}
+          mobileOpen={navigation.mobileOpen}
+        />
         {!authLayout && <SidebarNavigation {...navigation} />}
         <main className="page-main" id="main-content" tabIndex={-1}>
           <Suspense fallback={<Loading />}>

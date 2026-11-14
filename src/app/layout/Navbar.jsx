@@ -7,7 +7,7 @@ import useAuth from "../../shared/auth/useAuth.js";
 import BrandLogo from "../../shared/components/BrandLogo.jsx";
 import useTheme from "../../shared/theme/useTheme.js";
 
-function Navbar({ onOpenMobile }) {
+function Navbar({ onOpenMobile, mobileOpen = false }) {
   const { loggedIn, user } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const logout = useLogout();
@@ -89,6 +89,8 @@ function Navbar({ onOpenMobile }) {
               type="button"
               onClick={onOpenMobile}
               aria-label="Open navigation"
+              aria-controls="primary-navigation"
+              aria-expanded={mobileOpen}
             >
               <Menu />
             </button>

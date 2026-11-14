@@ -1,22 +1,35 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const DESKTOP_KEY = "salonhub.sidebar.collapsed";
 
 function readDesktopPreference() {
   if (typeof window === "undefined") return false;
-  return window.localStorage.getItem(DESKTOP_KEY) === "true";
+  try {
+    return window.localStorage.getItem(DESKTOP_KEY) === "true";
+  } catch {
+    return false;
+  }
 }
 
 export default function useNavigationState() {
   const [collapsed, setCollapsed] = useState(readDesktopPreference);
   const [mobileOpen, setMobileOpen] = useState(false);
+  // The control that opened the drawer gets focus back when it closes.
+  const openerRef = useRef(null);
+  const wasOpenRef = useRef(false);
 
   useEffect(() => {
-    window.localStorage.setItem(DESKTOP_KEY, String(collapsed));
+    try {
+      window.localStorage.setItem(DESKTOP_KEY, String(collapsed));
+    } catch {
+      // Storage can be unavailable; the preference simply is not remembered.
+    }
   }, [collapsed]);
 
   useEffect(() => {
     document.body.classList.toggle("navigation-drawer-open", mobileOpen);
+    if (wasOpenRef.current && !mobileOpen) openerRef.current?.focus?.();
+    wasOpenRef.current = mobileOpen;
     return () => document.body.classList.remove("navigation-drawer-open");
   }, [mobileOpen]);
 
@@ -32,7 +45,10 @@ export default function useNavigationState() {
     collapsed,
     mobileOpen,
     toggleCollapsed: () => setCollapsed((value) => !value),
-    openMobile: () => setMobileOpen(true),
+    openMobile: () => {
+      openerRef.current = document.activeElement;
+      setMobileOpen(true);
+    },
     closeMobile: () => setMobileOpen(false),
   };
 }

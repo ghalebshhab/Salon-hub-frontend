@@ -11,7 +11,7 @@ describe("getNavigationSections", () => {
   it("keeps the public discovery section available to guests", () => {
     expect(
       linksFor({ loggedIn: false, isOwner: false, hasSalon: false }),
-    ).toEqual(["/", "/community", "/hiring-posts"]);
+    ).toEqual(["/", "/community", "/hiring-posts", "/assistant"]);
   });
 
   it("adds authenticated activity and account destinations", () => {

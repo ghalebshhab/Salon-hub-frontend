@@ -1,6 +1,9 @@
+import { ASSISTANT_NAME } from "../../features/assistant/model/assistantIdentity.js";
+
 // Header context for the current route: a section label and a page title.
 const PAGE_TITLES = [
   [/^\/$/, "Discover", "Home"],
+  [/^\/assistant/, "Discover", `Ask ${ASSISTANT_NAME}`],
   [/^\/community\/people\/[^/]+/, "Community", "Member profile"],
   [/^\/community/, "Community", "Community"],
   [/^\/hiring-posts\/[^/]+\/apply/, "Careers", "Apply"],

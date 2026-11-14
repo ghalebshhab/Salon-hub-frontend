@@ -6,6 +6,9 @@ import OwnerRoute from "../layout/OwnerRoute.jsx";
 import NotFound from "./NotFound.jsx";
 
 const Home = lazy(() => import("../../features/home/pages/Home.jsx"));
+const AssistantPage = lazy(
+  () => import("../../features/assistant/pages/AssistantPage.jsx"),
+);
 const Prototype = lazy(() => import("../../features/prototype/Prototype.jsx"));
 const SalonDetails = lazy(
   () => import("../../features/salons/pages/SalonDetails.jsx"),
@@ -106,6 +109,7 @@ export default function AppRoutes() {
     <Routes>
       <Route element={<AppLayout />}>
         <Route path="/" element={<Home />} />
+        <Route path="/assistant" element={<AssistantPage />} />
         <Route path="/prototype" element={<Prototype />} />
         <Route path="/salons/:salonId" element={<SalonDetails />} />
         <Route element={<ProtectedRoute />}>
@@ -146,7 +150,10 @@ export default function AppRoutes() {
               path="/owner/create-hiring-post"
               element={<CreateHiringPost />}
             />
-            <Route path="/owner/applications" element={<HiringApplications />} />
+            <Route
+              path="/owner/applications"
+              element={<HiringApplications />}
+            />
             <Route path="/owner/employees" element={<ManageSalonEmployees />} />
             <Route
               path="/owner/employees/:employeeId/setup"

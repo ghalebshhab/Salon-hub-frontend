@@ -1,3 +1,4 @@
+import { createElement } from "react";
 import {
   Bell,
   BriefcaseBusiness,
@@ -19,6 +20,12 @@ import {
   UserPlus,
   UsersRound,
 } from "lucide-react";
+import LamsaMark from "../../features/assistant/components/LamsaMark.jsx";
+import { ASSISTANT_NAME } from "../../features/assistant/model/assistantIdentity.js";
+
+// The assistant keeps its own mark in the menu, drawn in line-icon style.
+const LamsaIcon = (props) =>
+  createElement(LamsaMark, { tone: "mono", ...props });
 
 /**
  * Sidebar sections for the signed-in role. Every destination has its own
@@ -43,6 +50,7 @@ export function getNavigationSections({
           to: "/hiring-posts",
           icon: BriefcaseBusiness,
         },
+        { label: `Ask ${ASSISTANT_NAME}`, to: "/assistant", icon: LamsaIcon },
       ],
     },
   ];

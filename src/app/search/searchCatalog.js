@@ -4,6 +4,7 @@ import { getNavigationSections } from "../layout/navigationConfig.js";
 // Extra words people type for a destination, beyond its visible title.
 const KEYWORDS = {
   "/": ["discover", "salons", "start"],
+  "/assistant": ["ai", "assistant", "chat", "help", "lamsa"],
   "/community": ["feed", "posts", "people", "friends"],
   "/hiring-posts": ["jobs", "careers", "vacancies", "hiring"],
   "/my-bookings": ["appointments", "reservations"],

@@ -57,13 +57,6 @@
   opacity: 0.32;
 }
 
-.community-page .community-mobile-nav a.active {
-  border-color: color-mix(in srgb, var(--primary) 28%, var(--border));
-  color: var(--primary);
-  background: color-mix(in srgb, var(--primary) 10%, var(--surface));
-  box-shadow: 0 8px 22px color-mix(in srgb, var(--primary) 10%, transparent);
-}
-
 @media (max-width: 680px) {
   .community-page::before {
     background-size: 54px 54px;

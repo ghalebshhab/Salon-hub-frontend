@@ -1,17 +1,22 @@
 import { Menu, Moon, Sun } from "lucide-react";
-import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import useLogout from "../../features/auth/hooks/useLogout.js";
 import NotificationBell from "../../features/notifications/components/NotificationBell.jsx";
 import useAuth from "../../shared/auth/useAuth.js";
 import BrandLogo from "../../shared/components/BrandLogo.jsx";
 import useTheme from "../../shared/theme/useTheme.js";
+import HeaderAccountMenu from "./HeaderAccountMenu.jsx";
+
+const ACCOUNT_LINKS = [
+  { to: "/profile/career", label: "Career profile" },
+  { to: "/my-bookings", label: "My bookings" },
+  { to: "/account/security", label: "Account security" },
+];
 
 function Navbar({ onOpenMobile, mobileOpen = false }) {
   const { loggedIn, user } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const logout = useLogout();
-  const [profileOpen, setProfileOpen] = useState(false);
   const initials =
     [user?.firstName, user?.lastName]
       .filter(Boolean)
@@ -39,45 +44,11 @@ function Navbar({ onOpenMobile, mobileOpen = false }) {
           </button>
           {loggedIn && <NotificationBell />}
           {loggedIn ? (
-            <div className="header-profile-wrap">
-              <button
-                className="header-avatar-button"
-                type="button"
-                onClick={() => setProfileOpen((value) => !value)}
-                aria-label="Open account menu"
-                aria-expanded={profileOpen}
-              >
-                <span aria-hidden="true">{initials}</span>
-              </button>
-              {profileOpen && (
-                <div className="header-profile-menu">
-                  <NavLink
-                    to="/profile/career"
-                    onClick={() => setProfileOpen(false)}
-                  >
-                    Career profile
-                  </NavLink>
-                  <NavLink
-                    to="/my-bookings"
-                    onClick={() => setProfileOpen(false)}
-                  >
-                    My bookings
-                  </NavLink>
-                  <NavLink
-                    to="/account/security"
-                    onClick={() => setProfileOpen(false)}
-                  >
-                    Account security
-                  </NavLink>
-                  <button
-                    type="button"
-                    onClick={() => void logout(() => setProfileOpen(false))}
-                  >
-                    Log out
-                  </button>
-                </div>
-              )}
-            </div>
+            <HeaderAccountMenu
+              initials={initials}
+              links={ACCOUNT_LINKS}
+              onLogout={logout}
+            />
           ) : (
             <NavLink to="/login" className="header-login-link">
               Log in

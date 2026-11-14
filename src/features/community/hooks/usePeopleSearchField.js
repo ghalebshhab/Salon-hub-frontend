@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { normalizeCommunitySearch } from "../model/communityPresentation.js";
 
-const SEARCH_DELAY_MS = 350;
+// Short pause so each typed letter narrows results almost immediately.
+const SEARCH_DELAY_MS = 150;
 
 export default function usePeopleSearchField(onSearch) {
   const [value, setValue] = useState("");
@@ -23,7 +24,8 @@ export default function usePeopleSearchField(onSearch) {
 
   const submit = (event) => {
     event.preventDefault();
-    if (event.nativeEvent.isComposing || event.nativeEvent.keyCode === 229) return;
+    if (event.nativeEvent.isComposing || event.nativeEvent.keyCode === 229)
+      return;
     window.clearTimeout(timerRef.current);
     onSearch(normalizedValue);
   };

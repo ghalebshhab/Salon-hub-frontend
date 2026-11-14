@@ -20,17 +20,26 @@ export default function PeopleSearchField({
         type="search"
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        placeholder="Name or @username"
+        placeholder="Start typing a name or @username"
         autoComplete="off"
         aria-controls="community-people-results"
         aria-describedby="community-search-hint"
       />
       <span id="community-search-hint" className="sr-only">
-        Results update as you type. Press Enter to search immediately.
+        Results narrow with each letter you type, matching the start of names.
+        Press Enter to search immediately.
       </span>
       {loading && (
-        <span className="community-search-spinner" role="status" aria-label="Searching">
-          <LoaderCircle className="community-spinning" size={19} aria-hidden="true" />
+        <span
+          className="community-search-spinner"
+          role="status"
+          aria-label="Searching"
+        >
+          <LoaderCircle
+            className="community-spinning"
+            size={19}
+            aria-hidden="true"
+          />
         </span>
       )}
       {value && (

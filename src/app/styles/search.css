@@ -431,3 +431,11 @@ kbd {
     display: none;
   }
 }
+
+/* Search highlights everywhere (community results, menus, palette). */
+mark {
+  border-radius: 3px;
+  color: inherit;
+  background: color-mix(in srgb, var(--accent) 34%, transparent);
+  font-weight: inherit;
+}

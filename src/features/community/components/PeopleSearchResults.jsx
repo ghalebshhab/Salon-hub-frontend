@@ -1,6 +1,7 @@
 import { RotateCw } from "lucide-react";
 import CommunityProfileLink from "./CommunityProfileLink.jsx";
 import FriendshipActions from "./FriendshipActions.jsx";
+import HighlightedText from "../../../shared/components/HighlightedText.jsx";
 
 export default function PeopleSearchResults({
   people,
@@ -13,8 +14,13 @@ export default function PeopleSearchResults({
   onAccept,
   onDecline,
 }) {
-  if (loading) {
-    return <p className="community-discovery-message">Finding people in the community…</p>;
+  // Keep the current list visible while the next letter narrows it.
+  if (loading && !people.length) {
+    return (
+      <p className="community-discovery-message">
+        Finding people in the community…
+      </p>
+    );
   }
   if (error) {
     return (
@@ -39,12 +45,38 @@ export default function PeopleSearchResults({
   return (
     <>
       <p className="community-discovery-caption">
-        {search ? "Search results" : "Suggested professionals"}
+        {search ? (
+          <>
+            People starting with <strong>“{search}”</strong>
+          </>
+        ) : (
+          "Suggested professionals"
+        )}
       </p>
-      <ul className="community-people-grid">
+      <ul className="community-people-grid" aria-busy={loading || undefined}>
         {people.map((member) => (
           <li className="community-person-row" key={member.user.id}>
-            <CommunityProfileLink user={member.user} size="small" />
+            <CommunityProfileLink user={member.user} size="small">
+              {search ? (
+                <>
+                  <span className="community-profile-link-copy">
+                    <strong>
+                      <HighlightedText
+                        text={member.user.displayName || member.user.userName}
+                        query={search}
+                      />
+                    </strong>
+                    <small>
+                      @
+                      <HighlightedText
+                        text={member.user.userName}
+                        query={search}
+                      />
+                    </small>
+                  </span>
+                </>
+              ) : undefined}
+            </CommunityProfileLink>
             <FriendshipActions
               member={member}
               busy={busy}

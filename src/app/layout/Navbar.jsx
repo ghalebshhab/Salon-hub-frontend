@@ -5,6 +5,7 @@ import {
   LayoutDashboard,
   Menu,
   Moon,
+  Search,
   ShieldCheck,
   Sun,
 } from "lucide-react";
@@ -17,6 +18,7 @@ import BrandLogo from "../../shared/components/BrandLogo.jsx";
 import useTheme from "../../shared/theme/useTheme.js";
 import HeaderAccountMenu from "./HeaderAccountMenu.jsx";
 import { pageTitleFor } from "./pageTitles.js";
+import { openGlobalSearch } from "../search/searchEvents.js";
 
 const ACCOUNT_LINKS = [
   { to: "/my-bookings", label: "My bookings", icon: CalendarCheck },
@@ -29,6 +31,11 @@ const OWNER_LINK = {
   label: "Salon dashboard",
   icon: LayoutDashboard,
 };
+
+const SHORTCUT_LABEL =
+  typeof navigator !== "undefined" && /Mac|iPhone|iPad/.test(navigator.platform)
+    ? "⌘ K"
+    : "Ctrl K";
 
 const ROLE_LABELS = {
   OWNER: "Salon owner",
@@ -80,6 +87,17 @@ function Navbar({ onOpenMobile, mobileOpen = false, showAuthActions = true }) {
           )}
         </div>
         <div className="navbar-actions">
+          <button
+            className="header-search-trigger"
+            type="button"
+            onClick={openGlobalSearch}
+            aria-label="Search SalonHub"
+            aria-keyshortcuts="Control+K Meta+K"
+          >
+            <Search aria-hidden="true" />
+            <span>Search…</span>
+            <kbd>{SHORTCUT_LABEL}</kbd>
+          </button>
           <button
             className="header-icon-button"
             type="button"

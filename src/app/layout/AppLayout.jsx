@@ -8,6 +8,7 @@ import Loading from "../../shared/components/Loading.jsx";
 import { NotificationProvider } from "../../features/notifications/model/NotificationProvider.jsx";
 import useAuth from "../../shared/auth/useAuth.js";
 import ScrollManager from "./ScrollManager.jsx";
+import CommandPalette from "../search/CommandPalette.jsx";
 import AppBackground from "./AppBackground.jsx";
 import { isAuthenticationRoute } from "./appBackgroundRoutes.js";
 export default function AppLayout() {
@@ -55,6 +56,7 @@ export default function AppLayout() {
           </Suspense>
         </main>
         <Footer />
+        <CommandPalette />
       </div>
     </NotificationProvider>
   );

@@ -13,7 +13,12 @@ import {
   UsersRound,
 } from "lucide-react";
 
-export function getNavigationSections({ loggedIn, isOwner, hasSalon }) {
+export function getNavigationSections({
+  loggedIn,
+  isOwner,
+  hasSalon,
+  isEmployee = false,
+}) {
   const sections = [
     {
       label: "Discover",
@@ -111,7 +116,7 @@ export function getNavigationSections({ loggedIn, isOwner, hasSalon }) {
     );
   }
 
-  if (hasSalon && !isOwner) {
+  if (isEmployee) {
     sections.push({
       label: "Employee",
       items: [

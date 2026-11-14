@@ -39,4 +39,19 @@ describe("getNavigationSections", () => {
     expect(links).toContain("/owner/create-service");
     expect(links).toContain("/owner/create-hiring-post");
   });
+
+  it("shows assigned appointments to employees only", () => {
+    expect(
+      linksFor({
+        loggedIn: true,
+        isOwner: false,
+        hasSalon: false,
+        isEmployee: true,
+      }),
+    ).toContain("/employee/bookings");
+    // A user with a pending salon request is not an employee.
+    expect(
+      linksFor({ loggedIn: true, isOwner: false, hasSalon: true }),
+    ).not.toContain("/employee/bookings");
+  });
 });

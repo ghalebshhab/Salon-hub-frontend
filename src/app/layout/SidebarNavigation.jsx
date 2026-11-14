@@ -12,10 +12,17 @@ export default function SidebarNavigation({
   closeMobile,
   toggleCollapsed,
 }) {
-  const { loggedIn, isOwner, user } = useAuth();
+  const { loggedIn, isOwner, role, user } = useAuth();
   const logout = useLogout();
   const hasSalon = Boolean(user?.ownedSalonId);
-  const sections = getNavigationSections({ loggedIn, isOwner, hasSalon });
+  // Employees have an employer salon (salonId); owners have ownedSalonId.
+  const isEmployee = role === "EMPLOYEE";
+  const sections = getNavigationSections({
+    loggedIn,
+    isOwner,
+    hasSalon,
+    isEmployee,
+  });
   const name =
     [user?.firstName, user?.lastName].filter(Boolean).join(" ") || "SalonHub";
   const initials = name

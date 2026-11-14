@@ -653,3 +653,68 @@ body:has(.app-sidebar.is-collapsed) .footer {
 .sidebar-create-list {
   flex-basis: 100%;
 }
+
+/* Header: current page context in the middle. */
+.header-page-title {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+  gap: 1px;
+  padding-left: var(--space-4);
+  border-left: 1px solid var(--border);
+}
+.header-page-title:empty {
+  border-left: 0;
+}
+.header-page-title span {
+  color: var(--muted);
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.header-page-title strong {
+  overflow: hidden;
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: var(--weight-semibold);
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Header: compact, elevated state once the page scrolls. */
+.creative-navbar,
+.creative-navbar-inner {
+  transition:
+    min-height var(--duration-slow) var(--ease-standard),
+    box-shadow var(--duration-slow) var(--ease-standard);
+}
+.creative-navbar.is-scrolled,
+.creative-navbar.is-scrolled .creative-navbar-inner {
+  min-height: 60px;
+}
+.creative-navbar.is-scrolled {
+  box-shadow: var(--elevation-2);
+}
+.creative-navbar.is-scrolled .creative-brand .brand-logo-mark {
+  width: 36px;
+  height: 36px;
+}
+.app-sidebar {
+  transition:
+    width 180ms ease,
+    transform 180ms ease,
+    top var(--duration-slow) var(--ease-standard);
+}
+body:has(.creative-navbar.is-scrolled) .app-sidebar {
+  top: 60px;
+}
+
+@media (max-width: 900px) {
+  .header-page-title {
+    visibility: hidden;
+    border-left: 0;
+  }
+}

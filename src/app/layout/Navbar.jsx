@@ -1,11 +1,13 @@
 import { Menu, Moon, Sun } from "lucide-react";
-import { Link, NavLink } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import useLogout from "../../features/auth/hooks/useLogout.js";
 import NotificationBell from "../../features/notifications/components/NotificationBell.jsx";
 import useAuth from "../../shared/auth/useAuth.js";
 import BrandLogo from "../../shared/components/BrandLogo.jsx";
 import useTheme from "../../shared/theme/useTheme.js";
 import HeaderAccountMenu from "./HeaderAccountMenu.jsx";
+import { pageTitleFor } from "./pageTitles.js";
 
 const ACCOUNT_LINKS = [
   { to: "/profile/career", label: "Career profile" },
@@ -13,10 +15,24 @@ const ACCOUNT_LINKS = [
   { to: "/account/security", label: "Account security" },
 ];
 
+function useScrolled(threshold = 8) {
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const update = () => setScrolled(window.scrollY > threshold);
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    return () => window.removeEventListener("scroll", update);
+  }, [threshold]);
+  return scrolled;
+}
+
 function Navbar({ onOpenMobile, mobileOpen = false }) {
   const { loggedIn, user } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const logout = useLogout();
+  const { pathname } = useLocation();
+  const scrolled = useScrolled();
+  const page = pageTitleFor(pathname);
   const initials =
     [user?.firstName, user?.lastName]
       .filter(Boolean)
@@ -26,12 +42,21 @@ function Navbar({ onOpenMobile, mobileOpen = false }) {
       .toUpperCase() || "SH";
 
   return (
-    <header className="creative-navbar">
+    <header
+      className={`creative-navbar ${scrolled ? "is-scrolled" : ""}`.trim()}
+    >
       <div className="creative-navbar-inner">
         <Link to="/" className="creative-brand" aria-label="SalonHub home">
           <BrandLogo />
         </Link>
-        <div className="navbar-spacer" />
+        <div className="header-page-title" aria-hidden="true">
+          {page && (
+            <>
+              <span>{page.section}</span>
+              <strong>{page.title}</strong>
+            </>
+          )}
+        </div>
         <div className="navbar-actions">
           <button
             className="header-icon-button"

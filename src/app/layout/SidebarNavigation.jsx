@@ -18,7 +18,7 @@ import { getNavigationSections } from "./navigationConfig.js";
 import NavigationTooltip from "./NavigationTooltip.jsx";
 import SidebarCreateMenu from "./SidebarCreateMenu.jsx";
 import { filterNavigationSections } from "./menuFilter.js";
-import { highlightParts } from "../search/searchModel.js";
+import HighlightedText from "../../shared/components/HighlightedText.jsx";
 import { openGlobalSearch } from "../search/searchEvents.js";
 
 export default function SidebarNavigation({
@@ -222,16 +222,7 @@ export default function SidebarNavigation({
                       >
                         <Icon />
                         <span className="sidebar-link-label">
-                          {ranges
-                            ? highlightParts(label, ranges).map(
-                                (part, index) =>
-                                  part.match ? (
-                                    <mark key={index}>{part.text}</mark>
-                                  ) : (
-                                    part.text
-                                  ),
-                              )
-                            : label}
+                          <HighlightedText text={label} ranges={ranges} />
                         </span>
                         {count > 0 && (
                           <span className="sidebar-badge" aria-hidden="true">

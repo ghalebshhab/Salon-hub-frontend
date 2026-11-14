@@ -1,4 +1,4 @@
-import { matchText } from "../search/searchModel.js";
+import { matchText } from "../../shared/search/searchModel.js";
 
 /**
  * Sidebar sections filtered to the items whose label starts with (or has a

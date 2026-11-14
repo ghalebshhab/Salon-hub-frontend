@@ -11,15 +11,10 @@ import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import useAuth from "../../shared/auth/useAuth.js";
 import { collectPageSections, getSearchPages } from "./searchCatalog.js";
-import { highlightParts, matchText, searchItems } from "./searchModel.js";
+import { matchText, searchItems } from "../../shared/search/searchModel.js";
+import HighlightedText from "../../shared/components/HighlightedText.jsx";
 import { OPEN_SEARCH_EVENT } from "./searchEvents.js";
 import usePeopleSearch from "./usePeopleSearch.js";
-
-function Highlighted({ text, ranges }) {
-  return highlightParts(text, ranges).map((part, index) =>
-    part.match ? <mark key={index}>{part.text}</mark> : part.text,
-  );
-}
 
 function isTypingTarget(element) {
   return (
@@ -279,7 +274,7 @@ function PaletteDialog({ onClose }) {
                         </span>
                         <span className="command-palette-copy">
                           <strong>
-                            <Highlighted
+                            <HighlightedText
                               text={item.title}
                               ranges={result.ranges}
                             />

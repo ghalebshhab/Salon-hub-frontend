@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { searchCommunityPeopleApi } from "../../features/community/api/communityRelationshipsApi.js";
 import { requireData } from "../../shared/api/response.js";
-import { normalizeQuery } from "./searchModel.js";
+import { normalizeQuery } from "../../shared/search/searchModel.js";
 
 const DELAY_MS = 140;
 

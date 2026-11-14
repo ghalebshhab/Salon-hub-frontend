@@ -20,7 +20,7 @@ export default function PlatformFeaturesSection() {
       <div className="container editorial-section">
         <ScrollReveal className="editorial-section-heading centered">
           <div>
-            <span className="editorial-index">02 / One platform</span>
+            <span className="editorial-index">03 / One platform</span>
             <h2>Designed for every side of salon life.</h2>
             <p>
               Useful tools meet a calm interface, so customers, professionals,

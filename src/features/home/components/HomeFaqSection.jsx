@@ -6,7 +6,7 @@ export default function HomeFaqSection() {
     <section className="editorial-section container" id="questions">
       <ScrollReveal className="editorial-section-heading centered">
         <div>
-          <span className="editorial-index">05 / Good to know</span>
+          <span className="editorial-index">06 / Good to know</span>
           <h2>Clear answers before you begin.</h2>
         </div>
       </ScrollReveal>

@@ -6,7 +6,7 @@ export default function CareerSection() {
     <section className="editorial-career-band" id="careers">
       <div className="container editorial-career-grid">
         <ScrollReveal>
-          <span className="editorial-index">04 / For professionals</span>
+          <span className="editorial-index">05 / For professionals</span>
           <h2>Your experience deserves a thoughtful introduction.</h2>
         </ScrollReveal>
         <ScrollReveal className="editorial-career-copy" delay={80}>

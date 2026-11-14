@@ -8,7 +8,7 @@ export default function OwnerExperienceSection() {
     <section className="editorial-section container" id="owners">
       <ScrollReveal className="editorial-owner-panel">
         <div className="editorial-owner-copy">
-          <span className="editorial-index">03 / For salon owners</span>
+          <span className="editorial-index">04 / For salon owners</span>
           <h2>A more considered way to run and grow your salon.</h2>
           <p>
             Build a trusted public presence, organize appointments, and make

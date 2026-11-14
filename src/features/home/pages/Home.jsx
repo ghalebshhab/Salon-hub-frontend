@@ -1,3 +1,4 @@
+import AssistantPicksSection from "../components/AssistantPicksSection.jsx";
 import CareerSection from "../components/CareerSection.jsx";
 import HomeCtaSection from "../components/HomeCtaSection.jsx";
 import HomeFaqSection from "../components/HomeFaqSection.jsx";
@@ -11,6 +12,7 @@ function Home() {
     <div className="editorial-home">
       <HomeHero />
       <SalonDiscoverySection />
+      <AssistantPicksSection />
       <PlatformFeaturesSection />
       <OwnerExperienceSection />
       <CareerSection />

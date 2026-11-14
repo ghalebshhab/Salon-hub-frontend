@@ -19,3 +19,14 @@ export const COMMUNITY_SECTION_TARGETS = {
     focusSelector: "textarea",
   },
 };
+
+/**
+ * Which workspace section a community URL shows. Creating a post happens
+ * in the feed, so /community/new opens the feed with the composer focused.
+ */
+export function communitySectionFor(pathname) {
+  if (pathname.startsWith(COMMUNITY_ROUTES.discover)) return "discover";
+  if (pathname.startsWith(COMMUNITY_ROUTES.requests)) return "requests";
+  if (pathname.startsWith(COMMUNITY_ROUTES.following)) return "following";
+  return "feed";
+}

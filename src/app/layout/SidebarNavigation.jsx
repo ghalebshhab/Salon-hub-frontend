@@ -3,11 +3,12 @@ import {
   LogOut,
   PanelLeftClose,
   PanelLeftOpen,
+  Search,
   ShieldCheck,
   X,
 } from "lucide-react";
-import { useEffect, useRef } from "react";
-import { NavLink } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
 import useLogout from "../../features/auth/hooks/useLogout.js";
 import useAuth from "../../shared/auth/useAuth.js";
 import BrandLogo from "../../shared/components/BrandLogo.jsx";
@@ -16,6 +17,9 @@ import { useNotifications } from "../../features/notifications/context/Notificat
 import { getNavigationSections } from "./navigationConfig.js";
 import NavigationTooltip from "./NavigationTooltip.jsx";
 import SidebarCreateMenu from "./SidebarCreateMenu.jsx";
+import { filterNavigationSections } from "./menuFilter.js";
+import { highlightParts } from "../search/searchModel.js";
+import { openGlobalSearch } from "../search/searchEvents.js";
 
 export default function SidebarNavigation({
   collapsed,
@@ -29,6 +33,8 @@ export default function SidebarNavigation({
     unreadNotifications: unreadCount,
     pendingBookings: usePendingBookingCount(loggedIn && isOwner),
   };
+  const navigate = useNavigate();
+  const [menuQuery, setMenuQuery] = useState("");
   const asideRef = useRef(null);
   const closeButtonRef = useRef(null);
 
@@ -66,6 +72,7 @@ export default function SidebarNavigation({
     hasSalon,
     isEmployee,
   });
+  const visibleSections = filterNavigationSections(sections, menuQuery);
   const name =
     [user?.firstName, user?.lastName].filter(Boolean).join(" ") || "SalonHub";
   const initials = name
@@ -149,8 +156,46 @@ export default function SidebarNavigation({
             </NavigationTooltip>
           </div>
         )}
+        <div className="sidebar-menu-search" role="search">
+          <Search aria-hidden="true" />
+          <input
+            type="search"
+            value={menuQuery}
+            onChange={(event) => setMenuQuery(event.target.value)}
+            onKeyDown={(event) => {
+              const first = visibleSections[0]?.items[0];
+              if (event.key === "Enter" && first && menuQuery.trim()) {
+                event.preventDefault();
+                setMenuQuery("");
+                closeMobile();
+                navigate(first.to);
+              } else if (event.key === "Escape" && menuQuery) {
+                event.stopPropagation();
+                setMenuQuery("");
+              }
+            }}
+            placeholder="Search menu"
+            aria-label="Search the menu"
+            autoComplete="off"
+          />
+        </div>
+        <NavigationTooltip label="Search">
+          <button
+            className="sidebar-link sidebar-search-compact"
+            type="button"
+            onClick={openGlobalSearch}
+            aria-label="Search"
+          >
+            <Search />
+          </button>
+        </NavigationTooltip>
         <nav className="sidebar-nav">
-          {sections.map((section) => (
+          {menuQuery.trim() && visibleSections.length === 0 && (
+            <p className="sidebar-menu-empty" role="status">
+              No menu items start with “{menuQuery.trim()}”.
+            </p>
+          )}
+          {visibleSections.map((section) => (
             <section className="sidebar-section" key={section.label}>
               <div className="sidebar-section-head">
                 <h2>{section.label}</h2>
@@ -161,28 +206,43 @@ export default function SidebarNavigation({
                   />
                 )}
               </div>
-              {section.items.map(({ label, to, icon: Icon, end, badge }) => {
-                const count = badge ? Number(badgeCounts[badge]) || 0 : 0;
-                return (
-                  <NavigationTooltip key={to} label={label}>
-                    <NavLink
-                      to={to}
-                      end={end}
-                      className="sidebar-link"
-                      onClick={closeMobile}
-                      aria-label={count > 0 ? `${label}, ${count} new` : label}
-                    >
-                      <Icon />
-                      <span className="sidebar-link-label">{label}</span>
-                      {count > 0 && (
-                        <span className="sidebar-badge" aria-hidden="true">
-                          {count > 99 ? "99+" : count}
+              {section.items.map(
+                ({ label, to, icon: Icon, end, badge, ranges }) => {
+                  const count = badge ? Number(badgeCounts[badge]) || 0 : 0;
+                  return (
+                    <NavigationTooltip key={to} label={label}>
+                      <NavLink
+                        to={to}
+                        end={end}
+                        className="sidebar-link"
+                        onClick={closeMobile}
+                        aria-label={
+                          count > 0 ? `${label}, ${count} new` : label
+                        }
+                      >
+                        <Icon />
+                        <span className="sidebar-link-label">
+                          {ranges
+                            ? highlightParts(label, ranges).map(
+                                (part, index) =>
+                                  part.match ? (
+                                    <mark key={index}>{part.text}</mark>
+                                  ) : (
+                                    part.text
+                                  ),
+                              )
+                            : label}
                         </span>
-                      )}
-                    </NavLink>
-                  </NavigationTooltip>
-                );
-              })}
+                        {count > 0 && (
+                          <span className="sidebar-badge" aria-hidden="true">
+                            {count > 99 ? "99+" : count}
+                          </span>
+                        )}
+                      </NavLink>
+                    </NavigationTooltip>
+                  );
+                },
+              )}
             </section>
           ))}
         </nav>

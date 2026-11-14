@@ -370,3 +370,64 @@ kbd {
     animation: none;
   }
 }
+
+/* Sidebar: filter the menu as you type. */
+.sidebar-menu-search {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin: 0 0 12px;
+}
+.sidebar-menu-search svg {
+  position: absolute;
+  left: 11px;
+  width: 16px;
+  height: 16px;
+  color: var(--muted);
+  pointer-events: none;
+}
+.sidebar-menu-search input {
+  width: 100%;
+  min-height: 40px;
+  padding: 0 10px 0 34px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  color: var(--text);
+  background: color-mix(in srgb, var(--bg) 60%, var(--card));
+  font: inherit;
+  font-size: var(--text-sm);
+}
+.sidebar-menu-search input:focus {
+  border-color: var(--primary);
+  outline: 0;
+  box-shadow: 0 0 0 3px var(--focus-ring);
+}
+.sidebar-menu-empty {
+  margin: 4px 10px 12px;
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+.sidebar-link-label mark {
+  border-radius: 3px;
+  color: inherit;
+  background: color-mix(in srgb, var(--accent) 34%, transparent);
+}
+.sidebar-search-compact {
+  display: none;
+  width: 100%;
+  margin-bottom: 10px;
+}
+.app-sidebar.is-collapsed .sidebar-menu-search {
+  display: none;
+}
+.app-sidebar.is-collapsed .sidebar-search-compact {
+  display: flex;
+}
+@media (max-width: 1180px) {
+  .app-sidebar.is-collapsed .sidebar-menu-search {
+    display: flex;
+  }
+  .app-sidebar.is-collapsed .sidebar-search-compact {
+    display: none;
+  }
+}

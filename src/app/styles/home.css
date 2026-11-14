@@ -1,6 +1,7 @@
 .editorial-home {
   overflow: hidden;
-  background: var(--bg);
+  /* The app backdrop shows through; sections add their own surface. */
+  background: transparent;
 }
 
 .editorial-hero {

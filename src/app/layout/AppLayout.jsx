@@ -24,7 +24,7 @@ export default function AppLayout() {
   const showAppBackground = !authLayout;
   const shellClass = [
     "app-shell",
-    showAppBackground && "has-side-rays",
+    showAppBackground && "has-backdrop",
     authLayout && "is-auth-layout",
   ]
     .filter(Boolean)

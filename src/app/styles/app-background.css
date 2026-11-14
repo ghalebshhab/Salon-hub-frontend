@@ -1,51 +1,128 @@
+/*
+ * App background: soft salon daylight behind every page.
+ * Two brand colors only (plum and the gold accent), both very light,
+ * plus a paper grain. Only transforms animate, and very slowly.
+ */
 .app-shell {
   position: relative;
   min-height: 100vh;
   isolation: isolate;
 }
 
-.app-side-rays-layer {
+.app-backdrop {
   position: fixed;
-  inset: 70px 0 0 78px;
-  z-index: 20;
-  pointer-events: none;
-  opacity: 0.34;
-  mix-blend-mode: multiply;
-  mask-image: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(0, 0, 0, 0.38) 28%,
-    #000 58%,
-    #000 100%
+  z-index: -1;
+  inset: 0;
+  overflow: hidden;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--primary-soft) 46%, var(--bg)) 0%,
+    var(--bg) 46%,
+    color-mix(in srgb, var(--surface-elevated) 42%, var(--bg)) 100%
   );
+  pointer-events: none;
 }
 
-:root[data-theme="dark"] .app-side-rays-layer {
-  opacity: 0.3;
-  mix-blend-mode: screen;
+.app-backdrop-light,
+.app-backdrop-warm {
+  position: absolute;
+  border-radius: 50%;
+  will-change: transform;
 }
 
-@media (max-width: 1050px) {
-  .app-side-rays-layer {
-    left: 0;
-    opacity: 0.27;
+/* Window light: a plum wash that falls from the top right. */
+.app-backdrop-light {
+  top: -38vh;
+  right: -18vw;
+  width: 78vw;
+  height: 92vh;
+  background: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--primary) 17%, transparent),
+    color-mix(in srgb, var(--primary) 6%, transparent) 58%,
+    transparent
+  );
+  animation: app-backdrop-light 36s ease-in-out infinite alternate;
+}
+
+/* Warm glow: the gold accent, low and quiet at the bottom left. */
+.app-backdrop-warm {
+  bottom: -42vh;
+  left: -16vw;
+  width: 66vw;
+  height: 84vh;
+  background: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--accent) 15%, transparent),
+    color-mix(in srgb, var(--accent) 5%, transparent) 58%,
+    transparent
+  );
+  animation: app-backdrop-warm 44s ease-in-out infinite alternate;
+}
+
+/* Paper grain: keeps large flat areas from looking digital. */
+.app-backdrop-grain {
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.29 0 0 0 0 0.18 0 0 0 0 0.27 0 0 0 0.9 0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 220px 220px;
+  opacity: 0.07;
+  mix-blend-mode: multiply;
+}
+
+@keyframes app-backdrop-light {
+  to {
+    transform: translate3d(-6vw, 5vh, 0) scale(1.08);
   }
 }
 
+@keyframes app-backdrop-warm {
+  to {
+    transform: translate3d(5vw, -4vh, 0) scale(1.06);
+  }
+}
+
+:root[data-theme="dark"] .app-backdrop-light {
+  background: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--primary) 14%, transparent),
+    color-mix(in srgb, var(--primary) 5%, transparent) 58%,
+    transparent
+  );
+}
+
+:root[data-theme="dark"] .app-backdrop-warm {
+  background: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--accent) 8%, transparent),
+    color-mix(in srgb, var(--accent) 3%, transparent) 58%,
+    transparent
+  );
+}
+
+:root[data-theme="dark"] .app-backdrop-grain {
+  opacity: 0.16;
+  mix-blend-mode: soft-light;
+}
+
 @media (max-width: 680px) {
-  .app-side-rays-layer {
-    opacity: 0.22;
-    mask-image: linear-gradient(
-      90deg,
-      transparent 0%,
-      rgba(0, 0, 0, 0.65) 20%,
-      #000 100%
-    );
+  .app-backdrop-light {
+    top: -24vh;
+    right: -40vw;
+    width: 130vw;
+    height: 70vh;
+  }
+
+  .app-backdrop-warm {
+    left: -50vw;
+    width: 130vw;
+    height: 64vh;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .app-side-rays-layer {
-    opacity: 0.18;
+  .app-backdrop-light,
+  .app-backdrop-warm {
+    animation: none;
   }
 }

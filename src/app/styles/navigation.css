@@ -684,6 +684,35 @@ body:has(.app-sidebar.is-collapsed) .footer {
   white-space: nowrap;
 }
 
+/* Header: guest actions. */
+.header-guest-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.header-guest-actions .header-login-link {
+  display: inline-flex;
+  min-height: 40px;
+  align-items: center;
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-md);
+  font-weight: var(--weight-semibold);
+}
+.header-join-button {
+  display: inline-flex;
+  min-height: 40px;
+  align-items: center;
+  padding: 0 var(--space-4);
+  border-radius: var(--radius-md);
+  color: var(--on-primary);
+  background: var(--primary);
+  font-weight: var(--weight-semibold);
+  transition: background-color var(--duration-base) var(--ease-standard);
+}
+.header-join-button:hover {
+  background: var(--primary-dark);
+}
+
 /* Header: compact, elevated state once the page scrolls. */
 .creative-navbar,
 .creative-navbar-inner {
@@ -712,9 +741,74 @@ body:has(.creative-navbar.is-scrolled) .app-sidebar {
   top: 60px;
 }
 
+/* Account menu: identity header, icons, separated log out. */
+.header-profile-menu {
+  min-width: 240px;
+}
+.header-profile-identity {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: 4px;
+  padding: 8px 10px 12px;
+  border-bottom: 1px solid var(--border);
+}
+.header-profile-identity > span {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: var(--radius-md);
+  color: var(--primary);
+  background: var(--primary-soft);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-bold);
+}
+.header-profile-identity div {
+  display: grid;
+  min-width: 0;
+}
+.header-profile-identity strong {
+  overflow: hidden;
+  color: var(--text);
+  font-size: var(--text-md);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.header-profile-identity small {
+  color: var(--muted);
+  font-size: var(--text-xs);
+}
+.header-profile-menu a,
+.header-profile-menu button {
+  gap: 10px;
+  font-weight: var(--weight-medium);
+}
+.header-profile-menu svg {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 auto;
+  color: var(--muted);
+}
+.header-profile-menu .header-profile-logout {
+  margin-top: 4px;
+  border-top: 1px solid var(--border);
+  border-radius: 0 0 8px 8px;
+}
+.header-profile-menu .header-profile-logout:hover {
+  color: var(--danger);
+  background: var(--danger-soft);
+}
+
 @media (max-width: 900px) {
   .header-page-title {
     visibility: hidden;
     border-left: 0;
+  }
+}
+@media (max-width: 560px) {
+  .header-guest-actions .header-login-link {
+    display: none;
   }
 }

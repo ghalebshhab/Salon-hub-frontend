@@ -44,6 +44,7 @@ export default function AppLayout() {
         <Navbar
           onOpenMobile={authLayout ? undefined : navigation.openMobile}
           mobileOpen={navigation.mobileOpen}
+          showAuthActions={!authLayout}
         />
         {!authLayout && <SidebarNavigation {...navigation} />}
         <main className="page-main" id="main-content" tabIndex={-1}>

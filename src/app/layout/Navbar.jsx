@@ -1,4 +1,13 @@
-import { Menu, Moon, Sun } from "lucide-react";
+import {
+  Bell,
+  CalendarCheck,
+  IdCard,
+  LayoutDashboard,
+  Menu,
+  Moon,
+  ShieldCheck,
+  Sun,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import useLogout from "../../features/auth/hooks/useLogout.js";
@@ -10,10 +19,22 @@ import HeaderAccountMenu from "./HeaderAccountMenu.jsx";
 import { pageTitleFor } from "./pageTitles.js";
 
 const ACCOUNT_LINKS = [
-  { to: "/profile/career", label: "Career profile" },
-  { to: "/my-bookings", label: "My bookings" },
-  { to: "/account/security", label: "Account security" },
+  { to: "/my-bookings", label: "My bookings", icon: CalendarCheck },
+  { to: "/notifications", label: "Notifications", icon: Bell },
+  { to: "/profile/career", label: "Career profile", icon: IdCard },
+  { to: "/account/security", label: "Account security", icon: ShieldCheck },
 ];
+const OWNER_LINK = {
+  to: "/owner/dashboard",
+  label: "Salon dashboard",
+  icon: LayoutDashboard,
+};
+
+const ROLE_LABELS = {
+  OWNER: "Salon owner",
+  EMPLOYEE: "Salon professional",
+  ADMIN: "Administrator",
+};
 
 function useScrolled(threshold = 8) {
   const [scrolled, setScrolled] = useState(false);
@@ -26,13 +47,14 @@ function useScrolled(threshold = 8) {
   return scrolled;
 }
 
-function Navbar({ onOpenMobile, mobileOpen = false }) {
-  const { loggedIn, user } = useAuth();
+function Navbar({ onOpenMobile, mobileOpen = false, showAuthActions = true }) {
+  const { loggedIn, isOwner, role, user } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const logout = useLogout();
   const { pathname } = useLocation();
   const scrolled = useScrolled();
   const page = pageTitleFor(pathname);
+  const name = [user?.firstName, user?.lastName].filter(Boolean).join(" ");
   const initials =
     [user?.firstName, user?.lastName]
       .filter(Boolean)
@@ -71,13 +93,22 @@ function Navbar({ onOpenMobile, mobileOpen = false }) {
           {loggedIn ? (
             <HeaderAccountMenu
               initials={initials}
-              links={ACCOUNT_LINKS}
+              name={name || "Your account"}
+              roleLabel={ROLE_LABELS[role] ?? "Salon member"}
+              links={isOwner ? [OWNER_LINK, ...ACCOUNT_LINKS] : ACCOUNT_LINKS}
               onLogout={logout}
             />
           ) : (
-            <NavLink to="/login" className="header-login-link">
-              Log in
-            </NavLink>
+            showAuthActions && (
+              <div className="header-guest-actions">
+                <NavLink to="/login" className="header-login-link">
+                  Log in
+                </NavLink>
+                <NavLink to="/register" className="header-join-button">
+                  Join
+                </NavLink>
+              </div>
+            )
           )}
           {onOpenMobile && (
             <button

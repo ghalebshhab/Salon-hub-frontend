@@ -1,3 +1,4 @@
+import { LogOut } from "lucide-react";
 import { useEffect, useId, useRef, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 
@@ -6,7 +7,13 @@ import { NavLink, useLocation } from "react-router-dom";
  * Closes on outside click, Escape (returning focus to the avatar),
  * and route changes; opening moves focus to the first item.
  */
-export default function HeaderAccountMenu({ initials, links, onLogout }) {
+export default function HeaderAccountMenu({
+  initials,
+  name,
+  roleLabel,
+  links,
+  onLogout,
+}) {
   const location = useLocation();
   // The menu belongs to the page it was opened on, so navigating closes it.
   const [openPath, setOpenPath] = useState(null);
@@ -57,15 +64,27 @@ export default function HeaderAccountMenu({ initials, links, onLogout }) {
       </button>
       {open && (
         <div className="header-profile-menu" id={menuId} ref={menuRef}>
-          {links.map(({ to, label }) => (
+          {name && (
+            <div className="header-profile-identity">
+              <span aria-hidden="true">{initials}</span>
+              <div>
+                <strong>{name}</strong>
+                {roleLabel && <small>{roleLabel}</small>}
+              </div>
+            </div>
+          )}
+          {links.map(({ to, label, icon: Icon }) => (
             <NavLink key={to} to={to} onClick={() => setOpen(false)}>
+              {Icon && <Icon aria-hidden="true" />}
               {label}
             </NavLink>
           ))}
           <button
+            className="header-profile-logout"
             type="button"
             onClick={() => void onLogout(() => setOpen(false))}
           >
+            <LogOut aria-hidden="true" />
             Log out
           </button>
         </div>

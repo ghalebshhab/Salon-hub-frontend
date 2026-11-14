@@ -1,5 +1,5 @@
 import { Newspaper, Store, UserRoundPlus, UserRoundSearch } from "lucide-react";
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { COMMUNITY_ROUTES } from "../model/communityRoutes.js";
 
 const TABS = [
@@ -46,10 +46,9 @@ export default function CommunityTabs({ active, counts }) {
         const count = countKey ? counts[countKey] : null;
         const highlight = countKey === "requests" && count > 0;
         return (
-          <NavLink
+          <Link
             key={key}
             to={to}
-            end
             className={`community-tab ${active === key ? "is-active" : ""}`.trim()}
             aria-current={active === key ? "page" : undefined}
             aria-label={count != null ? `${label}, ${count}` : label}
@@ -69,7 +68,7 @@ export default function CommunityTabs({ active, counts }) {
                 {count}
               </span>
             )}
-          </NavLink>
+          </Link>
         );
       })}
     </nav>

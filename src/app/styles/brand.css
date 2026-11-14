@@ -1,0 +1,27 @@
+/* SalonHub brand lockup: comb-hub symbol + Fraunces wordmark. */
+.brand-logo-mark {
+  color: var(--primary);
+  filter: none;
+}
+
+.brand-logo-mark-hub {
+  fill: var(--accent);
+}
+
+.creative-brand:hover .brand-logo-mark {
+  filter: none;
+  transform: translateY(-1px);
+}
+
+.brand-logo-name {
+  color: var(--text);
+  font-family: var(--font-display);
+  font-weight: var(--weight-semibold);
+  letter-spacing: -0.01em;
+}
+
+.brand-logo-name span {
+  color: var(--primary);
+  font-style: italic;
+  font-weight: var(--weight-medium);
+}

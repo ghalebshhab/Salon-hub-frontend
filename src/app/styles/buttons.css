@@ -2,6 +2,11 @@
  * Button system. Single source for .btn and its variants.
  * Use the shared <Button> component (src/shared/components/Button.jsx)
  * rather than composing these classes by hand.
+ *
+ * States: rest → hover (lift, pointer devices only) → active (press) →
+ * disabled (flat, no motion). Keyboard focus comes from motion.css.
+ * :where() keeps the state selectors at the same specificity as the
+ * variants, so feature overrides continue to win.
  */
 .btn {
   display: inline-flex;
@@ -14,8 +19,15 @@
   border-radius: 4px;
   font-weight: var(--weight-bold);
   letter-spacing: 0.01em;
+  text-decoration: none;
   cursor: pointer;
-  transition: 0.2s ease;
+  user-select: none;
+  transition:
+    color var(--duration-base) var(--ease-standard),
+    background-color var(--duration-base) var(--ease-standard),
+    border-color var(--duration-base) var(--ease-standard),
+    box-shadow var(--duration-base) var(--ease-standard),
+    transform var(--duration-base) var(--ease-standard);
 }
 
 /* Compact size for card and list actions. */
@@ -25,22 +37,10 @@
   font-size: var(--text-md);
 }
 
-.btn:disabled {
-  opacity: 0.65;
-  cursor: not-allowed;
-}
-
 .btn-primary {
   color: var(--on-primary);
   background: var(--primary);
   box-shadow: 0 12px 28px color-mix(in srgb, var(--primary) 24%, transparent);
-}
-
-.btn-primary:hover {
-  color: var(--on-primary);
-  background: var(--primary-dark);
-  box-shadow: 0 16px 34px color-mix(in srgb, var(--primary) 31%, transparent);
-  transform: translateY(-1px);
 }
 
 .btn-secondary {
@@ -49,20 +49,10 @@
   background: var(--card);
 }
 
-.btn-secondary:hover {
-  border-color: var(--primary);
-  background: var(--primary-soft);
-  transform: translateY(-1px);
-}
-
 .btn-danger {
   color: white;
   border: none;
   background: #d93636;
-}
-
-.btn-danger:hover {
-  background: #b92d2d;
 }
 
 .btn-success {
@@ -71,6 +61,44 @@
   background: var(--success);
 }
 
-.btn-success:hover {
-  background: color-mix(in srgb, var(--success) 86%, #000);
+/* Hover applies only where a pointer can hover, so it never sticks on touch. */
+@media (hover: hover) {
+  .btn:where(:not(:disabled, [aria-disabled="true"])):hover {
+    transform: translateY(-1px);
+  }
+
+  .btn-primary:where(:not(:disabled, [aria-disabled="true"])):hover {
+    color: var(--on-primary);
+    background: var(--primary-dark);
+    box-shadow: 0 16px 34px color-mix(in srgb, var(--primary) 31%, transparent);
+  }
+
+  .btn-secondary:where(:not(:disabled, [aria-disabled="true"])):hover {
+    border-color: var(--primary);
+    background: var(--primary-soft);
+  }
+
+  .btn-danger:where(:not(:disabled, [aria-disabled="true"])):hover {
+    background: #b92d2d;
+  }
+
+  .btn-success:where(:not(:disabled, [aria-disabled="true"])):hover {
+    background: color-mix(in srgb, var(--success) 86%, #000);
+  }
+}
+
+/* Press: the button settles back down and the shadow tightens. */
+.btn:where(:not(:disabled, [aria-disabled="true"])):active {
+  transform: translateY(0) scale(0.98);
+  transition-duration: var(--duration-fast);
+}
+
+.btn-primary:where(:not(:disabled, [aria-disabled="true"])):active {
+  box-shadow: 0 6px 14px color-mix(in srgb, var(--primary) 22%, transparent);
+}
+
+.btn:where(:disabled, [aria-disabled="true"]) {
+  opacity: 0.6;
+  box-shadow: none;
+  cursor: not-allowed;
 }

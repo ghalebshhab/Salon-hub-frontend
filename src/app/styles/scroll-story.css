@@ -39,10 +39,15 @@ html:has(.editorial-home) {
   filter: blur(8px);
   transform: translate3d(0, clamp(28px, 5vw, 64px), 0) scale(0.985);
   transform-origin: center bottom;
+  /*
+   * A gentle ease-out. The app's standard curve does most of its travel in
+   * the first third, which makes a long reveal still look fast.
+   */
+  --reveal-ease: cubic-bezier(0.33, 1, 0.68, 1);
   transition:
-    opacity 760ms var(--motion-ease) var(--reveal-delay, 0ms),
-    transform 920ms var(--motion-ease) var(--reveal-delay, 0ms),
-    filter 680ms ease var(--reveal-delay, 0ms);
+    opacity 1200ms var(--reveal-ease) var(--reveal-delay, 0ms),
+    transform 1400ms var(--reveal-ease) var(--reveal-delay, 0ms),
+    filter 1100ms ease var(--reveal-delay, 0ms);
   will-change: opacity, transform, filter;
 }
 

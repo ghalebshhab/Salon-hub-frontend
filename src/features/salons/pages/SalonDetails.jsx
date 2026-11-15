@@ -25,11 +25,15 @@ import SalonWorkGallery from "../../media/components/SalonWorkGallery.jsx";
 import { optimizedCloudinaryImage } from "../../media/model/cloudinaryMedia.js";
 import useSalonFollow from "../../community/hooks/useSalonFollow.js";
 import ReportDialog from "../../moderation/components/ReportDialog.jsx";
+import SalonLocationDialog from "../components/SalonLocationDialog.jsx";
+import SalonLocationPreview from "../components/SalonLocationPreview.jsx";
+import { toMapPoint } from "../model/jordanMapLocation.js";
 
 const formatTime = (value) => value?.slice(0, 5) || "Not listed";
 
 function SalonDetails() {
   const [reportOpen, setReportOpen] = useState(false);
+  const [mapOpen, setMapOpen] = useState(false);
   const { salon, employees, loading } = useSalonDetails();
   const { loggedIn, user } = useAuth();
   const { joining, requestJoin } = useJoinSalonRequest();
@@ -77,6 +81,7 @@ function SalonDetails() {
   const belongsToSalon = Number(user?.salonId) === Number(salonId);
   const canRequestJoin =
     loggedIn && user?.role === "USER" && !ownsSalon && !belongsToSalon;
+  const mapPoint = toMapPoint(salon.latitude, salon.longitude);
   return (
     <section className="salon-details-page">
       <div className="container section">
@@ -105,7 +110,17 @@ function SalonDetails() {
               <SalonStatusBadge state={salon.state} />
             </div>
             <h1>{salon.name}</h1>
-            {salon.googleMapsUrl ? (
+            {mapPoint ? (
+              <button
+                className="salon-details-location salon-details-location-link"
+                type="button"
+                onClick={() => setMapOpen(true)}
+              >
+                <MapPin aria-hidden="true" />
+                <span>{salon.city || "Salon location"}</span>
+                <span className="salon-details-location-cta">View on map</span>
+              </button>
+            ) : salon.googleMapsUrl ? (
               <a
                 className="salon-details-location salon-details-location-link"
                 href={salon.googleMapsUrl}
@@ -219,6 +234,14 @@ function SalonDetails() {
             <div className="salon-info-card">
               <span className="eyebrow">At a glance</span>
               <h2>Plan your visit</h2>
+              {mapPoint && (
+                <SalonLocationPreview
+                  salonName={salon.name}
+                  city={salon.city}
+                  point={mapPoint}
+                  onOpen={() => setMapOpen(true)}
+                />
+              )}
               <div className="salon-info-list">
                 <div>
                   <Clock3 aria-hidden="true" />
@@ -231,7 +254,15 @@ function SalonDetails() {
                   <MapPin aria-hidden="true" />
                   <span>
                     <strong>Location</strong>
-                    {salon.googleMapsUrl ? (
+                    {mapPoint ? (
+                      <button
+                        className="salon-info-map-link"
+                        type="button"
+                        onClick={() => setMapOpen(true)}
+                      >
+                        {salon.city || "Salon location"} · View on map
+                      </button>
+                    ) : salon.googleMapsUrl ? (
                       <a
                         href={salon.googleMapsUrl}
                         target="_blank"
@@ -374,6 +405,14 @@ function SalonDetails() {
           </main>
         </div>
       </div>
+      {mapOpen && mapPoint && (
+        <SalonLocationDialog
+          salonName={salon.name}
+          city={salon.city}
+          point={mapPoint}
+          onClose={() => setMapOpen(false)}
+        />
+      )}
       {reportOpen && (
         <ReportDialog
           targetType="SALON"

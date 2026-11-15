@@ -54,7 +54,11 @@ export default function useSalonBookings() {
     data,
     loading,
     refetch: loadBookings,
-  } = useQuery(loader, { initialData: {}, onError: showErrorToast });
+  } = useQuery(loader, {
+    initialData: {},
+    onError: showErrorToast,
+    keepPreviousData: true,
+  });
   const { bookings = [], employees = [] } = data;
 
   const openAssignment = (booking, employeeId) => {
@@ -116,22 +120,40 @@ export default function useSalonBookings() {
     }
   };
 
-  const handleAccept = async (booking) => {
-    try {
-      const response = await acceptBookingApi(booking.id, {
-        ownerNote: "Accepted, please come on time.",
-        assignedEmployeeId: booking.assignedEmployeeId || null,
-      });
+  const [acceptingBooking, setAcceptingBooking] = useState(null);
+  const [accepting, setAccepting] = useState(false);
 
+  /** Opens the confirm dialog, where the owner chooses who serves the customer. */
+  const handleAccept = (booking) => setAcceptingBooking(booking);
+  const closeAccept = () => {
+    if (!accepting) setAcceptingBooking(null);
+  };
+
+  const submitAccept = async ({ assignedEmployeeId, ownerNote }) => {
+    if (!acceptingBooking) return;
+    try {
+      setAccepting(true);
+      const response = await acceptBookingApi(acceptingBooking.id, {
+        ownerNote,
+        assignedEmployeeId,
+      });
       if (response.success) {
-        showSuccessToast(response.message || "Booking accepted");
+        showSuccessToast(
+          "Confirmed. The customer and the employee were notified.",
+        );
+        setAcceptingBooking(null);
         loadBookings();
       } else {
         showErrorToast(response.message || "Failed to accept booking");
       }
     } catch (error) {
-      console.error(error);
-      showErrorToast(error?.message || "Failed to accept booking");
+      showErrorToast(
+        error?.response?.data?.message ||
+          error?.message ||
+          "Failed to accept booking",
+      );
+    } finally {
+      setAccepting(false);
     }
   };
 
@@ -330,6 +352,11 @@ export default function useSalonBookings() {
     closeAssignment,
     submitAssignment,
     handleAccept,
+    acceptingBooking,
+    accepting,
+    closeAccept,
+    submitAccept,
+    loadBookings,
     openRejectModal,
     closeRejectModal,
     submitReject,

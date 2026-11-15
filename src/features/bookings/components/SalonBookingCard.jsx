@@ -8,31 +8,43 @@ import {
   UserRound,
   XCircle,
 } from "lucide-react";
+import { getStatusLabel, isLiveToday } from "../model/booking.js";
+import StaffLiveCard from "./live/StaffLiveCard.jsx";
 
 export default function SalonBookingCard({
   booking,
   eligibleEmployees,
   statusClass,
+  highlighted = false,
   onAccept,
   onAssign,
   onComplete,
   onReject,
   onReschedule,
+  onStatusChange,
 }) {
   const pendingReschedule = booking.rescheduleProposals?.find(
     (proposal) => proposal.status === "PENDING",
   );
   const canManage = ["PENDING", "ACCEPTED"].includes(booking.status);
+  const live = isLiveToday(booking);
 
   return (
-    <div className="booking-card">
+    <div
+      className={`booking-card ${highlighted ? "is-highlighted" : ""}`}
+      id={`booking-${booking.id}`}
+    >
       <div className="booking-card-header">
         <div>
           <h3>{booking.customerName || "Customer"}</h3>
           <p>{booking.customerEmail}</p>
         </div>
-        <span className={statusClass}>{booking.status}</span>
+        <span className={statusClass}>{getStatusLabel(booking.status)}</span>
       </div>
+
+      {live && (
+        <StaffLiveCard booking={booking} onStatusChange={onStatusChange} />
+      )}
 
       <div className="booking-info-grid">
         <p>
@@ -74,8 +86,8 @@ export default function SalonBookingCard({
             {booking.assignedEmployeeName
               ? `${booking.assignedEmployeeName} • ${
                   booking.assignedEmployeeSpecialty || "Employee"
-                }`
-              : "No employee assigned yet"}
+                }${booking.status === "PENDING" ? " (requested by the customer)" : ""}`
+              : "Customer asked you to assign someone"}
           </p>
         </div>
         {canManage && (
@@ -153,7 +165,7 @@ export default function SalonBookingCard({
             disabled={Boolean(pendingReschedule)}
           >
             <CheckCircle size={16} />
-            Accept
+            {booking.assignedEmployeeId ? "Accept" : "Assign and accept"}
           </button>
           <button
             className="btn btn-danger btn-small"
@@ -166,7 +178,7 @@ export default function SalonBookingCard({
         </div>
       )}
 
-      {booking.status === "ACCEPTED" && (
+      {booking.status === "ACCEPTED" && !live && (
         <button
           className="btn btn-secondary btn-small"
           type="button"

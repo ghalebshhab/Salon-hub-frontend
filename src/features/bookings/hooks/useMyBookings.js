@@ -24,7 +24,11 @@ export default function useMyBookings() {
     data: bookings,
     loading,
     refetch: loadBookings,
-  } = useQuery(loader, { initialData: [], onError: showErrorToast });
+  } = useQuery(loader, {
+    initialData: [],
+    onError: showErrorToast,
+    keepPreviousData: true,
+  });
 
   const previousStatuses = useRef(null);
   useEffect(() => {

@@ -1,4 +1,6 @@
+import AcceptBookingDialog from "../components/AcceptBookingDialog.jsx";
 import AssignEmployeeDialog from "../components/AssignEmployeeDialog.jsx";
+import useHighlightedBooking from "../hooks/useHighlightedBooking.js";
 import RejectBookingDialog from "../components/RejectBookingDialog.jsx";
 import RescheduleBookingDialog from "../components/RescheduleBookingDialog.jsx";
 import SalonBookingCard from "../components/SalonBookingCard.jsx";
@@ -7,6 +9,7 @@ import { getEligibleEmployees } from "../model/booking.js";
 
 function SalonBookings() {
   const manager = useSalonBookings();
+  const highlightedId = useHighlightedBooking(!manager.loading);
 
   if (manager.loading) {
     return <div className="loading">Loading salon bookings...</div>;
@@ -23,8 +26,8 @@ function SalonBookings() {
           <span className="eyebrow">Salon appointments</span>
           <h1>Salon Bookings</h1>
           <p>
-            Accept, reject, assign employee, or complete customer booking
-            requests.
+            Confirm requests and choose who serves each customer. Today's
+            appointments show the customer's trip and the service progress live.
           </p>
         </div>
       </div>
@@ -44,6 +47,8 @@ function SalonBookings() {
                 manager.employees,
               )}
               statusClass={manager.getStatusClass(booking.status)}
+              highlighted={highlightedId === booking.id}
+              onStatusChange={manager.loadBookings}
               onAccept={manager.handleAccept}
               onAssign={manager.openAssignment}
               onComplete={manager.handleComplete}
@@ -81,6 +86,15 @@ function SalonBookings() {
           onNoteChange={manager.setRescheduleNote}
           onClose={manager.closeReschedule}
           onSubmit={manager.submitReschedule}
+        />
+      )}
+
+      {manager.acceptingBooking && (
+        <AcceptBookingDialog
+          booking={manager.acceptingBooking}
+          accepting={manager.accepting}
+          onClose={manager.closeAccept}
+          onSubmit={manager.submitAccept}
         />
       )}
 

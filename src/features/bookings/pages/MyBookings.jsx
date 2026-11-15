@@ -1,4 +1,7 @@
 import useMyBookings from "../hooks/useMyBookings.js";
+import useHighlightedBooking from "../hooks/useHighlightedBooking.js";
+import CustomerLiveCard from "../components/live/CustomerLiveCard.jsx";
+import { getStatusLabel, isLiveToday } from "../model/booking.js";
 
 import { MessageSquareText } from "lucide-react";
 import CreateReviewModal from "../../reviews/components/CreateReviewModal.jsx";
@@ -27,10 +30,16 @@ function MyBookings() {
     getStatusClass,
     canCancel,
   } = useMyBookings();
+  const highlightedId = useHighlightedBooking(!loading);
 
   if (loading) {
     return <div className="loading">Loading your bookings...</div>;
   }
+
+  // Today's confirmed and running appointments come first.
+  const ordered = [...bookings].sort(
+    (a, b) => Number(isLiveToday(b)) - Number(isLiveToday(a)),
+  );
 
   return (
     <section className="container section">
@@ -49,12 +58,17 @@ function MyBookings() {
         </div>
       ) : (
         <div className="booking-list">
-          {bookings.map((booking) => {
+          {ordered.map((booking) => {
             const pendingReschedule = booking.rescheduleProposals?.find(
               (proposal) => proposal.status === "PENDING",
             );
+            const live = isLiveToday(booking);
             return (
-              <div className="booking-card" key={booking.id}>
+              <div
+                className={`booking-card ${highlightedId === booking.id ? "is-highlighted" : ""}`}
+                id={`booking-${booking.id}`}
+                key={booking.id}
+              >
                 <div className="booking-card-header">
                   <div>
                     <h3>{booking.salonName}</h3>
@@ -62,14 +76,20 @@ function MyBookings() {
                   </div>
 
                   <span className={getStatusClass(booking.status)}>
-                    {booking.status}
+                    {getStatusLabel(booking.status)}
                   </span>
                 </div>
 
-                {booking.status === "ACCEPTED" && (
+                {live && <CustomerLiveCard booking={booking} />}
+
+                {booking.status === "ACCEPTED" && !live && (
                   <p className="booking-decision accepted">
-                    The salon accepted your request. Your appointment is
-                    confirmed.
+                    The salon accepted your request
+                    {booking.assignedEmployeeName
+                      ? ` and ${booking.assignedEmployeeName} will serve you`
+                      : ""}
+                    . On the day, open this page to share your trip and follow
+                    your service live.
                   </p>
                 )}
                 {booking.status === "REJECTED" && (
@@ -80,8 +100,11 @@ function MyBookings() {
                 )}
                 {booking.status === "PENDING" && (
                   <p className="booking-decision pending">
-                    Your request was sent to the salon. We’ll show the decision
-                    here.
+                    Your request was sent to the salon.
+                    {booking.assignedEmployeeName
+                      ? ` Your time with ${booking.assignedEmployeeName} is held until the salon decides.`
+                      : " The salon will confirm and choose your professional."}{" "}
+                    You will get a notification.
                   </p>
                 )}
 

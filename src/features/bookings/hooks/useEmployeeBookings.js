@@ -12,10 +12,15 @@ export default function useEmployeeBookings() {
       requireData(await getMyEmployeeBookingsApi({ signal })) || [],
     [],
   );
-  const { data: bookings, loading } = useQuery(loader, {
+  const {
+    data: bookings,
+    loading,
+    refetch,
+  } = useQuery(loader, {
     initialData: [],
     onError: showErrorToast,
+    keepPreviousData: true,
   });
 
-  return { bookings, loading, getStatusClass };
+  return { bookings, loading, refetch, getStatusClass };
 }

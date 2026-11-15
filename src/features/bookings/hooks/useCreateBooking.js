@@ -1,12 +1,13 @@
-import { canEmployeePerformServices, getTodayDate } from "../model/booking.js";
+import {
+  canEmployeePerformServices,
+  getTodayDate,
+  toHourMinute,
+} from "../model/booking.js";
 import useQuery from "../../../shared/hooks/useQuery.js";
 import { requireData } from "../../../shared/api/response.js";
 import { useCallback, useMemo, useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
-import {
-  showSuccessToast,
-  showErrorToast,
-} from "../../../shared/notifications/toast.jsx";
+import { useLocation, useParams } from "react-router-dom";
+import { showErrorToast } from "../../../shared/notifications/toast.jsx";
 
 import { getSalonByIdApi } from "../../salons/api/salonApi.js";
 import { getActiveSalonServicesApi } from "../../services/api/salonServicesApi.js";
@@ -16,23 +17,38 @@ import {
   getBookingAvailabilityApi,
 } from "../api/bookingApi.js";
 
+export const BOOKING_STEPS = [
+  { key: "services", label: "Service" },
+  { key: "professional", label: "Professional" },
+  { key: "time", label: "Date & time" },
+  { key: "review", label: "Review" },
+];
+
+const MAX_NOTE = 1000;
+const MAX_LOCATION = 255;
+
+/**
+ * State for the booking wizard: services → professional → date & time → review.
+ * An empty `selectedEmployeeId` means "the salon assigns a professional".
+ */
 export default function useCreateBooking() {
   const { salonId } = useParams();
   const location = useLocation();
-  const navigate = useNavigate();
+  const preselectedServiceId = location.state?.selectedServiceId;
 
-  const selectedServiceIdFromState = location.state?.selectedServiceId;
-
+  const [step, setStep] = useState(0);
   const [selectedServiceIds, setSelectedServiceIds] = useState(() =>
-    selectedServiceIdFromState ? [Number(selectedServiceIdFromState)] : [],
+    preselectedServiceId ? [Number(preselectedServiceId)] : [],
   );
   const [selectedEmployeeId, setSelectedEmployeeId] = useState("");
+  const [bookingDate, setBookingDate] = useState(() => getTodayDate());
+  const [bookingTime, setBookingTime] = useState("");
   const [customerPhoneNumber, setCustomerPhoneNumber] = useState("");
   const [customerLocation, setCustomerLocation] = useState("");
-  const [bookingDate, setBookingDate] = useState("");
-  const [bookingTime, setBookingTime] = useState("");
   const [note, setNote] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
+  const [createdBooking, setCreatedBooking] = useState(null);
 
   const loader = useCallback(
     async (signal) => {
@@ -46,8 +62,10 @@ export default function useCreateBooking() {
       return {
         salon,
         services: services || [],
+        // The public list only contains active employees and has no status
+        // field; keep the check for responses that do include one.
         employees: (employees || []).filter(
-          (employee) => employee.status === "ACTIVE",
+          (employee) => !employee.status || employee.status === "ACTIVE",
         ),
       };
     },
@@ -59,12 +77,13 @@ export default function useCreateBooking() {
   });
   const { salon = null, services = [], employees = [] } = data;
 
-  const selectedServices = useMemo(() => {
-    return services.filter((service) =>
-      selectedServiceIds.includes(Number(service.id)),
-    );
-  }, [services, selectedServiceIds]);
-
+  const selectedServices = useMemo(
+    () =>
+      services.filter((service) =>
+        selectedServiceIds.includes(Number(service.id)),
+      ),
+    [services, selectedServiceIds],
+  );
   const eligibleEmployees = useMemo(
     () =>
       employees.filter((employee) =>
@@ -72,22 +91,24 @@ export default function useCreateBooking() {
       ),
     [employees, selectedServiceIds],
   );
-
-  const totalPrice = useMemo(() => {
-    return selectedServices.reduce(
-      (total, service) => total + Number(service.price || 0),
-      0,
-    );
-  }, [selectedServices]);
-
-  const totalDuration = useMemo(() => {
-    return selectedServices.reduce(
-      (total, service) => total + Number(service.durationMinutes || 0),
-      0,
-    );
-  }, [selectedServices]);
+  const selectedEmployee = useMemo(
+    () =>
+      employees.find(
+        (employee) => Number(employee.id) === Number(selectedEmployeeId),
+      ) || null,
+    [employees, selectedEmployeeId],
+  );
+  const totalPrice = selectedServices.reduce(
+    (total, service) => total + Number(service.price || 0),
+    0,
+  );
+  const totalDuration = selectedServices.reduce(
+    (total, service) => total + Number(service.durationMinutes || 0),
+    0,
+  );
 
   const availabilityReady =
+    step >= 2 &&
     Boolean(bookingDate) &&
     selectedServiceIds.length > 0 &&
     selectedServices.length === selectedServiceIds.length;
@@ -117,6 +138,7 @@ export default function useCreateBooking() {
     data: availability,
     error: availabilityQueryError,
     loading: availabilityQueryLoading,
+    refetch: reloadAvailability,
   } = useQuery(availabilityLoader, { initialData: null });
   const availabilityLoading = availabilityReady && availabilityQueryLoading;
   const availabilityError = availabilityQueryError
@@ -124,121 +146,121 @@ export default function useCreateBooking() {
       availabilityQueryError?.message ||
       "Unable to load available times"
     : "";
-
   const availableSlots = availability?.slots || [];
 
-  const handleEmployeeSelection = (employeeId) => {
-    setSelectedEmployeeId(employeeId);
-    setBookingTime("");
-  };
-
-  const handleServiceToggle = (serviceId) => {
-    setBookingTime("");
+  const toggleService = (serviceId) => {
     const id = Number(serviceId);
+    const nextIds = selectedServiceIds.includes(id)
+      ? selectedServiceIds.filter((item) => item !== id)
+      : [...selectedServiceIds, id];
+    setSelectedServiceIds(nextIds);
+    setBookingTime("");
+    // Keep the chosen professional only if they can still do every service.
+    if (
+      selectedEmployee &&
+      !canEmployeePerformServices(selectedEmployee, nextIds)
+    ) {
+      setSelectedEmployeeId("");
+    }
+  };
 
-    setSelectedServiceIds((prev) => {
-      if (prev.includes(id)) {
-        return prev.filter((item) => item !== id);
+  const chooseEmployee = (employeeId) => {
+    setSelectedEmployeeId(employeeId ? String(employeeId) : "");
+    setBookingTime("");
+  };
+
+  const chooseDate = (value) => {
+    setBookingDate(value);
+    setBookingTime("");
+  };
+
+  /** Shortcut when the chosen professional has no time: let the salon assign. */
+  const switchToSalonAssigns = () => chooseEmployee("");
+
+  const stepError = (index) => {
+    if (index === 0 && selectedServices.length === 0) {
+      return "Choose at least one service.";
+    }
+    if (index === 0 && eligibleEmployees.length === 0) {
+      return "No professional at this salon can do all the selected services together. Remove one service to continue.";
+    }
+    if (index === 2 && !bookingTime) {
+      return "Choose a time to continue.";
+    }
+    if (index === 3) {
+      if (customerLocation.trim().length === 0) {
+        return "Tell the salon where you are coming from.";
       }
-
-      return [...prev, id];
-    });
+      if (customerLocation.trim().length > MAX_LOCATION) {
+        return `Keep the area under ${MAX_LOCATION} characters.`;
+      }
+      if (note.trim().length > MAX_NOTE) {
+        return `Keep the note under ${MAX_NOTE} characters.`;
+      }
+    }
+    return "";
   };
 
-  const handleServiceSelection = (serviceId) => {
-    handleServiceToggle(serviceId);
-    setSelectedEmployeeId((currentId) => {
-      const employee = employees.find(
-        (item) => Number(item.id) === Number(currentId),
-      );
-      if (!employee) return currentId;
-      const nextIds = selectedServiceIds.includes(Number(serviceId))
-        ? selectedServiceIds.filter((id) => id !== Number(serviceId))
-        : [...selectedServiceIds, Number(serviceId)];
-      return canEmployeePerformServices(employee, nextIds) ? currentId : "";
-    });
+  const canContinue = !stepError(step);
+
+  const goNext = () => {
+    const error = stepError(step);
+    if (error) {
+      showErrorToast(error);
+      return;
+    }
+    setStep((current) => Math.min(current + 1, BOOKING_STEPS.length - 1));
+  };
+  const goBack = () => setStep((current) => Math.max(current - 1, 0));
+  const goToStep = (index) => {
+    // Only allow jumping back, or forward over steps that are already valid.
+    for (let i = 0; i < index; i += 1) {
+      if (stepError(i)) return;
+    }
+    setStep(index);
   };
 
-  const validateForm = () => {
-    if (
-      selectedServices.length === 0 ||
-      selectedServices.length !== selectedServiceIds.length
-    ) {
-      showErrorToast("Please choose at least one service");
-      return false;
+  const submit = async () => {
+    for (let i = 0; i < BOOKING_STEPS.length; i += 1) {
+      const error = stepError(i);
+      if (error) {
+        setStep(i);
+        setSubmitError(error);
+        return;
+      }
     }
-
-    if (!customerPhoneNumber.trim()) {
-      showErrorToast("Phone number is required");
-      return false;
-    }
-
-    if (!customerLocation.trim()) {
-      showErrorToast("Location is required");
-      return false;
-    }
-
-    if (!bookingDate) {
-      showErrorToast("Booking date is required");
-      return false;
-    }
-
-    if (availabilityLoading) {
-      showErrorToast("Please wait while available times are loading");
-      return false;
-    }
-
-    if (!bookingTime) {
-      showErrorToast("Choose one of the available appointment times");
-      return false;
-    }
-
-    if (
-      !availableSlots.some(
-        (slot) => slot.time?.toString().slice(0, 5) === bookingTime,
-      )
-    ) {
-      showErrorToast("This appointment time is no longer available");
-      return false;
-    }
-    return true;
-  };
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
-    if (!validateForm()) return;
-
+    setSubmitError("");
     try {
       setSubmitting(true);
-
-      const bookingData = {
+      const response = await createBookingApi({
         salonId: Number(salonId),
         serviceIds: selectedServiceIds,
         assignedEmployeeId: selectedEmployeeId
           ? Number(selectedEmployeeId)
           : null,
-        customerPhoneNumber: customerPhoneNumber.trim(),
+        customerPhoneNumber: customerPhoneNumber.trim() || null,
         customerLocation: customerLocation.trim(),
         bookingDate,
-        bookingTime,
-        note: note.trim(),
-      };
-
-      const response = await createBookingApi(bookingData);
-
+        bookingTime: toHourMinute(bookingTime),
+        note: note.trim() || null,
+      });
       if (response.success) {
-        showSuccessToast(response.message || "Booking created successfully");
-        navigate("/my-bookings");
-      } else {
-        showErrorToast(response.message || "Failed to create booking");
+        setCreatedBooking(response.data);
+        return;
+      }
+      const message = response.message || "The request could not be sent.";
+      setSubmitError(message);
+      // The time was taken while the customer was deciding: go back and refresh.
+      if (/no longer available|opening hours|not working/i.test(message)) {
+        setBookingTime("");
+        setStep(2);
+        reloadAvailability();
       }
     } catch (error) {
-      console.error(error);
-      showErrorToast(
+      setSubmitError(
         error?.response?.data?.message ||
           error?.message ||
-          "Failed to create booking",
+          "The request could not be sent.",
       );
     } finally {
       setSubmitting(false);
@@ -248,32 +270,40 @@ export default function useCreateBooking() {
   return {
     salon,
     services,
-    employees,
-    eligibleEmployees,
+    loading,
+    step,
+    goNext,
+    goBack,
+    goToStep,
+    canContinue,
     selectedServiceIds,
+    selectedServices,
+    toggleService,
+    eligibleEmployees,
     selectedEmployeeId,
-    handleEmployeeSelection,
+    selectedEmployee,
+    chooseEmployee,
+    switchToSalonAssigns,
+    bookingDate,
+    chooseDate,
+    bookingTime,
+    setBookingTime,
+    availability,
+    availableSlots,
+    availabilityLoading,
+    availabilityError,
+    reloadAvailability,
     customerPhoneNumber,
     setCustomerPhoneNumber,
     customerLocation,
     setCustomerLocation,
-    bookingDate,
-    setBookingDate,
-    bookingTime,
-    setBookingTime,
     note,
     setNote,
-    loading,
-    submitting,
-    selectedServices,
     totalPrice,
     totalDuration,
-    handleServiceToggle: handleServiceSelection,
-    getTodayDate,
-    availableSlots,
-    availabilityLoading,
-    availabilityError,
-    minimumLeadMinutes: availability?.minimumLeadMinutes || 30,
-    handleSubmit,
+    submitting,
+    submitError,
+    submit,
+    createdBooking,
   };
 }

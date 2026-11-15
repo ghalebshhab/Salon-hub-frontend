@@ -74,6 +74,90 @@ export const assignEmployeeToBookingApi = async (
   return response.data;
 };
 
+export const getAssignableEmployeesApi = async (bookingId, config = {}) => {
+  const response = await httpClient.get(
+    `/bookings/${bookingId}/assignable-employees`,
+    { ...config, showLoading: false },
+  );
+  return response.data;
+};
+
+// ---------- live tracking ----------
+
+const trackingPath = (bookingId) => `/bookings/${bookingId}/tracking`;
+const quiet = { showLoading: false };
+
+export const getBookingTrackingApi = async (bookingId, config = {}) => {
+  const response = await httpClient.get(trackingPath(bookingId), {
+    ...config,
+    ...quiet,
+  });
+  return response.data;
+};
+
+export const startJourneyApi = async (bookingId, position = null) => {
+  const response = await httpClient.post(
+    `${trackingPath(bookingId)}/journey/start`,
+    position,
+    quiet,
+  );
+  return response.data;
+};
+
+export const updateJourneyPositionApi = async (bookingId, position) => {
+  const response = await httpClient.put(
+    `${trackingPath(bookingId)}/journey/position`,
+    position,
+    quiet,
+  );
+  return response.data;
+};
+
+export const markArrivedApi = async (bookingId) => {
+  const response = await httpClient.post(
+    `${trackingPath(bookingId)}/journey/arrived`,
+    null,
+    quiet,
+  );
+  return response.data;
+};
+
+export const stopJourneyApi = async (bookingId) => {
+  const response = await httpClient.post(
+    `${trackingPath(bookingId)}/journey/stop`,
+    null,
+    quiet,
+  );
+  return response.data;
+};
+
+export const startServiceApi = async (bookingId) => {
+  const response = await httpClient.post(
+    `${trackingPath(bookingId)}/service/start`,
+    null,
+    quiet,
+  );
+  return response.data;
+};
+
+export const extendServiceApi = async (bookingId, minutes) => {
+  const response = await httpClient.post(
+    `${trackingPath(bookingId)}/service/extend`,
+    { minutes },
+    quiet,
+  );
+  return response.data;
+};
+
+export const completeServiceApi = async (bookingId) => {
+  const response = await httpClient.post(
+    `${trackingPath(bookingId)}/service/complete`,
+    null,
+    quiet,
+  );
+  return response.data;
+};
+
 export const getBookingRescheduleAvailabilityApi = async (
   bookingId,
   bookingDate,

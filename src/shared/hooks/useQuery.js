@@ -4,7 +4,13 @@ import { getApiErrorMessage } from "../api/response.js";
 // The loader owns data access; this hook owns request lifecycle and stale-result protection.
 export default function useQuery(
   loader,
-  { initialData = null, onError, errorMessage = "Unable to load data" } = {},
+  {
+    initialData = null,
+    onError,
+    errorMessage = "Unable to load data",
+    // While a refetch runs, keep showing the last data instead of initialData.
+    keepPreviousData = false,
+  } = {},
 ) {
   const [revision, setRevision] = useState(0);
   const [result, setResult] = useState(null);
@@ -28,10 +34,16 @@ export default function useQuery(
   }, [loader, revision, onError, errorMessage]);
 
   const current = result?.loader === loader && result?.revision === revision;
+  const previous = keepPreviousData && !current && result?.data != null;
   return {
-    data: current ? (result.data ?? initialData) : initialData,
+    data: current
+      ? (result.data ?? initialData)
+      : previous
+        ? result.data
+        : initialData,
     error: current ? result.error : null,
-    loading: !current,
+    loading: !current && !previous,
+    refreshing: !current && previous,
     refetch,
   };
 }

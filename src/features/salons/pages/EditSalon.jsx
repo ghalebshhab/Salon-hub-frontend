@@ -18,11 +18,12 @@ import SalonServicesList from "../../services/components/SalonServicesList.jsx";
 import EditableSalonSection from "../components/EditableSalonSection.jsx";
 import SalonCoverEditor from "../components/SalonCoverEditor.jsx";
 import SalonEmployees from "../components/SalonEmployees.jsx";
+import SalonLocationField from "../components/SalonLocationField.jsx";
 import {
   AvailabilityEditor,
+  CityEditor,
   ContactEditor,
   IdentityEditor,
-  LocationEditor,
 } from "../components/SalonSectionEditors.jsx";
 import SalonStatusBadge from "../components/SalonStatusBadge.jsx";
 import useEditSalon from "../hooks/useEditSalon.js";
@@ -197,25 +198,22 @@ export default function EditSalon() {
             {...sectionProps("location")}
             eyebrow="Location"
             title="Help guests arrive with confidence"
-            description="Choose the precise map point and keep the public city label accurate."
+            description="Pin the exact entrance on Google Maps. Guests can open it and get directions from the salon page."
             className="owner-edit-wide"
-            editor={
-              <LocationEditor
-                form={form}
-                setForm={editor.setForm}
-                onChange={editor.handleChange}
-              />
-            }
+            editor={<CityEditor form={form} onChange={editor.handleChange} />}
           >
-            <div className="owner-edit-detail-list">
-              <span>
-                <MapPin size={17} /> {salon.city || "Not listed"}
+            <div className="owner-location-summary">
+              <span className="owner-location-city">
+                <MapPin size={17} aria-hidden="true" /> City:{" "}
+                <strong>{salon.city || "Not listed"}</strong>
               </span>
-              {salon.googleMapsUrl && (
-                <a href={salon.googleMapsUrl} target="_blank" rel="noreferrer">
-                  Open saved map location
-                </a>
-              )}
+              <SalonLocationField
+                latitude={salon.latitude}
+                longitude={salon.longitude}
+                saving={editor.saving}
+                onConfirm={editor.saveLocation}
+                onRemove={editor.removeLocation}
+              />
             </div>
           </EditableSalonSection>
         </div>

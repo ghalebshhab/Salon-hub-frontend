@@ -34,6 +34,15 @@ export const updateSalonApi = async (salonId, data) => {
   return mapSalonResponse(response).data;
 };
 
+/** Sets or clears only the map pin: `{ latitude, longitude, city? }`. */
+export const updateSalonLocationApi = async (salonId, location) => {
+  const response = await httpClient.put(
+    `/salons/${salonId}/location`,
+    location,
+  );
+  return mapSalonResponse(response).data;
+};
+
 export const resubmitSalonApi = async (salonId) => {
   const response = await httpClient.post(`/salons/${salonId}/resubmit`);
   return mapSalonResponse(response).data;

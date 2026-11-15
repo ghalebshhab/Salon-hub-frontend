@@ -1,19 +1,4 @@
-import GoogleMapsLocationPicker from "./GoogleMapsLocationPicker.jsx";
-
-const SALON_CITIES = [
-  "Amman",
-  "Zarqa",
-  "Irbid",
-  "Aqaba",
-  "Jerash",
-  "Madaba",
-  "Ajloun",
-  "As-Salt",
-  "Al-Karak",
-  "Ma'an",
-  "Tafilah",
-  "Mafraq",
-];
+import { SALON_CITIES } from "../model/salonCities.js";
 
 export function IdentityEditor({ form, onChange }) {
   return (
@@ -105,57 +90,18 @@ export function AvailabilityEditor({ form, setForm, onChange }) {
   );
 }
 
-export function LocationEditor({ form, setForm, onChange }) {
-  const applyLocation = ({ latitude, longitude, googleMapsUrl, city }) =>
-    setForm((current) => ({
-      ...current,
-      latitude,
-      longitude,
-      googleMapsUrl,
-      ...(city ? { city } : {}),
-    }));
-
-  const setMapUrl = (value) => {
-    const coordinateMatch =
-      value.match(/@(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/) ||
-      value.match(/[?&](?:q|query)=(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/);
-    setForm((current) => ({
-      ...current,
-      googleMapsUrl: value,
-      ...(coordinateMatch
-        ? { latitude: coordinateMatch[1], longitude: coordinateMatch[2] }
-        : {}),
-    }));
-  };
-
+export function CityEditor({ form, onChange }) {
   return (
-    <div className="owner-location-editor">
-      <div className="owner-editor-fields">
-        <label>
-          <span>City</span>
-          <select name="city" value={form.city} onChange={onChange} required>
-            <option value="">Select a city</option>
-            {SALON_CITIES.map((city) => (
-              <option key={city}>{city}</option>
-            ))}
-          </select>
-        </label>
-        <label>
-          <span>Google Maps URL</span>
-          <input
-            name="googleMapsUrl"
-            type="url"
-            value={form.googleMapsUrl}
-            onChange={(event) => setMapUrl(event.target.value)}
-            placeholder="https://maps.google.com/..."
-          />
-        </label>
-      </div>
-      <GoogleMapsLocationPicker
-        latitude={form.latitude}
-        longitude={form.longitude}
-        onLocationChange={applyLocation}
-      />
+    <div className="owner-editor-fields">
+      <label>
+        <span>City shown on the profile</span>
+        <select name="city" value={form.city} onChange={onChange} required>
+          <option value="">Select a city</option>
+          {SALON_CITIES.map((city) => (
+            <option key={city}>{city}</option>
+          ))}
+        </select>
+      </label>
     </div>
   );
 }

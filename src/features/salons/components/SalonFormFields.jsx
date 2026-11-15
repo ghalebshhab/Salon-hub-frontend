@@ -1,21 +1,7 @@
-import { ExternalLink, MapPin } from "lucide-react";
+import { MapPin } from "lucide-react";
 import MediaSourcePicker from "../../media/components/MediaSourcePicker.jsx";
-import GoogleMapsLocationPicker from "./GoogleMapsLocationPicker.jsx";
-
-const SALON_CITIES = [
-  "Amman",
-  "Zarqa",
-  "Irbid",
-  "Aqaba",
-  "Jerash",
-  "Madaba",
-  "Ajloun",
-  "As-Salt",
-  "Al-Karak",
-  "Ma'an",
-  "Tafilah",
-  "Mafraq",
-];
+import { SALON_CITIES } from "../model/salonCities.js";
+import SalonLocationField from "./SalonLocationField.jsx";
 
 export default function SalonFormFields({ form, setForm, onChange }) {
   const setTime = (field, value) =>
@@ -29,26 +15,13 @@ export default function SalonFormFields({ form, setForm, onChange }) {
       coverPreviewUrl: previewUrl,
     }));
 
-  const setMapUrl = (value) => {
-    const coordinateMatch =
-      value.match(/@(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/) ||
-      value.match(/[?&](?:q|query)=(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/);
-    setForm((current) => ({
-      ...current,
-      googleMapsUrl: value,
-      ...(coordinateMatch
-        ? { latitude: coordinateMatch[1], longitude: coordinateMatch[2] }
-        : {}),
-    }));
-  };
-
   const setMapLocation = ({ latitude, longitude, googleMapsUrl, city }) =>
     setForm((current) => ({
       ...current,
-      latitude,
-      longitude,
-      googleMapsUrl,
-      ...(city ? { city } : {}),
+      latitude: latitude ?? "",
+      longitude: longitude ?? "",
+      googleMapsUrl: googleMapsUrl ?? "",
+      ...(SALON_CITIES.includes(city) ? { city } : {}),
     }));
 
   return (
@@ -157,63 +130,28 @@ export default function SalonFormFields({ form, setForm, onChange }) {
           <div>
             <MapPin size={19} />
             <div>
-              <strong>Google Maps location</strong>
+              <strong>Salon location on Google Maps</strong>
               <small>
-                Search, click or move the marker. The location fields are filled
-                automatically.
+                Optional, but guests find you faster with a map pin and
+                directions.
               </small>
             </div>
           </div>
-          <a
-            className="text-link"
-            href="https://www.google.com/maps/search/salon+in+Jordan"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Choose on Google Maps <ExternalLink size={14} />
-          </a>
         </div>
-        <GoogleMapsLocationPicker
+        <SalonLocationField
           latitude={form.latitude}
           longitude={form.longitude}
-          onLocationChange={setMapLocation}
+          setLabel="Map pin selected"
+          confirmLabel="Use this location"
+          onConfirm={setMapLocation}
+          onRemove={() =>
+            setMapLocation({
+              latitude: null,
+              longitude: null,
+              googleMapsUrl: null,
+            })
+          }
         />
-        <div className="form-group">
-          <label htmlFor="salon-google-maps">Google Maps URL</label>
-          <input
-            id="salon-google-maps"
-            type="url"
-            value={form.googleMapsUrl}
-            onChange={(event) => setMapUrl(event.target.value)}
-            placeholder="https://www.google.com/maps/place/.../@31.95,35.91,17z"
-          />
-        </div>
-        <div className="form-row">
-          <div className="form-group">
-            <label htmlFor="salon-latitude">Latitude</label>
-            <input
-              id="salon-latitude"
-              name="latitude"
-              type="number"
-              step="any"
-              value={form.latitude}
-              onChange={onChange}
-              placeholder="31.9539"
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="salon-longitude">Longitude</label>
-            <input
-              id="salon-longitude"
-              name="longitude"
-              type="number"
-              step="any"
-              value={form.longitude}
-              onChange={onChange}
-              placeholder="35.9106"
-            />
-          </div>
-        </div>
       </div>
       <MediaSourcePicker
         label="Salon profile picture"

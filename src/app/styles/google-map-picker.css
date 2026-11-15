@@ -1,93 +1,711 @@
-.google-map-picker {
+/* ============================================================
+ * Salon location: map picker, embeds, owner field, guest dialog
+ * ============================================================ */
+
+/* ---------- Embedded Google Map (read-only iframe) ---------- */
+.map-embed {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 160px;
+  overflow: hidden;
+  background:
+    repeating-linear-gradient(
+      45deg,
+      transparent 0 14px,
+      color-mix(in srgb, var(--border) 45%, transparent) 14px 15px
+    ),
+    var(--secondary);
+}
+.map-embed iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+.map-embed.is-static iframe {
+  pointer-events: none;
+}
+
+/* ---------- Interactive picker (Google Maps JS API) ---------- */
+.map-picker {
   display: grid;
-  gap: 12px;
-  margin: 16px 0;
+  grid-template-rows: auto 1fr;
+  gap: var(--space-3);
+  height: 100%;
 }
-.google-map-search {
-  min-height: 52px;
-  display: flex;
-  align-items: center;
+.map-picker-search {
+  min-height: 48px;
 }
-.google-map-search > span {
-  color: var(--muted);
-  font-size: var(--text-sm);
-  font-weight: var(--weight-bold);
-}
-.google-map-search gmp-place-autocomplete {
+.map-picker-search gmp-place-autocomplete {
   width: 100%;
   color-scheme: light dark;
   --gmp-mat-color-surface: var(--card);
   --gmp-mat-color-on-surface: var(--text);
   --gmp-mat-color-primary: var(--primary);
 }
-.google-map-canvas {
-  width: 100%;
-  height: 380px;
-  border: 1px solid var(--border);
-  border-radius: 18px;
+.map-picker[data-ready="false"] .map-picker-search {
+  border-radius: var(--radius-md);
+  background: var(--secondary);
+}
+.map-picker-stage {
+  position: relative;
+  min-height: 0;
+  border-radius: var(--radius-lg);
   overflow: hidden;
-  background: linear-gradient(135deg, var(--secondary), var(--card));
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
-}
-.google-map-picker-configuration .google-map-canvas,
-.google-map-picker-error .google-map-canvas {
-  height: 180px;
-  display: none;
-}
-.google-map-status {
-  display: flex;
-  gap: 11px;
-  align-items: flex-start;
-  padding: 13px 15px;
   border: 1px solid var(--border);
-  border-radius: 13px;
-  background: var(--card);
-  color: var(--muted);
 }
-.google-map-status > svg {
-  flex: 0 0 auto;
-  margin-top: 2px;
-  color: var(--primary);
+.map-picker-canvas {
+  position: absolute;
+  inset: 0;
 }
-.google-map-status div {
-  display: grid;
-  gap: 3px;
-}
-.google-map-status strong {
-  color: var(--text);
-  font-size: var(--text-sm);
-}
-.google-map-status span {
-  font-size: var(--text-xs);
-  line-height: 1.45;
-}
-.google-map-status small {
+.map-picker-loading {
+  position: absolute;
+  inset: 0;
   display: flex;
   align-items: center;
-  gap: 5px;
-  margin-top: 4px;
-  color: var(--primary-dark);
+  justify-content: center;
+  gap: var(--space-2);
+  color: var(--muted);
+  font-size: var(--text-md);
+  font-weight: var(--weight-semibold);
+  background: var(--secondary);
+}
+
+.spin {
+  animation: location-spin 0.9s linear infinite;
+}
+@keyframes location-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---------- Dialog shell (owner picker and guest view) ---------- */
+.location-dialog {
+  width: min(1040px, calc(100vw - 32px));
+  max-width: none;
+  max-height: calc(100dvh - 32px);
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  color: var(--text);
+  background: var(--card);
+  box-shadow: var(--elevation-4);
+  overflow: hidden;
+}
+.location-dialog[open] {
+  display: flex;
+  flex-direction: column;
+  animation: location-dialog-in var(--duration-slow) var(--ease-standard);
+}
+.location-dialog::backdrop {
+  background: rgba(23, 17, 22, 0.55);
+  backdrop-filter: blur(6px);
+}
+@keyframes location-dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.location-dialog-header {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-4);
+  padding: var(--space-6) var(--space-6) var(--space-4);
+}
+.location-dialog-header > div {
+  flex: 1;
+  min-width: 0;
+}
+.location-dialog-header h2 {
+  margin: var(--space-1) 0 var(--space-1);
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-snug);
+}
+.location-dialog-header p {
+  margin: 0;
+  color: var(--muted);
+  font-size: var(--text-md);
+  line-height: var(--leading-normal);
+}
+.location-dialog-icon {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-lg);
+  color: var(--primary);
+  background: var(--primary-soft);
+}
+.location-dialog-close {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  color: var(--muted);
+  background: var(--card);
+  cursor: pointer;
+  transition:
+    color var(--duration-fast),
+    background-color var(--duration-fast);
+}
+.location-dialog-close:hover:not(:disabled) {
+  color: var(--text);
+  background: var(--secondary);
+}
+.location-dialog-close:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.location-dialog-body {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: var(--space-5);
+  padding: 0 var(--space-6) var(--space-5);
+  overflow-y: auto;
+}
+.location-dialog-map {
+  height: 480px;
+  min-width: 0;
+}
+.location-dialog-map > .map-embed {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+.location-dialog-empty-map {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-6);
+  border: 1.5px dashed var(--border);
+  border-radius: var(--radius-lg);
+  color: var(--muted);
+  text-align: center;
+  background: var(--secondary);
+}
+.location-dialog-empty-map svg {
+  width: 36px;
+  height: 36px;
+  color: var(--primary);
+}
+.location-dialog-empty-map strong {
+  color: var(--text);
+  font-size: var(--text-lg);
+}
+.location-dialog-empty-map span {
+  max-width: 300px;
+  font-size: var(--text-md);
+  line-height: var(--leading-normal);
+}
+
+/* Side panel */
+.location-dialog-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-width: 0;
+}
+.location-method {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  min-height: 56px;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  background: var(--card);
+  cursor: pointer;
+  transition:
+    border-color var(--duration-fast),
+    background-color var(--duration-fast);
+}
+.location-method:hover:not(:disabled) {
+  border-color: var(--primary);
+  background: var(--primary-soft);
+}
+.location-method:disabled {
+  opacity: 0.65;
+  cursor: progress;
+}
+.location-method > svg {
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+  color: var(--primary);
+}
+.location-method span {
+  display: grid;
+  gap: 2px;
+}
+.location-method strong {
+  font-size: var(--text-md);
+}
+.location-method small {
+  color: var(--muted);
+  font-size: var(--text-xs);
+}
+
+.location-dialog-hint {
+  margin: 0;
+  color: var(--muted);
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+}
+
+.location-link-method {
+  display: grid;
+  gap: var(--space-2);
+}
+.location-steps {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-2);
+  padding: 0;
+  list-style: none;
+  counter-reset: step;
+}
+.location-steps li {
+  position: relative;
+  padding-left: 30px;
+  color: var(--muted);
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+  counter-increment: step;
+}
+.location-steps li::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-full);
+  color: var(--primary);
+  font-size: var(--text-2xs);
   font-weight: var(--weight-bold);
+  background: var(--primary-soft);
 }
-.google-map-picker-selected .google-map-status {
-  border-color: rgba(77, 155, 117, 0.42);
-  background: rgba(77, 155, 117, 0.08);
+.location-steps a {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  color: var(--primary-dark);
+  font-weight: var(--weight-semibold);
 }
-.google-map-picker-selected .google-map-status > svg {
-  color: #4d9b75;
+.location-link-label {
+  color: var(--text);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
 }
-.google-map-picker-error .google-map-status,
-.google-map-picker-configuration .google-map-status {
-  border-color: rgba(178, 84, 103, 0.35);
-  background: rgba(178, 84, 103, 0.08);
+.location-link-input {
+  display: flex;
+  gap: var(--space-2);
 }
-.google-map-picker-error .google-map-status > svg,
-.google-map-picker-configuration .google-map-status > svg {
-  color: #b25467;
+.location-link-input input {
+  flex: 1;
+  min-width: 0;
+  min-height: 44px;
+  padding: 0 var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  color: var(--text);
+  font: inherit;
+  font-size: var(--text-md);
+  background: var(--card);
 }
-@media (max-width: 720px) {
-  .google-map-canvas {
-    height: 320px;
-    border-radius: 14px;
+.location-link-input input[aria-invalid="true"] {
+  border-color: var(--danger);
+}
+.location-link-input .btn {
+  flex: 0 0 auto;
+  min-height: 44px;
+}
+.location-field-error {
+  margin: 0;
+  color: var(--danger);
+  font-size: var(--text-xs);
+  line-height: var(--leading-normal);
+}
+
+.location-dialog-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  margin: 0;
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  color: var(--danger);
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+  background: var(--danger-soft);
+}
+.location-dialog-notice svg {
+  flex: 0 0 auto;
+  margin-top: 2px;
+}
+
+.location-selection {
+  display: grid;
+  gap: var(--space-1);
+  margin-top: auto;
+  padding: var(--space-4);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--secondary);
+}
+.location-selection.is-set {
+  border-style: solid;
+  border-color: color-mix(in srgb, var(--success) 45%, transparent);
+  background: var(--success-soft);
+}
+.location-selection-label {
+  color: var(--muted);
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.location-selection strong {
+  font-size: var(--text-md);
+  line-height: var(--leading-snug);
+  overflow-wrap: anywhere;
+}
+.location-selection strong.is-empty {
+  color: var(--muted);
+  font-weight: var(--weight-medium);
+}
+.location-selection small {
+  color: var(--muted);
+  font-size: var(--text-xs);
+}
+.location-selection a {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  width: fit-content;
+  margin-top: var(--space-1);
+  color: var(--primary-dark);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+}
+
+.location-dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-6);
+  border-top: 1px solid var(--border);
+  background: color-mix(in srgb, var(--secondary) 45%, var(--card));
+}
+.location-dialog-footer .btn {
+  min-height: 44px;
+}
+.location-dialog-save-error {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex: 1 1 260px;
+  margin: 0 auto 0 0;
+  color: var(--danger);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-snug);
+}
+.location-dialog-save-error svg {
+  flex: 0 0 auto;
+}
+
+/* Guest view */
+.location-dialog-view {
+  width: min(880px, calc(100vw - 32px));
+}
+.location-dialog-view-map {
+  height: min(520px, 58dvh);
+  padding: 0 var(--space-6) var(--space-5);
+}
+.location-dialog-view-map .map-embed {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+
+/* ---------- Owner location field ---------- */
+.salon-location-field {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: var(--space-5);
+  align-items: center;
+  padding: var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--card);
+}
+.salon-location-field-preview {
+  position: relative;
+  height: 140px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--secondary);
+  cursor: pointer;
+}
+.salon-location-field-preview:focus-visible {
+  outline: 3px solid var(--focus-outline);
+  outline-offset: 2px;
+}
+.salon-location-field-empty {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  border: 1.5px dashed var(--border);
+  border-radius: inherit;
+  color: var(--primary);
+}
+.salon-location-field-empty svg {
+  width: 32px;
+  height: 32px;
+}
+.salon-location-field-body {
+  display: grid;
+  gap: var(--space-1);
+  min-width: 0;
+}
+.salon-location-field-body > strong {
+  font-size: var(--text-base);
+}
+.salon-location-field.has-point .salon-location-field-body > strong {
+  color: var(--success);
+}
+.salon-location-field-body > span {
+  color: var(--muted);
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+}
+.salon-location-field-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+.salon-location-field-actions .btn {
+  min-height: 40px;
+}
+.salon-location-remove {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 40px;
+  padding: 0 var(--space-2);
+  border: 0;
+  color: var(--danger);
+  font: inherit;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  background: none;
+  cursor: pointer;
+}
+.salon-location-remove:hover:not(:disabled) {
+  text-decoration: underline;
+}
+
+.owner-location-summary {
+  display: grid;
+  gap: var(--space-4);
+}
+.owner-location-city {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--muted);
+}
+.owner-location-city svg {
+  color: var(--primary);
+}
+.owner-location-city strong {
+  color: var(--text);
+}
+
+/* ---------- Guest preview card in the profile sidebar ---------- */
+.salon-location-preview {
+  margin: var(--space-4) 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--card);
+}
+.salon-location-preview-map {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 170px;
+  padding: 0;
+  border: 0;
+  cursor: pointer;
+}
+.salon-location-preview-map:focus-visible {
+  outline: 3px solid var(--focus-outline);
+  outline-offset: -3px;
+}
+.salon-location-preview-expand {
+  position: absolute;
+  right: var(--space-3);
+  bottom: var(--space-3);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  color: var(--on-primary);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-bold);
+  background: var(--primary);
+  box-shadow: var(--elevation-2);
+  transition: transform var(--duration-base) var(--ease-standard);
+}
+.salon-location-preview-map:hover .salon-location-preview-expand {
+  transform: translateY(-2px);
+}
+.salon-location-preview-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-top: 1px solid var(--border);
+}
+.salon-location-preview-footer span {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+.salon-location-preview-footer strong {
+  font-size: var(--text-md);
+}
+.salon-location-preview-footer small {
+  color: var(--muted);
+  font-size: var(--text-xs);
+}
+
+.salon-details-location-cta {
+  margin-left: var(--space-1);
+  padding: 2px 10px;
+  border-radius: var(--radius-full);
+  color: var(--primary-dark);
+  font-size: var(--text-xs);
+  background: var(--primary-soft);
+}
+button.salon-details-location-link {
+  padding: 0;
+  border: 0;
+  font: inherit;
+  background: none;
+  cursor: pointer;
+}
+.salon-info-map-link {
+  padding: 0;
+  border: 0;
+  color: var(--primary-dark);
+  font: inherit;
+  font-weight: var(--weight-bold);
+  text-align: left;
+  background: none;
+  cursor: pointer;
+}
+.salon-info-map-link:hover {
+  text-decoration: underline;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 900px) {
+  .location-dialog-body {
+    grid-template-columns: 1fr;
+  }
+  .location-dialog-map {
+    height: 52dvh;
+    min-height: 300px;
+  }
+  .location-selection {
+    margin-top: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .location-dialog,
+  .location-dialog-view {
+    width: 100vw;
+    max-height: 100dvh;
+    height: 100dvh;
+    margin: 0;
+    border-radius: 0;
+    border: 0;
+  }
+  .location-dialog-header {
+    padding: var(--space-4);
+  }
+  .location-dialog-header h2 {
+    font-size: var(--text-xl);
+  }
+  .location-dialog-icon {
+    display: none;
+  }
+  .location-dialog-body {
+    padding: 0 var(--space-4) var(--space-4);
+  }
+  .location-dialog-view-map {
+    flex: 1;
+    height: auto;
+    padding: 0 var(--space-4) var(--space-4);
+  }
+  .location-dialog-footer {
+    flex-wrap: wrap;
+    padding: var(--space-3) var(--space-4);
+  }
+  .location-dialog-footer .btn {
+    flex: 1 1 0;
+    justify-content: center;
+  }
+  .location-dialog-view-actions .btn-primary {
+    flex-basis: 100%;
+    order: -1;
+  }
+  .salon-location-field {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .location-dialog[open],
+  .spin {
+    animation: none;
+  }
+  .salon-location-preview-expand {
+    transition: none;
   }
 }

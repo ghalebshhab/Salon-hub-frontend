@@ -7,8 +7,13 @@ import {
   showWarningToast,
 } from "../../../shared/notifications/toast.jsx";
 import { getSalonEmployeesApi } from "../../employees/api/salonEmployeesApi.js";
-import { getMySalonApi, updateSalonApi } from "../api/salonApi.js";
-import { toSalonPayload } from "../model/salonForm.js";
+import {
+  getMySalonApi,
+  updateSalonApi,
+  updateSalonLocationApi,
+} from "../api/salonApi.js";
+import { SALON_CITIES } from "../model/salonCities.js";
+import { fromSalonResponse, toSalonPayload } from "../model/salonForm.js";
 
 export function toSalonForm(salon) {
   return {
@@ -82,31 +87,35 @@ export default function useEditSalon() {
 
   const resetForm = () => setDraft(toSalonForm(salon));
 
-  const save = async () => {
-    if (!salon?.salonId || !isValid(form)) return false;
+  const persist = async (next, successMessage) => {
+    if (!salon?.salonId || !isValid(next)) return false;
     try {
       setSaving(true);
       const response = await updateSalonApi(
         salon.salonId,
-        toSalonPayload(form),
+        toSalonPayload(next),
       );
       if (!response.success) {
         showErrorToast(response.message || "Could not update salon.");
         return false;
       }
+      const stored = response.data ? fromSalonResponse(response.data) : {};
       const updatedSalon = {
         ...salon,
-        ...form,
-        ...(response.data || {}),
-        description: form.description,
-        googleMapsUrl: form.googleMapsUrl,
-        latitude: form.latitude,
-        longitude: form.longitude,
+        ...next,
+        ...stored,
+        salonId: salon.salonId,
+        description: next.description,
+        // The server rebuilds the link from the coordinates; prefer its values.
+        googleMapsUrl: response.data?.googleMapsUrl ?? next.googleMapsUrl,
+        latitude: response.data?.latitude ?? next.latitude,
+        longitude: response.data?.longitude ?? next.longitude,
+        images: salon.images,
         state: salon.state,
       };
       setSavedSalon(updatedSalon);
       setDraft(toSalonForm(updatedSalon));
-      showSuccessToast("Salon section updated.");
+      showSuccessToast(successMessage);
       return true;
     } catch (error) {
       showErrorToast(
@@ -120,6 +129,55 @@ export default function useEditSalon() {
     }
   };
 
+  const save = () => persist(form, "Salon section updated.");
+
+  /**
+   * Saves only the map pin through its own endpoint, so other profile fields
+   * never block it. Throws with the server message so the dialog can show it
+   * (toasts render below a modal dialog).
+   */
+  const saveLocation = async ({ latitude, longitude, city }) => {
+    if (!salon?.salonId) throw new Error("Salon not loaded yet.");
+    setSaving(true);
+    try {
+      const response = await updateSalonLocationApi(salon.salonId, {
+        latitude: latitude ?? null,
+        longitude: longitude ?? null,
+        city: SALON_CITIES.includes(city) ? city : null,
+      });
+      if (!response.success || !response.data) {
+        throw new Error(response.message || "Could not save the location.");
+      }
+      const stored = response.data;
+      const location = {
+        city: stored.city,
+        address: stored.address,
+        latitude: stored.latitude,
+        longitude: stored.longitude,
+        googleMapsUrl: stored.googleMapsUrl,
+      };
+      setSavedSalon({ ...salon, ...location });
+      // Keep any unsaved edits in other sections; only refresh location fields.
+      setDraft((current) => (current ? { ...current, ...location } : current));
+      showSuccessToast(
+        latitude == null ? "Map pin removed." : "Salon location saved.",
+      );
+      return true;
+    } catch (error) {
+      throw new Error(
+        error?.response?.data?.message ||
+          error?.message ||
+          "Could not save the location.",
+        { cause: error },
+      );
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const removeLocation = () =>
+    saveLocation({ latitude: null, longitude: null });
+
   return {
     form,
     setForm,
@@ -130,5 +188,7 @@ export default function useEditSalon() {
     handleChange,
     resetForm,
     save,
+    saveLocation,
+    removeLocation,
   };
 }

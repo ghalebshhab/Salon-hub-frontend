@@ -1,137 +1,116 @@
-import { AlertCircle, CheckCircle2, LocateFixed, MapPin } from "lucide-react";
+import { LoaderCircle } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { loadGoogleMaps } from "../../../shared/lib/googleMapsLoader.js";
 import {
   cityFromAddressComponents,
-  googleMapsLink,
+  DEFAULT_MAP_CENTER,
   isInsideJordan,
   JORDAN_MAP_BOUNDS,
 } from "../model/jordanMapLocation.js";
 
-const AMMAN = { lat: 31.9539, lng: 35.9106 };
+const OVERVIEW_ZOOM = 8;
+const STREET_ZOOM = 17;
 
-function coordinates(latitude, longitude) {
-  const lat = Number(latitude);
-  const lng = Number(longitude);
-  return isInsideJordan(lat, lng) ? { lat, lng } : AMMAN;
-}
-
+/**
+ * Interactive Google Map limited to Jordan. The owner can search a place,
+ * click the map or drag the pin. `point` is controlled by the parent, so the
+ * parent can also move the pin (for example from the device location).
+ */
 export default function GoogleMapsLocationPicker({
-  latitude,
-  longitude,
-  onLocationChange,
+  apiKey,
+  point,
+  onPick,
+  onUnavailable,
+  onOutsideJordan,
 }) {
-  const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY?.trim();
   const mapNodeRef = useRef(null);
   const searchNodeRef = useRef(null);
-  const callbackRef = useRef(onLocationChange);
-  const initialLocationRef = useRef({ latitude, longitude });
-  const [state, setState] = useState(apiKey ? "loading" : "configuration");
-  const [message, setMessage] = useState(
-    apiKey
-      ? "Loading the interactive map…"
-      : "Add VITE_GOOGLE_MAPS_API_KEY to enable search and map selection.",
-  );
-  const [selectedAddress, setSelectedAddress] = useState("");
+  const mapRef = useRef(null);
+  const markerRef = useRef(null);
+  const callbacksRef = useRef({ onPick, onUnavailable, onOutsideJordan });
+  const initialPointRef = useRef(point);
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    callbackRef.current = onLocationChange;
-  }, [onLocationChange]);
+    callbacksRef.current = { onPick, onUnavailable, onOutsideJordan };
+  }, [onPick, onUnavailable, onOutsideJordan]);
 
   useEffect(() => {
-    if (!apiKey) return undefined;
-
     let active = true;
     const listeners = [];
     const searchHost = searchNodeRef.current;
-    const initialLocation = initialLocationRef.current;
 
     loadGoogleMaps(apiKey)
       .then(async () => {
-        if (!active || !mapNodeRef.current || !searchNodeRef.current) return;
-
         const [{ Map }, { PlaceAutocompleteElement }] = await Promise.all([
           window.google.maps.importLibrary("maps"),
           window.google.maps.importLibrary("places"),
         ]);
-        if (!active) return;
+        if (!active || !mapNodeRef.current || !searchHost) return;
 
-        const initialPosition = coordinates(
-          initialLocation.latitude,
-          initialLocation.longitude,
-        );
+        const initialPoint = initialPointRef.current;
         const map = new Map(mapNodeRef.current, {
-          center: initialPosition,
-          zoom: initialPosition === AMMAN ? 8 : 16,
-          restriction: {
-            latLngBounds: JORDAN_MAP_BOUNDS,
-            strictBounds: true,
-          },
+          center: initialPoint || DEFAULT_MAP_CENTER,
+          zoom: initialPoint ? STREET_ZOOM : OVERVIEW_ZOOM,
+          restriction: { latLngBounds: JORDAN_MAP_BOUNDS, strictBounds: true },
           clickableIcons: false,
-          fullscreenControl: true,
+          fullscreenControl: false,
           mapTypeControl: false,
           streetViewControl: false,
+          gestureHandling: "greedy",
         });
         const marker = new window.google.maps.Marker({
-          map,
-          position: initialPosition,
+          map: initialPoint ? map : null,
+          position: initialPoint || DEFAULT_MAP_CENTER,
           draggable: true,
           title: "Salon location",
         });
-        const geocoder = new window.google.maps.Geocoder();
-        const autocomplete = new PlaceAutocompleteElement({
-          includedRegionCodes: ["jo"],
-          placeholder: "Search for the salon or a place in Jordan",
-        });
-        searchNodeRef.current.replaceChildren(autocomplete);
+        mapRef.current = map;
+        markerRef.current = marker;
 
-        const applyLocation = async (position, placeDetails = {}) => {
-          const lat = Number(position.lat);
-          const lng = Number(position.lng);
+        const geocoder = new window.google.maps.Geocoder();
+        const search = new PlaceAutocompleteElement({
+          includedRegionCodes: ["jo"],
+          placeholder: "Search the salon name, street or area",
+        });
+        searchHost.replaceChildren(search);
+
+        const pick = async ({ lat, lng }, place = {}) => {
           if (!isInsideJordan(lat, lng)) {
-            setState("error");
-            setMessage("Choose a location inside Jordan.");
+            callbacksRef.current.onOutsideJordan?.();
             return;
           }
+          marker.setPosition({ lat, lng });
+          marker.setMap(map);
+          map.panTo({ lat, lng });
+          if (map.getZoom() < STREET_ZOOM - 2) map.setZoom(STREET_ZOOM);
 
-          let address = placeDetails.formattedAddress || "";
-          let addressComponents = placeDetails.addressComponents || [];
-          if (!address || !addressComponents.length) {
+          let address = place.formattedAddress || "";
+          let components = place.addressComponents || [];
+          if (!address || !components.length) {
             try {
-              const response = await geocoder.geocode({
+              const { results } = await geocoder.geocode({
                 location: { lat, lng },
               });
-              const result = response.results?.[0];
-              address ||= result?.formatted_address || "";
-              addressComponents = result?.address_components || [];
+              address ||= results?.[0]?.formatted_address || "";
+              components = results?.[0]?.address_components || [];
             } catch {
-              // Coordinates are still valid when an address label cannot be resolved.
+              // The point stays valid even when Google cannot name the address.
             }
           }
-
-          marker.setPosition({ lat, lng });
-          map.panTo({ lat, lng });
-          map.setZoom(16);
-          const city = cityFromAddressComponents(addressComponents);
-          setSelectedAddress(address || `${lat.toFixed(6)}, ${lng.toFixed(6)}`);
-          setState("selected");
-          setMessage(
-            "Location selected. The form fields were filled automatically.",
-          );
-          callbackRef.current?.({
-            latitude: lat.toFixed(7),
-            longitude: lng.toFixed(7),
-            googleMapsUrl: googleMapsLink(lat, lng),
-            city,
+          callbacksRef.current.onPick?.({
+            point: { lat, lng },
+            address,
+            city: cityFromAddressComponents(components),
           });
         };
 
         listeners.push(
           map.addListener("click", (event) => {
-            if (event.latLng) applyLocation(event.latLng.toJSON());
+            if (event.latLng) pick(event.latLng.toJSON());
           }),
           marker.addListener("dragend", (event) => {
-            if (event.latLng) applyLocation(event.latLng.toJSON());
+            if (event.latLng) pick(event.latLng.toJSON());
           }),
         );
 
@@ -139,81 +118,62 @@ export default function GoogleMapsLocationPicker({
           const place = event.placePrediction?.toPlace();
           if (!place) return;
           await place.fetchFields({
-            fields: [
-              "displayName",
-              "formattedAddress",
-              "location",
-              "addressComponents",
-            ],
+            fields: ["formattedAddress", "location", "addressComponents"],
           });
-          if (!place.location) return;
-          applyLocation(place.location.toJSON(), place);
+          if (place.location) pick(place.location.toJSON(), place);
         };
-        autocomplete.addEventListener("gmp-select", onPlaceSelect);
+        search.addEventListener("gmp-select", onPlaceSelect);
         listeners.push({
-          remove: () =>
-            autocomplete.removeEventListener("gmp-select", onPlaceSelect),
+          remove: () => search.removeEventListener("gmp-select", onPlaceSelect),
         });
 
-        const hasInitialLocation = isInsideJordan(
-          Number(initialLocation.latitude),
-          Number(initialLocation.longitude),
-        );
-        setState(hasInitialLocation ? "selected" : "ready");
-        setMessage(
-          hasInitialLocation
-            ? "Current salon location is shown. Search, click or drag the marker to change it."
-            : "Search for a place or click anywhere on the map inside Jordan.",
-        );
+        setReady(true);
       })
       .catch((error) => {
-        if (!active) return;
-        setState("error");
-        setMessage(error.message || "Google Maps could not be loaded.");
+        if (active) callbacksRef.current.onUnavailable?.(error);
       });
 
     return () => {
       active = false;
       listeners.forEach((listener) => listener?.remove?.());
-      if (searchHost) searchHost.replaceChildren();
+      markerRef.current?.setMap(null);
+      markerRef.current = null;
+      mapRef.current = null;
+      searchHost?.replaceChildren();
     };
   }, [apiKey]);
 
+  // Follow pin changes that come from the parent (device location).
+  const lat = point?.lat;
+  const lng = point?.lng;
+  useEffect(() => {
+    const map = mapRef.current;
+    const marker = markerRef.current;
+    if (!ready || !map || !marker || lat == null || lng == null) return;
+    const current = marker.getMap() ? marker.getPosition()?.toJSON() : null;
+    if (current && current.lat === lat && current.lng === lng) return;
+    marker.setPosition({ lat, lng });
+    marker.setMap(map);
+    map.panTo({ lat, lng });
+    map.setZoom(STREET_ZOOM);
+  }, [ready, lat, lng]);
+
   return (
-    <div className={`google-map-picker google-map-picker-${state}`}>
-      <div className="google-map-search" ref={searchNodeRef}>
-        {state === "loading" && <span>Preparing location search…</span>}
-      </div>
-      <div
-        className="google-map-canvas"
-        ref={mapNodeRef}
-        aria-label="Choose salon location on Google Maps"
-      />
-      <div
-        className="google-map-status"
-        role={state === "error" ? "alert" : "status"}
-      >
-        {state === "selected" ? (
-          <CheckCircle2 />
-        ) : state === "error" || state === "configuration" ? (
-          <AlertCircle />
-        ) : (
-          <LocateFixed />
+    <div className="map-picker" data-ready={ready}>
+      <div className="map-picker-search" ref={searchNodeRef} />
+      <div className="map-picker-stage">
+        <div
+          className="map-picker-canvas"
+          ref={mapNodeRef}
+          role="application"
+          aria-label="Map of Jordan. Click to place the salon pin."
+        />
+        {!ready && (
+          <div className="map-picker-loading" role="status">
+            <LoaderCircle className="spin" aria-hidden="true" />
+            Loading Google Maps…
+          </div>
         )}
-        <div>
-          <strong>
-            {state === "selected"
-              ? "Salon location selected"
-              : "Choose the salon location"}
-          </strong>
-          <span>{message}</span>
-          {selectedAddress && (
-            <small>
-              <MapPin size={13} />
-              {selectedAddress}
-            </small>
-          )}
-        </div>
       </div>
     </div>
   );

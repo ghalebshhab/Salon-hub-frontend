@@ -755,14 +755,6 @@
   gap: 10px;
 }
 
-.owner-location-editor {
-  display: grid;
-  gap: 18px;
-}
-
-.owner-location-editor .google-map-picker {
-  margin: 0;
-}
 
 .owner-public-preview {
   display: grid;

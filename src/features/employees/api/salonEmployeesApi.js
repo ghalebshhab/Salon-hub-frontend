@@ -37,6 +37,29 @@ export const getEmployeeScheduleApi = async (employeeId, config = {}) => {
   return response.data;
 };
 
+export const getEmployeeTimeOffApi = async (employeeId, config = {}) => {
+  const response = await httpClient.get(
+    `/salon-employees/${employeeId}/time-off`,
+    config,
+  );
+  return response.data;
+};
+
+export const addEmployeeTimeOffApi = async (employeeId, timeOff) => {
+  const response = await httpClient.post(
+    `/salon-employees/${employeeId}/time-off`,
+    timeOff,
+  );
+  return response.data;
+};
+
+export const removeEmployeeTimeOffApi = async (timeOffId) => {
+  const response = await httpClient.delete(
+    `/salon-employees/time-off/${timeOffId}`,
+  );
+  return response.data;
+};
+
 export const updateEmployeeScheduleApi = async (employeeId, periods) => {
   const response = await httpClient.put(
     `/salon-employees/${employeeId}/schedule`,

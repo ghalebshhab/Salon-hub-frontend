@@ -1,6 +1,8 @@
 import { useMemo } from "react";
 import { CalendarClock, Plus, Scissors, Trash2 } from "lucide-react";
+import { useParams } from "react-router-dom";
 import Loading from "../../../shared/components/Loading.jsx";
+import EmployeeTimeOffPanel from "../components/EmployeeTimeOffPanel.jsx";
 import useManageEmployeeSetup, {
   WEEK_DAYS,
 } from "../hooks/useManageEmployeeSetup.js";
@@ -10,6 +12,7 @@ function timeValue(value) {
 }
 
 function ManageEmployeeSetup() {
+  const { employeeId } = useParams();
   const {
     capabilities,
     schedule,
@@ -247,6 +250,11 @@ function ManageEmployeeSetup() {
           </button>
         </div>
       </section>
+
+      <EmployeeTimeOffPanel
+        employeeId={capabilities.employeeId ?? employeeId}
+        employeeName={capabilities.employeeName}
+      />
     </section>
   );
 }

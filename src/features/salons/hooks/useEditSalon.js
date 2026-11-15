@@ -32,12 +32,18 @@ export function toSalonForm(salon) {
   };
 }
 
-function isValid(form) {
-  if (form.name.trim().length <= 3) {
+/**
+ * Each section saves the whole salon, so a value the owner did not touch must
+ * not block the save (for example a short description saved before the
+ * current rule). New values still follow the rules; the server checks the same.
+ */
+export function isValid(form, saved = {}) {
+  const changed = (field) => form[field].trim() !== (saved[field] || "").trim();
+  if (changed("name") && form.name.trim().length <= 3) {
     showWarningToast("Salon name must contain more than 3 characters.");
     return false;
   }
-  if (form.description.trim().length <= 10) {
+  if (changed("description") && form.description.trim().length <= 10) {
     showWarningToast("Description must contain more than 10 characters.");
     return false;
   }
@@ -88,7 +94,7 @@ export default function useEditSalon() {
   const resetForm = () => setDraft(toSalonForm(salon));
 
   const persist = async (next, successMessage) => {
-    if (!salon?.salonId || !isValid(next)) return false;
+    if (!salon?.salonId || !isValid(next, toSalonForm(salon))) return false;
     try {
       setSaving(true);
       const response = await updateSalonApi(

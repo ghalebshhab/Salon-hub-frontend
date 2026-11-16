@@ -807,3 +807,77 @@
     justify-content: center;
   }
 }
+
+/* ---------- Salon closures (owner) ---------- */
+.salon-closures {
+  display: grid;
+  gap: var(--space-4);
+}
+.salon-closures .owner-edit-section-heading {
+  align-items: flex-start;
+}
+.salon-closures-icon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  color: var(--primary-dark);
+  background: var(--secondary);
+}
+.salon-closures .time-off-list,
+.salon-closures .time-off-empty,
+.salon-closures .time-off-skeleton {
+  margin-top: 0;
+}
+.salon-closures-warning {
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid color-mix(in srgb, var(--accent) 55%, transparent);
+  border-radius: var(--radius-md);
+  color: var(--text);
+  background: color-mix(in srgb, var(--accent) 14%, var(--card));
+  font-size: var(--text-sm);
+}
+.salon-closures-warning a {
+  color: var(--primary-dark);
+  font-weight: var(--weight-semibold);
+}
+
+/* ---------- Salon closure notice (public) ---------- */
+.salon-closure-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  margin: 0 0 var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid color-mix(in srgb, var(--accent) 55%, transparent);
+  border-radius: var(--radius-md);
+  color: var(--text);
+  background: color-mix(in srgb, var(--accent) 12%, var(--card));
+}
+.salon-closure-notice svg {
+  flex: none;
+  margin-top: 2px;
+  color: var(--accent);
+}
+.salon-closure-notice strong {
+  display: block;
+  font-size: var(--text-md);
+}
+.salon-closure-notice ul {
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+.salon-closure-notice.is-now {
+  border-color: color-mix(in srgb, var(--danger) 40%, transparent);
+  background: var(--danger-soft);
+}
+.salon-closure-notice.is-now svg,
+.salon-closure-notice.is-now strong {
+  color: var(--danger);
+}

@@ -61,3 +61,26 @@ export const getAllSalonsApi = async (config = {}) => {
   return mapSalonResponse(response).data;
 };
 export const deleteMySalonApi = deleteSalonApi;
+
+export const getSalonClosuresApi = async (salonId, config = {}) => {
+  const response = await httpClient.get(`/salons/${salonId}/closures`, {
+    showLoading: false,
+    ...config,
+  });
+  return response.data;
+};
+
+export const addSalonClosureApi = async (salonId, closure) => {
+  const response = await httpClient.post(
+    `/salons/${salonId}/closures`,
+    closure,
+  );
+  return response.data;
+};
+
+export const removeSalonClosureApi = async (salonId, closureId) => {
+  const response = await httpClient.delete(
+    `/salons/${salonId}/closures/${closureId}`,
+  );
+  return response.data;
+};

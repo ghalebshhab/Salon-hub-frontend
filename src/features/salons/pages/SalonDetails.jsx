@@ -15,6 +15,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import SalonCoverPlaceholder from "../components/SalonCoverPlaceholder.jsx";
 import useSalonDetails from "../hooks/useSalonDetails.js";
+import SalonClosureNotice from "../components/SalonClosureNotice.jsx";
 import SalonStatusBadge from "../components/SalonStatusBadge.jsx";
 import SalonServicesList from "../../services/components/SalonServicesList.jsx";
 import ReviewsList from "../../reviews/components/ReviewsList.jsx";
@@ -141,6 +142,8 @@ function SalonDetails() {
               {salon.description ||
                 "This salon has not added a description yet."}
             </p>
+
+            <SalonClosureNotice salonId={salonId} />
 
             <div className="salon-details-actions">
               <Link

@@ -18,6 +18,7 @@ import SalonServicesList from "../../services/components/SalonServicesList.jsx";
 import EditableSalonSection from "../components/EditableSalonSection.jsx";
 import SalonCoverEditor from "../components/SalonCoverEditor.jsx";
 import SalonEmployees from "../components/SalonEmployees.jsx";
+import SalonClosuresPanel from "../components/SalonClosuresPanel.jsx";
 import SalonLocationField from "../components/SalonLocationField.jsx";
 import {
   AvailabilityEditor,
@@ -216,6 +217,8 @@ export default function EditSalon() {
               />
             </div>
           </EditableSalonSection>
+
+          <SalonClosuresPanel salonId={salonId} />
         </div>
 
         <div className="owner-public-preview">

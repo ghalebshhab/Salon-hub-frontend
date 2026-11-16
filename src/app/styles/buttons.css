@@ -55,6 +55,13 @@
   background: #d93636;
 }
 
+/* Quiet destructive action: outline at rest, filled tint on hover. */
+.btn-ghost-danger {
+  color: var(--danger);
+  border: 1px solid color-mix(in srgb, var(--danger) 45%, transparent);
+  background: transparent;
+}
+
 .btn-success {
   color: var(--on-primary);
   border: none;
@@ -80,6 +87,11 @@
 
   .btn-danger:where(:not(:disabled, [aria-disabled="true"])):hover {
     background: #b92d2d;
+  }
+
+  .btn-ghost-danger:where(:not(:disabled, [aria-disabled="true"])):hover {
+    border-color: var(--danger);
+    background: var(--danger-soft);
   }
 
   .btn-success:where(:not(:disabled, [aria-disabled="true"])):hover {

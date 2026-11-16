@@ -7,6 +7,7 @@ const REASON_LABELS = {
   BUSY: "Busy at this time",
   TIME_OFF: "On time off",
   NOT_WORKING: "Not working then",
+  SALON_CLOSED: "Salon closed that day",
 };
 
 function pickDefault(employees, requestedId) {

@@ -158,6 +158,15 @@ export const completeServiceApi = async (bookingId) => {
   return response.data;
 };
 
+export const markNoShowApi = async (bookingId) => {
+  const response = await httpClient.post(
+    `${trackingPath(bookingId)}/no-show`,
+    null,
+    quiet,
+  );
+  return response.data;
+};
+
 export const getBookingRescheduleAvailabilityApi = async (
   bookingId,
   bookingDate,

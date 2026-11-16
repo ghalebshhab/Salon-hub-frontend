@@ -1,7 +1,12 @@
 import { expect, it } from "vitest";
 import {
   canCancel,
+  canMarkNoShow,
   describeUnavailable,
+  formatDateRange,
+  formatDeadline,
+  formatTimeLeft,
+  getAnswerDeadline,
   formatClock,
   formatDistance,
   formatDuration,
@@ -93,4 +98,65 @@ it("selects employees qualified for every requested service", () => {
     employees[0],
     employees[2],
   ]);
+});
+
+it("labels expired and missed appointments and never offers to cancel them", () => {
+  expect(getStatusLabel("EXPIRED")).toBe("Expired, no answer");
+  expect(getStatusLabel("NO_SHOW")).toBe("Missed");
+  expect(getStatusClass("EXPIRED")).toBe("inactive-tag");
+  expect(canCancel({ status: "EXPIRED" })).toBe(false);
+  expect(canCancel({ status: "NO_SHOW" })).toBe(false);
+});
+
+it("says the whole salon is closed, whoever was chosen", () => {
+  expect(describeUnavailable("SALON_CLOSED", "Sara")).toBe(
+    "The salon is closed this day.",
+  );
+});
+
+it("gives the answer deadline of a pending request with urgency", () => {
+  const now = new Date(2026, 10, 16, 10, 0);
+  const booking = {
+    status: "PENDING",
+    responseDeadline: "2026-11-16T12:30:00",
+  };
+
+  const info = getAnswerDeadline(booking, now);
+  expect(info.urgent).toBe(true);
+  expect(info.overdue).toBe(false);
+  expect(formatTimeLeft(info.msLeft)).toBe("2 h 30 min left");
+  expect(formatDeadline(info.deadline, now)).toBe("today 12:30");
+
+  const later = getAnswerDeadline(
+    { ...booking, responseDeadline: "2026-11-17T09:15:00" },
+    now,
+  );
+  expect(later.urgent).toBe(false);
+  expect(formatDeadline(later.deadline, now)).toBe("tomorrow 09:15");
+
+  expect(
+    getAnswerDeadline({ ...booking, responseDeadline: "2026-11-16T09:00:00" }, now)
+      .overdue,
+  ).toBe(true);
+  expect(getAnswerDeadline({ ...booking, status: "ACCEPTED" }, now)).toBeNull();
+});
+
+it("allows a no-show only fifteen minutes after a confirmed start", () => {
+  const booking = {
+    status: "ACCEPTED",
+    bookingDate: "2026-11-16",
+    bookingTime: "10:00:00",
+  };
+  expect(canMarkNoShow(booking, new Date(2026, 10, 16, 10, 14))).toBe(false);
+  expect(canMarkNoShow(booking, new Date(2026, 10, 16, 10, 15))).toBe(true);
+  expect(
+    canMarkNoShow({ ...booking, status: "PENDING" }, new Date(2026, 10, 17)),
+  ).toBe(false);
+});
+
+it("writes a closure as one day or a range", () => {
+  expect(formatDateRange("2026-11-20", "2026-11-20")).toBe("Friday 20 November");
+  expect(formatDateRange("2026-11-20", "2026-11-22")).toBe(
+    "Friday 20 November – Sunday 22 November",
+  );
 });

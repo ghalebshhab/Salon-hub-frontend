@@ -7,12 +7,14 @@ import {
   Play,
   Plus,
   Radio,
+  UserX,
 } from "lucide-react";
 import { useState } from "react";
 import useBookingTracking from "../../hooks/useBookingTracking.js";
 import {
   completeServiceApi,
   extendServiceApi,
+  markNoShowApi,
   startServiceApi,
 } from "../../api/bookingApi.js";
 import {
@@ -111,6 +113,7 @@ function CustomerJourney({ tracking }) {
 export default function StaffLiveCard({ booking, onStatusChange }) {
   const { tracking, error, busy, run } = useBookingTracking(booking.id);
   const [confirmComplete, setConfirmComplete] = useState(false);
+  const [confirmNoShow, setConfirmNoShow] = useState(false);
 
   if (!tracking) {
     return (
@@ -135,6 +138,14 @@ export default function StaffLiveCard({ booking, onStatusChange }) {
       "Service completed. The customer was notified.",
     );
     setConfirmComplete(false);
+  };
+
+  const noShow = async () => {
+    await act(
+      () => markNoShowApi(booking.id),
+      "Marked as no-show. The customer was notified.",
+    );
+    setConfirmNoShow(false);
   };
 
   return (
@@ -208,6 +219,34 @@ export default function StaffLiveCard({ booking, onStatusChange }) {
         </div>
       )}
 
+      {tracking.status === "ACCEPTED" &&
+        tracking.journeyStatus !== "ARRIVED" &&
+        tracking.noShowAllowedFrom && (
+          <div className="live-noshow">
+            {tracking.canMarkNoShow ? (
+              <button
+                className="btn btn-ghost-danger btn-small"
+                type="button"
+                disabled={busy}
+                onClick={() => setConfirmNoShow(true)}
+              >
+                <UserX size={15} aria-hidden="true" /> Customer did not come
+              </button>
+            ) : (
+              <small className="live-hint">
+                If the customer does not come, you can mark a no-show from{" "}
+                {formatClock(tracking.noShowAllowedFrom)}.
+              </small>
+            )}
+          </div>
+        )}
+
+      {tracking.status === "NO_SHOW" && (
+        <p className="live-line">
+          <UserX size={16} aria-hidden="true" /> Marked as no-show
+        </p>
+      )}
+
       {tracking.status === "COMPLETED" && (
         <p className="live-line is-done">
           <CheckCircle2 size={16} aria-hidden="true" /> Completed at{" "}
@@ -229,6 +268,17 @@ export default function StaffLiveCard({ booking, onStatusChange }) {
         loading={busy}
         onConfirm={complete}
         onCancel={() => setConfirmComplete(false)}
+      />
+
+      <ConfirmDialog
+        open={confirmNoShow}
+        title="Mark as no-show?"
+        message={`${tracking.customerName} did not come. The appointment closes as missed, and the customer is told. You cannot undo this.`}
+        confirmText="Mark no-show"
+        danger
+        loading={busy}
+        onConfirm={noShow}
+        onCancel={() => setConfirmNoShow(false)}
       />
     </section>
   );

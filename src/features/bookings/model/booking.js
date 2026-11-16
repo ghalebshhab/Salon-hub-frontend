@@ -5,6 +5,8 @@ const STATUS_CLASSES = {
   COMPLETED: "active-tag",
   REJECTED: "inactive-tag",
   CANCELLED: "inactive-tag",
+  EXPIRED: "inactive-tag",
+  NO_SHOW: "inactive-tag",
 };
 export const getStatusClass = (status) =>
   STATUS_CLASSES[status] || "pending-tag";
@@ -16,6 +18,8 @@ const STATUS_LABELS = {
   COMPLETED: "Completed",
   REJECTED: "Not accepted",
   CANCELLED: "Cancelled",
+  EXPIRED: "Expired, no answer",
+  NO_SHOW: "Missed",
 };
 export const getStatusLabel = (status) => STATUS_LABELS[status] || status;
 
@@ -48,9 +52,66 @@ const UNAVAILABLE_MESSAGES = {
 
 /** Plain sentence for why a day or an employee has no free time. */
 export function describeUnavailable(reason, who = "The salon") {
+  if (reason === "SALON_CLOSED") return "The salon is closed this day.";
   const message = UNAVAILABLE_MESSAGES[reason];
   if (!message) return `${who} has no free time this day.`;
   return `${who} ${message}`;
+}
+
+/** Staff can record a no-show this long after the start (matches the server). */
+export const NO_SHOW_GRACE_MINUTES = 15;
+
+/** A confirmed appointment whose start passed by the grace period. */
+export function canMarkNoShow(booking, now = new Date()) {
+  if (booking?.status !== "ACCEPTED" || !booking.bookingDate) return false;
+  const start = parseLocalDate(booking.bookingDate);
+  const [hours, minutes] = toHourMinute(booking.bookingTime).split(":").map(Number);
+  start.setHours(hours || 0, (minutes || 0) + NO_SHOW_GRACE_MINUTES, 0, 0);
+  return now >= start;
+}
+
+const HOUR_MS = 60 * 60 * 1000;
+/** Under this much time left, the owner sees the answer deadline as urgent. */
+export const URGENT_ANSWER_MS = 3 * HOUR_MS;
+
+/**
+ * Time left for the salon to answer a pending request.
+ * Returns null when the booking has no open deadline.
+ */
+export function getAnswerDeadline(booking, now = new Date()) {
+  if (booking?.status !== "PENDING" || !booking.responseDeadline) return null;
+  const deadline = new Date(booking.responseDeadline);
+  if (Number.isNaN(deadline.getTime())) return null;
+  const msLeft = deadline.getTime() - now.getTime();
+  return {
+    deadline,
+    msLeft,
+    overdue: msLeft <= 0,
+    urgent: msLeft > 0 && msLeft <= URGENT_ANSWER_MS,
+  };
+}
+
+/** "today 14:30", "tomorrow 09:00" or "Sat 21 Nov 14:30". */
+export function formatDeadline(date, now = new Date()) {
+  const time = `${String(date.getHours()).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}`;
+  const today = getTodayDate(now);
+  const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+  const day = getTodayDate(date);
+  if (day === today) return `today ${time}`;
+  if (day === getTodayDate(tomorrow)) return `tomorrow ${time}`;
+  const label = date.toLocaleDateString("en-GB", {
+    weekday: "short",
+    day: "numeric",
+    month: "short",
+  });
+  return `${label} ${time}`;
+}
+
+/** "3 h 20 min left", "45 min left". */
+export function formatTimeLeft(msLeft) {
+  if (msLeft <= 0) return "time is up";
+  const minutes = Math.max(1, Math.ceil(msLeft / 60000));
+  return `${formatDuration(minutes)} left`;
 }
 
 export function getTodayDate(date = new Date()) {
@@ -104,6 +165,13 @@ export function formatDateLabel(value) {
     day: "numeric",
     month: "long",
   });
+}
+
+/** "Friday 20 November" or "Friday 20 November – Sunday 22 November". */
+export function formatDateRange(startDate, endDate) {
+  if (!startDate) return "";
+  if (!endDate || startDate === endDate) return formatDateLabel(startDate);
+  return `${formatDateLabel(startDate)} – ${formatDateLabel(endDate)}`;
 }
 
 /** "2026-11-15T14:35:00" → "14:35". */

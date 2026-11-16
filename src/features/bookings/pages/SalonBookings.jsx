@@ -6,6 +6,8 @@ import RescheduleBookingDialog from "../components/RescheduleBookingDialog.jsx";
 import SalonBookingCard from "../components/SalonBookingCard.jsx";
 import useSalonBookings from "../hooks/useSalonBookings.js";
 import { getEligibleEmployees } from "../model/booking.js";
+import CashReceivedDialog from "../../payments/components/CashReceivedDialog.jsx";
+import ReceiptDialog from "../../payments/components/ReceiptDialog.jsx";
 
 function SalonBookings() {
   const manager = useSalonBookings();
@@ -51,7 +53,10 @@ function SalonBookings() {
               onStatusChange={manager.loadBookings}
               onAccept={manager.handleAccept}
               onAssign={manager.openAssignment}
+              onCashReceived={manager.cash.request}
+              onReceipt={manager.openReceipt}
               onComplete={manager.handleComplete}
+              onNoShow={manager.handleNoShow}
               onReject={manager.openRejectModal}
               onReschedule={manager.openReschedule}
               key={booking.id}
@@ -110,6 +115,17 @@ function SalonBookings() {
           onSubmit={manager.submitAssignment}
         />
       )}
+
+      <CashReceivedDialog
+        booking={manager.cash.target}
+        saving={manager.cash.saving}
+        onConfirm={manager.cash.confirm}
+        onCancel={manager.cash.cancel}
+      />
+      <ReceiptDialog
+        bookingId={manager.receiptBookingId}
+        onClose={manager.closeReceipt}
+      />
     </section>
   );
 }

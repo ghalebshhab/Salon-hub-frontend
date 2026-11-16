@@ -9,6 +9,7 @@ import TimeStep from "../components/wizard/TimeStep.jsx";
 import ReviewStep from "../components/wizard/ReviewStep.jsx";
 import BookingSummary from "../components/wizard/BookingSummary.jsx";
 import BookingSent from "../components/wizard/BookingSent.jsx";
+import { formatMoney, toFils } from "../../payments/model/payment.js";
 
 function CreateBooking() {
   const flow = useCreateBooking();
@@ -121,6 +122,11 @@ function CreateBooking() {
               onAreaChange={flow.setCustomerLocation}
               note={flow.note}
               onNoteChange={flow.setNote}
+              paymentMethods={flow.paymentMethods}
+              paymentMethod={flow.paymentMethod}
+              onPaymentMethodChange={flow.setPaymentMethod}
+              totalPrice={flow.totalPrice}
+              freeCancelHours={flow.freeCancelHours}
             />
           )}
 
@@ -143,7 +149,7 @@ function CreateBooking() {
             )}
             <div className="bk-actions-total" aria-hidden="true">
               <span>{flow.selectedServices.length} service(s)</span>
-              <strong>{flow.totalPrice} JD</strong>
+              <strong>{formatMoney(toFils(flow.totalPrice))}</strong>
             </div>
             {isLast ? (
               <button
@@ -177,6 +183,7 @@ function CreateBooking() {
             bookingTime={flow.bookingTime}
             totalPrice={flow.totalPrice}
             totalDuration={flow.totalDuration}
+            paymentMethod={flow.paymentMethod}
             step={step}
           />
         </aside>

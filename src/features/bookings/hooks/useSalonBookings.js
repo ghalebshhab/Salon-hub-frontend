@@ -13,10 +13,12 @@ import {
   completeBookingApi,
   getMySalonBookingsApi,
   getBookingRescheduleAvailabilityApi,
+  markNoShowApi,
   proposeBookingRescheduleApi,
   rejectBookingApi,
 } from "../api/bookingApi.js";
 import { getMySalonEmployeesApi } from "../../employees/api/salonEmployeesApi.js";
+import useCashPayment from "../../payments/hooks/useCashPayment.js";
 
 export default function useSalonBookings() {
   const [rejectModalOpen, setRejectModalOpen] = useState(false);
@@ -60,6 +62,11 @@ export default function useSalonBookings() {
     keepPreviousData: true,
   });
   const { bookings = [], employees = [] } = data;
+
+  const cash = useCashPayment({ onRecorded: loadBookings });
+  const [receiptBookingId, setReceiptBookingId] = useState(null);
+  const openReceipt = (booking) => setReceiptBookingId(booking.id);
+  const closeReceipt = useCallback(() => setReceiptBookingId(null), []);
 
   const openAssignment = (booking, employeeId) => {
     if (!employeeId) return;
@@ -333,6 +340,29 @@ export default function useSalonBookings() {
     }
   };
 
+  const handleNoShow = async (booking) => {
+    const confirmed = window.confirm(
+      `Mark ${booking.customerName || "this customer"} as a no-show? The customer will be told that they missed the appointment.`,
+    );
+    if (!confirmed) return;
+
+    try {
+      const response = await markNoShowApi(booking.id);
+      if (response.success) {
+        showSuccessToast("Marked as no-show. The customer was notified.");
+        loadBookings();
+      } else {
+        showErrorToast(response.message || "Could not mark the no-show");
+      }
+    } catch (error) {
+      showErrorToast(
+        error?.response?.data?.message ||
+          error?.message ||
+          "Could not mark the no-show",
+      );
+    }
+  };
+
   return {
     bookings,
     employees,
@@ -361,6 +391,11 @@ export default function useSalonBookings() {
     closeRejectModal,
     submitReject,
     handleComplete,
+    handleNoShow,
+    cash,
+    receiptBookingId,
+    openReceipt,
+    closeReceipt,
     rescheduleBooking,
     rescheduleDate,
     setRescheduleDate: changeRescheduleDate,

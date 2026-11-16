@@ -30,4 +30,13 @@ describe("notification titles", () => {
       "Friend request declined",
     );
   });
+
+  it("labels request expiry, reminders and missed appointments", () => {
+    expect(getNotificationTitle("BOOKING_EXPIRED")).toBe("Request expired");
+    expect(getNotificationTitle("BOOKING_REMINDER")).toBe(
+      "Appointment reminder",
+    );
+    expect(getNotificationTitle("BOOKING_NO_SHOW")).toBe("Missed appointment");
+    expect(getNotificationTitle("PAYMENT_RECEIVED")).toBe("Payment received");
+  });
 });

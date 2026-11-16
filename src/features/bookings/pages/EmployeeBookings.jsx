@@ -1,6 +1,9 @@
 import useEmployeeBookings from "../hooks/useEmployeeBookings.js";
 import useHighlightedBooking from "../hooks/useHighlightedBooking.js";
 import StaffLiveCard from "../components/live/StaffLiveCard.jsx";
+import CashReceivedDialog from "../../payments/components/CashReceivedDialog.jsx";
+import PaymentStrip from "../../payments/components/PaymentStrip.jsx";
+import ReceiptDialog from "../../payments/components/ReceiptDialog.jsx";
 import {
   formatDateLabel,
   formatDuration,
@@ -17,6 +20,8 @@ function AppointmentCard({
   getStatusClass,
   highlighted,
   onStatusChange,
+  onCashReceived,
+  onReceipt,
 }) {
   const live = isLiveToday(booking);
   return (
@@ -79,6 +84,13 @@ function AppointmentCard({
         </div>
       </div>
 
+      <PaymentStrip
+        payment={booking.payment}
+        canCollect
+        onCollect={() => onCashReceived(booking)}
+        onReceipt={() => onReceipt(booking)}
+      />
+
       {booking.note && (
         <p className="booking-note">
           <strong>Customer note:</strong> {booking.note}
@@ -110,6 +122,8 @@ function Group({ title, empty, bookings, ...cardProps }) {
               highlighted={cardProps.highlightedId === booking.id}
               getStatusClass={cardProps.getStatusClass}
               onStatusChange={cardProps.onStatusChange}
+              onCashReceived={cardProps.onCashReceived}
+              onReceipt={cardProps.onReceipt}
             />
           ))}
         </div>
@@ -125,7 +139,16 @@ const byTime = (a, b) =>
   );
 
 function EmployeeBookings() {
-  const { bookings, loading, refetch, getStatusClass } = useEmployeeBookings();
+  const {
+    bookings,
+    loading,
+    refetch,
+    getStatusClass,
+    cash,
+    receiptBookingId,
+    openReceipt,
+    closeReceipt,
+  } = useEmployeeBookings();
   const highlightedId = useHighlightedBooking(!loading);
 
   if (loading) {
@@ -148,7 +171,13 @@ function EmployeeBookings() {
     )
     .sort((a, b) => byTime(b, a))
     .slice(0, 20);
-  const cardProps = { getStatusClass, highlightedId, onStatusChange: refetch };
+  const cardProps = {
+    getStatusClass,
+    highlightedId,
+    onStatusChange: refetch,
+    onCashReceived: cash.request,
+    onReceipt: openReceipt,
+  };
 
   return (
     <section className="container section employee-agenda">
@@ -193,6 +222,14 @@ function EmployeeBookings() {
           />
         </>
       )}
+
+      <CashReceivedDialog
+        booking={cash.target}
+        saving={cash.saving}
+        onConfirm={cash.confirm}
+        onCancel={cash.cancel}
+      />
+      <ReceiptDialog bookingId={receiptBookingId} onClose={closeReceipt} />
     </section>
   );
 }

@@ -6,10 +6,17 @@ import {
   MapPin,
   Phone,
   UserRound,
+  UserX,
   XCircle,
 } from "lucide-react";
-import { getStatusLabel, isLiveToday } from "../model/booking.js";
+import {
+  canMarkNoShow,
+  getStatusLabel,
+  isLiveToday,
+} from "../model/booking.js";
+import AnswerDeadline from "./AnswerDeadline.jsx";
 import StaffLiveCard from "./live/StaffLiveCard.jsx";
+import PaymentStrip from "../../payments/components/PaymentStrip.jsx";
 
 export default function SalonBookingCard({
   booking,
@@ -18,7 +25,10 @@ export default function SalonBookingCard({
   highlighted = false,
   onAccept,
   onAssign,
+  onCashReceived,
   onComplete,
+  onReceipt,
+  onNoShow,
   onReject,
   onReschedule,
   onStatusChange,
@@ -41,6 +51,8 @@ export default function SalonBookingCard({
         </div>
         <span className={statusClass}>{getStatusLabel(booking.status)}</span>
       </div>
+
+      <AnswerDeadline booking={booking} audience="owner" />
 
       {live && (
         <StaffLiveCard booking={booking} onStatusChange={onStatusChange} />
@@ -111,6 +123,13 @@ export default function SalonBookingCard({
         <span>Total Duration: {booking.totalDurationMinutes} min</span>
       </div>
 
+      <PaymentStrip
+        payment={booking.payment}
+        canCollect={Boolean(onCashReceived)}
+        onCollect={() => onCashReceived(booking)}
+        onReceipt={onReceipt ? () => onReceipt(booking) : undefined}
+      />
+
       {booking.note && (
         <p className="booking-note">
           <strong>Customer note:</strong> {booking.note}
@@ -179,14 +198,26 @@ export default function SalonBookingCard({
       )}
 
       {booking.status === "ACCEPTED" && !live && (
-        <button
-          className="btn btn-secondary btn-small"
-          type="button"
-          onClick={() => onComplete(booking.id)}
-        >
-          <CheckCircle size={16} />
-          Mark Completed
-        </button>
+        <div className="service-actions">
+          <button
+            className="btn btn-secondary btn-small"
+            type="button"
+            onClick={() => onComplete(booking.id)}
+          >
+            <CheckCircle size={16} />
+            Mark Completed
+          </button>
+          {onNoShow && canMarkNoShow(booking) && (
+            <button
+              className="btn btn-ghost-danger btn-small"
+              type="button"
+              onClick={() => onNoShow(booking)}
+            >
+              <UserX size={16} />
+              Customer did not come
+            </button>
+          )}
+        </div>
       )}
     </div>
   );

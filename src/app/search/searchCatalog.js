@@ -16,6 +16,7 @@ const KEYWORDS = {
   "/owner/dashboard": ["analytics", "revenue", "overview", "stats"],
   "/owner/my-salon": ["profile", "cover", "location"],
   "/owner/bookings": ["appointments", "pending", "approve"],
+  "/owner/payments": ["money", "cash", "receipts", "unpaid", "fees", "commission"],
   "/owner/services": ["menu", "prices", "catalog"],
   "/owner/employees": ["staff", "employees", "availability"],
   "/owner/employment": ["invite", "join requests", "staff"],

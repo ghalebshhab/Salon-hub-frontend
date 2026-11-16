@@ -12,6 +12,7 @@ import { showErrorToast } from "../../../shared/notifications/toast.jsx";
 import { getSalonByIdApi } from "../../salons/api/salonApi.js";
 import { getActiveSalonServicesApi } from "../../services/api/salonServicesApi.js";
 import { getSalonEmployeesApi } from "../../employees/api/salonEmployeesApi.js";
+import { getPaymentOptionsApi } from "../../payments/api/paymentApi.js";
 import {
   createBookingApi,
   getBookingAvailabilityApi,
@@ -23,6 +24,12 @@ export const BOOKING_STEPS = [
   { key: "time", label: "Date & time" },
   { key: "review", label: "Review" },
 ];
+
+const DEFAULT_PAYMENT_OPTIONS = {
+  methods: ["CASH"],
+  defaultMethod: "CASH",
+  freeCancelHours: 24,
+};
 
 const MAX_NOTE = 1000;
 const MAX_LOCATION = 255;
@@ -52,15 +59,20 @@ export default function useCreateBooking() {
 
   const loader = useCallback(
     async (signal) => {
-      const [salon, services, employees] = await Promise.all([
+      const [salon, services, employees, paymentOptions] = await Promise.all([
         getSalonByIdApi(salonId, { signal }).then(requireData),
         getActiveSalonServicesApi(salonId, { signal }).then(requireData),
         getSalonEmployeesApi(salonId, { signal })
           .then(requireData)
           .catch(() => []),
+        // Cash always works; never block booking when the options fail to load.
+        getPaymentOptionsApi(salonId, { signal })
+          .then(requireData)
+          .catch(() => null),
       ]);
       return {
         salon,
+        paymentOptions: paymentOptions || DEFAULT_PAYMENT_OPTIONS,
         services: services || [],
         // The public list only contains active employees and has no status
         // field; keep the check for responses that do include one.
@@ -75,7 +87,19 @@ export default function useCreateBooking() {
     initialData: {},
     onError: showErrorToast,
   });
-  const { salon = null, services = [], employees = [] } = data;
+  const {
+    salon = null,
+    services = [],
+    employees = [],
+    paymentOptions = DEFAULT_PAYMENT_OPTIONS,
+  } = data;
+  const [chosenPaymentMethod, setPaymentMethod] = useState(null);
+  const paymentMethods = paymentOptions.methods?.length
+    ? paymentOptions.methods
+    : DEFAULT_PAYMENT_OPTIONS.methods;
+  const paymentMethod = paymentMethods.includes(chosenPaymentMethod)
+    ? chosenPaymentMethod
+    : paymentOptions.defaultMethod || paymentMethods[0];
 
   const selectedServices = useMemo(
     () =>
@@ -243,6 +267,7 @@ export default function useCreateBooking() {
         bookingDate,
         bookingTime: toHourMinute(bookingTime),
         note: note.trim() || null,
+        paymentMethod,
       });
       if (response.success) {
         setCreatedBooking(response.data);
@@ -301,6 +326,10 @@ export default function useCreateBooking() {
     setNote,
     totalPrice,
     totalDuration,
+    paymentMethods,
+    paymentMethod,
+    setPaymentMethod,
+    freeCancelHours: paymentOptions.freeCancelHours ?? 24,
     submitting,
     submitError,
     submit,

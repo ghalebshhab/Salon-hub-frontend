@@ -1,7 +1,8 @@
 import { getStatusClass } from "../model/booking.js";
 import useQuery from "../../../shared/hooks/useQuery.js";
 import { requireData } from "../../../shared/api/response.js";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
+import useCashPayment from "../../payments/hooks/useCashPayment.js";
 
 import { getMyEmployeeBookingsApi } from "../api/bookingApi.js";
 import { showErrorToast } from "../../../shared/notifications/toast.jsx";
@@ -22,5 +23,18 @@ export default function useEmployeeBookings() {
     keepPreviousData: true,
   });
 
-  return { bookings, loading, refetch, getStatusClass };
+  const cash = useCashPayment({ onRecorded: refetch });
+  const [receiptBookingId, setReceiptBookingId] = useState(null);
+  const closeReceipt = useCallback(() => setReceiptBookingId(null), []);
+
+  return {
+    bookings,
+    loading,
+    refetch,
+    getStatusClass,
+    cash,
+    receiptBookingId,
+    openReceipt: (booking) => setReceiptBookingId(booking.id),
+    closeReceipt,
+  };
 }

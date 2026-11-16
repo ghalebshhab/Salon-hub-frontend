@@ -1,5 +1,7 @@
 import { MapPin, Phone, StickyNote } from "lucide-react";
 import { useId } from "react";
+import PaymentMethodPicker from "../../../payments/components/PaymentMethodPicker.jsx";
+import { toFils } from "../../../payments/model/payment.js";
 
 export default function ReviewStep({
   phone,
@@ -8,6 +10,11 @@ export default function ReviewStep({
   onAreaChange,
   note,
   onNoteChange,
+  paymentMethods,
+  paymentMethod,
+  onPaymentMethodChange,
+  totalPrice,
+  freeCancelHours,
 }) {
   const id = useId();
   return (
@@ -73,6 +80,14 @@ export default function ReviewStep({
           />
         </label>
       </div>
+
+      <PaymentMethodPicker
+        methods={paymentMethods}
+        value={paymentMethod}
+        onChange={onPaymentMethodChange}
+        totalFils={toFils(totalPrice)}
+        freeCancelHours={freeCancelHours}
+      />
     </div>
   );
 }

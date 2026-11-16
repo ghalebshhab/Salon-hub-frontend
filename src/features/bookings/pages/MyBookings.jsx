@@ -1,7 +1,12 @@
 import useMyBookings from "../hooks/useMyBookings.js";
 import useHighlightedBooking from "../hooks/useHighlightedBooking.js";
+import { Link } from "react-router-dom";
+import AnswerDeadline from "../components/AnswerDeadline.jsx";
 import CustomerLiveCard from "../components/live/CustomerLiveCard.jsx";
 import { getStatusLabel, isLiveToday } from "../model/booking.js";
+import { useCallback, useState } from "react";
+import PaymentStrip from "../../payments/components/PaymentStrip.jsx";
+import ReceiptDialog from "../../payments/components/ReceiptDialog.jsx";
 
 import { MessageSquareText } from "lucide-react";
 import CreateReviewModal from "../../reviews/components/CreateReviewModal.jsx";
@@ -31,6 +36,8 @@ function MyBookings() {
     canCancel,
   } = useMyBookings();
   const highlightedId = useHighlightedBooking(!loading);
+  const [receiptBookingId, setReceiptBookingId] = useState(null);
+  const closeReceipt = useCallback(() => setReceiptBookingId(null), []);
 
   if (loading) {
     return <div className="loading">Loading your bookings...</div>;
@@ -107,6 +114,22 @@ function MyBookings() {
                     You will get a notification.
                   </p>
                 )}
+                <AnswerDeadline booking={booking} audience="customer" />
+                {booking.status === "EXPIRED" && (
+                  <p className="booking-decision rejected">
+                    The salon did not answer in time, so this request expired.
+                    Nothing was charged.{" "}
+                    <Link to={`/salons/${booking.salonId}/book`}>
+                      Choose another time
+                    </Link>
+                  </p>
+                )}
+                {booking.status === "NO_SHOW" && (
+                  <p className="booking-decision rejected">
+                    The salon marked this appointment as missed. If you were
+                    there, contact the salon.
+                  </p>
+                )}
 
                 <div className="booking-info-grid">
                   <p>
@@ -158,6 +181,11 @@ function MyBookings() {
                     Total Duration: {booking.totalDurationMinutes} min
                   </span>
                 </div>
+
+                <PaymentStrip
+                  payment={booking.payment}
+                  onReceipt={() => setReceiptBookingId(booking.id)}
+                />
 
                 {booking.note && (
                   <p className="booking-note">
@@ -275,6 +303,7 @@ function MyBookings() {
           onReviewCreated={handleReviewCreated}
         />
       )}
+      <ReceiptDialog bookingId={receiptBookingId} onClose={closeReceipt} />
     </section>
   );
 }

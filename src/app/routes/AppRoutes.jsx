@@ -79,6 +79,9 @@ const EditSalonService = lazy(
 const SalonBookings = lazy(
   () => import("../../features/bookings/pages/SalonBookings.jsx"),
 );
+const OwnerPayments = lazy(
+  () => import("../../features/payments/pages/OwnerPayments.jsx"),
+);
 const EmployeeBookings = lazy(
   () => import("../../features/bookings/pages/EmployeeBookings.jsx"),
 );
@@ -166,6 +169,7 @@ export default function AppRoutes() {
               element={<EditSalonService />}
             />
             <Route path="/owner/bookings" element={<SalonBookings />} />
+            <Route path="/owner/payments" element={<OwnerPayments />} />
           </Route>
           <Route path="/owner/create-salon" element={<CreateSalon />} />
           <Route path="/owner/my-salon" element={<MySalon />} />

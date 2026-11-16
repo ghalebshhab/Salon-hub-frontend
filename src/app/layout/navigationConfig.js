@@ -19,6 +19,7 @@ import {
   UserCheck,
   UserPlus,
   UsersRound,
+  Wallet,
 } from "lucide-react";
 import LamsaMark from "../../features/assistant/components/LamsaMark.jsx";
 import { ASSISTANT_NAME } from "../../features/assistant/model/assistantIdentity.js";
@@ -105,6 +106,7 @@ export function getNavigationSections({
           icon: Inbox,
           badge: "pendingBookings",
         },
+        { label: "Payments", to: "/owner/payments", icon: Wallet },
         { label: "Services", to: "/owner/services", icon: Scissors },
         {
           label: "Team & schedules",

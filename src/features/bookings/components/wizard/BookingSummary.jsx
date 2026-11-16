@@ -1,5 +1,10 @@
-import { CalendarDays, Clock3, Sparkles, UserRound } from "lucide-react";
+import { CalendarDays, Clock3, Sparkles, UserRound, Wallet } from "lucide-react";
 import { formatDateLabel, formatDuration } from "../../model/booking.js";
+import {
+  formatMoney,
+  getMethodShort,
+  toFils,
+} from "../../../payments/model/payment.js";
 
 /** Live summary of the request: on the side on desktop, on top of the review on mobile. */
 export default function BookingSummary({
@@ -10,6 +15,7 @@ export default function BookingSummary({
   bookingTime,
   totalPrice,
   totalDuration,
+  paymentMethod,
   step,
 }) {
   return (
@@ -54,6 +60,14 @@ export default function BookingSummary({
           </dt>
           <dd>{step < 2 ? "—" : formatDateLabel(bookingDate)}</dd>
         </div>
+        {step >= 3 && paymentMethod && (
+          <div>
+            <dt>
+              <Wallet size={15} aria-hidden="true" /> Payment
+            </dt>
+            <dd>{getMethodShort(paymentMethod)}</dd>
+          </div>
+        )}
         <div>
           <dt>
             <Clock3 size={15} aria-hidden="true" /> Time
@@ -70,9 +84,13 @@ export default function BookingSummary({
 
       <div className="bk-summary-total">
         <span>Total</span>
-        <strong>{totalPrice} JD</strong>
+        <strong>{formatMoney(toFils(totalPrice))}</strong>
       </div>
-      <p className="bk-summary-foot">Pay at the salon. No charge to request.</p>
+      <p className="bk-summary-foot">
+        {paymentMethod === "CASH" || !paymentMethod
+          ? "Pay at the salon. No charge to request."
+          : "No charge to request. You pay after the salon confirms."}
+      </p>
     </div>
   );
 }

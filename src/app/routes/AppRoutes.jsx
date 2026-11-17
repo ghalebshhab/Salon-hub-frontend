@@ -5,6 +5,9 @@ import ProtectedRoute from "../layout/ProtectedRoute.jsx";
 import OwnerRoute from "../layout/OwnerRoute.jsx";
 import NotFound from "./NotFound.jsx";
 
+// Design labs are for development only; they are not part of the live app.
+const SHOW_DEV_PAGES = import.meta.env.DEV;
+
 const Home = lazy(() => import("../../features/home/pages/Home.jsx"));
 const AssistantPage = lazy(
   () => import("../../features/assistant/pages/AssistantPage.jsx"),
@@ -113,7 +116,7 @@ export default function AppRoutes() {
       <Route element={<AppLayout />}>
         <Route path="/" element={<Home />} />
         <Route path="/assistant" element={<AssistantPage />} />
-        <Route path="/prototype" element={<Prototype />} />
+        {SHOW_DEV_PAGES && <Route path="/prototype" element={<Prototype />} />}
         <Route path="/salons/:salonId" element={<SalonDetails />} />
         <Route element={<ProtectedRoute />}>
           <Route path="/salons/:salonId/book" element={<CreateBooking />} />
@@ -137,7 +140,9 @@ export default function AppRoutes() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/verify-reset-code" element={<VerifyResetCode />} />
         <Route path="/reset-password" element={<ResetPassword />} />
-        <Route path="/auth-background-lab" element={<AuthBackgroundLab />} />
+        {SHOW_DEV_PAGES && (
+          <Route path="/auth-background-lab" element={<AuthBackgroundLab />} />
+        )}
         <Route element={<ProtectedRoute />}>
           <Route path="/hiring-posts" element={<HiringPosts />} />
           <Route

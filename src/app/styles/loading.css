@@ -161,7 +161,7 @@
   animation: salonSnipSpark 1s ease-in-out infinite;
 }
 
-.salon-navigation-logo-stage img {
+.salon-navigation-logo-stage .salon-loading-logo {
   position: relative;
   z-index: 2;
   width: 76px;
@@ -328,7 +328,7 @@
     height: 104px;
   }
 
-  .salon-navigation-logo-stage img {
+  .salon-navigation-logo-stage .salon-loading-logo {
     width: 68px;
     height: 68px;
   }
@@ -342,7 +342,7 @@
   .salon-snip-spark,
   .salon-snip-ring,
   .salon-navigation-logo-ring,
-  .salon-navigation-logo-stage img,
+  .salon-navigation-logo-stage .salon-loading-logo,
   .salon-loading-dots i {
     animation: none;
   }

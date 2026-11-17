@@ -1,3 +1,5 @@
+import { BrandMark } from "./BrandLogo.jsx";
+
 export default function BrandedLoadingOverlay({
   visible,
   message = "Preparing your experience…",
@@ -5,8 +7,6 @@ export default function BrandedLoadingOverlay({
   variant = "action",
 }) {
   if (!visible) return null;
-
-  const isNavigation = variant === "navigation";
 
   return (
     <div
@@ -17,22 +17,10 @@ export default function BrandedLoadingOverlay({
       aria-busy="true"
     >
       <div className="salon-loading-focus">
-        {isNavigation ? (
-          <div className="salon-navigation-logo-stage" aria-hidden="true">
-            <span className="salon-navigation-logo-ring" />
-            <img src="/salonhub-mark.svg" alt="" />
-          </div>
-        ) : (
-          <div className="salon-snip-stage" aria-hidden="true">
-            <span className="salon-snip-ring" />
-            <div className="salon-snip-scissors">
-              <span className="salon-snip-blade salon-snip-blade-left" />
-              <span className="salon-snip-blade salon-snip-blade-right" />
-              <span className="salon-snip-pivot" />
-              <span className="salon-snip-spark">✦</span>
-            </div>
-          </div>
-        )}
+        <div className="salon-navigation-logo-stage" aria-hidden="true">
+          <span className="salon-navigation-logo-ring" />
+          <BrandMark className="brand-logo-mark salon-loading-logo" />
+        </div>
         <div className="salon-loading-copy">
           <span>SalonHub</span>
           <strong>{message}</strong>

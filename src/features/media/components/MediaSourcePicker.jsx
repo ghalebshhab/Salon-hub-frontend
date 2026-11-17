@@ -144,9 +144,8 @@ export default function MediaSourcePicker({
             className="visually-hidden"
             type="file"
             accept={
-              allowVideo
-                ? "image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm"
-                : "image/jpeg,image/png,image/webp,image/gif"
+              // "image/*" opens the Photos app on phones.
+              allowVideo ? "image/*,video/*" : "image/*"
             }
             onChange={(event) => chooseFile(event.target.files?.[0])}
           />
@@ -155,7 +154,7 @@ export default function MediaSourcePicker({
             className="media-device-button"
             onClick={() => inputRef.current?.click()}
           >
-            <ImagePlus size={19} /> Choose from device
+            <ImagePlus size={19} /> Choose photo from device
           </button>
         </>
       ) : (

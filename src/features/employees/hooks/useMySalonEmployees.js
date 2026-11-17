@@ -11,6 +11,7 @@ import {
   getOwnerHiringPostsApi,
   rejectHiringApplicationApi,
 } from "../../hiring/api/hiringApi.js";
+import { confirmAction } from "../../../shared/confirm/confirmStore.js";
 
 export default function useMySalonEmployees() {
   const loader = useCallback(async (signal) => {
@@ -38,7 +39,17 @@ export default function useMySalonEmployees() {
   const process = async (applicationId, accept) => {
     const rejectionReason = accept
       ? undefined
-      : window.prompt("Why are you rejecting this application?");
+      : await confirmAction({
+          title: "Reject this application?",
+          message: "The applicant will see your reason.",
+          confirmText: "Reject",
+          danger: true,
+          input: {
+            label: "Reason",
+            placeholder: "Why are you rejecting this application?",
+            required: true,
+          },
+        });
     if (!accept && !rejectionReason?.trim()) return;
     try {
       const response = accept

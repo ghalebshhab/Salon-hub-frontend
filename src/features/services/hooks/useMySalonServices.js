@@ -11,6 +11,7 @@ import {
   getMySalonServicesApi,
   deleteSalonServiceApi,
 } from "../api/salonServicesApi.js";
+import { confirmAction } from "../../../shared/confirm/confirmStore.js";
 
 export default function useMySalonServices() {
   const loader = useCallback(
@@ -25,9 +26,12 @@ export default function useMySalonServices() {
   } = useQuery(loader, { initialData: [], onError: showErrorToast });
 
   const handleDelete = async (serviceId) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to disable this service?",
-    );
+    const confirmDelete = await confirmAction({
+      title: "Disable this service?",
+      message: "Customers will no longer be able to book it.",
+      confirmText: "Disable",
+      danger: true,
+    });
 
     if (!confirmDelete) return;
 

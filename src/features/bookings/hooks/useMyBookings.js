@@ -13,6 +13,7 @@ import {
   getMyBookingsApi,
   rejectBookingRescheduleApi,
 } from "../api/bookingApi.js";
+import { confirmAction } from "../../../shared/confirm/confirmStore.js";
 
 export default function useMyBookings() {
   const [respondingProposalId, setRespondingProposalId] = useState(null);
@@ -89,9 +90,13 @@ export default function useMyBookings() {
   }, [bookings, loadBookings]);
 
   const handleCancel = async (bookingId) => {
-    const confirmCancel = window.confirm(
-      "Are you sure you want to cancel this booking?",
-    );
+    const confirmCancel = await confirmAction({
+      title: "Cancel this booking?",
+      message: "The salon will be told that you cancelled.",
+      confirmText: "Cancel booking",
+      cancelText: "Keep booking",
+      danger: true,
+    });
 
     if (!confirmCancel) return;
 

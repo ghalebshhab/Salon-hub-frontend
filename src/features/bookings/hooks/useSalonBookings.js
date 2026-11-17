@@ -19,6 +19,7 @@ import {
 } from "../api/bookingApi.js";
 import { getMySalonEmployeesApi } from "../../employees/api/salonEmployeesApi.js";
 import useCashPayment from "../../payments/hooks/useCashPayment.js";
+import { confirmAction } from "../../../shared/confirm/confirmStore.js";
 
 export default function useSalonBookings() {
   const [rejectModalOpen, setRejectModalOpen] = useState(false);
@@ -319,9 +320,11 @@ export default function useSalonBookings() {
   };
 
   const handleComplete = async (bookingId) => {
-    const confirmComplete = window.confirm(
-      "Are you sure this booking is completed?",
-    );
+    const confirmComplete = await confirmAction({
+      title: "Mark this booking as completed?",
+      message: "Confirm that the service is done.",
+      confirmText: "Mark completed",
+    });
 
     if (!confirmComplete) return;
 
@@ -341,9 +344,12 @@ export default function useSalonBookings() {
   };
 
   const handleNoShow = async (booking) => {
-    const confirmed = window.confirm(
-      `Mark ${booking.customerName || "this customer"} as a no-show? The customer will be told that they missed the appointment.`,
-    );
+    const confirmed = await confirmAction({
+      title: "Mark as no-show?",
+      message: `${booking.customerName || "The customer"} will be told that they missed the appointment.`,
+      confirmText: "Mark no-show",
+      danger: true,
+    });
     if (!confirmed) return;
 
     try {

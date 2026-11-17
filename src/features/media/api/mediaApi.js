@@ -73,3 +73,10 @@ export async function deleteWorkMediaApi(mediaId) {
   const response = await httpClient.delete(`/media/work/${mediaId}`);
   return response.data;
 }
+
+export async function uploadProfilePictureApi(file) {
+  const body = new FormData();
+  body.append("file", file);
+  const response = await httpClient.post("/media/profile-picture", body);
+  return response.data;
+}

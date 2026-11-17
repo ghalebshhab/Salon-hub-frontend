@@ -26,6 +26,7 @@ export default function CommunityProfileLink({
           name={user.displayName || user.userName}
           salon={salon}
           size={size}
+          imageUrl={salon ? undefined : user.profilePictureUrl}
         />
       )}
       {children || (

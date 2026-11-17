@@ -18,7 +18,7 @@ function ProfileCard({ user, network }) {
     >
       <div className="community-me-cover" aria-hidden="true" />
       <div className="community-me-body">
-        <CommunityAvatar name={name} size="large" />
+        <CommunityAvatar name={name} size="large" imageUrl={user?.profilePictureUrl} />
         <h2 id="community-me-name">{name}</h2>
         {user?.userName && <p>@{user.userName}</p>}
         {user?.id && (

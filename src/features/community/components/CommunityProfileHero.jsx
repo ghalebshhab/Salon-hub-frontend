@@ -1,5 +1,8 @@
 import { BriefcaseBusiness, Flag, Sparkles, Store } from "lucide-react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import PhotoPickerButton from "../../../shared/components/PhotoPickerButton.jsx";
+import usePhotoUpload from "../../media/hooks/usePhotoUpload.js";
 import CommunityAvatar from "./CommunityAvatar.jsx";
 import CommunityProfileActions from "./CommunityProfileActions.jsx";
 
@@ -12,6 +15,17 @@ export default function CommunityProfileHero({
   onReport,
 }) {
   const { displayName, isSelf, role, salonRelationship, user } = viewModel;
+  const [photoUrl, setPhotoUrl] = useState("");
+  const { uploading, upload } = usePhotoUpload("profilePicture");
+
+  const uploadPhoto = async (file) => {
+    const url = await upload(file);
+    if (url) {
+      setPhotoUrl(url);
+      // The auth provider reloads the signed-in profile on window focus.
+      window.dispatchEvent(new Event("focus"));
+    }
+  };
 
   return (
     <header className="community-profile-hero">
@@ -21,7 +35,11 @@ export default function CommunityProfileHero({
         <span />
       </div>
       <div className="community-profile-identity">
-        <CommunityAvatar name={displayName} size="profile" />
+        <CommunityAvatar
+          name={displayName}
+          size="profile"
+          imageUrl={photoUrl || user.profilePictureUrl}
+        />
         <div className="community-profile-title-block">
           <div className="community-profile-role-line">
             <span>{role.label}</span>
@@ -44,8 +62,19 @@ export default function CommunityProfileHero({
         </div>
 
         <div className="community-profile-hero-actions">
+          {isSelf && (
+            <PhotoPickerButton
+              label="Change photo"
+              busy={uploading}
+              className="community-profile-report community-profile-photo-action"
+              onSelect={uploadPhoto}
+            />
+          )}
           {isSelf ? (
-            <Link className="community-profile-primary-action" to="/profile/career">
+            <Link
+              className="community-profile-primary-action"
+              to="/profile/career"
+            >
               <BriefcaseBusiness size={16} /> Edit professional profile
             </Link>
           ) : (
@@ -68,9 +97,18 @@ export default function CommunityProfileHero({
       </div>
 
       <dl className="community-profile-community-stats">
-        <div><dt>Posts</dt><dd>{profile.postCount ?? postCount}</dd></div>
-        <div><dt>Friends</dt><dd>{profile.friendCount ?? 0}</dd></div>
-        <div><dt>Salons followed</dt><dd>{profile.followedSalonCount ?? 0}</dd></div>
+        <div>
+          <dt>Posts</dt>
+          <dd>{profile.postCount ?? postCount}</dd>
+        </div>
+        <div>
+          <dt>Friends</dt>
+          <dd>{profile.friendCount ?? 0}</dd>
+        </div>
+        <div>
+          <dt>Salons followed</dt>
+          <dd>{profile.followedSalonCount ?? 0}</dd>
+        </div>
       </dl>
     </header>
   );

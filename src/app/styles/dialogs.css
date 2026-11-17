@@ -1,49 +1,134 @@
 /* ============================= */
-/* Custom Confirm Dialog */
+/* Confirm dialog                */
+/* Tokens only, so light and dark themes both work.                      */
+/* Intent: neutral (brand plum) or danger (brand rose, --danger).        */
 /* ============================= */
 
 .confirm-dialog-overlay {
+  /*
+   * Scrim and shadow use fixed dark values, never --text: in dark mode
+   * --text is near white and made a milky veil and a white glow.
+   * The scrim is light so the page behind stays clearly visible.
+   */
+  --dialog-scrim: rgba(41, 35, 41, 0.22);
+  --dialog-shadow:
+    0 1px 2px rgba(41, 35, 41, 0.06), 0 18px 48px rgba(41, 35, 41, 0.16);
+
   position: fixed;
   inset: 0;
   z-index: 9999;
   display: grid;
   place-items: center;
-  padding: 18px;
-  background: rgba(17, 24, 39, 0.55);
-  backdrop-filter: blur(10px);
+  padding: var(--space-4);
+  background: var(--dialog-scrim);
+  backdrop-filter: blur(2px);
+  animation: confirmOverlayIn var(--duration-base) var(--ease-standard);
+}
+
+:root[data-theme="dark"] .confirm-dialog-overlay {
+  /* Dim the page a little more and use pure dark shadows, no light. */
+  --dialog-scrim: rgba(6, 4, 8, 0.45);
+  --dialog-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.4), 0 20px 56px rgba(0, 0, 0, 0.55);
 }
 
 .confirm-dialog {
+  --dialog-tone: var(--primary);
+  --dialog-tone-soft: var(--primary-soft);
+  --dialog-on-tone: var(--on-primary);
+
   position: relative;
-  width: min(460px, 100%);
-  padding: 30px;
-  border-radius: 30px;
-  background:
-    radial-gradient(
-      circle at top right,
-      rgba(192, 132, 151, 0.14),
-      transparent 36%
-    ),
-    #ffffff;
+  width: min(440px, 100%);
+  overflow: hidden;
   border: 1px solid var(--border);
-  box-shadow: 0 28px 90px rgba(17, 24, 39, 0.28);
-  text-align: center;
-  animation: confirmDialogPop 0.18s ease-out;
+  border-radius: var(--radius-lg);
+  color: var(--text);
+  background: var(--card);
+  box-shadow: var(--dialog-shadow);
+  text-align: left;
+  animation: confirmDialogIn 260ms var(--ease-standard);
+}
+
+.confirm-dialog.is-danger {
+  --dialog-tone: var(--danger);
+  --dialog-tone-soft: var(--danger-soft);
+  --dialog-on-tone: #ffffff;
+}
+
+:root[data-theme="dark"] .confirm-dialog.is-danger {
+  /* --danger is a light rose in dark mode; dark text keeps AA contrast. */
+  --dialog-on-tone: #2a1418;
+}
+
+/* Thin intent line along the top edge. */
+.confirm-dialog::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  background: var(--dialog-tone);
+}
+
+.confirm-dialog-body {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-4);
+  padding: var(--space-6) var(--space-6) var(--space-5);
+}
+
+.confirm-icon {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border-radius: 12px;
+  color: var(--dialog-tone);
+  background: var(--dialog-tone-soft);
+}
+
+.confirm-dialog-copy {
+  min-width: 0;
+  padding-right: var(--space-6); /* room for the close button */
+}
+
+.confirm-dialog h2 {
+  margin: 2px 0 var(--space-2);
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: var(--weight-semibold);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+.confirm-dialog p {
+  margin: 0;
+  color: var(--muted);
+  font-size: var(--text-md);
+  line-height: 1.55;
 }
 
 .confirm-dialog-close {
   position: absolute;
-  top: 16px;
-  right: 16px;
-  width: 38px;
-  height: 38px;
+  top: var(--space-3);
+  right: var(--space-3);
   display: grid;
+  width: 34px;
+  height: 34px;
   place-items: center;
-  border: none;
-  border-radius: 14px;
-  background: #fff9f5;
+  border: 0;
+  border-radius: var(--radius-md);
   color: var(--muted);
+  background: transparent;
   cursor: pointer;
+  transition:
+    color var(--duration-base) var(--ease-standard),
+    background-color var(--duration-base) var(--ease-standard);
+}
+
+.confirm-dialog-close:hover:not(:disabled) {
+  color: var(--text);
+  background: var(--surface-elevated);
 }
 
 .confirm-dialog-close:disabled {
@@ -51,71 +136,141 @@
   cursor: not-allowed;
 }
 
-.confirm-icon {
-  width: 74px;
-  height: 74px;
+/* Optional text field (for example a rejection reason). */
+.confirm-dialog-field {
   display: grid;
-  place-items: center;
-  margin: 0 auto 18px;
-  border-radius: 26px;
-  color: var(--primary-dark);
-  background: var(--secondary);
+  grid-column: 1 / -1;
+  gap: var(--space-2);
 }
 
-.confirm-icon.danger {
-  color: #b91c1c;
-  background: #fee2e2;
-}
-
-.confirm-dialog h2 {
-  margin: 0 0 10px;
+.confirm-dialog-field label {
   color: var(--text);
-  font-size: var(--text-2xl);
-  letter-spacing: -0.5px;
+  font-size: var(--text-md);
+  font-weight: var(--weight-semibold);
 }
 
-.confirm-dialog p {
-  margin: 0;
-  color: var(--muted);
-  line-height: 1.7;
-  font-weight: var(--weight-bold);
+.confirm-dialog-field textarea {
+  width: 100%;
+  min-height: 92px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  color: var(--text);
+  background: var(--bg);
+  font: inherit;
+  font-size: var(--text-md);
+  line-height: 1.5;
+  resize: vertical;
+  transition:
+    border-color var(--duration-base) var(--ease-standard),
+    box-shadow var(--duration-base) var(--ease-standard);
 }
 
+.confirm-dialog-field textarea:focus-visible {
+  border-color: var(--dialog-tone);
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--dialog-tone) 22%, transparent);
+}
+
+/* Action bar. */
 .confirm-dialog-actions {
   display: flex;
-  justify-content: center;
-  gap: 12px;
-  margin-top: 26px;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-6);
+  border-top: 1px solid var(--border);
+  background: color-mix(in srgb, var(--surface-elevated) 55%, var(--card));
 }
 
 .confirm-dialog-actions .btn {
-  min-width: 140px;
-  justify-content: center;
+  min-width: 112px;
+  min-height: 44px;
+  border-radius: var(--radius-md);
 }
 
-@keyframes confirmDialogPop {
+.confirm-dialog-actions .confirm-dialog-confirm {
+  color: var(--dialog-on-tone);
+  border: 0;
+  background: var(--dialog-tone);
+  box-shadow: 0 10px 24px
+    color-mix(in srgb, var(--dialog-tone) 26%, transparent);
+}
+
+@media (hover: hover) {
+  .confirm-dialog-actions .confirm-dialog-confirm:not(:disabled):hover {
+    color: var(--dialog-on-tone);
+    background: color-mix(in srgb, var(--dialog-tone) 86%, var(--text));
+  }
+}
+
+.confirm-dialog-actions .btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.confirm-dialog-spinner {
+  animation: confirmSpin 0.8s linear infinite;
+}
+
+@keyframes confirmOverlayIn {
   from {
     opacity: 0;
-    transform: translateY(12px) scale(0.96);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
   }
 }
 
+@keyframes confirmDialogIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+}
+
+@keyframes confirmSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Phones: a bottom sheet with full-width buttons, main action first. */
 @media (max-width: 520px) {
+  .confirm-dialog-overlay {
+    place-items: end stretch;
+    padding: 0;
+  }
+
   .confirm-dialog {
-    padding: 24px;
-    border-radius: 24px;
+    width: 100%;
+    border-bottom: 0;
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    animation-name: confirmSheetIn;
+  }
+
+  .confirm-dialog-body {
+    padding: var(--space-6) var(--space-5) var(--space-4);
   }
 
   .confirm-dialog-actions {
-    flex-direction: column;
+    flex-direction: column-reverse;
+    padding: var(--space-4) var(--space-5)
+      calc(var(--space-4) + env(safe-area-inset-bottom));
   }
 
   .confirm-dialog-actions .btn {
     width: 100%;
+  }
+
+  @keyframes confirmSheetIn {
+    from {
+      transform: translateY(100%);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .confirm-dialog-overlay,
+  .confirm-dialog,
+  .confirm-dialog-spinner {
+    animation: none;
   }
 }

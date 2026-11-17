@@ -7,6 +7,7 @@ import { ToastContainer } from "react-toastify";
 import AuthProvider from "../features/auth/providers/AuthProvider.jsx";
 import GlobalLoadingOverlay from "../shared/components/GlobalLoadingOverlay.jsx";
 import NavigationLoadingOverlay from "../shared/components/NavigationLoadingOverlay.jsx";
+import ConfirmHost from "../shared/components/ConfirmHost.jsx";
 
 const SPLASH_SESSION_KEY = "salonhub_splash_seen";
 const SPLASH_MS = 600;
@@ -44,6 +45,7 @@ function App() {
             <AppRoutes />
             <GlobalLoadingOverlay />
             <NavigationLoadingOverlay />
+            <ConfirmHost />
 
             <ToastContainer
               position="bottom-right"

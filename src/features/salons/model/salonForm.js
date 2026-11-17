@@ -45,6 +45,7 @@ export function fromSalonResponse(salon) {
       salon.currentEmployeesNumber ?? salon.currentNumOfEmployees ?? 0,
     maxNumOfEmployees: salon.maxEmployeesNumber ?? salon.maxNumOfEmployees ?? 0,
     images: profilePictureUrl ? [profilePictureUrl] : [],
-    state: salon.openningStatus ?? salon.state ?? "CLOSED",
+    // The backend sends "Open" / "Closed"; the UI compares with "OPEN".
+    state: String(salon.openningStatus ?? salon.state ?? "CLOSED").toUpperCase(),
   };
 }

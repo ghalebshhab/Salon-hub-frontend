@@ -62,3 +62,9 @@ it("maps the backend salon response to the frontend view model", () => {
     images: ["https://example.com/a.png"],
   });
 });
+
+it("maps the backend open status to the upper-case UI state", () => {
+  expect(fromSalonResponse({ id: 1, openningStatus: "Open" }).state).toBe("OPEN");
+  expect(fromSalonResponse({ id: 1, openningStatus: "Closed" }).state).toBe("CLOSED");
+  expect(fromSalonResponse({ id: 1 }).state).toBe("CLOSED");
+});

@@ -72,3 +72,15 @@ export async function deleteCommunityCommentApi(postId, commentId) {
     await httpClient.delete(`/community/posts/${postId}/comments/${commentId}`),
   );
 }
+
+// Saves the photo/video in Cloudinary only for a real post. The backend
+// deletes the post's old file when it is replaced.
+export async function setCommunityPostMediaApi(postId, file) {
+  const body = new FormData();
+  body.append("file", file);
+  const response = await httpClient.put(
+    `/community/posts/${postId}/media`,
+    body,
+  );
+  return response.data;
+}

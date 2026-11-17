@@ -1,11 +1,15 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { requireData } from "../../../shared/api/response.js";
-import { showApiErrorToast } from "../../../shared/notifications/toast.jsx";
+import {
+  showApiErrorToast,
+  showWarningToast,
+} from "../../../shared/notifications/toast.jsx";
 import {
   createCommunityPostApi,
   deleteCommunityPostApi,
   getCommunityFeedApi,
   setCommunityPostLikeApi,
+  setCommunityPostMediaApi,
 } from "../api/communityPostsApi.js";
 import useCommunityAction from "./useCommunityAction.js";
 
@@ -25,7 +29,8 @@ export default function useCommunityPosts() {
 
     getCommunityFeedApi({}, { signal: controller.signal })
       .then((response) => {
-        if (!controller.signal.aborted) setPosts(requireData(response)?.content || []);
+        if (!controller.signal.aborted)
+          setPosts(requireData(response)?.content || []);
       })
       .catch((error) => {
         if (!controller.signal.aborted) {
@@ -34,7 +39,10 @@ export default function useCommunityPosts() {
         }
       })
       .finally(() => {
-        if (!controller.signal.aborted && feedControllerRef.current === controller) {
+        if (
+          !controller.signal.aborted &&
+          feedControllerRef.current === controller
+        ) {
           setLoading(false);
           feedControllerRef.current = null;
         }
@@ -49,10 +57,35 @@ export default function useCommunityPosts() {
   }, [loadFeed]);
 
   const createPost = useCallback(
-    async (postDraft) => {
+    async ({ mediaFile, ...postDraft }) => {
       const response = await runAction({
         key: "create-post",
-        action: () => createCommunityPostApi(postDraft),
+        action: async () => {
+          const created = await createCommunityPostApi(
+            mediaFile ? { ...postDraft, mediaUrl: null } : postDraft,
+          );
+          const createdPost = created?.success && created.data;
+          if (!createdPost || !mediaFile) return created;
+          // The photo goes to Cloudinary only after the post exists, so no
+          // unused files stay in storage.
+          try {
+            const withMedia = await setCommunityPostMediaApi(
+              createdPost.id,
+              mediaFile,
+            );
+            if (withMedia?.success && withMedia.data) return withMedia;
+            showWarningToast(
+              withMedia?.message ||
+                "The post is live, but its photo was not saved.",
+            );
+          } catch (error) {
+            showApiErrorToast(
+              error,
+              "The post is live, but its photo was not saved.",
+            );
+          }
+          return created;
+        },
         successMessage: "Your post is live.",
       });
       const post = response && requireData(response);

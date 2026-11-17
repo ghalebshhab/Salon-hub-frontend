@@ -6,6 +6,7 @@ import {
   setCommunityPostLikeApi,
 } from "../api/communityPostsApi.js";
 import useCommunityAction from "./useCommunityAction.js";
+import { confirmAction } from "../../../shared/confirm/confirmStore.js";
 
 const PAGE_SIZE = 10;
 const EMPTY_PAGE = { page: 0, totalElements: 0, totalPages: 0, last: true };
@@ -117,6 +118,14 @@ export default function useCommunityMemberPosts(userId, { onDelete } = {}) {
 
   const deletePost = useCallback(
     async (postId) => {
+      const confirmed = await confirmAction({
+        title: "Delete this post?",
+        message:
+          "The post, its photo, likes and comments will be deleted. You cannot undo this.",
+        confirmText: "Delete",
+        danger: true,
+      });
+      if (!confirmed) return;
       const response = await runAction({
         key: `delete-${postId}`,
         action: () => deleteCommunityPostApi(postId),

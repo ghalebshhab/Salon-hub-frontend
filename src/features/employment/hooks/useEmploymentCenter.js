@@ -16,6 +16,7 @@ import {
   getMyLeaveRequestsApi,
   rejectEmploymentRequestApi,
 } from "../api/employmentApi.js";
+import { confirmAction } from "../../../shared/confirm/confirmStore.js";
 
 export default function useEmploymentCenter() {
   const { user } = useAuth();
@@ -63,7 +64,14 @@ export default function useEmploymentCenter() {
       "The invitation could not be accepted.",
     );
 
-  const cancelRequest = (requestId) =>
+  const cancelRequest = async (requestId) =>
+    (await confirmAction({
+      title: "Cancel this employment request?",
+      message: "The salon will no longer see this request.",
+      confirmText: "Cancel request",
+      cancelText: "Keep it",
+      danger: true,
+    })) &&
     perform(
       () => cancelEmploymentRequestApi(requestId),
       "The employment request could not be cancelled.",
@@ -86,6 +94,14 @@ export default function useEmploymentCenter() {
   };
 
   const requestLeave = async () => {
+    const confirmed = await confirmAction({
+      title: "Ask to leave the salon?",
+      message:
+        "Your owner will get a leave request. You stay in the team until they approve it.",
+      confirmText: "Send leave request",
+      danger: true,
+    });
+    if (!confirmed) return;
     const completed = await perform(
       () => createLeaveRequestApi(leaveReason.trim() || null),
       "The leave request could not be sent.",
@@ -93,7 +109,13 @@ export default function useEmploymentCenter() {
     if (completed) setLeaveReason("");
   };
 
-  const cancelLeave = (requestId) =>
+  const cancelLeave = async (requestId) =>
+    (await confirmAction({
+      title: "Cancel your leave request?",
+      message: "You will stay in the salon team.",
+      confirmText: "Cancel request",
+      cancelText: "Keep it",
+    })) &&
     perform(
       () => cancelLeaveRequestApi(requestId),
       "The leave request could not be cancelled.",

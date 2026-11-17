@@ -12,6 +12,7 @@ import {
   publishWorkMediaApi,
   publishWorkMediaFromDriveApi,
 } from "../api/mediaApi.js";
+import { confirmAction } from "../../../shared/confirm/confirmStore.js";
 
 export default function useSalonWorkGallery(salonId) {
   const { user } = useAuth();
@@ -59,6 +60,13 @@ export default function useSalonWorkGallery(salonId) {
   };
 
   const remove = async (mediaId) => {
+    const confirmed = await confirmAction({
+      title: "Delete this work photo?",
+      message: "It will be removed from the salon gallery and from storage.",
+      confirmText: "Delete",
+      danger: true,
+    });
+    if (!confirmed) return;
     try {
       const response = await deleteWorkMediaApi(mediaId);
       if (!response.success) {

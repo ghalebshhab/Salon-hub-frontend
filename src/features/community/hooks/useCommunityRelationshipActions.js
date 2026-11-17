@@ -6,6 +6,7 @@ import {
   sendFriendRequestApi,
 } from "../api/communityRelationshipsApi.js";
 import useCommunityAction from "./useCommunityAction.js";
+import { confirmAction } from "../../../shared/confirm/confirmStore.js";
 
 export default function useCommunityRelationshipActions({ afterSuccess } = {}) {
   const { busyAction, runAction } = useCommunityAction();
@@ -40,7 +41,13 @@ export default function useCommunityRelationshipActions({ afterSuccess } = {}) {
   );
 
   const decline = useCallback(
-    (friendshipId) =>
+    async (friendshipId) =>
+      (await confirmAction({
+        title: "Decline this friend request?",
+        message: "The request will be removed.",
+        confirmText: "Decline",
+        danger: true,
+      })) &&
       execute({
         key: `decline-${friendshipId}`,
         action: () => declineFriendRequestApi(friendshipId),
@@ -50,7 +57,13 @@ export default function useCommunityRelationshipActions({ afterSuccess } = {}) {
   );
 
   const remove = useCallback(
-    (friendshipId) =>
+    async (friendshipId) =>
+      (await confirmAction({
+        title: "Remove this friend?",
+        message: "You will no longer be connected in the community.",
+        confirmText: "Remove",
+        danger: true,
+      })) &&
       execute({
         key: `remove-${friendshipId}`,
         action: () => removeFriendshipApi(friendshipId),

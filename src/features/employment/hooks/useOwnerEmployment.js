@@ -17,6 +17,7 @@ import {
   rejectEmploymentRequestApi,
 } from "../api/employmentApi.js";
 import useEmploymentCandidateSearch from "./useEmploymentCandidateSearch.js";
+import { confirmAction } from "../../../shared/confirm/confirmStore.js";
 
 export default function useOwnerEmployment() {
   const { user } = useAuth();
@@ -74,7 +75,14 @@ export default function useOwnerEmployment() {
       "The join request could not be accepted.",
     );
 
-  const cancelInvitation = (requestId) =>
+  const cancelInvitation = async (requestId) =>
+    (await confirmAction({
+      title: "Cancel this invitation?",
+      message: "The person will no longer be able to accept it.",
+      confirmText: "Cancel invitation",
+      cancelText: "Keep it",
+      danger: true,
+    })) &&
     perform(
       () => cancelEmploymentRequestApi(requestId),
       "The invitation could not be cancelled.",

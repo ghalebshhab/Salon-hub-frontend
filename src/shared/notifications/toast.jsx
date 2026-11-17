@@ -2,24 +2,24 @@ import { toast } from "react-toastify";
 import AppToast from "../components/AppToast.jsx";
 import { getApiErrorMessage } from "../api/response.js";
 
-const toastOptions = {
-  closeButton: false,
-  icon: false,
+// Same type + title + message = same toastId. While one is on screen,
+// react-toastify ignores the copies (for example, when several requests
+// fail together because the backend is down).
+const show = (type, title, message) => {
+  const toastId = `${type}:${title}:${message}`;
+  if (toast.isActive(toastId)) return;
+  toast[type](<AppToast type={type} title={title} message={message} />, {
+    closeButton: false,
+    icon: false,
+    toastId,
+  });
 };
 
-export const showSuccessToast = (message, title = "Success") => {
-  toast.success(
-    <AppToast type="success" title={title} message={message} />,
-    toastOptions,
-  );
-};
+export const showSuccessToast = (message, title = "Success") =>
+  show("success", title, message);
 
-export const showErrorToast = (message, title = "Something went wrong") => {
-  toast.error(
-    <AppToast type="error" title={title} message={message} />,
-    toastOptions,
-  );
-};
+export const showErrorToast = (message, title = "Something went wrong") =>
+  show("error", title, message);
 
 export const showApiErrorToast = (
   error,
@@ -27,16 +27,8 @@ export const showApiErrorToast = (
   title = "Something went wrong",
 ) => showErrorToast(getApiErrorMessage(error, fallback), title);
 
-export const showInfoToast = (message, title = "Note") => {
-  toast.info(
-    <AppToast type="info" title={title} message={message} />,
-    toastOptions,
-  );
-};
+export const showInfoToast = (message, title = "Note") =>
+  show("info", title, message);
 
-export const showWarningToast = (message, title = "Warning") => {
-  toast.warning(
-    <AppToast type="warning" title={title} message={message} />,
-    toastOptions,
-  );
-};
+export const showWarningToast = (message, title = "Warning") =>
+  show("warning", title, message);

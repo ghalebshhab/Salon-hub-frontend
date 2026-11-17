@@ -1,4 +1,4 @@
-import { CalendarSearch, RefreshCw, Sparkles } from "lucide-react";
+import { CalendarSearch, RotateCw, UsersRound } from "lucide-react";
 import { useMemo } from "react";
 import {
   describeUnavailable,
@@ -26,7 +26,7 @@ function NoTimes({
           type="button"
           onClick={onRetry}
         >
-          <RefreshCw size={15} aria-hidden="true" /> Try again
+          <RotateCw size={15} aria-hidden="true" /> Try again
         </button>
       </div>
     );
@@ -60,7 +60,7 @@ function NoTimes({
             type="button"
             onClick={onSalonAssigns}
           >
-            <Sparkles size={15} aria-hidden="true" /> Let the salon assign
+            <UsersRound size={15} aria-hidden="true" /> Let the salon assign
           </button>
         )}
       </div>

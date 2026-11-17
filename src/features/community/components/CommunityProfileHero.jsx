@@ -1,4 +1,4 @@
-import { BriefcaseBusiness, Flag, Sparkles, Store } from "lucide-react";
+import { BadgeCheck, Flag, Store, UserPen } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import PhotoPickerButton from "../../../shared/components/PhotoPickerButton.jsx";
@@ -45,7 +45,7 @@ export default function CommunityProfileHero({
             <span>{role.label}</span>
             {profile.careerProfileEnabled && (
               <span className="is-verified">
-                <Sparkles size={13} /> Professional profile
+                <BadgeCheck size={13} /> Professional profile
               </span>
             )}
           </div>
@@ -75,7 +75,7 @@ export default function CommunityProfileHero({
               className="community-profile-primary-action"
               to="/profile/career"
             >
-              <BriefcaseBusiness size={16} /> Edit professional profile
+              <UserPen size={16} /> Edit professional profile
             </Link>
           ) : (
             <CommunityProfileActions

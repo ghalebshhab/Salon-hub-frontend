@@ -12,12 +12,13 @@ import {
   IdCard,
   Inbox,
   LayoutDashboard,
+  Megaphone,
   MessagesSquare,
   Scissors,
   SquarePen,
+  SquarePlus,
   Store,
   UserCheck,
-  UserPlus,
   UsersRound,
   Wallet,
 } from "lucide-react";
@@ -128,11 +129,11 @@ export function getNavigationSections({
               to: "/owner/create-salon",
               icon: Building2,
             },
-        { label: "New service", to: "/owner/create-service", icon: Scissors },
+        { label: "New service", to: "/owner/create-service", icon: SquarePlus },
         {
           label: "New hiring post",
           to: "/owner/create-hiring-post",
-          icon: UserPlus,
+          icon: Megaphone,
         },
       ],
     });

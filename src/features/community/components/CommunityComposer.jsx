@@ -1,9 +1,9 @@
 import {
-  Check,
   ChevronDown,
   Globe2,
-  ImagePlus,
+  Link2,
   LoaderCircle,
+  Send,
   Store,
   X,
 } from "lucide-react";
@@ -118,7 +118,7 @@ export default function CommunityComposer({ user, busy, onPublish }) {
         id="community-media-input"
         hidden={!mediaOpen}
       >
-        <ImagePlus size={18} aria-hidden="true" />
+        <Link2 size={18} aria-hidden="true" />
         <input
           type="url"
           value={mediaUrl}
@@ -160,7 +160,7 @@ export default function CommunityComposer({ user, busy, onPublish }) {
             aria-controls="community-media-input"
             onClick={() => setMediaOpen((open) => !open)}
           >
-            <ImagePlus size={18} aria-hidden="true" /> Media URL
+            <Link2 size={18} aria-hidden="true" /> Media URL
           </button>
           <PhotoPickerButton
             label="Photo"
@@ -197,7 +197,7 @@ export default function CommunityComposer({ user, busy, onPublish }) {
             </>
           ) : (
             <>
-              <Check size={16} aria-hidden="true" /> Publish post
+              <Send size={16} aria-hidden="true" /> Publish post
             </>
           )}
         </button>

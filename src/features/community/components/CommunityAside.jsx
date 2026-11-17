@@ -1,4 +1,4 @@
-import { ArrowRight, BellRing, Sparkles } from "lucide-react";
+import { ArrowRight, BellRing, UserPlus } from "lucide-react";
 import { Link } from "react-router-dom";
 import { COMMUNITY_ROUTES } from "../model/communityRoutes.js";
 import CommunityAvatar from "./CommunityAvatar.jsx";
@@ -18,7 +18,11 @@ function ProfileCard({ user, network }) {
     >
       <div className="community-me-cover" aria-hidden="true" />
       <div className="community-me-body">
-        <CommunityAvatar name={name} size="large" imageUrl={user?.profilePictureUrl} />
+        <CommunityAvatar
+          name={name}
+          size="large"
+          imageUrl={user?.profilePictureUrl}
+        />
         <h2 id="community-me-name">{name}</h2>
         {user?.userName && <p>@{user.userName}</p>}
         {user?.id && (
@@ -80,7 +84,7 @@ function Suggestions({ network }) {
     >
       <header className="community-aside-heading">
         <h2 id="community-suggestions-title">
-          <Sparkles aria-hidden="true" /> People you may know
+          <UserPlus aria-hidden="true" /> People you may know
         </h2>
         <Link to={COMMUNITY_ROUTES.discover}>See all</Link>
       </header>

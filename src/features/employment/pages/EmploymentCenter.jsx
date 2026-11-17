@@ -1,4 +1,4 @@
-import { BriefcaseBusiness, LogOut, RefreshCw, XCircle } from "lucide-react";
+import { BriefcaseBusiness, LogOut, Undo2, XCircle } from "lucide-react";
 import EmptyState from "../../../shared/components/EmptyState.jsx";
 import Loading from "../../../shared/components/Loading.jsx";
 import EmploymentRequestCard from "../components/EmploymentRequestCard.jsx";
@@ -206,7 +206,7 @@ export default function EmploymentCenter() {
                       disabled={employment.acting}
                       onClick={() => employment.cancelLeave(request.requestId)}
                     >
-                      <RefreshCw size={16} /> Cancel leave request
+                      <Undo2 size={16} /> Cancel leave request
                     </button>
                   )
                 }

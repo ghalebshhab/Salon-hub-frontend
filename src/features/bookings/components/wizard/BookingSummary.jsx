@@ -1,4 +1,10 @@
-import { CalendarDays, Clock3, Sparkles, UserRound, Wallet } from "lucide-react";
+import {
+  CalendarDays,
+  Clock3,
+  UserRound,
+  UsersRound,
+  Wallet,
+} from "lucide-react";
 import { formatDateLabel, formatDuration } from "../../model/booking.js";
 import {
   formatMoney,
@@ -49,7 +55,7 @@ export default function BookingSummary({
               employee.fullName
             ) : (
               <span className="bk-summary-assign">
-                <Sparkles size={13} aria-hidden="true" /> Salon assigns
+                <UsersRound size={13} aria-hidden="true" /> Salon assigns
               </span>
             )}
           </dd>

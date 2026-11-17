@@ -1,4 +1,4 @@
-import { Maximize2, Navigation } from "lucide-react";
+import { Map as MapIcon, Navigation } from "lucide-react";
 import { googleMapsDirectionsLink } from "../model/jordanMapLocation.js";
 import GoogleMapEmbed from "./GoogleMapEmbed.jsx";
 
@@ -23,7 +23,7 @@ export default function SalonLocationPreview({
           title={`Map preview for ${salonName}`}
         />
         <span className="salon-location-preview-expand" aria-hidden="true">
-          <Maximize2 size={15} /> View map
+          <MapIcon size={15} /> View map
         </span>
       </button>
       <div className="salon-location-preview-footer">

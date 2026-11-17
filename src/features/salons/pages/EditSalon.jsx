@@ -3,8 +3,8 @@ import {
   Eye,
   Mail,
   MapPin,
+  Pencil,
   Phone,
-  Settings2,
   UsersRound,
 } from "lucide-react";
 import { useState } from "react";
@@ -118,7 +118,7 @@ export default function EditSalon() {
               type="button"
               onClick={() => beginEdit("identity")}
             >
-              <Settings2 size={17} /> Edit name and story
+              <Pencil size={17} /> Edit name and story
             </button>
             <div className="salon-details-hero-meta">
               <div>

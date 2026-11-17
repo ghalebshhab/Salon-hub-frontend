@@ -1,4 +1,4 @@
-import { Sparkles, UserRound } from "lucide-react";
+import { UserRound, UsersRound } from "lucide-react";
 
 function Avatar({ employee }) {
   if (employee.imageUrl) {
@@ -44,7 +44,7 @@ export default function ProfessionalStep({
             onChange={() => onChoose("")}
           />
           <span className="bk-avatar bk-avatar-any" aria-hidden="true">
-            <Sparkles size={20} />
+            <UsersRound size={20} />
           </span>
           <span className="bk-pro-body">
             <strong>Let the salon assign</strong>

@@ -1,136 +1,160 @@
 import {
   ArrowDownRight,
   ArrowUpRight,
-  CalendarDays,
+  CalendarCheck2,
+  CalendarX2,
   Clock3,
-  DollarSign,
   Star,
   TrendingUp,
   UserRound,
   UsersRound,
-  X,
+  Wallet,
+  WalletCards,
 } from "lucide-react";
+import { Link } from "react-router-dom";
+import { formatMoney } from "../../payments/model/payment.js";
 import { money } from "../model/dashboardFormat.js";
 
-const icons = {
-  revenue: DollarSign,
-  bookings: CalendarDays,
-  pending: Clock3,
-  employees: UsersRound,
-  customers: UserRound,
-  rating: Star,
-  cancellation: X,
-  average: TrendingUp,
-};
+/**
+ * Change versus the previous period. `lowerIsBetter` flips the color, so a
+ * falling no-show rate shows as good news.
+ */
+function Trend({ change, unit = "%", lowerIsBetter = false }) {
+  if (change == null) return null;
+  const value = Number(change);
+  if (!value) return <span className="owner-trend is-flat">No change</span>;
+  const up = value > 0;
+  const good = lowerIsBetter ? !up : up;
+  const Icon = up ? ArrowUpRight : ArrowDownRight;
+  return (
+    <span className={`owner-trend ${good ? "trend-up" : "trend-down"}`}>
+      <Icon size={14} aria-hidden="true" />
+      <span className="sr-only">{up ? "Up" : "Down"} </span>
+      {Math.abs(value)}
+      {unit}
+    </span>
+  );
+}
 
-function StatCard({ type, label, value, change, detail }) {
-  const Icon = icons[type];
-  const positive = Number(change) >= 0;
+function StatCard({ icon: Icon, label, value, detail, trend }) {
   return (
     <article className="owner-stat-card">
-      <div className="owner-stat-top">
-        <span className="owner-stat-icon">
-          <Icon size={18} />
-        </span>
-        <button
-          className="owner-info"
-          type="button"
-          title={detail}
-          aria-label={`How ${label.toLowerCase()} is calculated`}
-        >
-          i
-        </button>
-      </div>
+      <span className="owner-stat-icon" aria-hidden="true">
+        <Icon size={18} />
+      </span>
       <p>{label}</p>
       <strong>{value}</strong>
       <div className="owner-stat-foot">
-        {change !== null && (
-          <span className={positive ? "trend-up" : "trend-down"}>
-            {positive ? (
-              <ArrowUpRight size={14} />
-            ) : (
-              <ArrowDownRight size={14} />
-            )}
-            {Math.abs(change)}%
-          </span>
-        )}
+        {trend}
         <small>{detail}</small>
       </div>
     </article>
   );
 }
 
-export default function DashboardStats({ summary }) {
-  const stats = [
-    [
-      "revenue",
-      "Total revenue",
-      money(summary.revenue),
-      summary.revenueChange,
-      "Completed bookings only",
-    ],
-    [
-      "bookings",
-      "Completed bookings",
-      summary.completed,
-      summary.completedChange,
-      "Compared with the previous period",
-    ],
-    [
-      "pending",
-      "Pending requests",
-      summary.pending,
-      null,
-      "Need your attention",
-    ],
-    [
-      "employees",
-      "Active employees",
-      summary.employees,
-      null,
-      "Currently active team members",
-    ],
-    [
-      "customers",
-      "Unique customers",
-      summary.customers,
-      null,
-      "Customers in this period",
-    ],
-    [
-      "rating",
-      "Average salon rating",
-      summary.rating ? summary.rating.toFixed(1) : "—",
-      null,
-      `${summary.ratingCount} verified ratings`,
-    ],
-    [
-      "cancellation",
-      "Cancellation rate",
-      `${summary.cancellation}%`,
-      null,
-      "Lower is better",
-    ],
-    [
-      "average",
-      "Average booking value",
-      money(summary.averageValue),
-      null,
-      "Completed bookings",
-    ],
-  ];
+function MiniStat({ icon: Icon, label, value, to }) {
+  const body = (
+    <>
+      <Icon size={16} aria-hidden="true" />
+      <span>{label}</span>
+      <strong>{value}</strong>
+    </>
+  );
+  return to ? (
+    <Link className="owner-mini-stat is-link" to={to}>
+      {body}
+    </Link>
+  ) : (
+    <div className="owner-mini-stat">{body}</div>
+  );
+}
+
+/** Four main numbers first, then the smaller supporting numbers in one row. */
+export default function DashboardStats({ summary, insights = null }) {
+  const unpaid = insights?.payments;
   return (
-    <section className="owner-stats-grid">
-      {stats.map(([type, label, value, change, detail]) => (
+    <section className="owner-stats" aria-label="Key numbers">
+      <div className="owner-stats-grid">
         <StatCard
-          type={type}
-          label={label}
-          value={value}
-          change={change}
-          detail={detail}
-          key={type}
+          icon={Wallet}
+          label="Revenue"
+          value={money(summary.revenue)}
+          detail="From completed visits, vs. previous period"
+          trend={<Trend change={summary.revenueChange} />}
         />
-      ))}
+        <StatCard
+          icon={CalendarCheck2}
+          label="Completed visits"
+          value={summary.completed}
+          detail="vs. previous period"
+          trend={<Trend change={summary.completedChange} />}
+        />
+        <StatCard
+          icon={CalendarX2}
+          label="Cancel & no-show rate"
+          value={`${summary.cancellation}%`}
+          detail={
+            insights
+              ? `No-show: ${insights.noShowRate}% of confirmed visits`
+              : "Of all bookings in this period"
+          }
+          trend={
+            <Trend
+              change={summary.cancellationChange}
+              unit=" pts"
+              lowerIsBetter
+            />
+          }
+        />
+        <StatCard
+          icon={Star}
+          label="Salon rating"
+          value={summary.rating ? summary.rating.toFixed(1) : "—"}
+          detail={`${summary.ratingCount} verified ${
+            summary.ratingCount === 1 ? "review" : "reviews"
+          }`}
+        />
+      </div>
+      <div className="owner-mini-stats">
+        <MiniStat
+          icon={Clock3}
+          label="Requests to answer"
+          value={summary.pending}
+          to={summary.pending ? "/owner/bookings" : undefined}
+        />
+        {insights?.advanced ? (
+          <MiniStat
+            icon={UserRound}
+            label={`Returning (${insights.returning} of ${summary.customers})`}
+            value={`${insights.returningRate}%`}
+          />
+        ) : (
+          <MiniStat
+            icon={UserRound}
+            label="Customers"
+            value={summary.customers}
+          />
+        )}
+        <MiniStat
+          icon={TrendingUp}
+          label="Average visit value"
+          value={money(summary.averageValue)}
+        />
+        {unpaid ? (
+          <MiniStat
+            icon={WalletCards}
+            label={`Not paid yet (${unpaid.unpaidCount})`}
+            value={formatMoney(unpaid.unpaidFils, insights.currency)}
+            to={unpaid.unpaidCount ? "/owner/payments" : undefined}
+          />
+        ) : (
+          <MiniStat
+            icon={UsersRound}
+            label="Active team"
+            value={summary.employees}
+          />
+        )}
+      </div>
     </section>
   );
 }

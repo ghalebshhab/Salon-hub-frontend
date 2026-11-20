@@ -35,10 +35,22 @@ function renderHeader(props = {}) {
 it("connects the v0 owner actions to real application routes", () => {
   renderHeader();
 
-  expect(screen.getByRole("link", { name: "View public salon" }).getAttribute("href")).toBe("/salons/27");
-  expect(screen.getByRole("link", { name: "Manage salon" }).getAttribute("href")).toBe("/owner/my-salon/edit");
-  expect(screen.getByRole("link", { name: "Manage bookings" }).getAttribute("href")).toBe("/owner/bookings");
-  expect(screen.getByRole("link", { name: "Open Maison Rose Salon workspace" }).getAttribute("href")).toBe("/owner/my-salon");
+  expect(
+    screen
+      .getByRole("link", { name: "View public salon" })
+      .getAttribute("href"),
+  ).toBe("/salons/27");
+  expect(
+    screen.getByRole("link", { name: "Manage salon" }).getAttribute("href"),
+  ).toBe("/owner/my-salon/edit");
+  expect(
+    screen.getByRole("link", { name: "Manage bookings" }).getAttribute("href"),
+  ).toBe("/owner/bookings");
+  expect(
+    screen
+      .getByRole("link", { name: "Open Maison Rose Salon workspace" })
+      .getAttribute("href"),
+  ).toBe("/owner/my-salon");
 });
 
 it("keeps the dashboard controls interactive", () => {

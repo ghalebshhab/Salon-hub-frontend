@@ -1,7 +1,16 @@
-import { ExternalLink, Filter, MoreHorizontal, Search } from "lucide-react";
+import { ChevronRight, ExternalLink, Filter, Search } from "lucide-react";
 import { Link } from "react-router-dom";
 import { bookingStatus, initials } from "../model/dashboardModel.js";
-import { dashboardStatusClass, money } from "../model/dashboardFormat.js";
+import {
+  BOOKING_FILTER_STATUSES,
+  getOwnerStatusLook,
+  money,
+  paymentLabel,
+} from "../model/dashboardFormat.js";
+import OwnerStatusPill from "./OwnerStatusPill.jsx";
+
+/** Rows shown here; the full list lives in booking management. */
+const TABLE_LIMIT = 12;
 
 export default function BookingsTable({
   bookings,
@@ -33,10 +42,8 @@ export default function BookingsTable({
       <div className="owner-panel-heading owner-bookings-heading">
         <div>
           <span className="eyebrow">Operations</span>
-          <h2>Recent bookings</h2>
-          <p>
-            Customers, assigned employees, ratings, and completed booking value.
-          </p>
+          <h2>Bookings in this period</h2>
+          <p>Newest first. Select a row to see the details.</p>
         </div>
         <Link className="text-link" to="/owner/bookings">
           View all <ExternalLink size={14} />
@@ -44,8 +51,9 @@ export default function BookingsTable({
       </div>
       <div className="owner-toolbar">
         <div className="owner-search">
-          <Search size={16} />
+          <Search size={16} aria-hidden="true" />
           <input
+            type="search"
             aria-label="Search bookings"
             placeholder="Search customer, booking, employee"
             value={query}
@@ -55,9 +63,10 @@ export default function BookingsTable({
         <button
           className="owner-filter-button"
           type="button"
+          aria-expanded={showFilters}
           onClick={onToggleFilters}
         >
-          <Filter size={15} />
+          <Filter size={15} aria-hidden="true" />
           Filters
         </button>
         {showFilters && (
@@ -67,16 +76,10 @@ export default function BookingsTable({
             onChange={(event) => onFilterChange(event.target.value)}
             aria-label="Booking status filter"
           >
-            {[
-              "ALL",
-              "PENDING",
-              "ACCEPTED",
-              "COMPLETED",
-              "CANCELLED",
-              "REJECTED",
-            ].map((item) => (
+            <option value="ALL">All statuses</option>
+            {BOOKING_FILTER_STATUSES.map((item) => (
               <option value={item} key={item}>
-                {item === "ALL" ? "All statuses" : item}
+                {getOwnerStatusLook(item).label}
               </option>
             ))}
           </select>
@@ -93,11 +96,13 @@ export default function BookingsTable({
               <th>Status</th>
               <th>Booking value</th>
               <th>Rating</th>
-              <th />
+              <th>
+                <span className="sr-only">Details</span>
+              </th>
             </tr>
           </thead>
           <tbody>
-            {filtered.slice(0, 12).map((booking) => (
+            {filtered.slice(0, TABLE_LIMIT).map((booking) => (
               <tr key={booking.id} onClick={() => onSelectBooking(booking)}>
                 <td>
                   <strong>#{booking.id}</strong>
@@ -134,32 +139,52 @@ export default function BookingsTable({
                 </td>
                 <td>{booking.assignedEmployeeName || "Unassigned"}</td>
                 <td>
-                  <span
-                    className={dashboardStatusClass(bookingStatus(booking))}
-                  >
-                    {bookingStatus(booking)}
-                  </span>
+                  <OwnerStatusPill status={bookingStatus(booking)} />
                 </td>
                 <td>
                   <strong>{money(booking.totalPrice)}</strong>
-                  <small>Payment not tracked</small>
+                  <small>{paymentLabel(booking.payment)}</small>
                 </td>
                 <td>{booking.rating || "—"}</td>
                 <td>
-                  <MoreHorizontal size={17} />
+                  <button
+                    className="owner-row-button"
+                    type="button"
+                    aria-label={`Open booking #${booking.id}`}
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      onSelectBooking(booking);
+                    }}
+                  >
+                    <ChevronRight size={17} aria-hidden="true" />
+                  </button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+      {filtered.length > TABLE_LIMIT && (
+        <p className="owner-table-more">
+          Showing {TABLE_LIMIT} of {filtered.length} bookings.{" "}
+          <Link className="text-link" to="/owner/bookings">
+            See all in booking management
+          </Link>
+        </p>
+      )}
       {!filtered.length && (
         <div className="owner-empty">
-          <Search size={24} />
-          <strong>No bookings match these filters.</strong>
-          <button className="text-link" type="button" onClick={onClear}>
-            Clear filters
-          </button>
+          <Search size={24} aria-hidden="true" />
+          {bookings.length ? (
+            <>
+              <strong>No bookings match these filters.</strong>
+              <button className="text-link" type="button" onClick={onClear}>
+                Clear filters
+              </button>
+            </>
+          ) : (
+            <strong>No bookings in this period.</strong>
+          )}
         </div>
       )}
     </section>

@@ -6,6 +6,7 @@ import {
   CalendarCheck,
   CalendarClock,
   ClipboardList,
+  Crown,
   FileText,
   Handshake,
   House,
@@ -108,6 +109,7 @@ export function getNavigationSections({
           badge: "pendingBookings",
         },
         { label: "Payments", to: "/owner/payments", icon: Wallet },
+        { label: "My plan", to: "/owner/plan", icon: Crown },
         { label: "Services", to: "/owner/services", icon: Scissors },
         {
           label: "Team & schedules",

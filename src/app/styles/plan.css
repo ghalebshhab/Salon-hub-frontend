@@ -1,0 +1,603 @@
+/* Owner "My plan" page. Uses the brand tokens and the owner tones. */
+.plan-page {
+  --owner-warning: #9a5b12;
+  --owner-warning-soft: #fdf1dd;
+  --owner-info: #405c9b;
+  --owner-info-soft: #e8edf9;
+  display: grid;
+  gap: 24px;
+}
+:root[data-theme="dark"] .plan-page {
+  --owner-warning: #f0c27a;
+  --owner-warning-soft: #3a2c17;
+  --owner-info: #a9bdf0;
+  --owner-info-soft: #1f2840;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .plan-page {
+    --owner-warning: #f0c27a;
+    --owner-warning-soft: #3a2c17;
+    --owner-info: #a9bdf0;
+    --owner-info-soft: #1f2840;
+  }
+}
+.plan-page-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+}
+.plan-page-head h1 {
+  margin: 4px 0 6px;
+}
+.plan-page-head p,
+.plan-section-head p {
+  margin: 0;
+  color: var(--muted);
+}
+
+/* Status pills */
+.plan-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+.plan-pill.is-success {
+  background: var(--success-soft);
+  color: var(--success);
+}
+.plan-pill.is-warning {
+  background: var(--owner-warning-soft);
+  color: var(--owner-warning);
+}
+.plan-pill.is-info {
+  background: var(--owner-info-soft);
+  color: var(--owner-info);
+}
+.plan-pill.is-danger {
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+.plan-pill.is-neutral {
+  background: var(--secondary);
+  color: var(--muted);
+}
+
+/* Current plan and the request that waits */
+.plan-top {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+}
+.plan-top > :only-child {
+  grid-column: 1 / -1;
+}
+.plan-current,
+.plan-open,
+.plan-request,
+.plan-history {
+  padding: 22px;
+}
+.plan-current-head,
+.plan-open-head {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+.plan-current-head h2,
+.plan-open-head h2 {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 4px 0 6px;
+  font-size: 1.35rem;
+}
+.plan-current-head p,
+.plan-open-head p {
+  margin: 0 0 6px;
+  color: var(--muted);
+}
+.plan-current-icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+.plan-meters {
+  display: grid;
+  gap: 14px;
+  margin: 20px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.plan-meter-text {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 0.92rem;
+}
+.plan-meter-text small {
+  color: var(--muted);
+}
+.plan-meter-bar {
+  display: block;
+  height: 8px;
+  margin-top: 6px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--secondary);
+}
+.plan-meter-bar > span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--primary);
+  transform-origin: left;
+  transition: transform 300ms ease;
+}
+.plan-meter.is-full .plan-meter-bar > span {
+  background: var(--owner-warning);
+}
+.plan-meter.is-full strong {
+  color: var(--owner-warning);
+}
+.plan-current-foot {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 18px 0 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.plan-open {
+  display: grid;
+  gap: 16px;
+  border-color: color-mix(in srgb, var(--owner-warning) 35%, var(--border));
+}
+.plan-open-head > svg {
+  flex: none;
+  margin-top: 6px;
+  color: var(--owner-warning);
+}
+.plan-open .btn {
+  justify-self: start;
+}
+
+/* CliQ details */
+.plan-payto {
+  display: grid;
+  gap: 6px;
+  margin: 8px 0;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: var(--secondary);
+}
+.plan-payto div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+.plan-payto dt {
+  color: var(--muted);
+}
+.plan-payto dd {
+  margin: 0;
+  font-weight: 700;
+  user-select: all;
+}
+
+/* Comparison */
+.plan-compare {
+  display: grid;
+  gap: 18px;
+}
+.plan-section-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 14px;
+}
+.plan-section-head h2 {
+  margin: 4px 0;
+}
+.plan-cycle {
+  display: inline-flex;
+  padding: 4px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--card);
+}
+.plan-cycle button {
+  min-height: 36px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+.plan-cycle button.is-active {
+  background: var(--primary);
+  color: #fff;
+}
+.plan-cycle button:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+.plan-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  align-items: stretch;
+}
+.plan-card {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 22px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--card);
+  box-shadow: var(--shadow);
+}
+.plan-card.is-featured {
+  border: 2px solid var(--primary);
+}
+.plan-card.is-current {
+  background: color-mix(in srgb, var(--primary-soft) 45%, var(--card));
+}
+.plan-card header p {
+  margin: 4px 0 0;
+  color: var(--muted);
+}
+.plan-card-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.plan-card-title h3 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+.plan-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: var(--primary-soft);
+  color: var(--primary);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+.plan-price {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px;
+}
+.plan-price strong {
+  font-size: 1.9rem;
+  line-height: 1.1;
+}
+.plan-price span {
+  color: var(--muted);
+}
+.plan-price em {
+  flex-basis: 100%;
+  font-style: normal;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--success);
+}
+.plan-limits,
+.plan-features {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.9rem;
+}
+.plan-limits {
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+  font-weight: 600;
+}
+.plan-features li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+.plan-features svg {
+  flex: none;
+  margin-top: 2px;
+  color: var(--success);
+}
+.plan-features li.is-off,
+.plan-features li.is-off svg {
+  color: var(--muted);
+}
+.plan-card footer {
+  margin-top: auto;
+}
+.plan-card footer .btn {
+  width: 100%;
+  justify-content: center;
+}
+.plan-current-label {
+  display: block;
+  padding: 10px;
+  border-radius: 10px;
+  background: var(--primary-soft);
+  color: var(--primary);
+  text-align: center;
+  font-weight: 700;
+}
+.plan-note {
+  margin: -6px 0 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+/* Request form */
+.plan-request {
+  display: grid;
+  gap: 18px;
+  scroll-margin-top: 90px;
+  border: 2px solid var(--primary);
+}
+.plan-request-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+.plan-request-head h2 {
+  margin: 4px 0 6px;
+}
+.plan-request-head p {
+  margin: 0;
+  color: var(--muted);
+}
+.plan-request form {
+  display: grid;
+  gap: 16px;
+}
+.plan-methods {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.plan-methods legend {
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+.plan-method {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 64px;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  cursor: pointer;
+}
+.plan-method:has(input:checked) {
+  border-color: var(--primary);
+  background: var(--primary-soft);
+}
+.plan-method:has(input:focus-visible) {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+.plan-method.is-locked {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.plan-method > svg {
+  flex: none;
+  color: var(--primary);
+}
+.plan-method span {
+  display: grid;
+}
+.plan-method small {
+  color: var(--muted);
+}
+.plan-cliq p {
+  margin: 0;
+}
+.plan-field {
+  display: grid;
+  gap: 6px;
+  margin-top: 12px;
+}
+.plan-field span {
+  font-weight: 600;
+}
+.plan-field input {
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--card);
+  color: var(--text);
+  font: inherit;
+}
+.plan-field input:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  border-color: var(--primary);
+}
+.plan-request-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* Past requests */
+.plan-history h2 {
+  margin: 0 0 12px;
+  font-size: 1.1rem;
+}
+.plan-history ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.plan-history li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 0;
+  border-top: 1px solid var(--border);
+}
+.plan-history li > div {
+  display: grid;
+  gap: 2px;
+}
+.plan-history small {
+  color: var(--muted);
+}
+
+/* Loading */
+.plan-skeleton {
+  display: grid;
+  gap: 18px;
+}
+.plan-skeleton .skeleton-block {
+  display: block;
+  height: 180px;
+  border-radius: 18px;
+}
+.plan-skeleton .skeleton-block + .skeleton-block {
+  height: 420px;
+}
+
+@media (max-width: 960px) {
+  .plan-top,
+  .plan-grid {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 560px) {
+  .plan-methods {
+    grid-template-columns: 1fr;
+  }
+  .plan-request-actions .btn {
+    flex: 1;
+    justify-content: center;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .plan-meter-bar > span {
+    transition: none;
+  }
+}
+
+/* Plan lock notes on other owner pages (payment settings, dashboard). */
+.plan-lock-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--primary-soft);
+  color: var(--primary);
+  font-size: 0.88rem;
+}
+.plan-lock-note svg {
+  flex: none;
+  margin-top: 2px;
+}
+.plan-lock-note a {
+  margin-left: 4px;
+  color: inherit;
+  font-weight: 700;
+}
+
+/* Plan warning at the top of owner pages. */
+.plan-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 18px;
+  padding: 12px 16px;
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, var(--border));
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--accent) 14%, var(--card));
+  color: var(--text);
+}
+.plan-banner.is-danger {
+  border-color: color-mix(in srgb, var(--danger) 40%, var(--border));
+  background: var(--danger-soft);
+}
+.plan-banner > svg {
+  flex: none;
+  color: var(--accent);
+}
+.plan-banner.is-danger > svg {
+  color: var(--danger);
+}
+.plan-banner p {
+  flex: 1 1 260px;
+  margin: 0;
+  font-size: 0.92rem;
+}
+
+/* Paid-plan badge on public salon cards and the salon page. */
+.salon-plan-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--primary-soft);
+  color: var(--primary);
+  font-size: 0.74rem;
+  font-weight: 700;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+.salon-plan-badge.is-business {
+  background: var(--primary);
+  color: #fff;
+}
+.salon-plan-badge.is-business svg {
+  color: var(--accent);
+}
+.salon-plan-badge-overlay {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  box-shadow: 0 6px 18px rgba(30, 20, 28, 0.18);
+}
+.salon-details-badges {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}

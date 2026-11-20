@@ -1,4 +1,10 @@
-import { ArrowLeft, ArrowRight, Send } from "lucide-react";
+import {
+  AlertTriangle,
+  ArrowLeft,
+  ArrowRight,
+  Phone,
+  Send,
+} from "lucide-react";
 import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import useCreateBooking, { BOOKING_STEPS } from "../hooks/useCreateBooking.js";
@@ -10,6 +16,41 @@ import ReviewStep from "../components/wizard/ReviewStep.jsx";
 import BookingSummary from "../components/wizard/BookingSummary.jsx";
 import BookingSent from "../components/wizard/BookingSent.jsx";
 import { formatMoney, toFils } from "../../payments/model/payment.js";
+
+/**
+ * Shown when the salon's missed-visit rule limits this customer: either
+ * "Card now" only, or no online booking with a way to contact the salon.
+ */
+function PaymentRestrictionNotice({ restriction, phone, salonPath }) {
+  return (
+    <div
+      className={`bk-restriction ${restriction.blocked ? "is-blocked" : ""}`}
+      role="status"
+    >
+      <AlertTriangle size={20} aria-hidden="true" />
+      <div>
+        <strong>
+          {restriction.blocked
+            ? "Online booking is not available for you here"
+            : "This salon asks you to pay in advance"}
+        </strong>
+        <p>{restriction.message}</p>
+        {restriction.blocked && (
+          <div className="bk-restriction-actions">
+            {phone && (
+              <a className="btn btn-primary btn-small" href={`tel:${phone}`}>
+                <Phone size={16} aria-hidden="true" /> Call {phone}
+              </a>
+            )}
+            <Link className="btn btn-secondary btn-small" to={salonPath}>
+              Back to the salon
+            </Link>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
 
 function CreateBooking() {
   const flow = useCreateBooking();
@@ -76,6 +117,14 @@ function CreateBooking() {
           onSelect={flow.goToStep}
         />
       </header>
+
+      {flow.paymentRestriction && (
+        <PaymentRestrictionNotice
+          restriction={flow.paymentRestriction}
+          phone={flow.salon.phoneNumber}
+          salonPath={`/salons/${salonId}`}
+        />
+      )}
 
       <div className={`bk-layout ${isLast ? "is-review" : ""}`}>
         <div

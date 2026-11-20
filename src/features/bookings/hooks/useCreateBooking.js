@@ -94,9 +94,22 @@ export default function useCreateBooking() {
     paymentOptions = DEFAULT_PAYMENT_OPTIONS,
   } = data;
   const [chosenPaymentMethod, setPaymentMethod] = useState(null);
-  const paymentMethods = paymentOptions.methods?.length
-    ? paymentOptions.methods
-    : DEFAULT_PAYMENT_OPTIONS.methods;
+  // A salon's missed-visit rule can limit this customer to "Card now", or
+  // to no online method at all; never fall back to cash in that case.
+  const restricted = Boolean(paymentOptions.restricted);
+  const paymentMethods = restricted
+    ? paymentOptions.methods || []
+    : paymentOptions.methods?.length
+      ? paymentOptions.methods
+      : DEFAULT_PAYMENT_OPTIONS.methods;
+  const paymentRestriction = restricted
+    ? {
+        message:
+          paymentOptions.restrictionMessage ||
+          "This salon limits online booking for your account.",
+        blocked: paymentMethods.length === 0,
+      }
+    : null;
   const paymentMethod = paymentMethods.includes(chosenPaymentMethod)
     ? chosenPaymentMethod
     : paymentOptions.defaultMethod || paymentMethods[0];
@@ -212,6 +225,9 @@ export default function useCreateBooking() {
       return "Choose a time to continue.";
     }
     if (index === 3) {
+      if (paymentRestriction?.blocked) {
+        return paymentRestriction.message;
+      }
       if (customerLocation.trim().length === 0) {
         return "Tell the salon where you are coming from.";
       }
@@ -329,6 +345,7 @@ export default function useCreateBooking() {
     paymentMethods,
     paymentMethod,
     setPaymentMethod,
+    paymentRestriction,
     freeCancelHours: paymentOptions.freeCancelHours ?? 24,
     submitting,
     submitError,

@@ -1335,3 +1335,43 @@
   padding-top: var(--space-2);
   border-top: 1px dashed var(--border);
 }
+
+/* Salon missed-visit rule: pay in advance, or contact the salon. */
+.bk-restriction {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  margin: 0 0 18px;
+  padding: 14px 16px;
+  border: 1px solid color-mix(in srgb, var(--primary) 35%, var(--border));
+  border-radius: var(--radius-md, 14px);
+  background: color-mix(in srgb, var(--primary) 7%, var(--card));
+  color: var(--primary);
+}
+.bk-restriction.is-blocked {
+  border-color: color-mix(in srgb, var(--danger) 40%, var(--border));
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+.bk-restriction > svg {
+  flex: none;
+  margin-top: 2px;
+}
+.bk-restriction strong {
+  color: var(--text);
+}
+.bk-restriction p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: var(--text-sm);
+  line-height: 1.5;
+}
+.bk-restriction-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+.bk-restriction-actions .btn {
+  min-height: 44px;
+}

@@ -1,4 +1,6 @@
 import {
+  AlertTriangle,
+  CalendarCheck2,
   CalendarClock,
   CalendarDays,
   CheckCircle,
@@ -17,6 +19,35 @@ import {
 import AnswerDeadline from "./AnswerDeadline.jsx";
 import StaffLiveCard from "./live/StaffLiveCard.jsx";
 import PaymentStrip from "../../payments/components/PaymentStrip.jsx";
+
+/**
+ * What the owner should know about the customer before the visit: whether
+ * they confirmed after the reminder, and how often they missed a visit.
+ */
+function CustomerSignals({ booking }) {
+  const missed = Number(booking.customerNoShowCount || 0);
+  const confirmed =
+    booking.status === "ACCEPTED" && Boolean(booking.customerConfirmedAt);
+  if (!confirmed && !missed) return null;
+  return (
+    <div className="booking-signals">
+      {confirmed && (
+        <span className="booking-signal is-good">
+          <CalendarCheck2 size={14} aria-hidden="true" />
+          Customer confirmed they are coming
+        </span>
+      )}
+      {missed > 0 && (
+        <span className="booking-signal is-warning">
+          <AlertTriangle size={14} aria-hidden="true" />
+          {missed === 1
+            ? "Missed 1 visit at your salon"
+            : `Missed ${missed} visits at your salon`}
+        </span>
+      )}
+    </div>
+  );
+}
 
 export default function SalonBookingCard({
   booking,
@@ -51,6 +82,8 @@ export default function SalonBookingCard({
         </div>
         <span className={statusClass}>{getStatusLabel(booking.status)}</span>
       </div>
+
+      <CustomerSignals booking={booking} />
 
       <AnswerDeadline booking={booking} audience="owner" />
 

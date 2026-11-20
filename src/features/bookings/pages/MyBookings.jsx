@@ -1,30 +1,54 @@
+import { useCallback, useMemo, useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
+import {
+  CalendarCheck2,
+  CalendarPlus,
+  CalendarX2,
+  History,
+} from "lucide-react";
 import useMyBookings from "../hooks/useMyBookings.js";
 import useHighlightedBooking from "../hooks/useHighlightedBooking.js";
-import { Link } from "react-router-dom";
-import AnswerDeadline from "../components/AnswerDeadline.jsx";
-import CustomerLiveCard from "../components/live/CustomerLiveCard.jsx";
-import { getStatusLabel, isLiveToday } from "../model/booking.js";
-import { useCallback, useState } from "react";
-import PaymentStrip from "../../payments/components/PaymentStrip.jsx";
-import ReceiptDialog from "../../payments/components/ReceiptDialog.jsx";
-
-import { MessageSquareText } from "lucide-react";
-import CreateReviewModal from "../../reviews/components/CreateReviewModal.jsx";
+import { isLiveToday } from "../model/booking.js";
 import {
-  CalendarDays,
-  CalendarClock,
-  Clock,
-  MapPin,
-  Phone,
-  UserRound,
-  XCircle,
-} from "lucide-react";
+  BOOKING_VIEWS,
+  countByView,
+  countNeedsAnswer,
+  getBookingView,
+  selectBookings,
+} from "../model/customerBookings.js";
+import BookingViewTabs from "../components/customer/BookingViewTabs.jsx";
+import CustomerBookingCard from "../components/customer/CustomerBookingCard.jsx";
+import MyBookingsSkeleton from "../components/customer/MyBookingsSkeleton.jsx";
+import ReceiptDialog from "../../payments/components/ReceiptDialog.jsx";
+import CreateReviewModal from "../../reviews/components/CreateReviewModal.jsx";
+
+const EMPTY_STATES = {
+  upcoming: {
+    Icon: CalendarCheck2,
+    title: "No upcoming appointments",
+    text: "Find a salon you like and book your next visit in a few taps.",
+  },
+  past: {
+    Icon: History,
+    title: "No past visits yet",
+    text: "After your first appointment, you can review it and book it again from here.",
+  },
+  closed: {
+    Icon: CalendarX2,
+    title: "Nothing cancelled",
+    text: "Cancelled, declined and expired requests appear here.",
+  },
+};
+
+const VIEW_KEYS = new Set(BOOKING_VIEWS.map((view) => view.key));
 
 function MyBookings() {
   const {
     bookings,
     loading,
     handleCancel,
+    handleConfirmAttendance,
+    confirmingId,
     handleRescheduleDecision,
     respondingProposalId,
     reviewModalOpen,
@@ -32,270 +56,112 @@ function MyBookings() {
     openReviewModal,
     closeReviewModal,
     handleReviewCreated,
-    getStatusClass,
     canCancel,
   } = useMyBookings();
   const highlightedId = useHighlightedBooking(!loading);
+  const [params, setParams] = useSearchParams();
   const [receiptBookingId, setReceiptBookingId] = useState(null);
   const closeReceipt = useCallback(() => setReceiptBookingId(null), []);
 
-  if (loading) {
-    return <div className="loading">Loading your bookings...</div>;
-  }
+  // A link to one booking opens the list that holds it.
+  const highlighted = bookings.find((item) => item.id === highlightedId);
+  const requestedView = params.get("view");
+  const view = VIEW_KEYS.has(requestedView)
+    ? requestedView
+    : highlighted
+      ? getBookingView(highlighted)
+      : "upcoming";
 
-  // Today's confirmed and running appointments come first.
-  const ordered = [...bookings].sort(
-    (a, b) => Number(isLiveToday(b)) - Number(isLiveToday(a)),
+  const changeView = (next) =>
+    setParams(
+      (current) => {
+        const updated = new URLSearchParams(current);
+        updated.set("view", next);
+        updated.delete("bookingId");
+        return updated;
+      },
+      { replace: true },
+    );
+
+  const counts = useMemo(() => countByView(bookings), [bookings]);
+  const visible = useMemo(
+    () => selectBookings(bookings, view),
+    [bookings, view],
   );
+  const needsAnswer = countNeedsAnswer(bookings);
+  const empty = EMPTY_STATES[view];
 
   return (
-    <section className="container section">
-      <div className="profile-header">
+    <section className="container section mb-page">
+      <header className="mb-hero">
         <div>
           <span className="eyebrow">My appointments</span>
-          <h1>My Bookings</h1>
-          <p>Track your salon appointment requests and statuses.</p>
+          <h1>My bookings</h1>
+          <p>
+            {loading
+              ? "Loading your appointments…"
+              : counts.upcoming > 0
+                ? `You have ${counts.upcoming} upcoming ${counts.upcoming === 1 ? "appointment" : "appointments"}.`
+                : "Your requests, visits and receipts in one place."}
+          </p>
         </div>
+        <Link className="btn btn-primary" to="/">
+          <CalendarPlus size={18} aria-hidden="true" />
+          Book a new visit
+        </Link>
+      </header>
+
+      {needsAnswer > 0 && (
+        <p className="mb-alert" role="status">
+          <strong>{needsAnswer}</strong>{" "}
+          {needsAnswer === 1 ? "salon proposed" : "salons proposed"} a new time.
+          Please accept it or keep your time.
+        </p>
+      )}
+
+      <BookingViewTabs value={view} counts={counts} onChange={changeView} />
+
+      <div id="mb-panel" role="tabpanel" aria-labelledby={`mb-tab-${view}`}>
+        {loading && bookings.length === 0 ? (
+          <MyBookingsSkeleton />
+        ) : visible.length === 0 ? (
+          <div className="mb-empty">
+            <span className="mb-empty-icon" aria-hidden="true">
+              <empty.Icon size={28} />
+            </span>
+            <h2>{empty.title}</h2>
+            <p>{empty.text}</p>
+            {view !== "closed" && (
+              <Link className="btn btn-secondary btn-small" to="/">
+                Explore salons
+              </Link>
+            )}
+          </div>
+        ) : (
+          <div className="mb-list">
+            {visible.map((booking) => (
+              <CustomerBookingCard
+                key={booking.id}
+                booking={booking}
+                live={isLiveToday(booking)}
+                highlighted={highlightedId === booking.id}
+                cancellable={canCancel(booking)}
+                pendingProposal={booking.rescheduleProposals?.find(
+                  (proposal) => proposal.status === "PENDING",
+                )}
+                respondingProposalId={respondingProposalId}
+                onCancel={handleCancel}
+                confirming={confirmingId === booking.id}
+                onConfirmAttendance={handleConfirmAttendance}
+                onReview={openReviewModal}
+                onReceipt={() => setReceiptBookingId(booking.id)}
+                onRescheduleDecision={handleRescheduleDecision}
+              />
+            ))}
+          </div>
+        )}
       </div>
 
-      {bookings.length === 0 ? (
-        <div className="empty-state">
-          <h3>No bookings yet</h3>
-          <p>Go to any salon profile and book a service.</p>
-        </div>
-      ) : (
-        <div className="booking-list">
-          {ordered.map((booking) => {
-            const pendingReschedule = booking.rescheduleProposals?.find(
-              (proposal) => proposal.status === "PENDING",
-            );
-            const live = isLiveToday(booking);
-            return (
-              <div
-                className={`booking-card ${highlightedId === booking.id ? "is-highlighted" : ""}`}
-                id={`booking-${booking.id}`}
-                key={booking.id}
-              >
-                <div className="booking-card-header">
-                  <div>
-                    <h3>{booking.salonName}</h3>
-                    <p>Booking #{booking.id}</p>
-                  </div>
-
-                  <span className={getStatusClass(booking.status)}>
-                    {getStatusLabel(booking.status)}
-                  </span>
-                </div>
-
-                {live && <CustomerLiveCard booking={booking} />}
-
-                {booking.status === "ACCEPTED" && !live && (
-                  <p className="booking-decision accepted">
-                    The salon accepted your request
-                    {booking.assignedEmployeeName
-                      ? ` and ${booking.assignedEmployeeName} will serve you`
-                      : ""}
-                    . On the day, open this page to share your trip and follow
-                    your service live.
-                  </p>
-                )}
-                {booking.status === "REJECTED" && (
-                  <p className="booking-decision rejected">
-                    The salon could not accept this time. Check the salon’s note
-                    below and choose another time if you’d like to try again.
-                  </p>
-                )}
-                {booking.status === "PENDING" && (
-                  <p className="booking-decision pending">
-                    Your request was sent to the salon.
-                    {booking.assignedEmployeeName
-                      ? ` Your time with ${booking.assignedEmployeeName} is held until the salon decides.`
-                      : " The salon will confirm and choose your professional."}{" "}
-                    You will get a notification.
-                  </p>
-                )}
-                <AnswerDeadline booking={booking} audience="customer" />
-                {booking.status === "EXPIRED" && (
-                  <p className="booking-decision rejected">
-                    The salon did not answer in time, so this request expired.
-                    Nothing was charged.{" "}
-                    <Link to={`/salons/${booking.salonId}/book`}>
-                      Choose another time
-                    </Link>
-                  </p>
-                )}
-                {booking.status === "NO_SHOW" && (
-                  <p className="booking-decision rejected">
-                    The salon marked this appointment as missed. If you were
-                    there, contact the salon.
-                  </p>
-                )}
-
-                <div className="booking-info-grid">
-                  <p>
-                    <CalendarDays size={16} />
-                    {booking.bookingDate}
-                  </p>
-
-                  <p>
-                    <Clock size={16} />
-                    {booking.bookingTime?.toString().slice(0, 5)}
-                  </p>
-
-                  <p>
-                    <Phone size={16} />
-                    {booking.customerPhoneNumber}
-                  </p>
-
-                  <p>
-                    <MapPin size={16} />
-                    {booking.customerLocation}
-                  </p>
-                </div>
-
-                <div className="booking-services">
-                  <strong>Services:</strong>
-                  <div>
-                    {booking.services?.map((service) => (
-                      <span className="service-chip" key={service.id}>
-                        {service.name} - {service.price} JD
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                {booking.assignedEmployeeName && (
-                  <p className="booking-note">
-                    <UserRound size={15} />
-                    <strong>Your service provider:</strong>{" "}
-                    {booking.assignedEmployeeName}
-                    {booking.assignedEmployeeSpecialty
-                      ? ` • ${booking.assignedEmployeeSpecialty}`
-                      : ""}
-                  </p>
-                )}
-
-                <div className="booking-summary-row">
-                  <span>Total Price: {booking.totalPrice} JD</span>
-                  <span>
-                    Total Duration: {booking.totalDurationMinutes} min
-                  </span>
-                </div>
-
-                <PaymentStrip
-                  payment={booking.payment}
-                  onReceipt={() => setReceiptBookingId(booking.id)}
-                />
-
-                {booking.note && (
-                  <p className="booking-note">
-                    <strong>Your note:</strong> {booking.note}
-                  </p>
-                )}
-
-                {booking.ownerNote && (
-                  <p className="booking-note">
-                    <strong>Update from the salon:</strong> {booking.ownerNote}
-                  </p>
-                )}
-
-                {pendingReschedule && (
-                  <div className="reschedule-decision-card">
-                    <div>
-                      <CalendarClock size={20} />
-                      <div>
-                        <strong>The salon proposed a new appointment</strong>
-                        <p>
-                          {pendingReschedule.proposedDate} •{" "}
-                          {pendingReschedule.proposedTime
-                            ?.toString()
-                            .slice(0, 5)}
-                        </p>
-                      </div>
-                    </div>
-                    {pendingReschedule.note && <p>{pendingReschedule.note}</p>}
-                    <small>
-                      Your current appointment stays unchanged until you accept.
-                    </small>
-                    <div className="service-actions">
-                      <button
-                        className="btn btn-primary btn-small"
-                        type="button"
-                        disabled={respondingProposalId === pendingReschedule.id}
-                        onClick={() =>
-                          handleRescheduleDecision(
-                            booking.id,
-                            pendingReschedule.id,
-                            true,
-                          )
-                        }
-                      >
-                        Accept new time
-                      </button>
-                      <button
-                        className="btn btn-secondary btn-small"
-                        type="button"
-                        disabled={respondingProposalId === pendingReschedule.id}
-                        onClick={() =>
-                          handleRescheduleDecision(
-                            booking.id,
-                            pendingReschedule.id,
-                            false,
-                          )
-                        }
-                      >
-                        Keep original time
-                      </button>
-                    </div>
-                  </div>
-                )}
-
-                {booking.rescheduleProposals?.length > 0 && (
-                  <div className="reschedule-history">
-                    <strong>Reschedule history</strong>
-                    {booking.rescheduleProposals.map((proposal) => (
-                      <div
-                        className="reschedule-history-item"
-                        key={proposal.id}
-                      >
-                        <span>
-                          {proposal.proposedDate} •{" "}
-                          {proposal.proposedTime?.toString().slice(0, 5)}
-                        </span>
-                        <span
-                          className={`reschedule-status ${proposal.status.toLowerCase()}`}
-                        >
-                          {proposal.status}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                )}
-
-                {canCancel(booking) && (
-                  <button
-                    className="btn btn-danger btn-small"
-                    onClick={() => handleCancel(booking.id)}
-                  >
-                    <XCircle size={16} />
-                    Cancel Booking
-                  </button>
-                )}
-
-                {booking.status === "COMPLETED" && (
-                  <button
-                    className="btn btn-primary btn-small"
-                    onClick={() => openReviewModal(booking)}
-                  >
-                    <MessageSquareText size={16} />
-                    Write Review
-                  </button>
-                )}
-              </div>
-            );
-          })}
-        </div>
-      )}
       {reviewModalOpen && (
         <CreateReviewModal
           booking={selectedReviewBooking}

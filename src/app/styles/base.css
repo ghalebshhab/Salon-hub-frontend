@@ -2887,3 +2887,28 @@ select {
     background: color-mix(in srgb, var(--card) 97%, transparent);
   }
 }
+
+/* Owner booking card: customer confirmation and missed-visit history. */
+.booking-signals {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 4px 0 12px;
+}
+.booking-signal {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border-radius: var(--radius-full, 999px);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+}
+.booking-signal.is-good {
+  background: var(--success-soft);
+  color: var(--success);
+}
+.booking-signal.is-warning {
+  background: var(--danger-soft);
+  color: var(--danger);
+}

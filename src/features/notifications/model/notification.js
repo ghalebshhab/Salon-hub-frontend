@@ -11,6 +11,7 @@ const TITLES = {
   BOOKING_ASSIGNED: "New appointment for you",
   BOOKING_CUSTOMER_ON_THE_WAY: "Customer on the way",
   BOOKING_CUSTOMER_ARRIVED: "Customer arrived",
+  BOOKING_CUSTOMER_CONFIRMED: "Customer confirmed",
   BOOKING_SERVICE_STARTED: "Your service started",
   BOOKING_COMPLETED: "Appointment complete",
   BOOKING_EXPIRED: "Request expired",

@@ -1,4 +1,4 @@
-import { getStatusClass, canCancel } from "../model/booking.js";
+import { canCancel } from "../model/booking.js";
 import useQuery from "../../../shared/hooks/useQuery.js";
 import { requireData } from "../../../shared/api/response.js";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -10,6 +10,7 @@ import {
 import {
   acceptBookingRescheduleApi,
   cancelMyBookingApi,
+  confirmAttendanceApi,
   getMyBookingsApi,
   rejectBookingRescheduleApi,
 } from "../api/bookingApi.js";
@@ -17,6 +18,7 @@ import { confirmAction } from "../../../shared/confirm/confirmStore.js";
 
 export default function useMyBookings() {
   const [respondingProposalId, setRespondingProposalId] = useState(null);
+  const [confirmingId, setConfirmingId] = useState(null);
   const loader = useCallback(
     async (signal) => requireData(await getMyBookingsApi({ signal })) || [],
     [],
@@ -115,6 +117,27 @@ export default function useMyBookings() {
     }
   };
 
+  const handleConfirmAttendance = async (bookingId) => {
+    setConfirmingId(bookingId);
+    try {
+      const response = await confirmAttendanceApi(bookingId);
+      if (!response.success) {
+        showErrorToast(response.message || "Could not confirm your visit.");
+        return;
+      }
+      showSuccessToast(response.message || "The salon knows you are coming.");
+      loadBookings();
+    } catch (error) {
+      showErrorToast(
+        error?.response?.data?.message ||
+          error?.message ||
+          "Could not confirm your visit.",
+      );
+    } finally {
+      setConfirmingId(null);
+    }
+  };
+
   const handleRescheduleDecision = async (bookingId, proposalId, accept) => {
     try {
       setRespondingProposalId(proposalId);
@@ -157,6 +180,8 @@ export default function useMyBookings() {
     bookings,
     loading,
     handleCancel,
+    handleConfirmAttendance,
+    confirmingId,
     handleRescheduleDecision,
     respondingProposalId,
     reviewModalOpen,
@@ -164,7 +189,6 @@ export default function useMyBookings() {
     openReviewModal,
     closeReviewModal,
     handleReviewCreated,
-    getStatusClass,
     canCancel,
   };
 }

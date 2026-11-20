@@ -53,6 +53,14 @@ export const cancelMyBookingApi = async (bookingId) => {
   return response.data;
 };
 
+/** The customer says they will come to a confirmed appointment. */
+export const confirmAttendanceApi = async (bookingId) => {
+  const response = await httpClient.put(
+    `/bookings/${bookingId}/confirm-attendance`,
+  );
+  return response.data;
+};
+
 export const completeBookingApi = async (bookingId) => {
   const response = await httpClient.put(`/bookings/${bookingId}/complete`);
   return response.data;

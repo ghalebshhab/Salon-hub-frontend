@@ -3,6 +3,7 @@ import useSalonShowcase from "../hooks/useSalonShowcase.js";
 import { Link } from "react-router-dom";
 import { MapPin, Clock, ArrowRight } from "lucide-react";
 import SalonCoverPlaceholder from "./SalonCoverPlaceholder.jsx";
+import SalonPlanBadge from "./SalonPlanBadge.jsx";
 
 function SalonShowcase() {
   const { getImages, formatTime, salons, loading } = useSalonShowcase();
@@ -65,6 +66,10 @@ function SalonShowcase() {
               >
                 {salon.state}
               </span>
+              <SalonPlanBadge
+                badge={salon.planBadge}
+                className="salon-plan-badge-overlay"
+              />
             </div>
 
             <div className="salon-showcase-body">

@@ -27,6 +27,7 @@ import { optimizedCloudinaryImage } from "../../media/model/cloudinaryMedia.js";
 import useSalonFollow from "../../community/hooks/useSalonFollow.js";
 import ReportDialog from "../../moderation/components/ReportDialog.jsx";
 import SalonLocationDialog from "../components/SalonLocationDialog.jsx";
+import SalonPlanBadge from "../components/SalonPlanBadge.jsx";
 import SalonLocationPreview from "../components/SalonLocationPreview.jsx";
 import { toMapPoint } from "../model/jordanMapLocation.js";
 
@@ -108,7 +109,10 @@ function SalonDetails() {
           <div className="salon-details-hero-copy">
             <div className="salon-details-kicker">
               <span className="eyebrow">Salon profile</span>
-              <SalonStatusBadge state={salon.state} />
+              <span className="salon-details-badges">
+                <SalonPlanBadge badge={salon.planBadge} />
+                <SalonStatusBadge state={salon.state} />
+              </span>
             </div>
             <h1>{salon.name}</h1>
             {mapPoint ? (

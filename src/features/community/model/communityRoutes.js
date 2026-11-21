@@ -30,3 +30,8 @@ export function communitySectionFor(pathname) {
   if (pathname.startsWith(COMMUNITY_ROUTES.following)) return "following";
   return "feed";
 }
+
+/** A member's public community profile. */
+export function memberProfilePath(userId) {
+  return `/community/people/${userId}`;
+}

@@ -9,7 +9,9 @@ import {
   Phone,
   UsersRound,
 } from "lucide-react";
+import { Link } from "react-router-dom";
 import useNow from "../../../../shared/hooks/useNow.js";
+import { memberProfilePath } from "../../../community/model/communityRoutes.js";
 import {
   showErrorToast,
   showSuccessToast,
@@ -27,24 +29,38 @@ import {
 /** Short stories read better without the large first letter. */
 const DROP_CAP_MIN_LENGTH = 120;
 
-/** The person behind the salon, shown like a magazine byline. */
+/**
+ * The person behind the salon, shown like a magazine byline. The whole
+ * card opens the owner's profile when the salon sends the owner id.
+ */
 function OwnerCard({ salon, since }) {
   const owner = titleCase(salon.ownerName);
   if (!owner && !since) return null;
-  return (
-    <div className="ab-host">
+  const content = (
+    <>
       <span className="ab-host-avatar" aria-hidden="true">
         <span>{initials(owner || salon.name)}</span>
       </span>
-      <div className="ab-host-copy">
-        <span className="ab-host-label">Meet the owner</span>
+      <span className="ab-host-copy">
+        <span className="ab-host-label">Meet the founder</span>
         {owner && <strong className="ab-host-name">{owner}</strong>}
         <small>
-          {owner ? "Founder and owner" : "Salon owner"}
+          Founder and owner
           {since && ` · on SalonHub since ${since}`}
         </small>
-      </div>
-    </div>
+      </span>
+    </>
+  );
+
+  if (!salon.ownerId) return <div className="ab-host">{content}</div>;
+  return (
+    <Link
+      className="ab-host is-link"
+      to={memberProfilePath(salon.ownerId)}
+      aria-label={`View ${owner || "the owner"}'s profile`}
+    >
+      {content}
+    </Link>
   );
 }
 

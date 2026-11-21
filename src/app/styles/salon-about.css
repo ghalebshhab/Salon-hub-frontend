@@ -144,6 +144,46 @@
   font-size: var(--text-sm);
 }
 
+.ab-host.is-link {
+  color: inherit;
+  text-decoration: none;
+  transition:
+    border-color var(--duration-base) var(--ease-standard),
+    transform var(--duration-base) var(--ease-standard),
+    box-shadow var(--duration-base) var(--ease-standard);
+}
+.ab-host.is-link:hover {
+  border-color: var(--primary);
+  box-shadow: 0 14px 30px color-mix(in srgb, var(--primary) 14%, transparent);
+  transform: translateY(-2px);
+}
+.ab-host.is-link:focus-visible {
+  outline: 2px solid var(--focus-outline);
+  outline-offset: 3px;
+}
+.ab-host-copy {
+  flex: 1;
+}
+.ab-host.is-link .ab-host-name {
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+  transition: text-decoration-color var(--duration-base) var(--ease-standard);
+}
+.ab-host.is-link:hover .ab-host-name {
+  text-decoration-color: var(--primary);
+}
+@media (prefers-reduced-motion: reduce) {
+  .ab-host.is-link,
+  .ab-host.is-link .ab-host-name {
+    transition: none;
+  }
+  .ab-host.is-link:hover {
+    transform: none;
+  }
+}
+
 /* Side: hours and facts. */
 .ab-side {
   display: grid;

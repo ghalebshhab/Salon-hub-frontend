@@ -460,11 +460,12 @@ button.sh-fact:hover {
   line-height: var(--leading-normal);
 }
 
-/* Sticky booking card. */
+/* Sticky booking card. useCenteredSticky sets --sticky-top so the whole
+   column, map card included, stays in view. */
 .sp-aside {
   position: sticky;
-  top: calc(var(--sp-header) + var(--sp-tabs) + 24px);
-  padding-top: 48px;
+  top: var(--sticky-top, calc(var(--sp-header) + var(--sp-tabs) + 24px));
+  margin-top: 48px;
 }
 .sb {
   overflow: hidden;

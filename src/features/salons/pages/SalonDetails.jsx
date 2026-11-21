@@ -20,6 +20,7 @@ import SalonAbout from "../components/about/SalonAbout.jsx";
 import SalonHero from "../components/hero/SalonHero.jsx";
 import SalonSectionNav from "../components/SalonSectionNav.jsx";
 import SalonBookingCard from "../components/SalonBookingCard.jsx";
+import useCenteredSticky from "../hooks/useCenteredSticky.js";
 import SalonWorkGallery from "../../media/components/SalonWorkGallery.jsx";
 import useSalonFollow from "../../community/hooks/useSalonFollow.js";
 import ReportDialog from "../../moderation/components/ReportDialog.jsx";
@@ -49,6 +50,7 @@ function SalonDetails() {
   const { joining, requestJoin } = useJoinSalonRequest();
   const rating = useSalonRating(routeSalonId);
   const now = useNow();
+  const asideRef = useCenteredSticky();
   const visibleSalonId = salon?.salonId ?? salon?.id;
   const salonFollow = useSalonFollow(
     visibleSalonId,
@@ -212,7 +214,11 @@ function SalonDetails() {
             </PageSection>
           </main>
 
-          <aside className="sp-aside" aria-label="Plan your visit">
+          <aside
+            ref={asideRef}
+            className="sp-aside"
+            aria-label="Plan your visit"
+          >
             <SalonBookingCard
               salon={salon}
               status={status}

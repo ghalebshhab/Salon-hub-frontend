@@ -13,27 +13,77 @@ import {
   publishWorkMediaFromDriveApi,
 } from "../api/mediaApi.js";
 import { confirmAction } from "../../../shared/confirm/confirmStore.js";
+import { GALLERY_PAGE_SIZE } from "../model/workGallery.js";
 
+const apiMessage = (error, fallback) =>
+  error?.response?.data?.message || error?.message || fallback;
+
+/**
+ * The salon's published work. The first page loads with the page; more
+ * pages load on request. Employees of this salon can publish and delete
+ * their own work.
+ */
 export default function useSalonWorkGallery(salonId) {
   const { user } = useAuth();
   const [selection, setSelection] = useState(null);
   const [caption, setCaption] = useState("");
   const [publishing, setPublishing] = useState(false);
+  const [extra, setExtra] = useState({ items: [], page: 0 });
+  const [loadingMore, setLoadingMore] = useState(false);
+
   const loader = useCallback(
-    (signal) => getSalonWorkMediaApi(salonId, { signal }).then(requireData),
+    async (signal) => {
+      const data = await getSalonWorkMediaApi(salonId, {
+        signal,
+        params: { page: 0, size: GALLERY_PAGE_SIZE },
+      }).then(requireData);
+      setExtra({ items: [], page: 0 });
+      return data;
+    },
     [salonId],
   );
-  const { data, loading, refetch } = useQuery(loader, {
+  const { data, loading, error, refetch } = useQuery(loader, {
     initialData: { items: [] },
-    onError: showErrorToast,
   });
+
+  const firstPage = data?.items || [];
+  const seen = new Set(firstPage.map((item) => item.id));
+  const items = [
+    ...firstPage,
+    ...extra.items.filter((item) => !seen.has(item.id)),
+  ];
+  const totalItems = Math.max(Number(data?.totalItems) || 0, items.length);
+  const hasMore = items.length < totalItems;
+
   const canPublish =
     user?.role === "Employee" && Number(user?.salonId) === Number(salonId);
+  const isOwnItem = (item) =>
+    user?.id != null && Number(user.id) === Number(item.employeeId);
 
+  const loadMore = async () => {
+    if (loadingMore || !hasMore) return;
+    const page = extra.page + 1;
+    try {
+      setLoadingMore(true);
+      const next = await getSalonWorkMediaApi(salonId, {
+        params: { page, size: GALLERY_PAGE_SIZE },
+      }).then(requireData);
+      setExtra((current) => ({
+        items: [...current.items, ...(next?.items || [])],
+        page,
+      }));
+    } catch (loadError) {
+      showErrorToast(apiMessage(loadError, "Could not load more work."));
+    } finally {
+      setLoadingMore(false);
+    }
+  };
+
+  /** Returns true when the work is published. */
   const publish = async () => {
     if (!selection?.file && !selection?.remoteUrl) {
       showErrorToast("Choose a work photo or video first.");
-      return;
+      return false;
     }
     try {
       setPublishing(true);
@@ -42,53 +92,56 @@ export default function useSalonWorkGallery(salonId) {
         : await publishWorkMediaFromDriveApi(selection.remoteUrl, caption);
       if (!response.success) {
         showErrorToast(response.message);
-        return;
+        return false;
       }
       setSelection(null);
       setCaption("");
       refetch();
       showSuccessToast("Your work was published to the salon gallery.");
-    } catch (error) {
-      showErrorToast(
-        error?.response?.data?.message ||
-          error?.message ||
-          "Could not publish this media.",
-      );
+      return true;
+    } catch (publishError) {
+      showErrorToast(apiMessage(publishError, "Could not publish this media."));
+      return false;
     } finally {
       setPublishing(false);
     }
   };
 
+  /** Returns true when the work is deleted. */
   const remove = async (mediaId) => {
     const confirmed = await confirmAction({
-      title: "Delete this work photo?",
+      title: "Delete this work?",
       message: "It will be removed from the salon gallery and from storage.",
       confirmText: "Delete",
       danger: true,
     });
-    if (!confirmed) return;
+    if (!confirmed) return false;
     try {
       const response = await deleteWorkMediaApi(mediaId);
       if (!response.success) {
         showErrorToast(response.message);
-        return;
+        return false;
       }
       refetch();
-      showSuccessToast("Work media removed.");
-    } catch (error) {
-      showErrorToast(
-        error?.response?.data?.message ||
-          error?.message ||
-          "Could not remove this media.",
-      );
+      showSuccessToast("Work removed from the gallery.");
+      return true;
+    } catch (removeError) {
+      showErrorToast(apiMessage(removeError, "Could not remove this media."));
+      return false;
     }
   };
 
   return {
-    user,
-    items: data?.items || [],
+    items,
+    totalItems,
+    hasMore,
     loading,
+    loadingMore,
+    error,
+    refetch,
+    loadMore,
     canPublish,
+    isOwnItem,
     selection,
     setSelection,
     caption,

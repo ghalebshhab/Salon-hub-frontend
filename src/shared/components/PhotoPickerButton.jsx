@@ -45,7 +45,7 @@ export default function PhotoPickerButton({
     <>
       <input
         ref={inputRef}
-        className="visually-hidden"
+        hidden
         type="file"
         accept={allowVideo ? "image/*,video/*" : "image/*"}
         tabIndex={-1}

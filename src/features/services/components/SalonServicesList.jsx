@@ -16,10 +16,8 @@ function MenuSkeleton() {
     <ul className="menu-list" aria-hidden="true">
       {[0, 1, 2].map((item) => (
         <li className="menu-item is-skeleton" key={item}>
-          <div className="menu-item-main">
-            <span className="menu-skeleton-line is-wide" />
-            <span className="menu-skeleton-line" />
-          </div>
+          <span className="menu-skeleton-line is-wide" />
+          <span className="menu-skeleton-line" />
         </li>
       ))}
     </ul>
@@ -138,9 +136,10 @@ function SalonServicesList({ salonId, booking = null }) {
 
       {visible.length ? (
         <ul className="menu-list">
-          {visible.map((service) => (
+          {visible.map((service, index) => (
             <ServiceMenuItem
               key={service.id}
+              index={index}
               service={service}
               selected={selectedIds.includes(service.id)}
               disabled={full}

@@ -1,6 +1,6 @@
 /*
- * Salon page: services as a printed-menu list. Name, a dotted leader and the
- * price on one line, like a real salon price list. Customers add services
+ * Salon page: services as numbered tiles with the time and a large price,
+ * like a salon price card. Customers add services
  * to one visit; a bar at the bottom shows the total and the booking step.
  */
 .menu {
@@ -74,137 +74,171 @@
   outline-offset: 2px;
 }
 
-/* The list. */
+/* The list: a grid of service tiles. */
 .menu-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 12px;
   margin: 0;
   padding: 0;
-  overflow: hidden;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-xl);
-  background: var(--card);
   list-style: none;
 }
 .menu-item {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 16px;
-  align-items: center;
-  padding: 18px 20px;
-  transition: background-color var(--duration-base) var(--ease-standard);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  padding: 16px 16px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--card);
+  transition:
+    border-color var(--duration-base) var(--ease-standard),
+    background-color var(--duration-base) var(--ease-standard),
+    box-shadow var(--duration-base) var(--ease-standard),
+    transform var(--duration-base) var(--ease-standard);
 }
-.menu-item + .menu-item {
-  border-top: 1px solid var(--border);
+.menu-item.is-pickable {
+  cursor: pointer;
 }
-.menu-item:hover {
-  background: color-mix(in srgb, var(--primary) 4%, var(--card));
+.menu-item.is-pickable:hover {
+  border-color: color-mix(in srgb, var(--primary) 45%, var(--border));
+  box-shadow: 0 12px 26px color-mix(in srgb, var(--primary) 10%, transparent);
+  transform: translateY(-2px);
 }
 .menu-item.is-selected {
+  border-color: var(--primary);
   background: var(--menu-tint);
-  box-shadow: inset 3px 0 0 var(--primary);
+  box-shadow: 0 0 0 1px var(--primary);
+}
+.menu-item.is-blocked {
+  opacity: 0.55;
+  cursor: not-allowed;
 }
 
-.menu-item-main {
-  display: grid;
-  gap: 6px;
-  min-width: 0;
-}
-.menu-item-line {
+.menu-item-head {
   display: flex;
-  align-items: baseline;
-  gap: 10px;
-  min-width: 0;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 40px;
 }
-.menu-item-line h3 {
+.menu-item-no {
+  color: color-mix(in srgb, var(--primary) 55%, var(--muted));
+  font-family: var(--font-display);
+  font-size: var(--text-md);
+  font-style: italic;
+  font-weight: var(--weight-semibold);
+  letter-spacing: 0.04em;
+}
+
+.menu-item h3 {
   margin: 0;
-  overflow: hidden;
   color: var(--text);
   font-family: var(--font-display);
   font-size: var(--text-lg);
   font-weight: var(--weight-semibold);
-  line-height: var(--leading-snug);
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.menu-item-leader {
-  flex: 1;
-  min-width: 24px;
-  transform: translateY(-4px);
-  border-bottom: 2px dotted color-mix(in srgb, var(--muted) 45%, transparent);
-}
-.menu-item-price {
-  flex: 0 0 auto;
-  color: var(--text);
-  font-size: var(--text-base);
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
 }
 .menu-item-description {
   display: -webkit-box;
-  max-width: 62ch;
   margin: 0;
   overflow: hidden;
   color: var(--muted);
-  font-size: var(--text-md);
+  font-size: var(--text-sm);
   line-height: var(--leading-normal);
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
   line-clamp: 2;
 }
+
+.menu-item-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: auto;
+  padding-top: 10px;
+  border-top: 1px dashed var(--border);
+}
 .menu-item-duration {
   display: inline-flex;
   align-items: center;
   gap: 5px;
+  padding: 3px 9px;
+  border-radius: var(--radius-full);
+  background: var(--secondary);
   color: var(--muted);
-  font-size: var(--text-sm);
-  font-weight: var(--weight-semibold);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-bold);
 }
 .menu-item-duration svg {
   color: var(--primary);
 }
-
-.menu-item-toggle {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  min-width: 92px;
-  min-height: 44px;
-  padding: 0 16px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-full);
-  background: var(--card);
+.menu-item-price {
   color: var(--text);
-  font: inherit;
-  font-size: var(--text-md);
-  font-weight: var(--weight-bold);
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: var(--weight-semibold);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* The round add button; its hit area covers the whole tile. */
+.menu-item-toggle {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: var(--card);
+  color: var(--primary-dark);
   cursor: pointer;
   transition:
     background-color var(--duration-base) var(--ease-standard),
     border-color var(--duration-base) var(--ease-standard),
-    color var(--duration-base) var(--ease-standard);
+    color var(--duration-base) var(--ease-standard),
+    transform var(--duration-base) var(--ease-standard);
 }
-.menu-item-toggle:hover:not(:disabled) {
-  border-color: var(--primary);
-  color: var(--primary-dark);
+.menu-item-toggle::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
 }
-.menu-item-toggle[aria-pressed="true"] {
+.menu-item-toggle:disabled {
+  cursor: not-allowed;
+}
+.menu-item.is-pickable:hover .menu-item-toggle:not(:disabled) {
   border-color: var(--primary);
   background: var(--primary);
   color: var(--on-primary);
+  transform: rotate(90deg);
 }
-.menu-item-toggle:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+.menu-item-toggle[aria-pressed="true"],
+.menu-item.is-pickable:hover .menu-item-toggle[aria-pressed="true"] {
+  border-color: var(--primary);
+  background: var(--primary);
+  color: var(--on-primary);
+  transform: none;
 }
-.menu-item-toggle:focus-visible,
+.menu-item-toggle:focus-visible {
+  outline: none;
+}
+.menu-item:has(.menu-item-toggle:focus-visible) {
+  outline: 2px solid var(--focus-outline);
+  outline-offset: 2px;
+}
 .menu-bar-clear:focus-visible {
   outline: 2px solid var(--focus-outline);
   outline-offset: 2px;
 }
 
 /* Loading. */
-.menu-item.is-skeleton:hover {
-  background: none;
+.menu-item.is-skeleton {
+  min-height: 150px;
 }
 .menu-skeleton-line {
   display: block;
@@ -328,14 +362,6 @@
   .menu-tools {
     grid-template-columns: 1fr;
   }
-  .menu-item {
-    grid-template-columns: 1fr;
-    gap: 12px;
-    padding: 16px;
-  }
-  .menu-item-toggle {
-    justify-self: start;
-  }
   .menu-bar {
     bottom: 10px;
     padding-left: 14px;
@@ -347,6 +373,10 @@
   .menu-item,
   .menu-item-toggle {
     transition: none;
+  }
+  .menu-item.is-pickable:hover,
+  .menu-item.is-pickable:hover .menu-item-toggle:not(:disabled) {
+    transform: none;
   }
   .menu-bar,
   .menu-skeleton-line {

@@ -10,6 +10,7 @@ import DashboardStats from "../components/DashboardStats.jsx";
 import PerformancePanels from "../components/PerformancePanels.jsx";
 import OwnerDashboardSkeleton from "../components/OwnerDashboardSkeleton.jsx";
 import OwnerInsights from "../components/OwnerInsights.jsx";
+import ExportBookingsButton from "../components/ExportBookingsButton.jsx";
 import TeamPerformance from "../components/TeamPerformance.jsx";
 import useOwnerDashboard from "../hooks/useOwnerDashboard.js";
 import {
@@ -43,6 +44,8 @@ export default function OwnerDashboard() {
   const { data: subscription } = useMySubscription();
   const plan = subscription?.limits;
   const historyDays = plan?.analyticsMaxDays || null;
+  // Until the plan loads, keep the export locked; the server checks it too.
+  const exportLocked = !plan?.features?.includes("CSV_EXPORT");
   const rangeLocked = !rangeAllowed(range, historyDays);
   useEffect(() => {
     if (rangeLocked) setRange(DEFAULT_RANGE);
@@ -103,6 +106,9 @@ export default function OwnerDashboard() {
           onRefresh={refetch}
           refreshing={refreshing}
           workspaceActions
+          metaActions={
+            <ExportBookingsButton range={range} locked={exportLocked} />
+          }
         />
         <PlanStatusBanner subscription={subscription} />
         <DashboardStats summary={data.summary} insights={data.insights} />

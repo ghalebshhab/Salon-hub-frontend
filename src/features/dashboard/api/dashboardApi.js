@@ -34,3 +34,31 @@ export async function getOwnerDashboardSummaryApi(signal, params) {
     "The dashboard totals could not be loaded.",
   );
 }
+
+/**
+ * The bookings of a period as a CSV file (Business plan). Returns a Blob.
+ * The server sends errors as JSON; the message is read from the blob.
+ */
+export async function exportOwnerBookingsApi({ from, to }) {
+  try {
+    const response = await httpClient.get("/owner/dashboard/export", {
+      params: { from, to },
+      responseType: "blob",
+      loadingMessage: "Preparing your CSV file…",
+      timeout: 60000,
+    });
+    return response.data;
+  } catch (error) {
+    const body = error.response?.data;
+    if (body instanceof Blob) {
+      let message = null;
+      try {
+        message = JSON.parse(await body.text())?.message;
+      } catch {
+        // Not JSON: keep the message from the HTTP client.
+      }
+      if (message) throw new Error(message, { cause: error });
+    }
+    throw error;
+  }
+}

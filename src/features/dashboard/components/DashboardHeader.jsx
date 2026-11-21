@@ -11,6 +11,7 @@ export default function DashboardHeader({
   onRefresh,
   refreshing,
   workspaceActions = false,
+  metaActions = null,
 }) {
   const firstName = data.profile?.firstName || "Owner";
   const salonName = data.salon?.name || data.salon?.salonName || "My salon";
@@ -120,6 +121,7 @@ export default function DashboardHeader({
             <CalendarDays size={15} aria-hidden="true" />
           </Link>
         )}
+        {metaActions}
       </div>
     </>
   );

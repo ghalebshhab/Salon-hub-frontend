@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { BadgeCheck } from "lucide-react";
+import { Link } from "react-router-dom";
+import { memberProfilePath } from "../../../community/model/communityRoutes.js";
 import StarRating from "../StarRating.jsx";
 import {
   COMMENT_PREVIEW_LENGTH,
@@ -11,10 +13,28 @@ import {
 } from "../../model/salonReviews.js";
 
 /** One guest review. Every review comes from a completed booking. */
+/** The reviewer's circle: their photo or initials. */
+function ReviewerAvatar({ review }) {
+  const tone = avatarTone(review.customerId ?? review.customerName);
+  return (
+    <span className={`rv-avatar tone-${tone}`} aria-hidden="true">
+      {review.customerProfilePictureUrl ? (
+        <img src={review.customerProfilePictureUrl} alt="" loading="lazy" />
+      ) : (
+        reviewerInitials(review.customerName)
+      )}
+    </span>
+  );
+}
+
 export default function SalonReviewCard({ review, featured = false }) {
   const [expanded, setExpanded] = useState(false);
   const comment = review.comment?.trim() || "";
   const long = comment.length > COMMENT_PREVIEW_LENGTH;
+  const name = reviewerName(review.customerName);
+  const profilePath = review.customerId
+    ? memberProfilePath(review.customerId)
+    : null;
   const shown =
     long && !expanded
       ? `${comment.slice(0, COMMENT_PREVIEW_LENGTH).trimEnd()}…`
@@ -23,14 +43,32 @@ export default function SalonReviewCard({ review, featured = false }) {
   return (
     <article className={`rv-card${featured ? " is-featured" : ""}`}>
       <header className="rv-card-head">
-        <span
-          className={`rv-avatar tone-${avatarTone(review.customerId ?? review.customerName)}`}
-          aria-hidden="true"
-        >
-          {reviewerInitials(review.customerName)}
-        </span>
+        {profilePath ? (
+          <Link
+            className="rv-avatar-link"
+            to={profilePath}
+            tabIndex={-1}
+            aria-hidden="true"
+          >
+            <ReviewerAvatar review={review} />
+          </Link>
+        ) : (
+          <ReviewerAvatar review={review} />
+        )}
         <div className="rv-card-who">
-          <h3>{reviewerName(review.customerName)}</h3>
+          <h3>
+            {profilePath ? (
+              <Link
+                className="rv-name-link"
+                to={profilePath}
+                title={`View ${name}'s profile`}
+              >
+                {name}
+              </Link>
+            ) : (
+              name
+            )}
+          </h3>
           <span className="rv-verified">
             <BadgeCheck size={14} aria-hidden="true" />
             Verified visit

@@ -247,6 +247,48 @@
   background: color-mix(in srgb, #c46f9a 22%, var(--card));
   color: color-mix(in srgb, #8a3863 80%, var(--text));
 }
+.rv-avatar {
+  overflow: hidden;
+}
+.rv-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+/* The circle and the name open the reviewer's profile. */
+.rv-avatar-link {
+  display: block;
+  border-radius: var(--radius-full);
+  transition:
+    transform var(--duration-base) var(--ease-standard),
+    box-shadow var(--duration-base) var(--ease-standard);
+}
+.rv-avatar-link:hover {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 35%, transparent);
+  transform: scale(1.06);
+}
+.rv-name-link {
+  color: inherit;
+  text-decoration: none;
+}
+.rv-name-link:hover {
+  color: var(--primary-dark);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.rv-name-link:focus-visible {
+  outline: 2px solid var(--focus-outline);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .rv-avatar-link {
+    transition: none;
+  }
+  .rv-avatar-link:hover {
+    transform: none;
+  }
+}
 .rv-card-who {
   display: grid;
   gap: 2px;

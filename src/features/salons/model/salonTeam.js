@@ -1,11 +1,9 @@
 /** Cards shown before "Show the whole team". */
 export const TEAM_PREVIEW_COUNT = 6;
 /** Skills shown on a card before "+N". */
-export const CARD_SKILL_COUNT = 4;
-/** Services named on a card before "+N more". */
-export const CARD_SERVICE_COUNT = 3;
+export const CARD_SKILL_COUNT = 3;
 /** Bios longer than this get "Read more". */
-export const BIO_PREVIEW_LENGTH = 140;
+export const BIO_PREVIEW_LENGTH = 110;
 /** The specialty filter shows only for a team of this size or more. */
 const FILTER_MIN_TEAM = 4;
 

@@ -1,32 +1,37 @@
 import { useId, useState } from "react";
-import { Award, CalendarDays, Scissors } from "lucide-react";
+import { ArrowUpRight, CalendarDays } from "lucide-react";
 import { Link } from "react-router-dom";
 import {
   BIO_PREVIEW_LENGTH,
-  CARD_SERVICE_COUNT,
   CARD_SKILL_COUNT,
   firstName,
   initials,
   specialtyOf,
 } from "../../model/salonTeam.js";
+import { memberProfilePath } from "../../../community/model/communityRoutes.js";
 
 /**
- * One professional: who they are, what they are good at, which services
- * they do, and a shortcut to book with them. No private contact details.
+ * One professional, kept compact: photo, full name, specialty and years,
+ * a short bio, a few skills and "Book with …". The name link covers the
+ * whole card and opens their profile; the buttons inside sit above it.
  */
 export default function TeamMemberCard({ employee, booking }) {
   const [bioOpen, setBioOpen] = useState(false);
   const bioId = useId();
   const name = employee.fullName || "Salon professional";
+  const specialty = specialtyOf(employee);
   const bio = employee.professionalBio?.trim();
   const longBio = bio && bio.length > BIO_PREVIEW_LENGTH;
-  const skills = employee.skills || [];
+  // The specialty is already under the name, so it is not repeated here.
+  const skills = (employee.skills || []).filter(
+    (skill) => skill.toLowerCase() !== specialty.toLowerCase(),
+  );
   const services = employee.serviceNames || [];
   const years = Number(employee.yearsOfExperience);
 
   return (
     <article className="team-card">
-      <header className="team-card-head">
+      <div className="team-card-top">
         <div className="team-card-avatar" aria-hidden="true">
           {employee.imageUrl ? (
             <img src={employee.imageUrl} alt="" loading="lazy" />
@@ -35,21 +40,26 @@ export default function TeamMemberCard({ employee, booking }) {
           )}
         </div>
         <div className="team-card-title">
-          <h3>{name}</h3>
-          <span className="team-card-specialty">{specialtyOf(employee)}</span>
+          <h3>
+            <Link
+              className="team-card-link"
+              to={memberProfilePath(employee.id)}
+            >
+              {name}
+            </Link>
+          </h3>
+          <p className="team-card-meta">
+            <span className="team-card-specialty">{specialty}</span>
+            {years > 0 && (
+              <span className="team-card-years">
+                {years} {years === 1 ? "yr" : "yrs"}
+                <span className="sr-only"> of experience</span>
+              </span>
+            )}
+          </p>
         </div>
-        {years > 0 && (
-          <span
-            className="team-card-years"
-            title={`${years} years of experience`}
-          >
-            <Award size={14} aria-hidden="true" />
-            <strong>{years}</strong>
-            <span>{years === 1 ? "yr" : "yrs"}</span>
-            <span className="sr-only">of experience</span>
-          </span>
-        )}
-      </header>
+        <ArrowUpRight size={18} className="team-card-go" aria-hidden="true" />
+      </div>
 
       {bio && (
         <div className="team-card-bio">
@@ -86,34 +96,13 @@ export default function TeamMemberCard({ employee, booking }) {
         </ul>
       )}
 
-      <div className="team-card-services">
-        <Scissors size={15} aria-hidden="true" />
-        {services.length ? (
-          <p>
-            <span className="team-card-label">Does </span>
-            {services.slice(0, CARD_SERVICE_COUNT).join(", ")}
-            {services.length > CARD_SERVICE_COUNT && (
-              <span
-                className="team-card-extra"
-                title={services.slice(CARD_SERVICE_COUNT).join(", ")}
-              >
-                {" "}
-                +{services.length - CARD_SERVICE_COUNT} more
-              </span>
-            )}
-          </p>
-        ) : (
-          <p className="is-muted">Services are being set up</p>
-        )}
-      </div>
-
       {booking && services.length > 0 && (
         <Link
           className="team-card-book"
           to={booking.to}
           state={booking.state(employee.id)}
         >
-          <CalendarDays size={16} aria-hidden="true" />
+          <CalendarDays size={15} aria-hidden="true" />
           {booking.signedIn
             ? `Book with ${firstName(name)}`
             : "Sign in to book"}

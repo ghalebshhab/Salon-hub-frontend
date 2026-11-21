@@ -70,6 +70,9 @@ export default function SalonTeam({ employees = [], booking = null }) {
           role="group"
           aria-label="Filter the team by specialty"
         >
+          <span className="team-filters-label" aria-hidden="true">
+            Specialty
+          </span>
           {[
             {
               label: "Everyone",

@@ -7,8 +7,9 @@ import {
   getSalonReviewSummaryApi,
 } from "../api/reviewApi.js";
 
-import { showErrorToast } from "../../../shared/notifications/toast.jsx";
+const EMPTY_SUMMARY = { averageRating: 0, totalReviews: 0 };
 
+/** The salon's public reviews and its rating summary. */
 export default function useReviewsList({ salonId }) {
   const loader = useCallback(
     async (signal) => {
@@ -18,17 +19,15 @@ export default function useReviewsList({ salonId }) {
       ]);
       return {
         reviews: reviews || [],
-        summary: summary || { averageRating: 0, totalReviews: 0 },
+        summary: summary || EMPTY_SUMMARY,
       };
     },
     [salonId],
   );
-  const { data, loading } = useQuery(loader, {
+  const { data, loading, error, refetch } = useQuery(loader, {
     initialData: {},
-    onError: showErrorToast,
   });
-  const { reviews = [], summary = { averageRating: 0, totalReviews: 0 } } =
-    data;
+  const { reviews = [], summary = EMPTY_SUMMARY } = data || {};
 
-  return { loading, reviews, summary };
+  return { loading, error, refetch, reviews, summary };
 }

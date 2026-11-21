@@ -9,7 +9,7 @@ import {
   showErrorToast,
   showSuccessToast,
 } from "../../../../shared/notifications/toast.jsx";
-import { tagline } from "../../model/salonPage.js";
+import { salonStatement, tagline } from "../../model/salonPage.js";
 import useSectionJump from "../../hooks/useSectionJump.js";
 
 async function shareSalon(name) {
@@ -109,7 +109,11 @@ export default function SalonHero({
             fetchPriority="high"
           />
         ) : (
-          <SalonCoverPlaceholder name={salon.name} variant="hero" />
+          <SalonCoverPlaceholder
+            name={salon.name}
+            variant="hero"
+            statement={salonStatement(salon)}
+          />
         )}
         <div className="sh-cover-content">
           {salon.planBadge && (

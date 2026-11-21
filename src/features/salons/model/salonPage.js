@@ -25,3 +25,26 @@ export function tagline(description) {
   const cut = sentence.slice(0, TAGLINE_MAX);
   return `${cut.slice(0, cut.lastIndexOf(" ")).replace(/[,;:]$/, "")}…`;
 }
+
+const STATEMENT_MAX = 64;
+
+/**
+ * The words inside the cover monogram: a short statement about the salon,
+ * taken from its description ("Men hair style salon"), and a small line
+ * above the initials ("Amman · Est. 2026").
+ */
+export function salonStatement(salon) {
+  const city = String(salon.city || "").trim();
+  const year = salon.createdAt ? String(salon.createdAt).slice(0, 4) : "";
+  let line = tagline(salon.description).replace(/[.!?…]+$/, "");
+  if (line.length > STATEMENT_MAX) line = "";
+  if (line) line = line[0].toLocaleUpperCase() + line.slice(1);
+  // "Men hair style" reads as a statement: "Men hair style salon".
+  const words = line.split(" ").filter(Boolean).length;
+  if (line && words <= 4 && !/salon/i.test(line)) line = `${line} salon`;
+
+  const text = line || "Beauty salon";
+
+  const kicker = [city, year && `Est. ${year}`].filter(Boolean).join(" · ");
+  return { text, kicker: kicker || "On SalonHub" };
+}

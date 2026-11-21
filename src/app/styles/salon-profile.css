@@ -619,34 +619,6 @@
   line-height: 1.7;
 }
 
-.salon-about-section {
-  background: linear-gradient(
-    135deg,
-    color-mix(in srgb, var(--card) 94%, transparent),
-    color-mix(in srgb, var(--secondary) 42%, var(--card))
-  );
-}
-
-.salon-about-contact {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px 20px;
-  padding-top: 20px;
-  border-top: 1px solid var(--border);
-}
-
-.salon-about-contact a {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--primary-dark);
-  font-weight: var(--weight-bold);
-}
-
-.salon-about-contact svg {
-  color: var(--primary);
-}
-
 .salon-details-page .services-grid {
   gap: 14px;
   margin: 0;
@@ -681,28 +653,6 @@
 .salon-details-page .service-meta span {
   color: var(--text);
   background: var(--secondary);
-}
-
-.salon-details-page .reviews-summary-card,
-.salon-details-page .review-card {
-  background: var(--card);
-  box-shadow: none;
-}
-
-.salon-details-page .review-card {
-  transition:
-    transform 180ms ease,
-    border-color 180ms ease;
-}
-
-.salon-details-page .review-card:hover {
-  border-color: var(--primary);
-  background: var(--card);
-  transform: translateY(-2px);
-}
-
-.salon-details-page .review-comment {
-  color: var(--muted);
 }
 
 .salon-not-found {

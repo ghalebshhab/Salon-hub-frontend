@@ -365,8 +365,9 @@ button.sh-fact:hover {
   z-index: var(--z-sticky, 20);
   margin: 28px 0 0;
   border-bottom: 1px solid var(--border);
-  background: color-mix(in srgb, var(--bg) 88%, transparent);
-  backdrop-filter: blur(12px);
+  /* Nearly solid instead of a blur: a blur under a sticky bar is redrawn
+     on every scroll frame. */
+  background: color-mix(in srgb, var(--bg) 97%, transparent);
 }
 .sn ul {
   display: flex;

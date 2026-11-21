@@ -14,6 +14,7 @@ import ReviewsList from "../../reviews/components/ReviewsList.jsx";
 import useSalonRating from "../../reviews/hooks/useSalonRating.js";
 import useAuth from "../../../shared/auth/useAuth.js";
 import useNow from "../../../shared/hooks/useNow.js";
+import useSmoothWheel from "../../../shared/hooks/useSmoothWheel.js";
 import useJoinSalonRequest from "../../employment/hooks/useJoinSalonRequest.js";
 import SalonTeam from "../components/team/SalonTeam.jsx";
 import SalonAbout from "../components/about/SalonAbout.jsx";
@@ -51,6 +52,7 @@ function SalonDetails() {
   const rating = useSalonRating(routeSalonId);
   const now = useNow();
   const asideRef = useCenteredSticky();
+  useSmoothWheel();
   const visibleSalonId = salon?.salonId ?? salon?.id;
   const salonFollow = useSalonFollow(
     visibleSalonId,

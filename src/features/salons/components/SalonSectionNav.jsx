@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { SALON_SECTIONS } from "../model/salonPage.js";
 import useSectionJump from "../hooks/useSectionJump.js";
 
@@ -33,13 +33,23 @@ function currentSection() {
  */
 export default function SalonSectionNav() {
   const [active, setActive] = useState(SALON_SECTIONS[0].id);
+  const activeRef = useRef(active);
   const jump = useSectionJump();
 
   useEffect(() => {
     let frame = 0;
     const update = () => {
-      cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(() => setActive(currentSection()));
+      // One measurement per frame, however many scroll events arrive.
+      if (frame) return;
+      frame = requestAnimationFrame(() => {
+        frame = 0;
+        const next = currentSection();
+        // Only re-render when the current section changes.
+        if (next !== activeRef.current) {
+          activeRef.current = next;
+          setActive(next);
+        }
+      });
     };
     update();
     // Capture: the page may scroll inside a container, not the window.

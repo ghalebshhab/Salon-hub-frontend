@@ -17,7 +17,7 @@ import ReviewsList from "../../reviews/components/ReviewsList.jsx";
 import SalonServicesList from "../../services/components/SalonServicesList.jsx";
 import EditableSalonSection from "../components/EditableSalonSection.jsx";
 import SalonCoverEditor from "../components/SalonCoverEditor.jsx";
-import SalonEmployees from "../components/SalonEmployees.jsx";
+import SalonTeam from "../components/team/SalonTeam.jsx";
 import SalonClosuresPanel from "../components/SalonClosuresPanel.jsx";
 import SalonLocationField from "../components/SalonLocationField.jsx";
 import {
@@ -262,7 +262,7 @@ export default function EditSalon() {
                 Manage team
               </Link>
             </div>
-            <SalonEmployees employees={editor.employees} />
+            <SalonTeam employees={editor.employees} />
           </section>
 
           <section className="salon-details-section">

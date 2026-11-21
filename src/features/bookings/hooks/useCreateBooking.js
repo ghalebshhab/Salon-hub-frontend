@@ -44,6 +44,8 @@ export default function useCreateBooking() {
   const preselectedServiceId = location.state?.selectedServiceId;
   // The salon page's menu can send several services for one visit.
   const preselectedServiceIds = location.state?.selectedServiceIds;
+  // "Book with" on the salon's team section chooses the professional.
+  const preselectedEmployeeId = location.state?.selectedEmployeeId;
 
   const [step, setStep] = useState(0);
   const [selectedServiceIds, setSelectedServiceIds] = useState(() => {
@@ -52,7 +54,9 @@ export default function useCreateBooking() {
     }
     return preselectedServiceId ? [Number(preselectedServiceId)] : [];
   });
-  const [selectedEmployeeId, setSelectedEmployeeId] = useState("");
+  const [selectedEmployeeId, setSelectedEmployeeId] = useState(() =>
+    preselectedEmployeeId ? String(preselectedEmployeeId) : "",
+  );
   const [bookingDate, setBookingDate] = useState(() => getTodayDate());
   const [bookingTime, setBookingTime] = useState("");
   const [customerPhoneNumber, setCustomerPhoneNumber] = useState("");

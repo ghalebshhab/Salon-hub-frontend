@@ -41,6 +41,7 @@ export function getNavigationSections({
   isOwner,
   hasSalon,
   isEmployee = false,
+  isManager = false,
 }) {
   const sections = [
     {
@@ -91,6 +92,25 @@ export function getNavigationSections({
           label: "My appointments",
           to: "/employee/bookings",
           icon: CalendarClock,
+        },
+      ],
+    });
+  }
+
+  if (isManager && !isOwner) {
+    sections.push({
+      label: "Salon",
+      items: [
+        {
+          label: "Booking requests",
+          to: "/owner/bookings",
+          icon: Inbox,
+          badge: "pendingBookings",
+        },
+        {
+          label: "Team & schedules",
+          to: "/owner/employees",
+          icon: UsersRound,
         },
       ],
     });

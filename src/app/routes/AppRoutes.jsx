@@ -2,6 +2,7 @@ import { lazy } from "react";
 import { Route, Routes } from "react-router-dom";
 import AppLayout from "../layout/AppLayout.jsx";
 import ProtectedRoute from "../layout/ProtectedRoute.jsx";
+import SalonManagerRoute from "../layout/SalonManagerRoute.jsx";
 import OwnerRoute from "../layout/OwnerRoute.jsx";
 import NotFound from "./NotFound.jsx";
 
@@ -165,20 +166,22 @@ export default function AppRoutes() {
               path="/owner/applications"
               element={<HiringApplications />}
             />
-            <Route path="/owner/employees" element={<ManageSalonEmployees />} />
-            <Route
-              path="/owner/employees/:employeeId/setup"
-              element={<ManageEmployeeSetup />}
-            />
             <Route path="/owner/services" element={<MySalonServices />} />
             <Route path="/owner/create-service" element={<AddSalonService />} />
             <Route
               path="/owner/services/:serviceId/edit"
               element={<EditSalonService />}
             />
-            <Route path="/owner/bookings" element={<SalonBookings />} />
             <Route path="/owner/payments" element={<OwnerPayments />} />
             <Route path="/owner/plan" element={<OwnerPlan />} />
+          </Route>
+          <Route element={<SalonManagerRoute />}>
+            <Route path="/owner/bookings" element={<SalonBookings />} />
+            <Route path="/owner/employees" element={<ManageSalonEmployees />} />
+            <Route
+              path="/owner/employees/:employeeId/setup"
+              element={<ManageEmployeeSetup />}
+            />
           </Route>
           <Route path="/owner/create-salon" element={<CreateSalon />} />
           <Route path="/owner/my-salon" element={<MySalon />} />

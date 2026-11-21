@@ -27,11 +27,11 @@ export default function SidebarNavigation({
   closeMobile,
   toggleCollapsed,
 }) {
-  const { loggedIn, isOwner, role, user } = useAuth();
+  const { loggedIn, isOwner, isManager, role, user } = useAuth();
   const { unreadCount } = useNotifications();
   const badgeCounts = {
     unreadNotifications: unreadCount,
-    pendingBookings: usePendingBookingCount(loggedIn && isOwner),
+    pendingBookings: usePendingBookingCount(loggedIn && (isOwner || isManager)),
   };
   const navigate = useNavigate();
   const [menuQuery, setMenuQuery] = useState("");
@@ -71,6 +71,7 @@ export default function SidebarNavigation({
     isOwner,
     hasSalon,
     isEmployee,
+    isManager,
   });
   const visibleSections = filterNavigationSections(sections, menuQuery);
   const name =

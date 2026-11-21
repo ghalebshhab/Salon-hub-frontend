@@ -1,4 +1,10 @@
-import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
 import { getUserProfileApi } from "../api/authApi.js";
 import { requireData } from "../../../shared/api/response.js";
 import AuthContext from "../../../shared/auth/authContext.js";
@@ -74,13 +80,15 @@ export default function AuthProvider({
   const value = useMemo(() => {
     const current = profileState.token === token;
     const user = current ? profileState.user : null;
-    const role = typeof user?.role === "string" ? user.role.toUpperCase() : null;
+    const role =
+      typeof user?.role === "string" ? user.role.toUpperCase() : null;
     return {
       token,
       loggedIn: Boolean(token),
       user,
       role,
       isOwner: role === "OWNER",
+      isManager: role === "EMPLOYEE" && Boolean(user?.salonManager),
       profileLoading: Boolean(token) && (!current || profileState.loading),
       profileError: current ? profileState.error : null,
     };

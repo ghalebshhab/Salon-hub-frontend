@@ -17,7 +17,7 @@ import AssistantDock from "../../features/assistant/components/AssistantDock.jsx
 import { ASSISTANT_PATH } from "../../features/assistant/model/assistantRoutes.js";
 export default function AppLayout() {
   const location = useLocation();
-  const { token, loggedIn, isOwner, role, user } = useAuth();
+  const { token, loggedIn, isOwner, isManager, role, user } = useAuth();
   const navigation = useNavigationState();
   // Sign-in and recovery pages are focused tasks: no app sidebar or background.
   const authLayout = isAuthenticationRoute(location.pathname);
@@ -37,8 +37,9 @@ export default function AppLayout() {
         isOwner,
         hasSalon: Boolean(user?.ownedSalonId),
         isEmployee: role === "EMPLOYEE",
+        isManager,
       }),
-    [loggedIn, isOwner, role, user?.ownedSalonId],
+    [loggedIn, isOwner, isManager, role, user?.ownedSalonId],
   );
   const showAssistantDock =
     !authLayout && !location.pathname.startsWith(ASSISTANT_PATH);

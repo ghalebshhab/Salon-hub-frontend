@@ -9,10 +9,14 @@ export default function useManageSalonEmployees() {
     (signal) => getMySalonEmployeesApi({ signal }).then(requireData),
     [],
   );
-  const { data: employees, loading } = useQuery(loader, {
+  const {
+    data: employees,
+    loading,
+    refetch,
+  } = useQuery(loader, {
     initialData: [],
     onError: showErrorToast,
   });
 
-  return { employees, loading };
+  return { employees, loading, refetch };
 }

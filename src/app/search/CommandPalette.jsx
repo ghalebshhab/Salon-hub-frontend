@@ -51,7 +51,7 @@ export default function CommandPalette() {
 }
 
 function PaletteDialog({ onClose }) {
-  const { loggedIn, isOwner, role, user } = useAuth();
+  const { loggedIn, isOwner, isManager, role, user } = useAuth();
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const [query, setQuery] = useState("");
@@ -72,8 +72,9 @@ function PaletteDialog({ onClose }) {
         isOwner,
         hasSalon: Boolean(user?.ownedSalonId),
         isEmployee: role === "EMPLOYEE",
+        isManager,
       }),
-    [loggedIn, isOwner, role, user?.ownedSalonId],
+    [loggedIn, isOwner, isManager, role, user?.ownedSalonId],
   );
   const { people, loading, error } = usePeopleSearch(query, loggedIn);
 

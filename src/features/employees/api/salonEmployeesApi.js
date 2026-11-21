@@ -67,3 +67,13 @@ export const updateEmployeeScheduleApi = async (employeeId, periods) => {
   );
   return response.data;
 };
+
+/** Owner only: give (true) or remove (false) the salon manager role. */
+export const setSalonManagerApi = async (employeeId, manager) => {
+  const response = await httpClient.put(
+    `/salon-employees/${employeeId}/manager`,
+    { manager },
+    { loadingMessage: manager ? "Adding a manager…" : "Removing the manager…" },
+  );
+  return response.data;
+};

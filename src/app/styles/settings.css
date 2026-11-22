@@ -1,0 +1,393 @@
+/*
+ * Settings page. Calm and plain: a short title, a section list on the side,
+ * and white cards with rows (icon, text, control). The only bold element is
+ * the selected choice card, outlined in the brand colour.
+ */
+.st-page {
+  width: min(1040px, 100%);
+  margin: 0 auto;
+  padding: var(--space-8) var(--space-4) var(--space-16);
+}
+
+.st-hero {
+  display: grid;
+  gap: var(--space-2);
+  margin-bottom: var(--space-8);
+}
+.st-eyebrow {
+  margin: 0;
+  color: var(--primary);
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.st-hero h1 {
+  margin: 0;
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: var(--text-4xl);
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-tight);
+}
+.st-hero p:last-child {
+  max-width: 60ch;
+  margin: 0;
+  color: var(--muted);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+}
+
+.st-layout {
+  display: grid;
+  grid-template-columns: 200px minmax(0, 1fr);
+  gap: var(--space-8);
+  align-items: start;
+}
+
+/* Section list. */
+.st-nav {
+  position: sticky;
+  top: 96px;
+  display: grid;
+  gap: 2px;
+}
+.st-nav a {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 40px;
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-md);
+  color: var(--muted);
+  font-size: var(--text-md);
+  font-weight: var(--weight-medium);
+  text-decoration: none;
+  transition:
+    background-color var(--duration-fast) var(--ease-standard),
+    color var(--duration-fast) var(--ease-standard);
+}
+.st-nav a:hover {
+  background: var(--secondary);
+  color: var(--text);
+}
+.st-nav a:focus-visible {
+  outline: 2px solid var(--focus-outline);
+  outline-offset: 2px;
+}
+
+.st-content {
+  display: grid;
+  gap: var(--space-6);
+}
+
+/* A section card. */
+.st-section {
+  display: grid;
+  gap: var(--space-4);
+  padding: var(--space-6);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--card);
+  scroll-margin-top: 96px;
+}
+.st-section-head {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+.st-section-icon,
+.st-row-icon {
+  display: grid;
+  flex: none;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  border-radius: var(--radius-md);
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+.st-section-head h2 {
+  margin: 0;
+  color: var(--text);
+  font-size: var(--text-xl);
+  font-weight: var(--weight-semibold);
+}
+.st-section-head p {
+  max-width: 62ch;
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: var(--text-md);
+  line-height: var(--leading-normal);
+}
+
+/* Choice cards (language, theme). */
+.st-choices {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--space-3);
+}
+.st-choice {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 72px;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--card);
+  cursor: pointer;
+  transition:
+    border-color var(--duration-fast) var(--ease-standard),
+    box-shadow var(--duration-fast) var(--ease-standard);
+}
+.st-choice:hover {
+  border-color: color-mix(in srgb, var(--primary) 45%, var(--border));
+}
+.st-choice.is-checked {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 1px var(--primary);
+}
+.st-choice input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.st-choice:has(input:focus-visible) {
+  outline: 2px solid var(--focus-outline);
+  outline-offset: 2px;
+}
+.st-choice-text {
+  display: grid;
+  flex: 1;
+  gap: 2px;
+  min-width: 0;
+}
+.st-choice-text strong {
+  color: var(--text);
+  font-size: var(--text-base);
+  font-weight: var(--weight-semibold);
+}
+.st-choice-text small {
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+.st-choice-badge {
+  display: grid;
+  flex: none;
+  width: 40px;
+  height: 40px;
+  place-items: center;
+  border-radius: var(--radius-md);
+  background: var(--secondary);
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: var(--weight-semibold);
+}
+.st-choice-check {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--border);
+  border-radius: 50%;
+  transition: border var(--duration-fast) var(--ease-standard);
+}
+.st-choice.is-checked .st-choice-check {
+  border: 6px solid var(--primary);
+}
+
+/* Mini window that shows the theme. */
+.st-theme-preview {
+  position: relative;
+  display: grid;
+  flex: none;
+  width: 56px;
+  height: 40px;
+  padding: 6px;
+  gap: 4px;
+  align-content: start;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+.st-theme-preview span {
+  height: 5px;
+  border-radius: 3px;
+}
+.st-theme-preview span:first-child {
+  width: 70%;
+}
+.st-theme-preview svg {
+  position: absolute;
+  inset-inline-end: 5px;
+  bottom: 5px;
+}
+.st-theme-preview.is-light {
+  background: #fbf8fa;
+  color: #9a6b2d;
+}
+.st-theme-preview.is-light span {
+  background: #d9ccd5;
+}
+.st-theme-preview.is-dark {
+  background: #1d171c;
+  color: #e2b062;
+}
+.st-theme-preview.is-dark span {
+  background: #4a3d47;
+}
+
+/* Rows: icon, text, then a status or an arrow. */
+.st-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  min-height: 64px;
+  padding: var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--card);
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  text-decoration: none;
+}
+.st-row-text {
+  display: grid;
+  flex: 1;
+  gap: 2px;
+  min-width: 0;
+}
+.st-row-text strong {
+  color: var(--text);
+  font-size: var(--text-md);
+  font-weight: var(--weight-semibold);
+}
+.st-row-text p {
+  margin: 0;
+  color: var(--muted);
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+}
+.st-row-control {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-2);
+}
+.st-row-link {
+  cursor: pointer;
+  transition:
+    border-color var(--duration-fast) var(--ease-standard),
+    background-color var(--duration-fast) var(--ease-standard);
+}
+.st-row-link:hover {
+  border-color: color-mix(in srgb, var(--primary) 40%, var(--border));
+  background: color-mix(in srgb, var(--primary-soft) 45%, var(--card));
+}
+.st-row-link:focus-visible {
+  outline: 2px solid var(--focus-outline);
+  outline-offset: 2px;
+}
+.st-row-go {
+  flex: none;
+  color: var(--muted);
+}
+:root[dir="rtl"] .st-row-go {
+  transform: scaleX(-1);
+}
+.st-row-link.is-danger .st-row-icon {
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+.st-row-link.is-danger:hover {
+  border-color: color-mix(in srgb, var(--danger) 40%, var(--border));
+  background: var(--danger-soft);
+}
+
+.st-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  background: var(--secondary);
+  color: var(--text);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  white-space: nowrap;
+}
+.st-status::before {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--muted);
+  content: "";
+}
+.st-status.is-ok::before {
+  background: var(--success);
+}
+.st-status.is-off::before {
+  background: var(--danger);
+}
+.st-help {
+  margin: 0;
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+
+@media (max-width: 860px) {
+  .st-layout {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+  /* The section list becomes a row of chips that scrolls sideways. */
+  .st-nav {
+    position: static;
+    display: flex;
+    gap: var(--space-2);
+    margin-inline: calc(var(--space-4) * -1);
+    padding: 0 var(--space-4) var(--space-1);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .st-nav a {
+    flex: none;
+    min-height: 36px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-full);
+    background: var(--card);
+  }
+}
+
+@media (max-width: 520px) {
+  .st-page {
+    padding-top: var(--space-6);
+  }
+  .st-hero h1 {
+    font-size: var(--text-3xl);
+  }
+  .st-section {
+    padding: var(--space-4);
+  }
+  .st-row {
+    flex-wrap: wrap;
+  }
+  .st-row-control {
+    width: 100%;
+    justify-content: flex-start;
+    padding-inline-start: 48px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .st-nav a,
+  .st-choice,
+  .st-choice-check,
+  .st-row-link {
+    transition: none;
+  }
+}

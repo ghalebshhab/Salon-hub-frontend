@@ -4,6 +4,7 @@ import {
   showSuccessToast,
 } from "../../../shared/notifications/toast.jsx";
 import { createHiringPostApi } from "../api/hiringApi.js";
+import t from "../../../shared/i18n/t.js";
 
 const initialForm = {
   title: "",
@@ -39,16 +40,16 @@ export default function useCreateHiringPost() {
         expiresAt: `${form.expiresAt}:00`,
       });
       if (!response.success) {
-        showErrorToast(response.message || "Failed to create hiring post");
+        showErrorToast(response.message || t("Failed to create hiring post"));
         return;
       }
-      showSuccessToast("Hiring post created successfully");
+      showSuccessToast(t("Hiring post created successfully"));
       setForm(initialForm);
     } catch (error) {
       showErrorToast(
         error?.response?.data?.message ||
           error?.message ||
-          "Failed to create hiring post",
+          t("Failed to create hiring post"),
       );
     } finally {
       setLoading(false);

@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
-import Loading from "../../../shared/components/Loading.jsx";
+import { ApplyHiringSkeleton } from "../components/HiringSkeletons.jsx";
 import useApplyHiringPost from "../hooks/useApplyHiringPost.js";
+import t from "../../../shared/i18n/t.js";
 
 function ApplyHiringPost() {
   const {
@@ -12,16 +13,16 @@ function ApplyHiringPost() {
     submitting,
     handleSubmit,
   } = useApplyHiringPost();
-  if (loading) return <Loading message="Preparing the application…" />;
+  if (loading) return <ApplyHiringSkeleton />;
   return (
     <section className="auth-page">
       <form className="auth-card wide" onSubmit={handleSubmit}>
-        <h1>Apply for this position</h1>
+        <h1>{t("Apply for this position")}</h1>
         <p className="muted">
-          Your application uses the career profile saved to your account.
+          {t("Your application uses the career profile saved to your account.")}
         </p>
         <div className="form-group">
-          <label>Applicant</label>
+          <label>{t("Applicant")}</label>
           <input
             value={[profile?.firstName, profile?.lastName]
               .filter(Boolean)
@@ -30,33 +31,33 @@ function ApplyHiringPost() {
           />
         </div>
         <div className="form-group">
-          <label>Skills</label>
+          <label>{t("Skills")}</label>
           <input
-            value={profile?.skills?.join(", ") || "No career skills saved"}
+            value={profile?.skills?.join(", ") || t("No career skills saved")}
             disabled
           />
         </div>
         {!profile?.careerProfileEnabled && (
           <p className="muted">
-            Your career profile is incomplete.{" "}
-            <Link to="/profile/career">Complete it now</Link>.
+            {t("Your career profile is incomplete.")}
+            <Link to="/profile/career">{t("Complete it now")}</Link>.
           </p>
         )}
         <div className="form-group">
-          <label>Application note</label>
+          <label>{t("Application note")}</label>
           <textarea
             value={applicationNote}
             onChange={(event) => setApplicationNote(event.target.value)}
             maxLength="2000"
             rows="5"
-            placeholder="Tell the salon why you are a good fit."
+            placeholder={t("Tell the salon why you are a good fit.")}
           />
         </div>
         <button
           className="btn btn-primary full-width"
           disabled={submitting || !profile?.careerProfileEnabled}
         >
-          {submitting ? "Submitting..." : "Submit Application"}
+          {submitting ? t("Submitting...") : t("Submit Application")}
         </button>
         <p className="auth-switch">
           <button
@@ -64,7 +65,7 @@ function ApplyHiringPost() {
             type="button"
             onClick={() => navigate("/hiring-posts")}
           >
-            Cancel
+            {t("Cancel")}
           </button>
         </p>
       </form>

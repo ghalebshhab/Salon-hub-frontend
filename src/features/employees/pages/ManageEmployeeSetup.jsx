@@ -1,11 +1,15 @@
 import { useMemo } from "react";
 import { CalendarClock, Plus, Scissors, Trash2 } from "lucide-react";
 import { useParams } from "react-router-dom";
-import Loading from "../../../shared/components/Loading.jsx";
+import { EmployeeSetupSkeleton } from "../components/EmployeesPageSkeletons.jsx";
 import EmployeeTimeOffPanel from "../components/EmployeeTimeOffPanel.jsx";
 import useManageEmployeeSetup, {
   WEEK_DAYS,
 } from "../hooks/useManageEmployeeSetup.js";
+import ErrorPage from "../../../shared/components/ErrorPage.jsx";
+import classifyError from "../../../shared/errors/classifyError.js";
+import t from "../../../shared/i18n/t.js";
+import { serviceName } from "../../services/model/serviceText.js";
 
 function timeValue(value) {
   return value?.slice(0, 5) || "";
@@ -39,15 +43,13 @@ function ManageEmployeeSetup() {
     [periods],
   );
 
-  if (loading) return <Loading message="Loading employee setup…" />;
+  if (loading) return <EmployeeSetupSkeleton />;
   if (error || !capabilities || !schedule) {
     return (
-      <section className="container section">
-        <div className="empty-state">
-          <h2>Employee setup is unavailable</h2>
-          <p>{error?.message || "This employee could not be loaded."}</p>
-        </div>
-      </section>
+      <ErrorPage
+        kind={classifyError(error)}
+        title={t("Employee setup is unavailable")}
+      />
     );
   }
 
@@ -105,12 +107,16 @@ function ManageEmployeeSetup() {
     <section className="container section employee-setup-page">
       <header className="profile-header">
         <div>
-          <span className="eyebrow">Booking setup</span>
+          <span className="eyebrow">{t("Booking setup")}</span>
           <h1>{capabilities.employeeName}</h1>
           <p>
-            Choose this employee’s services and weekly availability. Schedule
-            times must fall between {timeValue(schedule.salonOpeningTime)} and{" "}
-            {timeValue(schedule.salonClosingTime)}.
+            {t(
+              "Choose this employee’s services and weekly availability. Schedule times must fall between {open} and {close}.",
+              {
+                open: timeValue(schedule.salonOpeningTime),
+                close: timeValue(schedule.salonClosingTime),
+              },
+            )}
           </p>
         </div>
       </header>
@@ -121,17 +127,19 @@ function ManageEmployeeSetup() {
             <Scissors size={20} />
           </span>
           <div>
-            <h2>Services they can perform</h2>
+            <h2>{t("Services they can perform")}</h2>
             <p>
-              Customers can only choose employees qualified for every selected
-              service.
+              {t(
+                "Customers can only choose employees qualified for every selected service.",
+              )}
             </p>
           </div>
         </div>
         {services.length === 0 ? (
           <p className="muted">
-            Add an active service to your salon before assigning employee
-            capabilities.
+            {t(
+              "Add an active service to your salon before assigning employee capabilities.",
+            )}
           </p>
         ) : (
           <div className="employee-service-options">
@@ -143,9 +151,12 @@ function ManageEmployeeSetup() {
                   onChange={() => toggleService(service.id)}
                 />
                 <span>
-                  <strong>{service.name}</strong>
+                  <strong>{serviceName(service)}</strong>
                   <small>
-                    {service.price} JD · {service.durationMinutes} min
+                    {t("{price} JD · {durationMinutes} min", {
+                      price: service.price,
+                      durationMinutes: service.durationMinutes,
+                    })}
                   </small>
                 </span>
               </label>
@@ -159,7 +170,7 @@ function ManageEmployeeSetup() {
             onClick={saveServices}
             disabled={saving}
           >
-            {saving ? "Saving…" : "Save services"}
+            {saving ? t("Saving…") : t("Save services")}
           </button>
         </div>
       </section>
@@ -170,17 +181,18 @@ function ManageEmployeeSetup() {
             <CalendarClock size={20} />
           </span>
           <div>
-            <h2>Weekly schedule</h2>
+            <h2>{t("Weekly schedule")}</h2>
             <p>
-              Add one or more work periods for each day. Leave a day empty for a
-              day off.
+              {t(
+                "Add one or more work periods for each day. Leave a day empty for a day off.",
+              )}
             </p>
           </div>
         </div>
         <div className="employee-week-grid">
           {WEEK_DAYS.map((day) => (
             <div className="employee-day-row" key={day}>
-              <strong>{day[0] + day.slice(1).toLowerCase()}</strong>
+              <strong>{t(day[0] + day.slice(1).toLowerCase())}</strong>
               <div className="employee-day-periods">
                 {periodsByDay[day].map((period, index) => (
                   <div
@@ -188,7 +200,7 @@ function ManageEmployeeSetup() {
                     key={`${day}-${index}`}
                   >
                     <label>
-                      <span className="sr-only">Start time</span>
+                      <span className="sr-only">{t("Start time")}</span>
                       <input
                         type="time"
                         value={timeValue(period.startTime)}
@@ -202,9 +214,9 @@ function ManageEmployeeSetup() {
                         }
                       />
                     </label>
-                    <span>to</span>
+                    <span>{t("to")}</span>
                     <label>
-                      <span className="sr-only">End time</span>
+                      <span className="sr-only">{t("End time")}</span>
                       <input
                         type="time"
                         value={timeValue(period.endTime)}
@@ -221,7 +233,9 @@ function ManageEmployeeSetup() {
                     <button
                       className="icon-button danger"
                       type="button"
-                      aria-label={`Remove ${day.toLowerCase()} period`}
+                      aria-label={t("Remove {day} period", {
+                        day: t(day[0] + day.slice(1).toLowerCase()),
+                      })}
                       onClick={() => removePeriod(day, index)}
                     >
                       <Trash2 size={16} />
@@ -233,7 +247,7 @@ function ManageEmployeeSetup() {
                   type="button"
                   onClick={() => addPeriod(day)}
                 >
-                  <Plus size={15} /> Add hours
+                  <Plus size={15} /> {t("Add hours")}
                 </button>
               </div>
             </div>
@@ -246,7 +260,7 @@ function ManageEmployeeSetup() {
             onClick={saveSchedule}
             disabled={saving}
           >
-            {saving ? "Saving…" : "Save schedule"}
+            {saving ? t("Saving…") : t("Save schedule")}
           </button>
         </div>
       </section>

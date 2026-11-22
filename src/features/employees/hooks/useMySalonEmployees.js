@@ -12,6 +12,7 @@ import {
   rejectHiringApplicationApi,
 } from "../../hiring/api/hiringApi.js";
 import { confirmAction } from "../../../shared/confirm/confirmStore.js";
+import t from "../../../shared/i18n/t.js";
 
 export default function useMySalonEmployees() {
   const loader = useCallback(async (signal) => {
@@ -40,13 +41,13 @@ export default function useMySalonEmployees() {
     const rejectionReason = accept
       ? undefined
       : await confirmAction({
-          title: "Reject this application?",
-          message: "The applicant will see your reason.",
-          confirmText: "Reject",
+          title: t("Reject this application?"),
+          message: t("The applicant will see your reason."),
+          confirmText: t("Reject"),
           danger: true,
           input: {
-            label: "Reason",
-            placeholder: "Why are you rejecting this application?",
+            label: t("Reason"),
+            placeholder: t("Why are you rejecting this application?"),
             required: true,
           },
         });
@@ -59,7 +60,7 @@ export default function useMySalonEmployees() {
             rejectionReason.trim(),
           );
       if (!response.success) {
-        showErrorToast(response.message || "Could not update application.");
+        showErrorToast(response.message || t("Could not update application."));
         return;
       }
       showSuccessToast(`Application ${accept ? "accepted" : "rejected"}.`);
@@ -68,7 +69,7 @@ export default function useMySalonEmployees() {
       showErrorToast(
         error?.response?.data?.message ||
           error?.message ||
-          "Could not update application.",
+          t("Could not update application."),
       );
     }
   };

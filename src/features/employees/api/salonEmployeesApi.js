@@ -1,4 +1,5 @@
 import httpClient from "../../../shared/api/httpClient.js";
+import t from "../../../shared/i18n/t.js";
 
 export const getMySalonEmployeesApi = async (config = {}) => {
   const response = await httpClient.get("/salon-employees/my-salon", config);
@@ -73,7 +74,11 @@ export const setSalonManagerApi = async (employeeId, manager) => {
   const response = await httpClient.put(
     `/salon-employees/${employeeId}/manager`,
     { manager },
-    { loadingMessage: manager ? "Adding a manager…" : "Removing the manager…" },
+    {
+      loadingMessage: manager
+        ? t("Adding a manager…")
+        : t("Removing the manager…"),
+    },
   );
   return response.data;
 };

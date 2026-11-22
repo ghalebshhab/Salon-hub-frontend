@@ -5,6 +5,7 @@ import {
   showErrorToast,
   showSuccessToast,
 } from "../../../shared/notifications/toast.jsx";
+import t from "../../../shared/i18n/t.js";
 
 /**
  * The owner gives or removes the salon manager role. A manager can answer
@@ -15,22 +16,24 @@ export default function useSalonManagerRole(onChanged) {
 
   const setManager = useCallback(
     async (employee, manager) => {
-      const name = employee.fullName || "This employee";
+      const name = employee.fullName || t("This employee");
       const confirmed = await confirmAction(
         manager
           ? {
-              title: `Make ${name} a manager?`,
-              message:
+              title: t("Make {name} a manager?", { name }),
+              message: t(
                 "Managers can answer booking requests, assign employees and change the team's schedules and time off. They cannot see payments, your plan or salon settings.",
-              confirmText: "Make manager",
-              cancelText: "Cancel",
+              ),
+              confirmText: t("Make manager"),
+              cancelText: t("Cancel"),
             }
           : {
-              title: `Remove ${name} as manager?`,
-              message:
+              title: t("Remove {name} as manager?", { name }),
+              message: t(
                 "They stay on your team, but they can no longer manage bookings or schedules.",
-              confirmText: "Remove manager",
-              cancelText: "Keep manager",
+              ),
+              confirmText: t("Remove manager"),
+              cancelText: t("Keep manager"),
               danger: true,
             },
       );
@@ -40,13 +43,15 @@ export default function useSalonManagerRole(onChanged) {
       try {
         const response = await setSalonManagerApi(employee.id, manager);
         if (!response.success) {
-          showErrorToast(response.message || "The manager role was not saved.");
+          showErrorToast(
+            response.message || t("The manager role was not saved."),
+          );
           return;
         }
         showSuccessToast(response.message);
         await onChanged?.();
       } catch (error) {
-        showErrorToast(error.message || "The manager role was not saved.");
+        showErrorToast(error.message || t("The manager role was not saved."));
       } finally {
         setBusyId(null);
       }

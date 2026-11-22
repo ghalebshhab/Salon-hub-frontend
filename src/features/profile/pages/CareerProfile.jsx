@@ -1,21 +1,23 @@
-import Loading from "../../../shared/components/Loading.jsx";
+import CareerProfileSkeleton from "../components/CareerProfileSkeleton.jsx";
 import useCareerProfile from "../hooks/useCareerProfile.js";
+import t from "../../../shared/i18n/t.js";
+import { PAGE_HEADS } from "../../../shared/copy/pageHeads.js";
 
 function CareerProfile() {
   const { form, profile, loading, saving, handleChange, handleSubmit } =
     useCareerProfile();
-  if (loading) return <Loading message="Loading your career profile…" />;
+  if (loading) return <CareerProfileSkeleton />;
   return (
     <section className="form-page">
       <form className="form-card" onSubmit={handleSubmit}>
-        <h1>Career Profile</h1>
+        <h1>{t(PAGE_HEADS.careerProfile.title)}</h1>
         <p className="muted">
-          Hiring applications use these details. Completion:{" "}
+          {t(PAGE_HEADS.careerProfile.text)}
           {profile?.careerProfileCompletionPercentage ?? 0}%.
         </p>
         <div className="form-row">
           <div className="form-group">
-            <label>Date of birth</label>
+            <label>{t("Date of birth")}</label>
             <input
               name="dateOfBirth"
               type="date"
@@ -25,7 +27,7 @@ function CareerProfile() {
             />
           </div>
           <div className="form-group">
-            <label>Years of experience</label>
+            <label>{t("Years of experience")}</label>
             <input
               name="yearsOfExperience"
               type="number"
@@ -37,7 +39,7 @@ function CareerProfile() {
           </div>
         </div>
         <div className="form-group">
-          <label>Skills, separated by commas</label>
+          <label>{t("Skills, separated by commas")}</label>
           <input
             name="skills"
             value={form.skills}
@@ -46,7 +48,7 @@ function CareerProfile() {
           />
         </div>
         <div className="form-group">
-          <label>Preferred work locations, separated by commas</label>
+          <label>{t("Preferred work locations, separated by commas")}</label>
           <input
             name="preferredWorkLocations"
             value={form.preferredWorkLocations}
@@ -55,7 +57,7 @@ function CareerProfile() {
           />
         </div>
         <div className="form-group">
-          <label>Resume URL</label>
+          <label>{t("Resume URL")}</label>
           <input
             name="resumeUrl"
             type="url"
@@ -64,7 +66,7 @@ function CareerProfile() {
           />
         </div>
         <div className="form-group">
-          <label>Portfolio URL</label>
+          <label>{t("Portfolio URL")}</label>
           <input
             name="portfolioUrl"
             type="url"
@@ -73,7 +75,7 @@ function CareerProfile() {
           />
         </div>
         <div className="form-group">
-          <label>Professional bio</label>
+          <label>{t("Professional bio")}</label>
           <textarea
             name="professionalBio"
             value={form.professionalBio}
@@ -83,7 +85,7 @@ function CareerProfile() {
           />
         </div>
         <button className="btn btn-primary full-width" disabled={saving}>
-          {saving ? "Saving..." : "Save Career Profile"}
+          {saving ? t("Saving...") : t("Save Career Profile")}
         </button>
       </form>
     </section>

@@ -1,8 +1,10 @@
 import useHiringPosts from "../hooks/useHiringPosts.js";
 
 import HiringPostCard from "../components/HiringPostCard.jsx";
-import Loading from "../../../shared/components/Loading.jsx";
+import { HiringCardsBones } from "../components/HiringSkeletons.jsx";
 import EmptyState from "../../../shared/components/EmptyState.jsx";
+import t from "../../../shared/i18n/t.js";
+import { PAGE_HEADS } from "../../../shared/copy/pageHeads.js";
 
 function HiringPosts() {
   const { posts, loading } = useHiringPosts();
@@ -10,14 +12,17 @@ function HiringPosts() {
   return (
     <section className="container section">
       <div className="section-title left">
-        <h1>Open Hiring Posts</h1>
-        <p>Barbers can join salons from active hiring posts.</p>
+        <h1>{t(PAGE_HEADS.hiringPosts.title)}</h1>
+        <p>{t(PAGE_HEADS.hiringPosts.text)}</p>
       </div>
 
       {loading ? (
-        <Loading message="Finding career opportunities…" />
+        <HiringCardsBones />
       ) : posts.length === 0 ? (
-        <EmptyState title="No open hiring posts" message="Check again later." />
+        <EmptyState
+          title={t("No open hiring posts")}
+          message={t("Check again later.")}
+        />
       ) : (
         <div className="hiring-grid">
           {posts.map((post) => (

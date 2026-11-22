@@ -1,14 +1,17 @@
 import useCreateHiringPost from "../hooks/useCreateHiringPost.js";
+import t from "../../../shared/i18n/t.js";
 
 function CreateHiringPost() {
   const { form, loading, handleChange, handleSubmit } = useCreateHiringPost();
   return (
     <section className="form-page">
       <form className="form-card" onSubmit={handleSubmit}>
-        <h1>Create Hiring Post</h1>
-        <p className="muted">Publish an opening for your approved salon.</p>
+        <h1>{t("Create Hiring Post")}</h1>
+        <p className="muted">
+          {t("Publish an opening for your approved salon.")}
+        </p>
         <div className="form-group">
-          <label>Title</label>
+          <label>{t("Title")}</label>
           <input
             name="title"
             value={form.title}
@@ -17,7 +20,7 @@ function CreateHiringPost() {
           />
         </div>
         <div className="form-group">
-          <label>Description</label>
+          <label>{t("Description")}</label>
           <textarea
             name="description"
             value={form.description}
@@ -27,18 +30,18 @@ function CreateHiringPost() {
           />
         </div>
         <div className="form-group">
-          <label>Required skills, separated by commas</label>
+          <label>{t("Required skills, separated by commas")}</label>
           <input
             name="requiredSkills"
             value={form.requiredSkills}
             onChange={handleChange}
-            placeholder="Hair styling, Coloring"
+            placeholder={t("Hair styling, Coloring")}
             required
           />
         </div>
         <div className="form-row">
           <div className="form-group">
-            <label>Minimum age</label>
+            <label>{t("Minimum age")}</label>
             <input
               name="minimumAge"
               type="number"
@@ -49,7 +52,7 @@ function CreateHiringPost() {
             />
           </div>
           <div className="form-group">
-            <label>Maximum age</label>
+            <label>{t("Maximum age")}</label>
             <input
               name="maximumAge"
               type="number"
@@ -62,17 +65,17 @@ function CreateHiringPost() {
         </div>
         <div className="form-row">
           <div className="form-group">
-            <label>Employee location</label>
+            <label>{t("Employee location")}</label>
             <input
               name="employeeLocation"
               value={form.employeeLocation}
               onChange={handleChange}
-              placeholder="Amman"
+              placeholder={t("Amman")}
               required
             />
           </div>
           <div className="form-group">
-            <label>Minimum experience (years)</label>
+            <label>{t("Minimum experience (years)")}</label>
             <input
               name="minimumYearsOfExperience"
               type="number"
@@ -85,7 +88,7 @@ function CreateHiringPost() {
         </div>
         <div className="form-row">
           <div className="form-group">
-            <label>Positions</label>
+            <label>{t("Positions")}</label>
             <input
               name="numOfPositions"
               type="number"
@@ -96,7 +99,7 @@ function CreateHiringPost() {
             />
           </div>
           <div className="form-group">
-            <label>Application deadline</label>
+            <label>{t("Application deadline")}</label>
             <input
               name="expiresAt"
               type="datetime-local"
@@ -107,7 +110,7 @@ function CreateHiringPost() {
           </div>
         </div>
         <button className="btn btn-primary full-width" disabled={loading}>
-          {loading ? "Posting..." : "Create Hiring Post"}
+          {loading ? t("Posting...") : t("Create Hiring Post")}
         </button>
       </form>
     </section>

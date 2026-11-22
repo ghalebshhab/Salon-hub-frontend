@@ -8,6 +8,7 @@ import {
 } from "../../../shared/notifications/toast.jsx";
 import useEmployeeTimeOff from "../hooks/useEmployeeTimeOff.js";
 import { formatDateLabel, getTodayDate } from "../../bookings/model/booking.js";
+import t from "../../../shared/i18n/t.js";
 
 const emptyForm = () => ({
   startDate: getTodayDate(),
@@ -49,9 +50,9 @@ export default function EmployeeTimeOffPanel({ employeeId, employeeName }) {
       return;
     }
     if (result.affectedBookings > 0) {
-      showWarningToast(result.message, "Reassign appointments");
+      showWarningToast(result.message, t("Reassign appointments"));
     } else {
-      showSuccessToast("Time off saved. Customers cannot book these days.");
+      showSuccessToast(t("Time off saved. Customers cannot book these days."));
     }
     setForm(emptyForm());
   };
@@ -60,7 +61,7 @@ export default function EmployeeTimeOffPanel({ employeeId, employeeName }) {
     if (!removing) return;
     const result = await remove(removing.id);
     setRemoving(null);
-    if (result.ok) showSuccessToast("Time off removed.");
+    if (result.ok) showSuccessToast(t("Time off removed."));
     else showErrorToast(result.message);
   };
 
@@ -71,17 +72,19 @@ export default function EmployeeTimeOffPanel({ employeeId, employeeName }) {
           <CalendarOff size={20} aria-hidden="true" />
         </span>
         <div>
-          <h2 id={`${id}-title`}>Time off</h2>
+          <h2 id={`${id}-title`}>{t("Time off")}</h2>
           <p>
-            Vacation or sick days. {employeeName} disappears from booking on
-            these days, including the first and last day.
+            {t(
+              "Vacation or sick days. {employeeName} disappears from booking on these days, including the first and last day.",
+              { employeeName },
+            )}
           </p>
         </div>
       </div>
 
       <form className="time-off-form" onSubmit={submit}>
         <label>
-          <span>From</span>
+          <span>{t("From")}</span>
           <input
             type="date"
             required
@@ -91,7 +94,7 @@ export default function EmployeeTimeOffPanel({ employeeId, employeeName }) {
           />
         </label>
         <label>
-          <span>To</span>
+          <span>{t("To")}</span>
           <input
             type="date"
             required
@@ -101,24 +104,24 @@ export default function EmployeeTimeOffPanel({ employeeId, employeeName }) {
           />
         </label>
         <label className="time-off-reason">
-          <span>Reason (only you see it)</span>
+          <span>{t("Reason (only you see it)")}</span>
           <input
             maxLength={255}
             value={form.reason}
             onChange={update("reason")}
-            placeholder="Vacation"
+            placeholder={t("Vacation")}
           />
         </label>
         <button className="btn btn-primary" type="submit" disabled={saving}>
           <Plus size={16} aria-hidden="true" />{" "}
-          {saving ? "Saving…" : "Add time off"}
+          {saving ? t("Saving…") : t("Add time off")}
         </button>
       </form>
 
       {loading ? (
         <span className="skeleton-block time-off-skeleton" />
       ) : items.length === 0 ? (
-        <p className="time-off-empty">No upcoming time off.</p>
+        <p className="time-off-empty">{t("No upcoming time off.")}</p>
       ) : (
         <ul className="time-off-list">
           {items.map((item) => (
@@ -134,7 +137,7 @@ export default function EmployeeTimeOffPanel({ employeeId, employeeName }) {
               <button
                 className="icon-button danger"
                 type="button"
-                aria-label="Remove this time off"
+                aria-label={t("Remove this time off")}
                 onClick={() => setRemoving(item)}
               >
                 <Trash2 size={16} aria-hidden="true" />
@@ -146,9 +149,11 @@ export default function EmployeeTimeOffPanel({ employeeId, employeeName }) {
 
       <ConfirmDialog
         open={Boolean(removing)}
-        title="Remove this time off?"
-        message={`${employeeName} becomes bookable again on these days.`}
-        confirmText="Remove"
+        title={t("Remove this time off?")}
+        message={t("{employeeName} becomes bookable again on these days.", {
+          employeeName,
+        })}
+        confirmText={t("Remove")}
         danger
         onConfirm={confirmRemove}
         onCancel={() => setRemoving(null)}

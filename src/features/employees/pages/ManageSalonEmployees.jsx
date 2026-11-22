@@ -1,13 +1,15 @@
 import { CalendarClock, Scissors, ShieldCheck, UserRound } from "lucide-react";
 import { Link } from "react-router-dom";
 import EmptyState from "../../../shared/components/EmptyState.jsx";
-import Loading from "../../../shared/components/Loading.jsx";
+import { SalonTeamSkeleton } from "../components/EmployeesPageSkeletons.jsx";
 import useAuth from "../../../shared/auth/useAuth.js";
 import ManagerRoleControl from "../components/ManagerRoleControl.jsx";
 import useManageSalonEmployees from "../hooks/useManageSalonEmployees.js";
 import useSalonManagerRole from "../hooks/useSalonManagerRole.js";
 import useMySubscription from "../../subscriptions/hooks/useMySubscription.js";
 import PlanLockNote from "../../subscriptions/components/PlanLockNote.jsx";
+import t from "../../../shared/i18n/t.js";
+import { PAGE_HEADS } from "../../../shared/copy/pageHeads.js";
 
 function TeamGrid({ employees, managerControl }) {
   return (
@@ -27,7 +29,7 @@ function TeamGrid({ employees, managerControl }) {
               {employee.manager && (
                 <span className="employee-manager-badge">
                   <ShieldCheck size={13} aria-hidden="true" />
-                  Manager
+                  {t("Manager")}
                 </span>
               )}
             </h2>
@@ -36,11 +38,11 @@ function TeamGrid({ employees, managerControl }) {
               <Scissors size={15} aria-hidden="true" />
               {employee.serviceNames?.length
                 ? employee.serviceNames.join(", ")
-                : "No services assigned"}
+                : t("No services assigned")}
             </span>
             <span>
               <CalendarClock size={15} aria-hidden="true" />
-              Configure weekly availability
+              {t("Configure weekly availability")}
             </span>
           </div>
           <div className="employee-setup-actions">
@@ -48,7 +50,7 @@ function TeamGrid({ employees, managerControl }) {
               className="btn btn-secondary btn-small"
               to={`/owner/employees/${employee.id}/setup`}
             >
-              Manage booking options
+              {t("Manage booking options")}
             </Link>
             {managerControl?.(employee)}
           </div>
@@ -70,8 +72,9 @@ function OwnerTeam({ employees, refetch }) {
     <>
       {features && locked && (
         <PlanLockNote>
-          Business salons can make an employee a manager who answers bookings
-          and plans the team&apos;s time.{" "}
+          {t(
+            "Business salons can make an employee a manager who answers bookings and plans the team's time.",
+          )}
         </PlanLockNote>
       )}
       <TeamGrid
@@ -93,25 +96,24 @@ function ManageSalonEmployees() {
   const { isOwner } = useAuth();
   const { employees, loading, refetch } = useManageSalonEmployees();
 
-  if (loading) return <Loading message="Loading your salon team…" />;
+  if (loading) return <SalonTeamSkeleton />;
 
   return (
     <section className="container section">
       <header className="profile-header">
         <div>
-          <span className="eyebrow">Team setup</span>
-          <h1>Employees and schedules</h1>
-          <p>
-            Set the services each employee can perform and their weekly working
-            hours. Customers will only be able to select qualified employees.
-          </p>
+          <span className="eyebrow">{t(PAGE_HEADS.salonTeam.eyebrow)}</span>
+          <h1>{t(PAGE_HEADS.salonTeam.title)}</h1>
+          <p>{t(PAGE_HEADS.salonTeam.text)}</p>
         </div>
       </header>
 
       {employees.length === 0 ? (
         <EmptyState
-          title="No active employees yet"
-          message="Once an employee joins your salon, you can configure their services and weekly schedule here."
+          title={t("No active employees yet")}
+          message={t(
+            "Once an employee joins your salon, you can configure their services and weekly schedule here.",
+          )}
         />
       ) : isOwner ? (
         <OwnerTeam employees={employees} refetch={refetch} />

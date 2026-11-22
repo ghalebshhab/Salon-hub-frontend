@@ -10,15 +10,19 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import EmptyState from "../../../shared/components/EmptyState.jsx";
-import Loading from "../../../shared/components/Loading.jsx";
+import {
+  CandidateCardsBones,
+  OwnerEmploymentSkeleton,
+} from "../components/EmploymentSkeletons.jsx";
 import EmploymentRequestCard from "../components/EmploymentRequestCard.jsx";
 import LeaveRequestCard from "../components/LeaveRequestCard.jsx";
 import useOwnerEmployment from "../hooks/useOwnerEmployment.js";
+import t from "../../../shared/i18n/t.js";
+import { PAGE_HEADS } from "../../../shared/copy/pageHeads.js";
 
 export default function OwnerEmployment() {
   const employment = useOwnerEmployment();
-  if (employment.loading)
-    return <Loading message="Loading employment workflows…" />;
+  if (employment.loading) return <OwnerEmploymentSkeleton />;
 
   const joinRequests = employment.requests.filter(
     (request) => request.requestType === "User_Request",
@@ -31,12 +35,11 @@ export default function OwnerEmployment() {
     <section className="container section employment-page">
       <header className="employment-hero">
         <div>
-          <span className="eyebrow">Owner workspace</span>
-          <h1>Employment and invitations</h1>
-          <p>
-            Discover career-ready candidates, invite them to your salon, decide
-            join requests, and release employees through one traceable workflow.
-          </p>
+          <span className="eyebrow">
+            {t(PAGE_HEADS.ownerEmployment.eyebrow)}
+          </span>
+          <h1>{t(PAGE_HEADS.ownerEmployment.title)}</h1>
+          <p>{t(PAGE_HEADS.ownerEmployment.text)}</p>
         </div>
         <div className="employment-summary-grid">
           <span>
@@ -45,14 +48,14 @@ export default function OwnerEmployment() {
                 joinRequests.filter((item) => item.status === "Requested")
                   .length
               }
-            </strong>{" "}
-            pending joins
+            </strong>
+            {t("pending joins")}
           </span>
           <span>
             <strong>
               {invitations.filter((item) => item.status === "Requested").length}
-            </strong>{" "}
-            open invitations
+            </strong>
+            {t("open invitations")}
           </span>
           <span>
             <strong>
@@ -61,8 +64,8 @@ export default function OwnerEmployment() {
                   (item) => item.status === "Requested",
                 ).length
               }
-            </strong>{" "}
-            leave decisions
+            </strong>
+            {t("leave decisions")}
           </span>
         </div>
       </header>
@@ -70,13 +73,13 @@ export default function OwnerEmployment() {
       <section className="employment-section">
         <div className="employment-section-heading">
           <div>
-            <span className="eyebrow">Candidate discovery</span>
-            <h2>Invite a professional</h2>
+            <span className="eyebrow">{t("Candidate discovery")}</span>
+            <h2>{t("Invite a professional")}</h2>
           </div>
           <div
             className="employment-search"
             role="search"
-            aria-label="Search career-ready professionals"
+            aria-label={t("Search career-ready professionals")}
           >
             <Search size={18} />
             <input
@@ -84,37 +87,40 @@ export default function OwnerEmployment() {
               onChange={(event) =>
                 employment.setSearchInput(event.target.value)
               }
-              placeholder="Search by name, username, skill, or location"
+              placeholder={t("Search by name, username, skill, or location")}
               maxLength={100}
-              aria-label="Search professionals"
+              aria-label={t("Search professionals")}
             />
             {employment.searchInput && (
               <button
                 className="employment-search-clear"
                 type="button"
                 onClick={employment.clearSearch}
-                aria-label="Clear candidate search"
+                aria-label={t("Clear candidate search")}
               >
                 <X size={16} />
               </button>
             )}
             <span className="employment-search-status" aria-live="polite">
               {employment.candidatesSearching
-                ? "Searching…"
-                : `${employment.candidates.length} found`}
+                ? t("Searching…")
+                : t("{length} found", { length: employment.candidates.length })}
             </span>
           </div>
         </div>
         <p className="employment-search-hint">
-          Results update as you type. Search is case-insensitive and matches the
-          beginning of names, usernames, skills, and locations.
+          {t(
+            "Results update as you type. Search is case-insensitive and matches the beginning of names, usernames, skills, and locations.",
+          )}
         </p>
         {employment.candidatesLoading ? (
-          <Loading message="Finding career-ready professionals…" />
+          <CandidateCardsBones />
         ) : employment.candidates.length === 0 ? (
           <EmptyState
-            title="No matching career profiles"
-            message="Try another name or skill. Only active career profiles can be invited."
+            title={t("No matching career profiles")}
+            message={t(
+              "Try another name or skill. Only active career profiles can be invited.",
+            )}
           />
         ) : (
           <div className="candidate-directory-grid">
@@ -133,7 +139,9 @@ export default function OwnerEmployment() {
                     <Link
                       className="candidate-directory-avatar"
                       to={`/community/people/${candidate.userId}`}
-                      aria-label={`View ${candidate.fullName}'s profile`}
+                      aria-label={t("View {fullName}'s profile", {
+                        fullName: candidate.fullName,
+                      })}
                     >
                       <UserRoundSearch size={23} />
                     </Link>
@@ -148,7 +156,7 @@ export default function OwnerEmployment() {
                   </div>
                   <p className="candidate-directory-bio">
                     {candidate.professionalBio ||
-                      "No professional biography added."}
+                      t("No professional biography added.")}
                   </p>
                   <div className="candidate-directory-skills">
                     {(candidate.skills || []).slice(0, 5).map((skill) => (
@@ -157,12 +165,14 @@ export default function OwnerEmployment() {
                   </div>
                   <div className="candidate-directory-meta">
                     <span>
-                      {candidate.yearsOfExperience ?? 0} years experience
+                      {candidate.yearsOfExperience ?? 0} {t("years experience")}
                     </span>
                     <span>
                       {candidate.currentSalonName
-                        ? `Currently at ${candidate.currentSalonName}`
-                        : "Available to join"}
+                        ? t("Currently at {currentSalonName}", {
+                            currentSalonName: candidate.currentSalonName,
+                          })
+                        : t("Available to join")}
                     </span>
                   </div>
                   <div className="employment-card-actions">
@@ -170,7 +180,7 @@ export default function OwnerEmployment() {
                       className="btn btn-secondary btn-small"
                       to={`/community/people/${candidate.userId}`}
                     >
-                      Profile <ArrowUpRight size={16} />
+                      {t("Profile")} <ArrowUpRight size={16} />
                     </Link>
                     {candidate.resumeUrl && (
                       <a
@@ -179,7 +189,7 @@ export default function OwnerEmployment() {
                         target="_blank"
                         rel="noreferrer"
                       >
-                        <FileText size={16} /> Résumé
+                        <FileText size={16} /> {t("Résumé")}
                       </a>
                     )}
                     <button
@@ -191,7 +201,9 @@ export default function OwnerEmployment() {
                       }
                     >
                       <Send size={16} />
-                      {pendingInvitation ? "Invitation pending" : "Invite"}
+                      {pendingInvitation
+                        ? t("Invitation pending")
+                        : t("Invite")}
                     </button>
                   </div>
                 </article>
@@ -204,14 +216,14 @@ export default function OwnerEmployment() {
       <section className="employment-section">
         <div className="employment-section-heading">
           <div>
-            <span className="eyebrow">Incoming</span>
-            <h2>Join requests</h2>
+            <span className="eyebrow">{t("Incoming")}</span>
+            <h2>{t("Join requests")}</h2>
           </div>
         </div>
         {joinRequests.length === 0 ? (
           <EmptyState
-            title="No join requests"
-            message="Direct requests from users will appear here."
+            title={t("No join requests")}
+            message={t("Direct requests from users will appear here.")}
           />
         ) : (
           <div className="employment-grid">
@@ -231,7 +243,7 @@ export default function OwnerEmployment() {
                           employment.acceptRequest(request.requestId)
                         }
                       >
-                        <CheckCircle2 size={16} /> Accept
+                        <CheckCircle2 size={16} /> {t("Accept")}
                       </button>
                       <button
                         className="btn btn-secondary btn-small"
@@ -244,7 +256,7 @@ export default function OwnerEmployment() {
                           })
                         }
                       >
-                        <XCircle size={16} /> Reject
+                        <XCircle size={16} /> {t("Reject")}
                       </button>
                     </>
                   )
@@ -258,8 +270,8 @@ export default function OwnerEmployment() {
       {employment.rejection.requestId && (
         <section className="employment-decision-panel">
           <div>
-            <span className="eyebrow">Owner decision</span>
-            <h2>Explain the rejection</h2>
+            <span className="eyebrow">{t("Owner decision")}</span>
+            <h2>{t("Explain the rejection")}</h2>
           </div>
           <textarea
             rows="3"
@@ -270,7 +282,7 @@ export default function OwnerEmployment() {
                 reason: event.target.value,
               }))
             }
-            placeholder="Reason shown to the applicant"
+            placeholder={t("Reason shown to the applicant")}
           />
           <div className="employment-card-actions">
             <button
@@ -279,7 +291,7 @@ export default function OwnerEmployment() {
               disabled={employment.acting}
               onClick={employment.submitRejection}
             >
-              Send rejection
+              {t("Send rejection")}
             </button>
             <button
               className="btn btn-secondary"
@@ -289,7 +301,7 @@ export default function OwnerEmployment() {
                 employment.setRejection({ requestId: null, reason: "" })
               }
             >
-              Cancel
+              {t("Cancel")}
             </button>
           </div>
         </section>
@@ -298,14 +310,16 @@ export default function OwnerEmployment() {
       <section className="employment-section">
         <div className="employment-section-heading">
           <div>
-            <span className="eyebrow">Outgoing</span>
-            <h2>Invitation history</h2>
+            <span className="eyebrow">{t("Outgoing")}</span>
+            <h2>{t("Invitation history")}</h2>
           </div>
         </div>
         {invitations.length === 0 ? (
           <EmptyState
-            title="No invitations sent"
-            message="Invite a career-ready candidate from the directory above."
+            title={t("No invitations sent")}
+            message={t(
+              "Invite a career-ready candidate from the directory above.",
+            )}
           />
         ) : (
           <div className="employment-grid">
@@ -324,7 +338,7 @@ export default function OwnerEmployment() {
                         employment.cancelInvitation(request.requestId)
                       }
                     >
-                      Cancel invitation
+                      {t("Cancel invitation")}
                     </button>
                   )
                 }
@@ -337,19 +351,21 @@ export default function OwnerEmployment() {
       <section className="employment-section">
         <div className="employment-section-heading">
           <div>
-            <span className="eyebrow">Employee rights</span>
-            <h2>Leave requests</h2>
+            <span className="eyebrow">{t("Employee rights")}</span>
+            <h2>{t("Leave requests")}</h2>
           </div>
         </div>
         <p className="employment-policy-note">
-          Employees cannot be forced to remain. Owners confirm the release so
-          schedules, service capabilities, employee counts, and any approved
-          transfer update atomically.
+          {t(
+            "Employees cannot be forced to remain. Owners confirm the release so schedules, service capabilities, employee counts, and any approved transfer update atomically.",
+          )}
         </p>
         {employment.leaveRequests.length === 0 ? (
           <EmptyState
-            title="No leave requests"
-            message="Employee leave and transfer approvals will appear here."
+            title={t("No leave requests")}
+            message={t(
+              "Employee leave and transfer approvals will appear here.",
+            )}
           />
         ) : (
           <div className="employment-grid">
@@ -365,7 +381,7 @@ export default function OwnerEmployment() {
                       disabled={employment.acting}
                       onClick={() => employment.acceptLeave(request.requestId)}
                     >
-                      <CheckCircle2 size={16} /> Confirm release
+                      <CheckCircle2 size={16} /> {t("Confirm release")}
                     </button>
                   )
                 }

@@ -13,6 +13,7 @@ import {
   updateEmployeeScheduleApi,
   updateEmployeeServicesApi,
 } from "../api/salonEmployeesApi.js";
+import t from "../../../shared/i18n/t.js";
 
 export const WEEK_DAYS = [
   "MONDAY",
@@ -83,15 +84,15 @@ export default function useManageEmployeeSetup() {
     try {
       const response = await updateEmployeeServicesApi(employeeId, serviceIds);
       if (!response.success)
-        throw new Error(response.message || "Could not save services.");
-      showSuccessToast("Employee services updated.");
+        throw new Error(response.message || t("Could not save services."));
+      showSuccessToast(t("Employee services updated."));
       setServiceDraft(null);
       refetch();
     } catch (error) {
       showErrorToast(
         error?.response?.data?.message ||
           error.message ||
-          "Could not save services.",
+          t("Could not save services."),
       );
     } finally {
       setSaving(false);
@@ -100,22 +101,24 @@ export default function useManageEmployeeSetup() {
 
   const saveSchedule = async () => {
     if (periods.length > 28) {
-      showErrorToast("An employee schedule can have up to 28 weekly periods.");
+      showErrorToast(
+        t("An employee schedule can have up to 28 weekly periods."),
+      );
       return;
     }
     setSaving(true);
     try {
       const response = await updateEmployeeScheduleApi(employeeId, periods);
       if (!response.success)
-        throw new Error(response.message || "Could not save schedule.");
-      showSuccessToast("Employee schedule updated.");
+        throw new Error(response.message || t("Could not save schedule."));
+      showSuccessToast(t("Employee schedule updated."));
       setPeriodDraft(null);
       refetch();
     } catch (error) {
       showErrorToast(
         error?.response?.data?.message ||
           error.message ||
-          "Could not save schedule.",
+          t("Could not save schedule."),
       );
     } finally {
       setSaving(false);

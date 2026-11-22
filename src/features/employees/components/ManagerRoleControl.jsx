@@ -1,4 +1,5 @@
 import { ShieldCheck } from "lucide-react";
+import t from "../../../shared/i18n/t.js";
 
 /**
  * Owner-only control on a team card: shows whether the employee is a
@@ -23,7 +24,7 @@ export default function ManagerRoleControl({
       onClick={() => onChange(employee, !manager)}
     >
       <ShieldCheck size={15} aria-hidden="true" />
-      {manager ? "Remove manager" : "Make manager"}
+      {manager ? t("Remove manager") : t("Make manager")}
     </button>
   );
 }

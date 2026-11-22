@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { requireData } from "../../../shared/api/response.js";
 import { showApiErrorToast } from "../../../shared/notifications/toast.jsx";
 import { searchEmploymentCandidatesApi } from "../api/employmentApi.js";
+import t from "../../../shared/i18n/t.js";
 
 const SEARCH_DELAY_MS = 180;
 
@@ -41,7 +42,7 @@ export default function useEmploymentCandidateSearch() {
           }
         } catch (error) {
           if (!controller.signal.aborted) {
-            showApiErrorToast(error, "Candidates could not be searched.");
+            showApiErrorToast(error, t("Candidates could not be searched."));
           }
         } finally {
           if (!controller.signal.aborted) {

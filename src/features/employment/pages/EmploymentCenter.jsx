@@ -1,44 +1,46 @@
 import { BriefcaseBusiness, LogOut, Undo2, XCircle } from "lucide-react";
 import EmptyState from "../../../shared/components/EmptyState.jsx";
-import Loading from "../../../shared/components/Loading.jsx";
+import { EmploymentCenterSkeleton } from "../components/EmploymentSkeletons.jsx";
 import EmploymentRequestCard from "../components/EmploymentRequestCard.jsx";
 import LeaveRequestCard from "../components/LeaveRequestCard.jsx";
 import useEmploymentCenter from "../hooks/useEmploymentCenter.js";
+import t from "../../../shared/i18n/t.js";
+import { PAGE_HEADS } from "../../../shared/copy/pageHeads.js";
 
 export default function EmploymentCenter() {
   const employment = useEmploymentCenter();
-  if (employment.loading)
-    return <Loading message="Loading your employment center…" />;
+  if (employment.loading) return <EmploymentCenterSkeleton />;
 
   return (
     <section className="container section employment-page">
       <header className="employment-hero">
         <div>
-          <span className="eyebrow">Career relationships</span>
-          <h1>Employment center</h1>
-          <p>
-            Review salon invitations, follow your join requests, and manage a
-            leave or transfer without losing the request history.
-          </p>
+          <span className="eyebrow">
+            {t(PAGE_HEADS.employmentCenter.eyebrow)}
+          </span>
+          <h1>{t(PAGE_HEADS.employmentCenter.title)}</h1>
+          <p>{t(PAGE_HEADS.employmentCenter.text)}</p>
         </div>
         <div className="employment-summary-card">
           <BriefcaseBusiness size={24} />
           <strong>{employment.requests.length}</strong>
-          <span>employment records</span>
+          <span>{t("employment records")}</span>
         </div>
       </header>
 
       <section className="employment-section">
         <div className="employment-section-heading">
           <div>
-            <span className="eyebrow">Invitations and requests</span>
-            <h2>Your salon opportunities</h2>
+            <span className="eyebrow">{t("Invitations and requests")}</span>
+            <h2>{t("Your salon opportunities")}</h2>
           </div>
         </div>
         {employment.requests.length === 0 ? (
           <EmptyState
-            title="No employment requests yet"
-            message="Join requests and salon invitations will remain available here."
+            title={t("No employment requests yet")}
+            message={t(
+              "Join requests and salon invitations will remain available here.",
+            )}
           />
         ) : (
           <div className="employment-grid">
@@ -70,7 +72,7 @@ export default function EmploymentCenter() {
                                 employment.acceptRequest(request.requestId)
                               }
                             >
-                              Accept invitation
+                              {t("Accept invitation")}
                             </button>
                             <button
                               className="btn btn-secondary btn-small"
@@ -83,7 +85,7 @@ export default function EmploymentCenter() {
                                 })
                               }
                             >
-                              <XCircle size={16} /> Reject
+                              <XCircle size={16} /> {t("Reject")}
                             </button>
                           </>
                         )}
@@ -96,7 +98,7 @@ export default function EmploymentCenter() {
                               employment.cancelRequest(request.requestId)
                             }
                           >
-                            Cancel request
+                            {t("Cancel request")}
                           </button>
                         )}
                       </>
@@ -112,8 +114,8 @@ export default function EmploymentCenter() {
       {employment.rejection.requestId && (
         <section className="employment-decision-panel">
           <div>
-            <span className="eyebrow">Reject invitation</span>
-            <h2>Tell the salon why you declined</h2>
+            <span className="eyebrow">{t("Reject invitation")}</span>
+            <h2>{t("Tell the salon why you declined")}</h2>
           </div>
           <textarea
             rows="3"
@@ -124,7 +126,7 @@ export default function EmploymentCenter() {
                 reason: event.target.value,
               }))
             }
-            placeholder="Add a clear reason"
+            placeholder={t("Add a clear reason")}
           />
           <div className="employment-card-actions">
             <button
@@ -133,7 +135,7 @@ export default function EmploymentCenter() {
               disabled={employment.acting}
               onClick={employment.submitRejection}
             >
-              Confirm rejection
+              {t("Confirm rejection")}
             </button>
             <button
               className="btn btn-secondary"
@@ -143,7 +145,7 @@ export default function EmploymentCenter() {
                 employment.setRejection({ requestId: null, reason: "" })
               }
             >
-              Keep invitation
+              {t("Keep invitation")}
             </button>
           </div>
         </section>
@@ -152,8 +154,8 @@ export default function EmploymentCenter() {
       <section className="employment-section">
         <div className="employment-section-heading">
           <div>
-            <span className="eyebrow">Leave and transfer</span>
-            <h2>Your leave history</h2>
+            <span className="eyebrow">{t("Leave and transfer")}</span>
+            <h2>{t("Your leave history")}</h2>
           </div>
         </div>
         {employment.role === "Employee" &&
@@ -163,10 +165,11 @@ export default function EmploymentCenter() {
             <div className="employment-leave-form">
               <LogOut size={22} />
               <div>
-                <h3>Request to leave your current salon</h3>
+                <h3>{t("Request to leave your current salon")}</h3>
                 <p>
-                  The owner must release the employment relationship. If this is
-                  a transfer, your accepted destination remains reserved.
+                  {t(
+                    "The owner must release the employment relationship. If this is a transfer, your accepted destination remains reserved.",
+                  )}
                 </p>
               </div>
               <textarea
@@ -175,7 +178,7 @@ export default function EmploymentCenter() {
                 onChange={(event) =>
                   employment.setLeaveReason(event.target.value)
                 }
-                placeholder="Optional reason for leaving"
+                placeholder={t("Optional reason for leaving")}
               />
               <button
                 className="btn btn-primary"
@@ -183,14 +186,16 @@ export default function EmploymentCenter() {
                 disabled={employment.acting}
                 onClick={employment.requestLeave}
               >
-                Send leave request
+                {t("Send leave request")}
               </button>
             </div>
           )}
         {employment.leaveRequests.length === 0 ? (
           <EmptyState
-            title="No leave requests"
-            message="Any normal leave or salon-transfer request will appear here."
+            title={t("No leave requests")}
+            message={t(
+              "Any normal leave or salon-transfer request will appear here.",
+            )}
           />
         ) : (
           <div className="employment-grid">
@@ -206,7 +211,7 @@ export default function EmploymentCenter() {
                       disabled={employment.acting}
                       onClick={() => employment.cancelLeave(request.requestId)}
                     >
-                      <Undo2 size={16} /> Cancel leave request
+                      <Undo2 size={16} /> {t("Cancel leave request")}
                     </button>
                   )
                 }

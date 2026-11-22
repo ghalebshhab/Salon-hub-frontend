@@ -5,6 +5,7 @@ import {
   showSuccessToast,
 } from "../../../shared/notifications/toast.jsx";
 import { requestToJoinSalonApi } from "../api/employmentApi.js";
+import t from "../../../shared/i18n/t.js";
 
 export default function useJoinSalonRequest() {
   const [joining, setJoining] = useState(false);
@@ -15,16 +16,16 @@ export default function useJoinSalonRequest() {
       const response = await requestToJoinSalonApi(salonId);
       if (!response.success) {
         showErrorToast(
-          response.message || "The join request could not be sent.",
+          response.message || t("The join request could not be sent."),
         );
         return false;
       }
       showSuccessToast(
-        response.message || "Join request sent to the salon owner.",
+        response.message || t("Join request sent to the salon owner."),
       );
       return true;
     } catch (error) {
-      showApiErrorToast(error, "The join request could not be sent.");
+      showApiErrorToast(error, t("The join request could not be sent."));
       return false;
     } finally {
       setJoining(false);

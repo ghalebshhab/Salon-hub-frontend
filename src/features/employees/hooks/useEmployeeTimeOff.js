@@ -6,6 +6,7 @@ import {
   getEmployeeTimeOffApi,
   removeEmployeeTimeOffApi,
 } from "../api/salonEmployeesApi.js";
+import t from "../../../shared/i18n/t.js";
 
 const errorMessage = (error, fallback) =>
   error?.response?.data?.message || error?.message || fallback;
@@ -34,7 +35,7 @@ export default function useEmployeeTimeOff(employeeId, { onError } = {}) {
       if (!response.success) {
         return {
           ok: false,
-          message: response.message || "Could not save the time off.",
+          message: response.message || t("Could not save the time off."),
         };
       }
       refetch();
@@ -46,7 +47,7 @@ export default function useEmployeeTimeOff(employeeId, { onError } = {}) {
     } catch (error) {
       return {
         ok: false,
-        message: errorMessage(error, "Could not save the time off."),
+        message: errorMessage(error, t("Could not save the time off.")),
       };
     } finally {
       setSaving(false);
@@ -59,7 +60,7 @@ export default function useEmployeeTimeOff(employeeId, { onError } = {}) {
       if (!response.success) {
         return {
           ok: false,
-          message: response.message || "Could not remove the time off.",
+          message: response.message || t("Could not remove the time off."),
         };
       }
       refetch();
@@ -67,7 +68,7 @@ export default function useEmployeeTimeOff(employeeId, { onError } = {}) {
     } catch (error) {
       return {
         ok: false,
-        message: errorMessage(error, "Could not remove the time off."),
+        message: errorMessage(error, t("Could not remove the time off.")),
       };
     }
   };

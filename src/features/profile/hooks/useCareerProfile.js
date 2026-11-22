@@ -9,6 +9,7 @@ import {
   getUserProfileApi,
   updateUserProfileApi,
 } from "../../auth/api/authApi.js";
+import t from "../../../shared/i18n/t.js";
 
 const listText = (value) => (value || []).join(", ");
 export default function useCareerProfile() {
@@ -50,16 +51,16 @@ export default function useCareerProfile() {
       };
       const response = await updateUserProfileApi(payload);
       if (!response.success) {
-        showErrorToast(response.message || "Could not save career profile");
+        showErrorToast(response.message || t("Could not save career profile"));
         return;
       }
       setDraft(null);
-      showSuccessToast("Career profile saved.");
+      showSuccessToast(t("Career profile saved."));
     } catch (error) {
       showErrorToast(
         error?.response?.data?.message ||
           error?.message ||
-          "Could not save career profile",
+          t("Could not save career profile"),
       );
     } finally {
       setSaving(false);

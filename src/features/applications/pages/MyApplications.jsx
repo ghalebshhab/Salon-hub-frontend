@@ -10,27 +10,30 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import EmptyState from "../../../shared/components/EmptyState.jsx";
-import Loading from "../../../shared/components/Loading.jsx";
+import MyApplicationsSkeleton from "../components/MyApplicationsSkeleton.jsx";
 import useMyApplications from "../hooks/useMyApplications.js";
 import {
   countApplications,
   filterApplications,
   getApplicationStatus,
 } from "../model/applicationStatus.js";
+import t from "../../../shared/i18n/t.js";
+import { dateLocale } from "../../../shared/i18n/language.js";
+import { PAGE_HEADS } from "../../../shared/copy/pageHeads.js";
 
 const filters = [
-  { id: "all", label: "All applications" },
-  { id: "in-progress", label: "In progress" },
-  { id: "accepted", label: "Accepted" },
-  { id: "closed", label: "Closed" },
+  { id: "all", label: t("All applications") },
+  { id: "in-progress", label: t("In progress") },
+  { id: "accepted", label: t("Accepted") },
+  { id: "closed", label: t("Closed") },
 ];
 
 function formatAppliedDate(value) {
-  if (!value) return "Date unavailable";
+  if (!value) return t("Date unavailable");
   const date = new Date(value);
   return Number.isNaN(date.getTime())
-    ? "Date unavailable"
-    : new Intl.DateTimeFormat(undefined, {
+    ? t("Date unavailable")
+    : new Intl.DateTimeFormat(dateLocale(), {
         dateStyle: "medium",
         timeStyle: "short",
       }).format(date);
@@ -53,13 +56,15 @@ function ApplicationCard({ application }) {
             <BriefcaseBusiness size={20} />
           </span>
           <div>
-            <span className="eyebrow">{application.salonName || "Salon"}</span>
-            <h2>{application.hiringPostTitle || "Hiring application"}</h2>
+            <span className="eyebrow">
+              {application.salonName || t("Salon")}
+            </span>
+            <h2>{application.hiringPostTitle || t("Hiring application")}</h2>
           </div>
         </div>
         <span className={`application-status-pill status-${status.group}`}>
           <StatusIcon size={15} />
-          {status.label}
+          {t(status.label)}
         </span>
       </div>
 
@@ -72,21 +77,25 @@ function ApplicationCard({ application }) {
         )}
         <span>
           <CalendarDays size={16} />
-          Applied {formatAppliedDate(application.appliedAt)}
+          {t("Applied")} {formatAppliedDate(application.appliedAt)}
         </span>
         {Number.isFinite(application.matchScore) && (
           <span className="application-match-score">
             <Sparkles size={16} />
-            {application.matchScore}% profile match
+            {t("{matchScore}% profile match", {
+              matchScore: application.matchScore,
+            })}
           </span>
         )}
       </div>
 
-      <p className="candidate-application-status-copy">{status.description}</p>
+      <p className="candidate-application-status-copy">
+        {t(status.description)}
+      </p>
 
       {application.applicationNote && (
         <div className="candidate-application-note">
-          <strong>Your note</strong>
+          <strong>{t("Your note")}</strong>
           <p>{application.applicationNote}</p>
         </div>
       )}
@@ -96,13 +105,13 @@ function ApplicationCard({ application }) {
         <div className="candidate-application-match-details">
           {application.matchedSkills?.length > 0 && (
             <div>
-              <strong>Matched skills</strong>
+              <strong>{t("Matched skills")}</strong>
               <p>{application.matchedSkills.join(" · ")}</p>
             </div>
           )}
           {application.missingRequirements?.length > 0 && (
             <div>
-              <strong>Requirements to strengthen</strong>
+              <strong>{t("Requirements to strengthen")}</strong>
               <p>{application.missingRequirements.join(" · ")}</p>
             </div>
           )}
@@ -116,7 +125,7 @@ function ApplicationCard({ application }) {
           target="_blank"
           rel="noreferrer"
         >
-          View submitted resume <ArrowRight size={16} />
+          {t("View submitted resume")} <ArrowRight size={16} />
         </a>
       )}
     </article>
@@ -127,7 +136,7 @@ function MyApplications() {
   const { applications, loading, error, filter, setFilter } =
     useMyApplications();
 
-  if (loading) return <Loading message="Loading your applications…" />;
+  if (loading) return <MyApplicationsSkeleton />;
 
   const visibleApplications = filterApplications(applications, filter);
 
@@ -135,41 +144,43 @@ function MyApplications() {
     <section className="container section candidate-applications-page">
       <header className="candidate-applications-header">
         <div>
-          <span className="eyebrow">Your career journey</span>
-          <h1>My Applications</h1>
-          <p>
-            Follow your applications and see updates from salons in one place.
-          </p>
+          <span className="eyebrow">
+            {t(PAGE_HEADS.myApplications.eyebrow)}
+          </span>
+          <h1>{t(PAGE_HEADS.myApplications.title)}</h1>
+          <p>{t(PAGE_HEADS.myApplications.text)}</p>
         </div>
         <Link className="btn btn-primary" to="/hiring-posts">
-          Find opportunities <ArrowRight size={17} />
+          {t("Find opportunities")} <ArrowRight size={17} />
         </Link>
       </header>
 
       {error ? (
         <EmptyState
-          title="Applications could not load"
+          title={t("Applications could not load")}
           message={
             error?.response?.data?.message ||
             error?.message ||
-            "Please try again in a moment."
+            t("Please try again in a moment.")
           }
         />
       ) : applications.length === 0 ? (
         <div className="candidate-applications-empty">
           <EmptyState
-            title="Your next opportunity starts here"
-            message="When you apply to a hiring post, its status and salon updates will appear on this page."
+            title={t("Your next opportunity starts here")}
+            message={t(
+              "When you apply to a hiring post, its status and salon updates will appear on this page.",
+            )}
           />
           <Link className="btn btn-primary" to="/hiring-posts">
-            Browse hiring posts <ArrowRight size={17} />
+            {t("Browse hiring posts")} <ArrowRight size={17} />
           </Link>
         </div>
       ) : (
         <>
           <div
             className="application-filter-bar"
-            aria-label="Filter applications"
+            aria-label={t("Filter applications")}
           >
             {filters.map((item) => (
               <button
@@ -179,15 +190,17 @@ function MyApplications() {
                 onClick={() => setFilter(item.id)}
                 type="button"
               >
-                {item.label}
+                {t(item.label)}
                 <span>{countApplications(applications, item.id)}</span>
               </button>
             ))}
           </div>
           {visibleApplications.length === 0 ? (
             <EmptyState
-              title="No applications in this group"
-              message="Choose another status filter to see your applications."
+              title={t("No applications in this group")}
+              message={t(
+                "Choose another status filter to see your applications.",
+              )}
             />
           ) : (
             <div className="candidate-applications-list">

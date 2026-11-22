@@ -17,6 +17,7 @@ import {
   rejectEmploymentRequestApi,
 } from "../api/employmentApi.js";
 import { confirmAction } from "../../../shared/confirm/confirmStore.js";
+import t from "../../../shared/i18n/t.js";
 
 export default function useEmploymentCenter() {
   const { user } = useAuth();
@@ -47,7 +48,7 @@ export default function useEmploymentCenter() {
         showErrorToast(response.message || fallback);
         return false;
       }
-      showSuccessToast(response.message || "Employment request updated.");
+      showSuccessToast(response.message || t("Employment request updated."));
       refetch();
       return true;
     } catch (error) {
@@ -61,25 +62,25 @@ export default function useEmploymentCenter() {
   const acceptRequest = (requestId) =>
     perform(
       () => acceptEmploymentRequestApi(requestId),
-      "The invitation could not be accepted.",
+      t("The invitation could not be accepted."),
     );
 
   const cancelRequest = async (requestId) =>
     (await confirmAction({
-      title: "Cancel this employment request?",
-      message: "The salon will no longer see this request.",
-      confirmText: "Cancel request",
-      cancelText: "Keep it",
+      title: t("Cancel this employment request?"),
+      message: t("The salon will no longer see this request."),
+      confirmText: t("Cancel request"),
+      cancelText: t("Keep it"),
       danger: true,
     })) &&
     perform(
       () => cancelEmploymentRequestApi(requestId),
-      "The employment request could not be cancelled.",
+      t("The employment request could not be cancelled."),
     );
 
   const submitRejection = async () => {
     if (!rejection.reason.trim()) {
-      showErrorToast("Add a reason before rejecting the invitation.");
+      showErrorToast(t("Add a reason before rejecting the invitation."));
       return;
     }
     const completed = await perform(
@@ -88,37 +89,38 @@ export default function useEmploymentCenter() {
           rejection.requestId,
           rejection.reason.trim(),
         ),
-      "The invitation could not be rejected.",
+      t("The invitation could not be rejected."),
     );
     if (completed) setRejection({ requestId: null, reason: "" });
   };
 
   const requestLeave = async () => {
     const confirmed = await confirmAction({
-      title: "Ask to leave the salon?",
-      message:
+      title: t("Ask to leave the salon?"),
+      message: t(
         "Your owner will get a leave request. You stay in the team until they approve it.",
-      confirmText: "Send leave request",
+      ),
+      confirmText: t("Send leave request"),
       danger: true,
     });
     if (!confirmed) return;
     const completed = await perform(
       () => createLeaveRequestApi(leaveReason.trim() || null),
-      "The leave request could not be sent.",
+      t("The leave request could not be sent."),
     );
     if (completed) setLeaveReason("");
   };
 
   const cancelLeave = async (requestId) =>
     (await confirmAction({
-      title: "Cancel your leave request?",
-      message: "You will stay in the salon team.",
-      confirmText: "Cancel request",
-      cancelText: "Keep it",
+      title: t("Cancel your leave request?"),
+      message: t("You will stay in the salon team."),
+      confirmText: t("Cancel request"),
+      cancelText: t("Keep it"),
     })) &&
     perform(
       () => cancelLeaveRequestApi(requestId),
-      "The leave request could not be cancelled.",
+      t("The leave request could not be cancelled."),
     );
 
   return {

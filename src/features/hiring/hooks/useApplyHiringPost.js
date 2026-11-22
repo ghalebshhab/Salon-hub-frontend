@@ -8,6 +8,7 @@ import {
 } from "../../../shared/notifications/toast.jsx";
 import { getUserProfileApi } from "../../auth/api/authApi.js";
 import { joinHiringPostApi } from "../api/hiringApi.js";
+import t from "../../../shared/i18n/t.js";
 
 export default function useApplyHiringPost() {
   const { postId } = useParams();
@@ -24,7 +25,7 @@ export default function useApplyHiringPost() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (!profile?.careerProfileEnabled) {
-      showErrorToast("Complete your career profile before applying.");
+      showErrorToast(t("Complete your career profile before applying."));
       return;
     }
     try {
@@ -33,18 +34,18 @@ export default function useApplyHiringPost() {
         applicationNote: applicationNote.trim(),
       });
       if (!response.success) {
-        showErrorToast(response.message || "Failed to submit application.");
+        showErrorToast(response.message || t("Failed to submit application."));
         return;
       }
       showSuccessToast(
-        response.message || "Application submitted successfully.",
+        response.message || t("Application submitted successfully."),
       );
       navigate("/hiring-posts");
     } catch (error) {
       showErrorToast(
         error?.response?.data?.message ||
           error?.message ||
-          "Failed to submit application.",
+          t("Failed to submit application."),
       );
     } finally {
       setSubmitting(false);

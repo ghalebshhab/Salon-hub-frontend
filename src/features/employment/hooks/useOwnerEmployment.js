@@ -18,6 +18,7 @@ import {
 } from "../api/employmentApi.js";
 import useEmploymentCandidateSearch from "./useEmploymentCandidateSearch.js";
 import { confirmAction } from "../../../shared/confirm/confirmStore.js";
+import t from "../../../shared/i18n/t.js";
 
 export default function useOwnerEmployment() {
   const { user } = useAuth();
@@ -48,7 +49,7 @@ export default function useOwnerEmployment() {
         showErrorToast(response.message || fallback);
         return false;
       }
-      showSuccessToast(response.message || "Employment workflow updated.");
+      showSuccessToast(response.message || t("Employment workflow updated."));
       refetch();
       return true;
     } catch (error) {
@@ -66,31 +67,31 @@ export default function useOwnerEmployment() {
           user?.ownedSalonId ?? user?.salonId,
           userId,
         ),
-      "The invitation could not be sent.",
+      t("The invitation could not be sent."),
     );
 
   const acceptRequest = (requestId) =>
     perform(
       () => acceptEmploymentRequestApi(requestId),
-      "The join request could not be accepted.",
+      t("The join request could not be accepted."),
     );
 
   const cancelInvitation = async (requestId) =>
     (await confirmAction({
-      title: "Cancel this invitation?",
-      message: "The person will no longer be able to accept it.",
-      confirmText: "Cancel invitation",
-      cancelText: "Keep it",
+      title: t("Cancel this invitation?"),
+      message: t("The person will no longer be able to accept it."),
+      confirmText: t("Cancel invitation"),
+      cancelText: t("Keep it"),
       danger: true,
     })) &&
     perform(
       () => cancelEmploymentRequestApi(requestId),
-      "The invitation could not be cancelled.",
+      t("The invitation could not be cancelled."),
     );
 
   const submitRejection = async () => {
     if (!rejection.reason.trim()) {
-      showErrorToast("Add a reason before rejecting this request.");
+      showErrorToast(t("Add a reason before rejecting this request."));
       return;
     }
     const completed = await perform(
@@ -99,7 +100,7 @@ export default function useOwnerEmployment() {
           rejection.requestId,
           rejection.reason.trim(),
         ),
-      "The join request could not be rejected.",
+      t("The join request could not be rejected."),
     );
     if (completed) setRejection({ requestId: null, reason: "" });
   };
@@ -107,7 +108,7 @@ export default function useOwnerEmployment() {
   const acceptLeave = (requestId) =>
     perform(
       () => acceptLeaveRequestApi(requestId),
-      "The leave request could not be accepted.",
+      t("The leave request could not be accepted."),
     );
 
   return {

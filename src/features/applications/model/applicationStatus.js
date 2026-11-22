@@ -1,38 +1,42 @@
+import t from "../../../shared/i18n/t.js";
 const statusDetails = {
   Requested: {
-    label: "Under review",
+    label: t("Under review"),
     group: "in-progress",
-    description: "The salon has received your application and is reviewing it.",
+    description: t(
+      "The salon has received your application and is reviewing it.",
+    ),
   },
   Accepted_Pending_Leave: {
-    label: "Accepted · transfer pending",
+    label: t("Accepted · transfer pending"),
     group: "in-progress",
-    description:
+    description: t(
       "The salon accepted you. Your employment transfer is being completed.",
+    ),
   },
   Accepted: {
-    label: "Accepted",
+    label: t("Accepted"),
     group: "accepted",
-    description: "The salon accepted your application.",
+    description: t("The salon accepted your application."),
   },
   Rejected: {
-    label: "Not selected",
+    label: t("Not selected"),
     group: "closed",
-    description: "The salon has completed its review for this application.",
+    description: t("The salon has completed its review for this application."),
   },
   Cancelled: {
-    label: "Cancelled",
+    label: t("Cancelled"),
     group: "closed",
-    description: "This application is no longer active.",
+    description: t("This application is no longer active."),
   },
 };
 
 export function getApplicationStatus(status) {
   return (
     statusDetails[status] || {
-      label: status || "Unknown",
+      label: status || t("Unknown"),
       group: "closed",
-      description: "The application status is unavailable.",
+      description: t("The application status is unavailable."),
     }
   );
 }

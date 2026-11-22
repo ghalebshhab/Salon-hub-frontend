@@ -1,13 +1,15 @@
 import { CalendarDays, Store, UserRound } from "lucide-react";
 import EmploymentStatusPill from "./EmploymentStatusPill.jsx";
+import t from "../../../shared/i18n/t.js";
+import { dateLocale } from "../../../shared/i18n/language.js";
 
 const formatDate = (value) =>
   value
-    ? new Intl.DateTimeFormat(undefined, {
+    ? new Intl.DateTimeFormat(dateLocale(), {
         dateStyle: "medium",
         timeStyle: "short",
       }).format(new Date(value))
-    : "Date unavailable";
+    : t("Date unavailable");
 
 export default function EmploymentRequestCard({
   request,
@@ -25,7 +27,7 @@ export default function EmploymentRequestCard({
         </div>
         <div>
           <span className="eyebrow">
-            {invitation ? "Salon invitation" : "Join request"}
+            {invitation ? t("Salon invitation") : t("Join request")}
           </span>
           <h3>{perspective === "owner" ? person : request.salonName}</h3>
         </div>
@@ -41,12 +43,13 @@ export default function EmploymentRequestCard({
       </div>
       {request.hiringPostTitle && (
         <p className="employment-context">
-          Connected to hiring post: <strong>{request.hiringPostTitle}</strong>
+          {t("Connected to hiring post:")}{" "}
+          <strong>{request.hiringPostTitle}</strong>
         </p>
       )}
       {request.rejectionReason && (
         <p className="employment-reason">
-          <strong>Decision reason:</strong> {request.rejectionReason}
+          <strong>{t("Decision reason:")}</strong> {request.rejectionReason}
         </p>
       )}
       {actions && <div className="employment-card-actions">{actions}</div>}

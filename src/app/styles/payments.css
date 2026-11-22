@@ -259,8 +259,10 @@
   display: block;
   height: 12px;
   background:
-    linear-gradient(-45deg, transparent 8px, var(--pay-paper) 0) 0 0 / 16px 12px repeat-x,
-    linear-gradient(45deg, transparent 8px, var(--pay-paper) 0) 0 0 / 16px 12px repeat-x;
+    linear-gradient(-45deg, transparent 8px, var(--pay-paper) 0) 0 0 / 16px 12px
+      repeat-x,
+    linear-gradient(45deg, transparent 8px, var(--pay-paper) 0) 0 0 / 16px 12px
+      repeat-x;
   transform: translateY(11px);
 }
 .receipt-toolbar {
@@ -508,7 +510,11 @@
   color: var(--on-primary);
   border-color: transparent;
   background:
-    radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--accent) 40%, transparent), transparent 55%),
+    radial-gradient(
+      circle at 100% 0%,
+      color-mix(in srgb, var(--accent) 40%, transparent),
+      transparent 55%
+    ),
     var(--primary-dark);
 }
 .pay-kpi.tone-warning {

@@ -1,6 +1,7 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import useAuth from "../../shared/auth/useAuth.js";
-import Loading from "../../shared/components/Loading.jsx";
+import RouteSkeleton from "../routes/routeSkeletons.jsx";
+import ErrorPage from "../../shared/components/ErrorPage.jsx";
 
 export default function OwnerRoute() {
   const { loggedIn, isOwner, profileLoading } = useAuth();
@@ -16,6 +17,6 @@ export default function OwnerRoute() {
     );
   }
 
-  if (profileLoading) return <Loading message="Checking owner access…" />;
-  return isOwner ? <Outlet /> : <Navigate to="/" replace />;
+  if (profileLoading) return <RouteSkeleton />;
+  return isOwner ? <Outlet /> : <ErrorPage kind="forbidden" />;
 }

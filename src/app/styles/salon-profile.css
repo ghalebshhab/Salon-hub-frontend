@@ -692,16 +692,6 @@
   animation: salon-shimmer 1.5s infinite;
 }
 
-.salon-skeleton-hero {
-  min-height: 460px;
-}
-.salon-skeleton-copy {
-  height: 120px;
-}
-.salon-skeleton-section {
-  height: 300px;
-}
-
 @keyframes salon-fade-up {
   from {
     opacity: 0;

@@ -48,7 +48,10 @@ export default function ScrollManager() {
       const reducedMotion =
         window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ??
         false;
-      const behavior = reducedMotion ? "auto" : "smooth";
+      // A new page starts at the top at once; only a jump inside the same page
+      // (a #section link) glides, so the reader sees where it went.
+      const samePage = previous.pathname === location.pathname;
+      const behavior = reducedMotion || !samePage ? "auto" : "smooth";
       if (location.hash) {
         const targetId = decodeURIComponent(location.hash.slice(1));
         const target = document.getElementById(targetId);

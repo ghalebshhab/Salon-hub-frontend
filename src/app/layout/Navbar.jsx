@@ -6,6 +6,7 @@ import {
   Menu,
   Moon,
   Search,
+  Settings as SettingsIcon,
   ShieldCheck,
   Sun,
 } from "lucide-react";
@@ -16,31 +17,34 @@ import NotificationBell from "../../features/notifications/components/Notificati
 import useAuth from "../../shared/auth/useAuth.js";
 import BrandLogo from "../../shared/components/BrandLogo.jsx";
 import useTheme from "../../shared/theme/useTheme.js";
+import useI18n from "../../shared/i18n/useI18n.js";
 import HeaderAccountMenu from "./HeaderAccountMenu.jsx";
 import { pageTitleFor } from "./pageTitles.js";
 import { openGlobalSearch } from "../search/searchEvents.js";
+import t from "../../shared/i18n/t.js";
 
 const ACCOUNT_LINKS = [
-  { to: "/my-bookings", label: "My bookings", icon: CalendarCheck },
-  { to: "/notifications", label: "Notifications", icon: Bell },
-  { to: "/profile/career", label: "Career profile", icon: IdCard },
-  { to: "/account/security", label: "Account security", icon: ShieldCheck },
+  { to: "/my-bookings", label: t("My bookings"), icon: CalendarCheck },
+  { to: "/notifications", label: t("Notifications"), icon: Bell },
+  { to: "/profile/career", label: t("Career profile"), icon: IdCard },
+  { to: "/account/security", label: t("Account security"), icon: ShieldCheck },
+  { to: "/settings", label: t("Settings"), icon: SettingsIcon },
 ];
 const OWNER_LINK = {
   to: "/owner/dashboard",
-  label: "Salon dashboard",
+  label: t("Salon dashboard"),
   icon: LayoutDashboard,
 };
 
 const SHORTCUT_LABEL =
   typeof navigator !== "undefined" && /Mac|iPhone|iPad/.test(navigator.platform)
-    ? "⌘ K"
-    : "Ctrl K";
+    ? t("⌘ K")
+    : t("Ctrl K");
 
 const ROLE_LABELS = {
-  OWNER: "Salon owner",
-  EMPLOYEE: "Salon professional",
-  ADMIN: "Administrator",
+  OWNER: t("Salon owner"),
+  EMPLOYEE: t("Salon professional"),
+  ADMIN: t("Administrator"),
 };
 
 function useScrolled(threshold = 8) {
@@ -57,6 +61,7 @@ function useScrolled(threshold = 8) {
 function Navbar({ onOpenMobile, mobileOpen = false, showAuthActions = true }) {
   const { loggedIn, isOwner, role, user } = useAuth();
   const { theme, toggleTheme } = useTheme();
+  const { t } = useI18n();
   const logout = useLogout();
   const { pathname } = useLocation();
   const scrolled = useScrolled();
@@ -75,14 +80,14 @@ function Navbar({ onOpenMobile, mobileOpen = false, showAuthActions = true }) {
       className={`creative-navbar ${scrolled ? "is-scrolled" : ""}`.trim()}
     >
       <div className="creative-navbar-inner">
-        <Link to="/" className="creative-brand" aria-label="SalonHub home">
+        <Link to="/" className="creative-brand" aria-label={t("SalonHub home")}>
           <BrandLogo />
         </Link>
         <div className="header-page-title" aria-hidden="true">
           {page && (
             <>
-              <span>{page.section}</span>
-              <strong>{page.title}</strong>
+              <span>{t(page.section)}</span>
+              <strong>{t(page.title)}</strong>
             </>
           )}
         </div>
@@ -91,18 +96,20 @@ function Navbar({ onOpenMobile, mobileOpen = false, showAuthActions = true }) {
             className="header-search-trigger"
             type="button"
             onClick={openGlobalSearch}
-            aria-label="Search SalonHub"
+            aria-label={t("Search SalonHub")}
             aria-keyshortcuts="Control+K Meta+K"
           >
             <Search aria-hidden="true" />
-            <span>Search…</span>
+            <span>{t("Search…")}</span>
             <kbd>{SHORTCUT_LABEL}</kbd>
           </button>
           <button
             className="header-icon-button"
             type="button"
             onClick={toggleTheme}
-            aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+            aria-label={t(
+              theme === "dark" ? "Switch to light mode" : "Switch to dark mode",
+            )}
             aria-pressed={theme === "dark"}
           >
             {theme === "dark" ? <Sun /> : <Moon />}
@@ -111,19 +118,22 @@ function Navbar({ onOpenMobile, mobileOpen = false, showAuthActions = true }) {
           {loggedIn ? (
             <HeaderAccountMenu
               initials={initials}
-              name={name || "Your account"}
-              roleLabel={ROLE_LABELS[role] ?? "Salon member"}
-              links={isOwner ? [OWNER_LINK, ...ACCOUNT_LINKS] : ACCOUNT_LINKS}
+              name={name || t("Your account")}
+              roleLabel={t(ROLE_LABELS[role] ?? "Salon member")}
+              links={(isOwner
+                ? [OWNER_LINK, ...ACCOUNT_LINKS]
+                : ACCOUNT_LINKS
+              ).map((link) => ({ ...link, label: t(link.label) }))}
               onLogout={logout}
             />
           ) : (
             showAuthActions && (
               <div className="header-guest-actions">
                 <NavLink to="/login" className="header-login-link">
-                  Log in
+                  {t("Log in")}
                 </NavLink>
                 <NavLink to="/register" className="header-join-button">
-                  Join
+                  {t("Join")}
                 </NavLink>
               </div>
             )
@@ -133,7 +143,7 @@ function Navbar({ onOpenMobile, mobileOpen = false, showAuthActions = true }) {
               className="mobile-menu-button"
               type="button"
               onClick={onOpenMobile}
-              aria-label="Open navigation"
+              aria-label={t("Open navigation")}
               aria-controls="primary-navigation"
               aria-expanded={mobileOpen}
             >

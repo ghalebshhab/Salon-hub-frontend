@@ -1,6 +1,7 @@
 import { LogOut } from "lucide-react";
 import { useEffect, useId, useRef, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
+import useI18n from "../../shared/i18n/useI18n.js";
 
 /**
  * Avatar button with a dropdown of account destinations.
@@ -15,6 +16,7 @@ export default function HeaderAccountMenu({
   onLogout,
 }) {
   const location = useLocation();
+  const { t } = useI18n();
   // The menu belongs to the page it was opened on, so navigating closes it.
   const [openPath, setOpenPath] = useState(null);
   const open = openPath === location.pathname;
@@ -56,7 +58,7 @@ export default function HeaderAccountMenu({
         className="header-avatar-button"
         type="button"
         onClick={() => setOpen((value) => !value)}
-        aria-label="Open account menu"
+        aria-label={t("Open account menu")}
         aria-expanded={open}
         aria-controls={menuId}
       >
@@ -85,7 +87,7 @@ export default function HeaderAccountMenu({
             onClick={() => void onLogout(() => setOpen(false))}
           >
             <LogOut aria-hidden="true" />
-            Log out
+            {t("Log out")}
           </button>
         </div>
       )}

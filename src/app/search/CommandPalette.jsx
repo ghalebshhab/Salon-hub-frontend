@@ -15,6 +15,7 @@ import { matchText, searchItems } from "../../shared/search/searchModel.js";
 import HighlightedText from "../../shared/components/HighlightedText.jsx";
 import { OPEN_SEARCH_EVENT } from "./searchEvents.js";
 import usePeopleSearch from "./usePeopleSearch.js";
+import t from "../../shared/i18n/t.js";
 
 function isTypingTarget(element) {
   return (
@@ -82,11 +83,11 @@ function PaletteDialog({ onClose }) {
     if (!query.trim()) {
       return [
         {
-          label: "On this page",
+          label: t("On this page"),
           results: sections.slice(0, 6).map((item) => ({ item, ranges: [] })),
         },
         {
-          label: "Suggested pages",
+          label: t("Suggested pages"),
           results: pages
             .filter((page) => page.to !== pathname)
             .slice(0, 5)
@@ -111,9 +112,9 @@ function PaletteDialog({ onClose }) {
       };
     });
     return [
-      { label: "On this page", results: searchItems(sections, query, 6) },
-      { label: "Pages", results: searchItems(pages, query, 8) },
-      { label: "People", results: peopleResults },
+      { label: t("On this page"), results: searchItems(sections, query, 6) },
+      { label: t("Pages"), results: searchItems(pages, query, 8) },
+      { label: t("People"), results: peopleResults },
     ].filter((group) => group.results.length);
   }, [query, sections, pages, people, pathname]);
 
@@ -190,7 +191,7 @@ function PaletteDialog({ onClose }) {
         className="command-palette"
         role="dialog"
         aria-modal="true"
-        aria-label="Search SalonHub"
+        aria-label={t("Search SalonHub")}
         onMouseDown={(event) => event.stopPropagation()}
       >
         <div className="command-palette-input">
@@ -207,8 +208,8 @@ function PaletteDialog({ onClose }) {
             }
             placeholder={
               loggedIn
-                ? "Search pages, sections, and people…"
-                : "Search pages and sections…"
+                ? t("Search pages, sections, and people…")
+                : t("Search pages and sections…")
             }
             value={query}
             onChange={(event) => {
@@ -229,20 +230,20 @@ function PaletteDialog({ onClose }) {
             type="button"
             className="command-palette-close"
             onClick={onClose}
-            aria-label="Close search"
+            aria-label={t("Close search")}
           >
             <X aria-hidden="true" />
           </button>
         </div>
 
         <div className="command-palette-results" ref={listRef}>
-          <ul id={listId} role="listbox" aria-label="Search results">
+          <ul id={listId} role="listbox" aria-label={t("Search results")}>
             {groups.map((group) => (
               <li key={group.label} role="presentation">
                 <div className="command-palette-group" role="presentation">
-                  {group.label}
+                  {t(group.label)}
                 </div>
-                <ul role="group" aria-label={group.label}>
+                <ul role="group" aria-label={t(group.label)}>
                   {group.results.map((result) => {
                     index += 1;
                     const current = index;
@@ -280,7 +281,7 @@ function PaletteDialog({ onClose }) {
                               ranges={result.ranges}
                             />
                           </strong>
-                          {item.subtitle && <small>{item.subtitle}</small>}
+                          {item.subtitle && <small>{t(item.subtitle)}</small>}
                         </span>
                         <CornerDownLeft
                           className="command-palette-enter"
@@ -296,11 +297,18 @@ function PaletteDialog({ onClose }) {
 
           {query.trim() && !flat.length && !searchingPeople && (
             <div className="command-palette-empty">
-              <strong>No results for “{query.trim()}”</strong>
+              <strong>
+                {t("No results for “")}
+                {query.trim()}”
+              </strong>
               <span>
                 {error
-                  ? "People search is unavailable right now. Pages and sections still work."
-                  : "Try the first letters of a page, section, or person's name."}
+                  ? t(
+                      "People search is unavailable right now. Pages and sections still work.",
+                    )
+                  : t(
+                      "Try the first letters of a page, section, or person's name.",
+                    )}
               </span>
             </div>
           )}
@@ -309,18 +317,20 @@ function PaletteDialog({ onClose }) {
         <div className="command-palette-footer" aria-hidden="true">
           <span>
             <kbd>↑</kbd>
-            <kbd>↓</kbd> to navigate
+            <kbd>↓</kbd> {t("to navigate")}
           </span>
           <span>
-            <kbd>↵</kbd> to open
+            <kbd>↵</kbd> {t("to open")}
           </span>
           <span>
-            <kbd>esc</kbd> to close
+            <kbd>{t("esc")}</kbd> {t("to close")}
           </span>
         </div>
         <p className="sr-only" aria-live="polite">
           {query.trim()
-            ? `${flat.length} result${flat.length === 1 ? "" : "s"}`
+            ? flat.length === 1
+              ? t("1 result")
+              : t("{count} results", { count: flat.length })
             : ""}
         </p>
       </div>

@@ -4,6 +4,7 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   Search,
+  Settings as SettingsIcon,
   ShieldCheck,
   X,
 } from "lucide-react";
@@ -20,6 +21,19 @@ import SidebarCreateMenu from "./SidebarCreateMenu.jsx";
 import { filterNavigationSections } from "./menuFilter.js";
 import HighlightedText from "../../shared/components/HighlightedText.jsx";
 import { openGlobalSearch } from "../search/searchEvents.js";
+import useI18n from "../../shared/i18n/useI18n.js";
+import i18nT from "../../shared/i18n/t.js";
+
+/** Menu labels in the chosen language, so the menu search matches what people read. */
+function translateSections(sections, t) {
+  const label = (item) => ({ ...item, label: t(item.label) });
+  return sections.map((section) => ({
+    ...section,
+    label: t(section.label),
+    items: section.items.map(label),
+    actions: section.actions?.map(label),
+  }));
+}
 
 export default function SidebarNavigation({
   collapsed,
@@ -34,6 +48,7 @@ export default function SidebarNavigation({
     pendingBookings: usePendingBookingCount(loggedIn && (isOwner || isManager)),
   };
   const navigate = useNavigate();
+  const { t } = useI18n();
   const [menuQuery, setMenuQuery] = useState("");
   const asideRef = useRef(null);
   const closeButtonRef = useRef(null);
@@ -66,13 +81,16 @@ export default function SidebarNavigation({
   const hasSalon = Boolean(user?.ownedSalonId);
   // Employees have an employer salon (salonId); owners have ownedSalonId.
   const isEmployee = role === "EMPLOYEE";
-  const sections = getNavigationSections({
-    loggedIn,
-    isOwner,
-    hasSalon,
-    isEmployee,
-    isManager,
-  });
+  const sections = translateSections(
+    getNavigationSections({
+      loggedIn,
+      isOwner,
+      hasSalon,
+      isEmployee,
+      isManager,
+    }),
+    t,
+  );
   const visibleSections = filterNavigationSections(sections, menuQuery);
   const name =
     [user?.firstName, user?.lastName].filter(Boolean).join(" ") || "SalonHub";
@@ -91,7 +109,7 @@ export default function SidebarNavigation({
         }
         type="button"
         onClick={closeMobile}
-        aria-label="Close navigation"
+        aria-label={t("Close navigation")}
         tabIndex={mobileOpen ? 0 : -1}
       />
       <aside
@@ -100,7 +118,7 @@ export default function SidebarNavigation({
         className={`app-sidebar ${collapsed ? "is-collapsed" : ""} ${
           mobileOpen ? "is-mobile-open" : ""
         }`}
-        aria-label="Primary navigation"
+        aria-label={t("Primary navigation")}
       >
         <div className="sidebar-mobile-head">
           <BrandLogo />
@@ -109,7 +127,7 @@ export default function SidebarNavigation({
             className="sidebar-icon-button"
             type="button"
             onClick={closeMobile}
-            aria-label="Close navigation"
+            aria-label={t("Close navigation")}
           >
             <X />
           </button>
@@ -117,40 +135,42 @@ export default function SidebarNavigation({
         {loggedIn ? (
           <div className="sidebar-identity">
             <div className="sidebar-avatar" aria-hidden="true">
-              {initials || "SH"}
+              {initials || i18nT("SH")}
             </div>
             <div className="sidebar-identity-copy">
               <strong>{name}</strong>
-              <span>{isOwner ? "Salon owner" : "Salon member"}</span>
+              <span>{t(isOwner ? "Salon owner" : "Salon member")}</span>
             </div>
           </div>
         ) : (
           <div className="sidebar-guest">
             <div className="sidebar-guest-full">
-              <strong>Your salon world, in one place</strong>
-              <p>Book visits, follow salons, and grow your beauty career.</p>
+              <strong>{t("Your salon world, in one place")}</strong>
+              <p>
+                {t("Book visits, follow salons, and grow your beauty career.")}
+              </p>
               <div className="sidebar-guest-actions">
                 <NavLink
                   to="/register"
                   className="sidebar-guest-join"
                   onClick={closeMobile}
                 >
-                  Join SalonHub
+                  {t("Join SalonHub")}
                 </NavLink>
                 <NavLink
                   to="/login"
                   className="sidebar-guest-login"
                   onClick={closeMobile}
                 >
-                  Log in
+                  {t("Log in")}
                 </NavLink>
               </div>
             </div>
-            <NavigationTooltip label="Log in">
+            <NavigationTooltip label={t("Log in")}>
               <NavLink
                 to="/login"
                 className="sidebar-link sidebar-guest-compact"
-                aria-label="Log in"
+                aria-label={t("Log in")}
               >
                 <LogIn />
               </NavLink>
@@ -175,17 +195,17 @@ export default function SidebarNavigation({
                 setMenuQuery("");
               }
             }}
-            placeholder="Search menu"
-            aria-label="Search the menu"
+            placeholder={t("Search menu")}
+            aria-label={t("Search the menu")}
             autoComplete="off"
           />
         </div>
-        <NavigationTooltip label="Search">
+        <NavigationTooltip label={t("Search")}>
           <button
             className="sidebar-link sidebar-search-compact"
             type="button"
             onClick={openGlobalSearch}
-            aria-label="Search"
+            aria-label={t("Search")}
           >
             <Search />
           </button>
@@ -193,13 +213,15 @@ export default function SidebarNavigation({
         <nav className="sidebar-nav">
           {menuQuery.trim() && visibleSections.length === 0 && (
             <p className="sidebar-menu-empty" role="status">
-              No menu items start with “{menuQuery.trim()}”.
+              {t("No menu items start with “{query}”.", {
+                query: menuQuery.trim(),
+              })}
             </p>
           )}
           {visibleSections.map((section) => (
             <section className="sidebar-section" key={section.label}>
               <div className="sidebar-section-head">
-                <h2>{section.label}</h2>
+                <h2>{i18nT(section.label)}</h2>
                 {section.actions && (
                   <SidebarCreateMenu
                     actions={section.actions}
@@ -211,14 +233,16 @@ export default function SidebarNavigation({
                 ({ label, to, icon: Icon, end, badge, ranges }) => {
                   const count = badge ? Number(badgeCounts[badge]) || 0 : 0;
                   return (
-                    <NavigationTooltip key={to} label={label}>
+                    <NavigationTooltip key={to} label={i18nT(label)}>
                       <NavLink
                         to={to}
                         end={end}
                         className="sidebar-link"
                         onClick={closeMobile}
                         aria-label={
-                          count > 0 ? `${label}, ${count} new` : label
+                          count > 0
+                            ? t("{label}, {count} new", { label, count })
+                            : label
                         }
                       >
                         <Icon />
@@ -239,16 +263,29 @@ export default function SidebarNavigation({
           ))}
         </nav>
         <div className="sidebar-footer">
+          <NavigationTooltip label={t("Settings")}>
+            <NavLink
+              to="/settings"
+              className="sidebar-link"
+              onClick={closeMobile}
+              aria-label={t("Settings")}
+            >
+              <SettingsIcon />
+              <span className="sidebar-link-label">{t("Settings")}</span>
+            </NavLink>
+          </NavigationTooltip>
           {loggedIn && (
-            <NavigationTooltip label="Account security">
+            <NavigationTooltip label={t("Account security")}>
               <NavLink
                 to="/account/security"
                 className="sidebar-link"
                 onClick={closeMobile}
-                aria-label="Account security"
+                aria-label={t("Account security")}
               >
                 <ShieldCheck />
-                <span className="sidebar-link-label">Account security</span>
+                <span className="sidebar-link-label">
+                  {t("Account security")}
+                </span>
               </NavLink>
             </NavigationTooltip>
           )}
@@ -259,19 +296,21 @@ export default function SidebarNavigation({
               onClick={() => void logout(closeMobile)}
             >
               <LogOut />
-              <span className="sidebar-link-label">Log out</span>
+              <span className="sidebar-link-label">{t("Log out")}</span>
             </button>
           )}
           <button
             className="sidebar-collapse-button"
             type="button"
             onClick={toggleCollapsed}
-            aria-label={collapsed ? "Expand navigation" : "Collapse navigation"}
+            aria-label={t(
+              collapsed ? "Expand navigation" : "Collapse navigation",
+            )}
             aria-expanded={!collapsed}
           >
             {collapsed ? <PanelLeftOpen /> : <PanelLeftClose />}
             <span>
-              {collapsed ? "Expand navigation" : "Collapse navigation"}
+              {t(collapsed ? "Expand navigation" : "Collapse navigation")}
             </span>
           </button>
         </div>

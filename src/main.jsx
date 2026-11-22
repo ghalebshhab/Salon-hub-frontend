@@ -8,6 +8,7 @@ import "@fontsource-variable/fraunces/opsz-italic.css";
 import "./app/styles/index.css";
 import "react-toastify/dist/ReactToastify.css";
 import "./shared/theme/theme.js";
+import "./shared/i18n/language.js";
 
 createRoot(document.getElementById("root")).render(
   <React.StrictMode>

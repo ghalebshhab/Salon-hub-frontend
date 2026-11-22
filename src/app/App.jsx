@@ -8,6 +8,8 @@ import AuthProvider from "../features/auth/providers/AuthProvider.jsx";
 import GlobalLoadingOverlay from "../shared/components/GlobalLoadingOverlay.jsx";
 import NavigationLoadingOverlay from "../shared/components/NavigationLoadingOverlay.jsx";
 import ConfirmHost from "../shared/components/ConfirmHost.jsx";
+import I18nProvider from "../shared/i18n/I18nProvider.jsx";
+import t from "../shared/i18n/t.js";
 
 const SPLASH_SESSION_KEY = "salonhub_splash_seen";
 const SPLASH_MS = 600;
@@ -38,32 +40,36 @@ function App() {
   if (showSplash) return <StartupSplash />;
 
   return (
-    <AuthProvider>
-      <div className="application-enter">
-        <ErrorBoundary>
-          <BrowserRouter>
-            <AppRoutes />
-            <GlobalLoadingOverlay />
-            <NavigationLoadingOverlay />
-            <ConfirmHost />
+    <I18nProvider>
+      <AuthProvider>
+        <div className="application-enter">
+          <ErrorBoundary fullScreen>
+            <BrowserRouter>
+              <AppRoutes />
+              <GlobalLoadingOverlay />
+              <NavigationLoadingOverlay />
+              <ConfirmHost />
 
-            <ToastContainer
-              position="bottom-right"
-              autoClose={3600}
-              hideProgressBar={true}
-              newestOnTop={false}
-              closeOnClick
-              pauseOnHover
-              draggable
-              limit={4}
-              theme="dark"
-              toastClassName="salon-toast-shell"
-              bodyClassName="salon-toast-body"
-            />
-          </BrowserRouter>
-        </ErrorBoundary>
-      </div>
-    </AuthProvider>
+              <ToastContainer
+                position="bottom-right"
+                aria-label={t("Notifications Alt+T")}
+                rtl={document.documentElement.dir === "rtl"}
+                autoClose={3600}
+                hideProgressBar={true}
+                newestOnTop={false}
+                closeOnClick
+                pauseOnHover
+                draggable
+                limit={4}
+                theme="dark"
+                toastClassName="salon-toast-shell"
+                bodyClassName="salon-toast-body"
+              />
+            </BrowserRouter>
+          </ErrorBoundary>
+        </div>
+      </AuthProvider>
+    </I18nProvider>
   );
 }
 

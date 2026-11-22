@@ -1,5 +1,6 @@
 import { KeyRound, LogIn, ShieldCheck, Store, UserPlus } from "lucide-react";
 import { getNavigationSections } from "../layout/navigationConfig.js";
+import t from "../../shared/i18n/t.js";
 
 // Extra words people type for a destination, beyond its visible title.
 const KEYWORDS = {
@@ -42,11 +43,11 @@ const KEYWORDS = {
 };
 
 const SECTION_SUBTITLES = {
-  Discover: "Discover",
-  "My activity": "My activity",
-  Career: "Career",
-  Employee: "Employee",
-  Salon: "Salon workspace",
+  Discover: t("Discover"),
+  "My activity": t("My activity"),
+  Career: t("Career"),
+  Employee: t("Employee"),
+  Salon: t("Salon workspace"),
 };
 
 /**
@@ -68,8 +69,8 @@ export function getSearchPages(auth) {
   if (auth.loggedIn) {
     pages.push({
       id: "page:/account/security",
-      title: "Account security",
-      subtitle: "Account",
+      title: t("Account security"),
+      subtitle: t("Account"),
       to: "/account/security",
       icon: ShieldCheck,
       keywords: KEYWORDS["/account/security"],
@@ -77,8 +78,8 @@ export function getSearchPages(auth) {
     if (!auth.isOwner && !auth.hasSalon) {
       pages.push({
         id: "page:/owner/create-salon",
-        title: "List your salon",
-        subtitle: "For salons",
+        title: t("List your salon"),
+        subtitle: t("For salons"),
         to: "/owner/create-salon",
         icon: Store,
         keywords: ["create salon", "open salon", "register salon"],
@@ -88,24 +89,24 @@ export function getSearchPages(auth) {
     pages.push(
       {
         id: "page:/login",
-        title: "Log in",
-        subtitle: "Account",
+        title: t("Log in"),
+        subtitle: t("Account"),
         to: "/login",
         icon: LogIn,
         keywords: ["sign in"],
       },
       {
         id: "page:/register",
-        title: "Create an account",
-        subtitle: "Account",
+        title: t("Create an account"),
+        subtitle: t("Account"),
         to: "/register",
         icon: UserPlus,
         keywords: ["join", "sign up", "register"],
       },
       {
         id: "page:/forgot-password",
-        title: "Reset your password",
-        subtitle: "Account",
+        title: t("Reset your password"),
+        subtitle: t("Account"),
         to: "/forgot-password",
         icon: KeyRound,
         keywords: ["forgot password", "recover"],
@@ -145,7 +146,8 @@ export function collectPageSections(root) {
       return {
         id: `section:${heading.id}`,
         title,
-        subtitle: heading.tagName === "H1" ? "Page title" : "On this page",
+        subtitle:
+          heading.tagName === "H1" ? t("Page title") : t("On this page"),
         targetId: heading.id,
       };
     })

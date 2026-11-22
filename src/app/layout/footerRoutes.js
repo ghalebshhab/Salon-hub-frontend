@@ -7,6 +7,7 @@ const WORKSPACE_ROUTES = [
   /^\/notifications/,
   /^\/profile\//,
   /^\/account\//,
+  /^\/settings/,
   /^\/employment/,
   /^\/salons\/[^/]+\/book/,
 ];

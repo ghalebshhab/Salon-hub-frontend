@@ -33,15 +33,6 @@
 .bk-back:hover {
   color: var(--text);
 }
-.bk-skeleton-head {
-  height: 120px;
-  margin-bottom: var(--space-6);
-  border-radius: var(--radius-lg);
-}
-.bk-skeleton-body {
-  height: 420px;
-  border-radius: var(--radius-xl);
-}
 
 /* ---------- Stepper ---------- */
 .bk-stepper {
@@ -1259,7 +1250,7 @@
     padding: var(--space-8) var(--space-4);
   }
   .live-timeline-label {
-    font-size: 10px;
+    font-size: var(--text-2xs);
   }
 }
 

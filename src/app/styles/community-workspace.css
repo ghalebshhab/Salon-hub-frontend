@@ -184,8 +184,11 @@ body:has(.creative-navbar.is-scrolled) .community-tabs {
 }
 
 /* Shared card language for every section and rail card */
-.community-workspace-v2 :is(.community-v2-main > .community-panel, .community-aside-card),
-.community-workspace-v2 .community-feed > :is(.community-composer, .community-post-card, .community-panel) {
+.community-workspace-v2
+  :is(.community-v2-main > .community-panel, .community-aside-card),
+.community-workspace-v2
+  .community-feed
+  > :is(.community-composer, .community-post-card, .community-panel) {
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   background: var(--card);

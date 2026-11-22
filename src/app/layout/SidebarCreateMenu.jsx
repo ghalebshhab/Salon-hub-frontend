@@ -1,10 +1,12 @@
 import { ChevronDown, Plus } from "lucide-react";
 import { useId, useState } from "react";
 import { NavLink } from "react-router-dom";
+import useI18n from "../../shared/i18n/useI18n.js";
 
 // Compact "New" disclosure for owner create actions in a sidebar section.
 export default function SidebarCreateMenu({ actions, onNavigate }) {
   const [open, setOpen] = useState(false);
+  const { t } = useI18n();
   const listId = useId();
 
   return (
@@ -17,7 +19,7 @@ export default function SidebarCreateMenu({ actions, onNavigate }) {
         aria-controls={listId}
       >
         <Plus aria-hidden="true" />
-        <span>New</span>
+        <span>{t("New")}</span>
         <ChevronDown className="sidebar-create-chevron" aria-hidden="true" />
       </button>
       {open && (

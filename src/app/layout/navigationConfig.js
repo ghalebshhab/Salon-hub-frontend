@@ -25,6 +25,7 @@ import {
 } from "lucide-react";
 import LamsaMark from "../../features/assistant/components/LamsaMark.jsx";
 import { ASSISTANT_NAME } from "../../features/assistant/model/assistantIdentity.js";
+import t from "../../shared/i18n/t.js";
 
 // The assistant keeps its own mark in the menu, drawn in line-icon style.
 const LamsaIcon = (props) =>
@@ -45,16 +46,20 @@ export function getNavigationSections({
 }) {
   const sections = [
     {
-      label: "Discover",
+      label: t("Discover"),
       items: [
-        { label: "Home", to: "/", icon: House, end: true },
-        { label: "Community", to: "/community", icon: MessagesSquare },
+        { label: t("Home"), to: "/", icon: House, end: true },
+        { label: t("Community"), to: "/community", icon: MessagesSquare },
         {
-          label: "Career opportunities",
+          label: t("Career opportunities"),
           to: "/hiring-posts",
           icon: BriefcaseBusiness,
         },
-        { label: `Ask ${ASSISTANT_NAME}`, to: "/assistant", icon: LamsaIcon },
+        {
+          label: t("Ask {ASSISTANT_NAME}", { ASSISTANT_NAME }),
+          to: "/assistant",
+          icon: LamsaIcon,
+        },
       ],
     },
   ];
@@ -63,11 +68,11 @@ export function getNavigationSections({
 
   sections.push(
     {
-      label: "My activity",
+      label: t("My activity"),
       items: [
-        { label: "My bookings", to: "/my-bookings", icon: CalendarCheck },
+        { label: t("My bookings"), to: "/my-bookings", icon: CalendarCheck },
         {
-          label: "Notifications",
+          label: t("Notifications"),
           to: "/notifications",
           icon: Bell,
           badge: "unreadNotifications",
@@ -75,21 +80,21 @@ export function getNavigationSections({
       ],
     },
     {
-      label: "Career",
+      label: t("Career"),
       items: [
-        { label: "Career profile", to: "/profile/career", icon: IdCard },
-        { label: "My applications", to: "/my-applications", icon: FileText },
-        { label: "Employment center", to: "/employment", icon: Handshake },
+        { label: t("Career profile"), to: "/profile/career", icon: IdCard },
+        { label: t("My applications"), to: "/my-applications", icon: FileText },
+        { label: t("Employment center"), to: "/employment", icon: Handshake },
       ],
     },
   );
 
   if (isEmployee) {
     sections.push({
-      label: "Employee",
+      label: t("Employee"),
       items: [
         {
-          label: "My appointments",
+          label: t("My appointments"),
           to: "/employee/bookings",
           icon: CalendarClock,
         },
@@ -99,16 +104,16 @@ export function getNavigationSections({
 
   if (isManager && !isOwner) {
     sections.push({
-      label: "Salon",
+      label: t("Salon"),
       items: [
         {
-          label: "Booking requests",
+          label: t("Booking requests"),
           to: "/owner/bookings",
           icon: Inbox,
           badge: "pendingBookings",
         },
         {
-          label: "Team & schedules",
+          label: t("Team & schedules"),
           to: "/owner/employees",
           icon: UsersRound,
         },
@@ -118,42 +123,54 @@ export function getNavigationSections({
 
   if (isOwner) {
     sections.push({
-      label: "Salon",
+      label: t("Salon"),
       items: [
-        { label: "Dashboard", to: "/owner/dashboard", icon: LayoutDashboard },
-        { label: "My salon", to: "/owner/my-salon", icon: Store, end: true },
         {
-          label: "Booking requests",
+          label: t("Dashboard"),
+          to: "/owner/dashboard",
+          icon: LayoutDashboard,
+        },
+        { label: t("My salon"), to: "/owner/my-salon", icon: Store, end: true },
+        {
+          label: t("Booking requests"),
           to: "/owner/bookings",
           icon: Inbox,
           badge: "pendingBookings",
         },
-        { label: "Payments", to: "/owner/payments", icon: Wallet },
-        { label: "My plan", to: "/owner/plan", icon: Crown },
-        { label: "Services", to: "/owner/services", icon: Scissors },
+        { label: t("Payments"), to: "/owner/payments", icon: Wallet },
+        { label: t("My plan"), to: "/owner/plan", icon: Crown },
+        { label: t("Services"), to: "/owner/services", icon: Scissors },
         {
-          label: "Team & schedules",
+          label: t("Team & schedules"),
           to: "/owner/employees",
           icon: UsersRound,
         },
-        { label: "Employment", to: "/owner/employment", icon: UserCheck },
+        { label: t("Employment"), to: "/owner/employment", icon: UserCheck },
         {
-          label: "Hiring applications",
+          label: t("Hiring applications"),
           to: "/owner/applications",
           icon: ClipboardList,
         },
       ],
       actions: [
         hasSalon
-          ? { label: "Edit salon", to: "/owner/my-salon/edit", icon: SquarePen }
+          ? {
+              label: t("Edit salon"),
+              to: "/owner/my-salon/edit",
+              icon: SquarePen,
+            }
           : {
-              label: "Create salon",
+              label: t("Create salon"),
               to: "/owner/create-salon",
               icon: Building2,
             },
-        { label: "New service", to: "/owner/create-service", icon: SquarePlus },
         {
-          label: "New hiring post",
+          label: t("New service"),
+          to: "/owner/create-service",
+          icon: SquarePlus,
+        },
+        {
+          label: t("New hiring post"),
           to: "/owner/create-hiring-post",
           icon: Megaphone,
         },

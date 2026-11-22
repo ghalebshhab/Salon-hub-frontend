@@ -4,9 +4,21 @@
   min-height: 100vh;
   overflow: clip;
   background:
-    radial-gradient(circle at 8% 4%, color-mix(in srgb, var(--primary) 13%, transparent), transparent 27rem),
-    radial-gradient(circle at 94% 16%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 31rem),
-    radial-gradient(ellipse at 48% 74%, color-mix(in srgb, var(--primary) 6%, transparent), transparent 42rem),
+    radial-gradient(
+      circle at 8% 4%,
+      color-mix(in srgb, var(--primary) 13%, transparent),
+      transparent 27rem
+    ),
+    radial-gradient(
+      circle at 94% 16%,
+      color-mix(in srgb, var(--accent) 18%, transparent),
+      transparent 31rem
+    ),
+    radial-gradient(
+      ellipse at 48% 74%,
+      color-mix(in srgb, var(--primary) 6%, transparent),
+      transparent 42rem
+    ),
     linear-gradient(
       180deg,
       color-mix(in srgb, var(--surface) 58%, var(--bg)) 0%,
@@ -23,8 +35,15 @@
   content: "";
   opacity: 0.38;
   background-image:
-    linear-gradient(color-mix(in srgb, var(--border) 42%, transparent) 1px, transparent 1px),
-    linear-gradient(90deg, color-mix(in srgb, var(--border) 42%, transparent) 1px, transparent 1px);
+    linear-gradient(
+      color-mix(in srgb, var(--border) 42%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--border) 42%, transparent) 1px,
+      transparent 1px
+    );
   background-size: 76px 76px;
   mask-image: linear-gradient(to bottom, black, transparent 76%);
 }

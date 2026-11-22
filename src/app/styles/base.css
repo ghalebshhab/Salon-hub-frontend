@@ -1060,6 +1060,13 @@ select {
   border-color: #222;
 }
 
+.form-group .form-hint {
+  display: block;
+  margin-top: 0.4rem;
+  font-size: var(--text-sm);
+  color: var(--muted, #6b6b6b);
+}
+
 .form-grid-two {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -2314,7 +2321,7 @@ select {
 .owner-dropdown-menu {
   position: absolute;
   top: calc(100% + 14px);
-  right: 0;
+  inset-inline-end: 0;
   width: 265px;
   padding: 10px;
   border-radius: 22px;

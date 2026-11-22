@@ -481,18 +481,6 @@
 }
 
 /* Loading */
-.plan-skeleton {
-  display: grid;
-  gap: 18px;
-}
-.plan-skeleton .skeleton-block {
-  display: block;
-  height: 180px;
-  border-radius: 18px;
-}
-.plan-skeleton .skeleton-block + .skeleton-block {
-  height: 420px;
-}
 
 @media (max-width: 960px) {
   .plan-top,

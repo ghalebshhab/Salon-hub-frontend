@@ -114,7 +114,7 @@
   color: #2b1d27;
   background: var(--accent);
   font-family: var(--font-body);
-  font-size: 10px;
+  font-size: var(--text-2xs);
   font-weight: var(--weight-bold);
 }
 
@@ -690,7 +690,7 @@
   color: var(--lamsa-plum-deep);
   background: linear-gradient(135deg, #f0cf9f, var(--lamsa-gold));
   font-family: var(--font-body);
-  font-size: 10px;
+  font-size: var(--text-2xs);
   font-weight: var(--weight-bold);
   letter-spacing: 0.08em;
   vertical-align: middle;
@@ -1316,7 +1316,7 @@
   border-radius: 5px;
   background: var(--bg);
   font-family: inherit;
-  font-size: 10px;
+  font-size: var(--text-2xs);
 }
 
 .lamsa-disclaimer {
@@ -1785,7 +1785,7 @@
     display: inline-grid;
     margin: 0;
     border: 2px solid var(--card);
-    font-size: 9px;
+    font-size: var(--text-2xs);
   }
 
   .lamsa-dock.is-open .lamsa-launcher {

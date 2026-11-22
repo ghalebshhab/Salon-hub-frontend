@@ -314,7 +314,7 @@ button.sh-fact:hover {
 .sh-menu {
   position: absolute;
   top: calc(100% + 8px);
-  right: 0;
+  inset-inline-end: 0;
   z-index: var(--z-dropdown, 30);
   display: grid;
   min-width: 240px;
@@ -698,24 +698,6 @@ button.sh-fact:hover {
 }
 
 /* ---------- Loading ---------- */
-.sp-skeleton {
-  display: grid;
-  gap: 18px;
-  padding-top: 24px;
-}
-.sp-skeleton .skeleton-block {
-  border-radius: var(--radius-xl);
-}
-.sp-skeleton-cover {
-  height: clamp(320px, 42vw, 500px);
-}
-.sp-skeleton-bar {
-  height: 56px;
-}
-.sp-skeleton-section {
-  height: 320px;
-}
-
 @keyframes sp-rise {
   from {
     opacity: 0;

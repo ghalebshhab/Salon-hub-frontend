@@ -283,6 +283,12 @@
   outline: none;
 }
 
+.booking-assigned-employee-box select:focus-visible {
+  border-color: var(--focus-outline);
+  box-shadow: 0 0 0 3px
+    color-mix(in srgb, var(--focus-outline) 22%, transparent);
+}
+
 .employee-bookings-grid {
   display: grid;
   gap: 20px;

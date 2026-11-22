@@ -380,7 +380,7 @@ kbd {
 }
 .sidebar-menu-search svg {
   position: absolute;
-  left: 11px;
+  inset-inline-start: 11px;
   width: 16px;
   height: 16px;
   color: var(--muted);
@@ -389,7 +389,8 @@ kbd {
 .sidebar-menu-search input {
   width: 100%;
   min-height: 40px;
-  padding: 0 10px 0 34px;
+  padding-block: 0;
+  padding-inline: 34px 10px;
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   color: var(--text);

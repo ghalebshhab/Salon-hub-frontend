@@ -1,6 +1,7 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import useAuth from "../../shared/auth/useAuth.js";
-import Loading from "../../shared/components/Loading.jsx";
+import RouteSkeleton from "../routes/routeSkeletons.jsx";
+import ErrorPage from "../../shared/components/ErrorPage.jsx";
 
 /**
  * Pages for the salon's daily work: bookings and the team's schedules. The
@@ -21,6 +22,6 @@ export default function SalonManagerRoute() {
     );
   }
 
-  if (profileLoading) return <Loading message="Checking salon access…" />;
-  return isOwner || isManager ? <Outlet /> : <Navigate to="/" replace />;
+  if (profileLoading) return <RouteSkeleton />;
+  return isOwner || isManager ? <Outlet /> : <ErrorPage kind="forbidden" />;
 }

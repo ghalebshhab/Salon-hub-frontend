@@ -95,6 +95,9 @@ const EmployeeBookings = lazy(
 const CreateBooking = lazy(
   () => import("../../features/bookings/pages/CreateBooking.jsx"),
 );
+const Settings = lazy(
+  () => import("../../features/settings/pages/Settings.jsx"),
+);
 const MyBookings = lazy(
   () => import("../../features/bookings/pages/MyBookings.jsx"),
 );
@@ -122,6 +125,7 @@ export default function AppRoutes() {
         <Route path="/assistant" element={<AssistantPage />} />
         {SHOW_DEV_PAGES && <Route path="/prototype" element={<Prototype />} />}
         <Route path="/salons/:salonId" element={<SalonDetails />} />
+        <Route path="/settings" element={<Settings />} />
         <Route element={<ProtectedRoute />}>
           <Route path="/salons/:salonId/book" element={<CreateBooking />} />
           <Route path="/my-bookings" element={<MyBookings />} />

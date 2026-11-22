@@ -77,7 +77,7 @@ body.navigation-drawer-open {
 .header-profile-menu {
   position: absolute;
   top: 50px;
-  right: 0;
+  inset-inline-end: 0;
   display: grid;
   min-width: 190px;
   gap: 4px;
@@ -564,7 +564,7 @@ body:has(.app-sidebar.is-collapsed) .footer {
   min-height: 28px;
   align-items: center;
   gap: 4px;
-  margin-right: 4px;
+  margin-inline-end: 4px;
   padding: 0 8px 0 6px;
   border: 1px solid color-mix(in srgb, var(--primary) 26%, var(--border));
   border-radius: var(--radius-full);
@@ -744,6 +744,16 @@ body:has(.creative-navbar.is-scrolled) .app-sidebar {
 /* Account menu: identity header, icons, separated log out. */
 .header-profile-menu {
   min-width: 240px;
+}
+/* On a phone the avatar sits near the screen edge, so pin the menu to the
+   screen (like the notification list) to keep it fully visible. */
+@media (max-width: 640px) {
+  .header-profile-menu {
+    position: fixed;
+    top: 76px;
+    inset-inline-end: 12px;
+    max-width: calc(100vw - 24px);
+  }
 }
 .header-profile-identity {
   display: flex;

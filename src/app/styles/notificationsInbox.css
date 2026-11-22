@@ -50,7 +50,7 @@
   position: absolute;
   z-index: 1200;
   top: calc(100% + 14px);
-  right: -72px;
+  inset-inline-end: -72px;
   width: min(390px, calc(100vw - 28px));
   overflow: hidden;
   border: 1px solid var(--border);
@@ -361,7 +361,7 @@
 
 @media (max-width: 1050px) {
   .notification-popover {
-    right: 0;
+    inset-inline-end: 0;
   }
 }
 
@@ -369,7 +369,7 @@
   .notification-popover {
     position: fixed;
     top: 76px;
-    right: 12px;
+    inset-inline-end: 12px;
     width: calc(100vw - 24px);
   }
 

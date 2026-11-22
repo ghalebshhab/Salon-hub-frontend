@@ -1,0 +1,213 @@
+/*
+ * Customer live booking card ("Leave on time").
+ * One status line, three facts, one main button. The step sets one tone
+ * colour: calm brand while waiting, amber when it is almost time, green to
+ * leave, red when late. Nothing else on the card uses colour.
+ */
+.live-card.lt {
+  --lt-amber: #9a5f12;
+  --lt-tone: var(--primary);
+  gap: var(--space-4);
+  border-color: color-mix(in srgb, var(--lt-tone) 35%, var(--border));
+  border-left: 4px solid var(--lt-tone);
+  background: var(--card);
+  transition: border-color var(--duration-slow) var(--ease-standard);
+}
+:root[data-theme="dark"] .live-card.lt {
+  --lt-amber: #e2b062;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .live-card.lt {
+    --lt-amber: #e2b062;
+  }
+}
+.live-card.lt.is-soon {
+  --lt-tone: var(--lt-amber);
+}
+.live-card.lt.is-now,
+.live-card.lt.is-arrived,
+.live-card.lt.is-on-the-way {
+  --lt-tone: var(--success);
+}
+.live-card.lt.is-late {
+  --lt-tone: var(--danger);
+}
+
+/* Header: what this is and whether alerts are on. */
+.lt-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+.lt-live,
+.lt-alerts {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--muted);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+}
+.lt-live svg {
+  color: var(--lt-tone);
+}
+.lt-alerts {
+  padding: 2px 9px;
+  border-radius: var(--radius-full);
+  background: var(--secondary);
+  color: var(--text);
+}
+
+/* Status: the one answer. */
+.lt-status {
+  display: grid;
+  gap: 4px;
+}
+.lt-title {
+  margin: 0;
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: var(--text-3xl);
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-tight);
+  font-variant-numeric: tabular-nums;
+}
+.live-card.lt:is(.is-soon, .is-now, .is-late) .lt-title {
+  color: var(--lt-tone);
+}
+.lt-text {
+  margin: 0;
+  max-width: 60ch;
+  color: var(--muted);
+  font-size: var(--text-md);
+  line-height: var(--leading-normal);
+}
+
+/* Facts: the same three boxes on every step. */
+.lt-facts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+.lt-fact {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+  padding: var(--space-3);
+}
+.lt-fact + .lt-fact {
+  border-left: 1px solid var(--border);
+}
+.lt-fact dt {
+  color: var(--muted);
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.lt-fact dd {
+  display: grid;
+  gap: 1px;
+  margin: 0;
+}
+.lt-fact strong {
+  color: var(--text);
+  font-size: var(--text-xl);
+  font-weight: var(--weight-semibold);
+  font-variant-numeric: tabular-nums;
+}
+.lt-fact span {
+  overflow: hidden;
+  color: var(--muted);
+  font-size: var(--text-xs);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.lt-fact span.is-ok {
+  color: var(--success);
+}
+.lt-fact span.is-late {
+  color: var(--danger);
+  font-weight: var(--weight-semibold);
+}
+
+/* Actions: one main button and one quiet link. */
+.lt-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-4);
+}
+.lt-actions .btn {
+  min-height: 44px;
+}
+.lt-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  font-size: var(--text-sm);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.lt-link:hover:not(:disabled) {
+  color: var(--text);
+}
+.lt-link:focus-visible {
+  outline: 2px solid var(--focus-outline);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+.lt-link:disabled {
+  cursor: progress;
+  opacity: 0.6;
+}
+
+.lt-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0 var(--space-3);
+  padding-top: var(--space-2);
+  border-top: 1px dashed var(--border);
+}
+.lt-foot small {
+  color: var(--muted);
+  font-size: var(--text-xs);
+}
+.lt-foot .lt-link {
+  font-size: var(--text-xs);
+}
+
+@media (max-width: 420px) {
+  .lt-title {
+    font-size: var(--text-2xl);
+  }
+  .lt-fact {
+    padding: var(--space-2);
+  }
+  .lt-fact strong {
+    font-size: var(--text-lg);
+  }
+  .lt-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .live-card.lt {
+    transition: none;
+  }
+}

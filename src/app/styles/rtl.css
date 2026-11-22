@@ -1,0 +1,73 @@
+/*
+ * Arabic (right-to-left). Flex and grid rows mirror by themselves with
+ * dir="rtl"; this file mirrors the app frame, which uses fixed left/right
+ * values, and gives Arabic a font that has Arabic letters.
+ */
+:root[lang|="ar"] {
+  --font-body:
+    "Segoe UI", "Geeza Pro", "Noto Sans Arabic", Tahoma, system-ui, sans-serif;
+  --font-display:
+    "Segoe UI", "Geeza Pro", "Noto Sans Arabic", Tahoma, system-ui, sans-serif;
+}
+/* Arabic letters need more line height and no extra letter spacing. */
+:root[lang|="ar"] body {
+  line-height: 1.7;
+}
+:root[lang|="ar"]
+  :is(h1, h2, h3, p, span, strong, small, a, button, label, li, dt, dd) {
+  letter-spacing: 0 !important;
+}
+
+/* Sidebar on the right, page content beside it. */
+:root[dir="rtl"] .app-sidebar {
+  right: 0;
+  left: auto;
+  border-right: 0;
+  border-left: 1px solid var(--border);
+}
+:root[dir="rtl"] :is(.page-main, .footer) {
+  margin-right: 272px;
+  margin-left: 0;
+  transition: margin-right 180ms ease;
+}
+:root[dir="rtl"] .app-sidebar.is-collapsed ~ .page-main,
+:root[dir="rtl"] body:has(.app-sidebar.is-collapsed) .footer {
+  margin-right: 78px;
+  margin-left: 0;
+}
+:root[dir="rtl"] .app-shell.is-auth-layout :is(.page-main, .footer) {
+  margin-right: 0;
+}
+:root[dir="rtl"] .sidebar-link.active::before {
+  right: -14px;
+  left: auto;
+  border-radius: 4px 0 0 4px;
+}
+:root[dir="rtl"] .navigation-tooltip {
+  right: 88px;
+  left: auto;
+}
+:root[dir="rtl"] .skip-link {
+  right: var(--space-3);
+  left: auto;
+}
+/* Icons that point to a side. */
+:root[dir="rtl"]
+  :is(.sidebar-collapse-button svg, .team-card-go, .lt-link svg) {
+  transform: scaleX(-1);
+}
+
+@media (max-width: 1180px) {
+  :root[dir="rtl"] :is(.page-main, .footer),
+  :root[dir="rtl"] .app-sidebar.is-collapsed ~ .page-main,
+  :root[dir="rtl"] body:has(.app-sidebar.is-collapsed) .footer {
+    margin-right: 0;
+  }
+  :root[dir="rtl"] .app-sidebar {
+    box-shadow: -18px 0 40px rgba(0, 0, 0, 0.16);
+    transform: translateX(100%);
+  }
+  :root[dir="rtl"] .app-sidebar.is-mobile-open {
+    transform: translateX(0);
+  }
+}

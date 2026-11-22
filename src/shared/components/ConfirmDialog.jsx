@@ -1,5 +1,6 @@
 import { CircleHelp, LoaderCircle, TriangleAlert, X } from "lucide-react";
 import { useEffect, useId, useRef, useState } from "react";
+import t from "../i18n/t.js";
 
 /**
  * The one confirmation dialog of the app. Use it directly with `open`, or
@@ -12,10 +13,10 @@ function ConfirmDialog({ open, ...props }) {
 }
 
 function ConfirmDialogPanel({
-  title = "Are you sure?",
-  message = "This action cannot be undone.",
-  confirmText = "Confirm",
-  cancelText = "Cancel",
+  title = t("Are you sure?"),
+  message = t("This action cannot be undone."),
+  confirmText = t("Confirm"),
+  cancelText = t("Cancel"),
   danger = false,
   loading = false,
   input = null,
@@ -72,7 +73,7 @@ function ConfirmDialogPanel({
           type="button"
           onClick={onCancel}
           disabled={loading}
-          aria-label="Close"
+          aria-label={t("Close")}
         >
           <X size={18} aria-hidden="true" />
         </button>
@@ -83,19 +84,19 @@ function ConfirmDialogPanel({
           </span>
 
           <div className="confirm-dialog-copy">
-            <h2 id={titleId}>{title}</h2>
+            <h2 id={titleId}>{t(title)}</h2>
             <p id={messageId}>{message}</p>
           </div>
 
           {input && (
             <div className="confirm-dialog-field">
-              <label htmlFor={inputId}>{input.label}</label>
+              <label htmlFor={inputId}>{t(input.label)}</label>
               <textarea
                 id={inputId}
                 ref={inputRef}
                 rows={3}
                 maxLength={input.maxLength || 1000}
-                placeholder={input.placeholder}
+                placeholder={t(input.placeholder)}
                 value={value}
                 onChange={(event) => setValue(event.target.value)}
                 disabled={loading}
@@ -128,7 +129,7 @@ function ConfirmDialogPanel({
                 aria-hidden="true"
               />
             )}
-            {loading ? "Please wait…" : confirmText}
+            {loading ? t("Please wait…") : confirmText}
           </button>
         </div>
       </form>

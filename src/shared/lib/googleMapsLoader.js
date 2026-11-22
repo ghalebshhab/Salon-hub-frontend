@@ -1,3 +1,5 @@
+import t from "../i18n/t.js";
+import { getCurrentLanguage } from "../i18n/language.js";
 let googleMapsPromise;
 
 export function loadGoogleMaps(apiKey) {
@@ -6,7 +8,9 @@ export function loadGoogleMaps(apiKey) {
   }
 
   if (!apiKey) {
-    return Promise.reject(new Error("Google Maps API key is not configured."));
+    return Promise.reject(
+      new Error(t("Google Maps API key is not configured.")),
+    );
   }
 
   if (googleMapsPromise) return googleMapsPromise;
@@ -24,7 +28,7 @@ export function loadGoogleMaps(apiKey) {
 
     if (existingScript) {
       existingScript.addEventListener("error", () =>
-        reject(new Error("Google Maps could not be loaded.")),
+        reject(new Error(t("Google Maps could not be loaded."))),
       );
       return;
     }
@@ -35,7 +39,7 @@ export function loadGoogleMaps(apiKey) {
       loading: "async",
       callback: callbackName,
       libraries: "places,geocoding",
-      language: "en",
+      language: getCurrentLanguage() === "ar" ? "ar" : "en",
       region: "JO",
       v: "weekly",
     });
@@ -46,7 +50,7 @@ export function loadGoogleMaps(apiKey) {
     script.onerror = () => {
       googleMapsPromise = undefined;
       delete window[callbackName];
-      reject(new Error("Google Maps could not be loaded."));
+      reject(new Error(t("Google Maps could not be loaded.")));
     };
     document.head.appendChild(script);
   });

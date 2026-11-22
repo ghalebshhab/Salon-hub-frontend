@@ -1,3 +1,4 @@
+import t from "../i18n/t.js";
 // The SalonHub comb-hub symbol: comb teeth radiating from one gold hub.
 // Drawn inline so it follows the light/dark theme colors.
 export function BrandMark({ className = "brand-logo-mark" }) {
@@ -34,7 +35,9 @@ function BrandLogo({ showTagline = false }) {
           Salon<span>hub</span>
         </span>
         {showTagline && (
-          <span className="brand-logo-tagline">Salons · People · Growth</span>
+          <span className="brand-logo-tagline">
+            {t("Salons · People · Growth")}
+          </span>
         )}
       </span>
     </span>

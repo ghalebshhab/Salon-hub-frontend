@@ -1,3 +1,4 @@
+import t from "../i18n/t.js";
 let sequence = 0;
 const requests = new Map();
 const listeners = new Set();
@@ -8,12 +9,12 @@ function publish() {
   snapshot = {
     active: messages.length > 0,
     count: messages.length,
-    message: messages.at(-1) || "Working on your request…",
+    message: messages.at(-1) || t("Working on your request…"),
   };
   listeners.forEach((listener) => listener());
 }
 
-export function startLoading(message = "Working on your request…") {
+export function startLoading(message = t("Working on your request…")) {
   const requestId = ++sequence;
   requests.set(requestId, message);
   publish();

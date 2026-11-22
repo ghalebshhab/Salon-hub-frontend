@@ -1,13 +1,15 @@
-import { useState } from "react";
-import { applyTheme, getInitialTheme } from "./theme.js";
+import { applyTheme } from "./theme.js";
+import useDocumentTheme from "./useDocumentTheme.js";
 
+/**
+ * The current theme and ways to change it. It reads the theme from <html>,
+ * so the header toggle and the Settings page always show the same value.
+ */
 export default function useTheme() {
-  const [theme, setTheme] = useState(getInitialTheme);
+  const theme = useDocumentTheme();
 
-  const toggleTheme = () => {
-    const nextTheme = applyTheme(theme === "dark" ? "light" : "dark");
-    setTheme(nextTheme);
-  };
+  const setTheme = (next) => applyTheme(next);
+  const toggleTheme = () => applyTheme(theme === "dark" ? "light" : "dark");
 
-  return { theme, toggleTheme };
+  return { theme, setTheme, toggleTheme };
 }

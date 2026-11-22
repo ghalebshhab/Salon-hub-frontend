@@ -1,4 +1,5 @@
 import { highlightParts, matchText } from "../search/searchModel.js";
+import t from "../i18n/t.js";
 
 /**
  * Renders text with the parts that match a search wrapped in <mark>.
@@ -8,6 +9,6 @@ export default function HighlightedText({ text = "", ranges, query }) {
   const spans = ranges ?? (query ? matchText(text, query)?.ranges : null) ?? [];
   if (!spans.length) return text;
   return highlightParts(text, spans).map((part, index) =>
-    part.match ? <mark key={index}>{part.text}</mark> : part.text,
+    part.match ? <mark key={index}>{t(part.text)}</mark> : part.text,
   );
 }

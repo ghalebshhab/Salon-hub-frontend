@@ -1,6 +1,7 @@
 import { ImagePlus, LoaderCircle } from "lucide-react";
 import { useRef } from "react";
 import { showWarningToast } from "../notifications/toast.jsx";
+import t from "../i18n/t.js";
 
 const IMAGE_LIMIT = 8 * 1024 * 1024;
 const VIDEO_LIMIT = 40 * 1024 * 1024;
@@ -11,10 +12,10 @@ const VIDEO_LIMIT = 40 * 1024 * 1024;
  * On phones, "image/*" opens the Photos / Gallery app.
  */
 export default function PhotoPickerButton({
-  label = "Choose photo",
+  label = t("Choose photo"),
   allowVideo = false,
   busy = false,
-  busyLabel = "Uploading…",
+  busyLabel = t("Uploading…"),
   className = "media-device-button",
   onSelect,
 }) {
@@ -26,15 +27,15 @@ export default function PhotoPickerButton({
     const video = file.type.startsWith("video/");
     if ((!video && !file.type.startsWith("image/")) || (video && !allowVideo)) {
       showWarningToast(
-        allowVideo ? "Choose a photo or video." : "Choose a photo.",
+        allowVideo ? t("Choose a photo or video.") : t("Choose a photo."),
       );
       return;
     }
     if (file.size > (video ? VIDEO_LIMIT : IMAGE_LIMIT)) {
       showWarningToast(
         video
-          ? "Videos must be 40 MB or smaller."
-          : "Photos must be 8 MB or smaller.",
+          ? t("Videos must be 40 MB or smaller.")
+          : t("Photos must be 8 MB or smaller."),
       );
       return;
     }

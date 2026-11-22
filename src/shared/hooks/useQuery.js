@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { getApiErrorMessage } from "../api/response.js";
+import t from "../i18n/t.js";
 
 // The loader owns data access; this hook owns request lifecycle and stale-result protection.
 export default function useQuery(
@@ -7,7 +8,7 @@ export default function useQuery(
   {
     initialData = null,
     onError,
-    errorMessage = "Unable to load data",
+    errorMessage = t("Unable to load data"),
     // While a refetch runs, keep showing the last data instead of initialData.
     keepPreviousData = false,
   } = {},

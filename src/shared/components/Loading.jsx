@@ -1,6 +1,7 @@
 import BrandedLoadingOverlay from "./BrandedLoadingOverlay.jsx";
+import t from "../i18n/t.js";
 
-function Loading({ message = "Preparing your experience…" }) {
+function Loading({ message = t("Preparing your experience…") }) {
   return (
     <BrandedLoadingOverlay
       visible

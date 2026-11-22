@@ -9,7 +9,10 @@ export default function useDocumentTheme() {
     const observer = new MutationObserver(() => {
       setTheme(root.dataset.theme === "dark" ? "dark" : "light");
     });
-    observer.observe(root, { attributes: true, attributeFilter: ["data-theme"] });
+    observer.observe(root, {
+      attributes: true,
+      attributeFilter: ["data-theme"],
+    });
     return () => observer.disconnect();
   }, []);
 

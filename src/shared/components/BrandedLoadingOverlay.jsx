@@ -1,8 +1,9 @@
 import { BrandMark } from "./BrandLogo.jsx";
+import t from "../i18n/t.js";
 
 export default function BrandedLoadingOverlay({
   visible,
-  message = "Preparing your experience…",
+  message = t("Preparing your experience…"),
   className = "",
   variant = "action",
 }) {
@@ -22,7 +23,7 @@ export default function BrandedLoadingOverlay({
           <BrandMark className="brand-logo-mark salon-loading-logo" />
         </div>
         <div className="salon-loading-copy">
-          <span>SalonHub</span>
+          <span>{t("SalonHub")}</span>
           <strong>{message}</strong>
         </div>
         <div className="salon-loading-dots" aria-hidden="true">

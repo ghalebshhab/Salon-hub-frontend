@@ -8,7 +8,7 @@ it("shows a branded and accessible loading state", () => {
   );
 
   expect(screen.getByRole("status", { name: "Signing you in…" })).toBeDefined();
-  expect(container.querySelector(".salon-snip-scissors")).not.toBeNull();
+  expect(container.querySelector("svg.salon-loading-logo")).not.toBeNull();
 });
 
 it("uses the main logo for navigation loading", () => {
@@ -20,10 +20,8 @@ it("uses the main logo for navigation loading", () => {
     />,
   );
 
-  expect(
-    container.querySelector('img[src="/salonhub-mark.svg"]'),
-  ).not.toBeNull();
-  expect(container.querySelector(".salon-snip-scissors")).toBeNull();
+  expect(container.querySelector("svg.salon-loading-logo")).not.toBeNull();
+  expect(container.querySelector(".salon-loading-navigation")).not.toBeNull();
 });
 
 it("does not block the page when loading is inactive", () => {

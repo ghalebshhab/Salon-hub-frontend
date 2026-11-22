@@ -36,9 +36,7 @@ it("shows the main logo after every router navigation", () => {
   expect(
     screen.getByRole("status", { name: "Opening your salon dashboard…" }),
   ).toBeDefined();
-  expect(
-    container.querySelector('img[src="/salonhub-mark.svg"]'),
-  ).not.toBeNull();
+  expect(container.querySelector("svg.salon-loading-logo")).not.toBeNull();
 
   act(() => vi.advanceTimersByTime(321));
   expect(screen.queryByRole("status")).toBeNull();

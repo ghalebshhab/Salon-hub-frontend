@@ -145,9 +145,7 @@ function parseColor(value) {
       (index) => parseInt(full.slice(index, index + 2), 16) / 255,
     );
   }
-  const rgb = /^rgba?\(\s*([\d.]+)[\s,]+([\d.]+)[\s,]+([\d.]+)/i.exec(
-    text,
-  );
+  const rgb = /^rgba?\(\s*([\d.]+)[\s,]+([\d.]+)[\s,]+([\d.]+)/i.exec(text);
   if (rgb) {
     return [rgb[1], rgb[2], rgb[3]].map((channel) =>
       clamp(parseFloat(channel) / 255, 0, 1),
@@ -157,9 +155,7 @@ function parseColor(value) {
 }
 
 const geometryFor = (frame, aspect) => ({
-  source: frame.side
-    ? [aspect * 0.5 + 0.42, 0.3]
-    : [aspect * 0.5 + 0.1, 0.62],
+  source: frame.side ? [aspect * 0.5 + 0.42, 0.3] : [aspect * 0.5 + 0.1, 0.62],
   heading: frame.side ? 3.42 : -2.48,
 });
 
@@ -299,14 +295,17 @@ export default function SideRays({
     const shader = gl ? createProgram(gl) : null;
     if (!gl || !shader) return undefined;
 
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const reduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
     const vao = gl.createVertexArray();
     const size = { width: 1, height: 1 };
     const pointer = { x: 0, y: 0, inside: false };
     const aim = { value: 0, velocity: 0 };
     const focus = { angle: 0, strength: 0 };
     let time = Math.random() * 100;
-    let reveal = settingsRef.current.intro && !reduced && generation === 0 ? 0 : 1;
+    let reveal =
+      settingsRef.current.intro && !reduced && generation === 0 ? 0 : 1;
     let animationFrame = 0;
     let last = 0;
     let visible = true;
@@ -364,7 +363,8 @@ export default function SideRays({
       const tracking = current.followMouse && pointer.inside && !reduced;
       const pointed = tracking ? pointerAngle(current) : 0;
       const target = tracking
-        ? clamp(pointed, -current.spread, current.spread) * current.mouseInfluence
+        ? clamp(pointed, -current.spread, current.spread) *
+          current.mouseInfluence
         : 0;
       const focusTarget = tracking ? current.mouseInfluence : 0;
       const ease = 1 - Math.exp(-delta * 6);
@@ -519,7 +519,11 @@ export default function SideRays({
       className={`side-rays${className ? ` ${className}` : ""}`}
       style={style}
     >
-      <canvas ref={canvasRef} className="side-rays__canvas" aria-hidden="true" />
+      <canvas
+        ref={canvasRef}
+        className="side-rays__canvas"
+        aria-hidden="true"
+      />
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import { CheckCircle2, XCircle, Info, AlertTriangle } from "lucide-react";
+import t from "../i18n/t.js";
 
 function AppToast({ type = "info", title, message }) {
   const icons = {
@@ -15,7 +16,7 @@ function AppToast({ type = "info", title, message }) {
       <div className="salon-toast-icon-box">{icons[type] || icons.info}</div>
 
       <div className="salon-toast-content">
-        <h4>{title}</h4>
+        <h4>{t(title)}</h4>
         <p>{message}</p>
       </div>
     </div>

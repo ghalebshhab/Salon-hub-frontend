@@ -7,6 +7,7 @@ import {
 } from "../api/communityRelationshipsApi.js";
 import useCommunityAction from "./useCommunityAction.js";
 import { confirmAction } from "../../../shared/confirm/confirmStore.js";
+import t from "../../../shared/i18n/t.js";
 
 export default function useCommunityRelationshipActions({ afterSuccess } = {}) {
   const { busyAction, runAction } = useCommunityAction();
@@ -25,7 +26,7 @@ export default function useCommunityRelationshipActions({ afterSuccess } = {}) {
       execute({
         key: `connect-${userId}`,
         action: () => sendFriendRequestApi(userId),
-        successMessage: "Friend request sent.",
+        successMessage: t("Friend request sent."),
       }),
     [execute],
   );
@@ -35,7 +36,7 @@ export default function useCommunityRelationshipActions({ afterSuccess } = {}) {
       execute({
         key: `accept-${friendshipId}`,
         action: () => acceptFriendRequestApi(friendshipId),
-        successMessage: "You are now connected.",
+        successMessage: t("You are now connected."),
       }),
     [execute],
   );
@@ -43,15 +44,15 @@ export default function useCommunityRelationshipActions({ afterSuccess } = {}) {
   const decline = useCallback(
     async (friendshipId) =>
       (await confirmAction({
-        title: "Decline this friend request?",
-        message: "The request will be removed.",
-        confirmText: "Decline",
+        title: t("Decline this friend request?"),
+        message: t("The request will be removed."),
+        confirmText: t("Decline"),
         danger: true,
       })) &&
       execute({
         key: `decline-${friendshipId}`,
         action: () => declineFriendRequestApi(friendshipId),
-        successMessage: "Friend request declined.",
+        successMessage: t("Friend request declined."),
       }),
     [execute],
   );
@@ -59,15 +60,15 @@ export default function useCommunityRelationshipActions({ afterSuccess } = {}) {
   const remove = useCallback(
     async (friendshipId) =>
       (await confirmAction({
-        title: "Remove this friend?",
-        message: "You will no longer be connected in the community.",
-        confirmText: "Remove",
+        title: t("Remove this friend?"),
+        message: t("You will no longer be connected in the community."),
+        confirmText: t("Remove"),
         danger: true,
       })) &&
       execute({
         key: `remove-${friendshipId}`,
         action: () => removeFriendshipApi(friendshipId),
-        successMessage: "Community connection removed.",
+        successMessage: t("Community connection removed."),
       }),
     [execute],
   );

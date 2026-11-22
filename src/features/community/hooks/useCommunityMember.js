@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { requireData } from "../../../shared/api/response.js";
 import { getCommunityProfileApi } from "../api/communityPostsApi.js";
+import t from "../../../shared/i18n/t.js";
 
 const isCanceled = (error) =>
   error?.name === "CanceledError" || error?.name === "AbortError";
@@ -9,9 +10,14 @@ export default function useCommunityMember(userId) {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  // The raw error, so the page can tell "not available" from "offline".
+  const [failure, setFailure] = useState(null);
 
   const applyResponse = useCallback((response) => {
-    const nextProfile = requireData(response, "This profile could not be loaded.");
+    const nextProfile = requireData(
+      response,
+      t("This profile could not be loaded."),
+    );
     setProfile(nextProfile);
     return nextProfile;
   }, []);
@@ -22,6 +28,7 @@ export default function useCommunityMember(userId) {
       if (controller.signal.aborted) return;
       setProfile(null);
       setError("");
+      setFailure(null);
       setLoading(true);
     });
 
@@ -29,7 +36,10 @@ export default function useCommunityMember(userId) {
       .then(applyResponse)
       .catch((requestError) => {
         if (!isCanceled(requestError)) {
-          setError(requestError.message || "This profile could not be loaded.");
+          setFailure(requestError);
+          setError(
+            requestError.message || t("This profile could not be loaded."),
+          );
         }
       })
       .finally(() => {
@@ -51,5 +61,5 @@ export default function useCommunityMember(userId) {
     );
   }, []);
 
-  return { profile, loading, error, refresh, decrementPostCount };
+  return { profile, loading, error, failure, refresh, decrementPostCount };
 }

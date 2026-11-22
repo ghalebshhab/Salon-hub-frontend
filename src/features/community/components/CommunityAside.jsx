@@ -4,12 +4,13 @@ import { COMMUNITY_ROUTES } from "../model/communityRoutes.js";
 import CommunityAvatar from "./CommunityAvatar.jsx";
 import CommunityProfileLink from "./CommunityProfileLink.jsx";
 import FriendshipActions from "./FriendshipActions.jsx";
+import t from "../../../shared/i18n/t.js";
 
 function ProfileCard({ user, network }) {
   const name =
     [user?.firstName, user?.lastName].filter(Boolean).join(" ") ||
     user?.userName ||
-    "SalonHub member";
+    t("SalonHub member");
   const stat = (value) => (network.loading ? "—" : value);
   return (
     <section
@@ -30,21 +31,21 @@ function ProfileCard({ user, network }) {
             className="community-me-link"
             to={`/community/people/${user.id}`}
           >
-            View your profile
+            {t("View your profile")}
           </Link>
         )}
       </div>
       <dl className="community-me-stats">
         <div>
-          <dt>Friends</dt>
+          <dt>{t("Friends")}</dt>
           <dd>{stat(network.friends.length)}</dd>
         </div>
         <div>
-          <dt>Following</dt>
+          <dt>{t("Following")}</dt>
           <dd>{stat(network.followedSalons.length)}</dd>
         </div>
         <div>
-          <dt>Requests</dt>
+          <dt>{t("Requests")}</dt>
           <dd>{stat(network.requests.length)}</dd>
         </div>
       </dl>
@@ -63,9 +64,10 @@ function RequestsNudge({ count }) {
       </span>
       <span>
         <strong>
-          {count} friend {count === 1 ? "request" : "requests"}
+          {t("{count} friend", { count })}{" "}
+          {count === 1 ? t("request") : t("requests")}
         </strong>
-        <small>Review and respond</small>
+        <small>{t("Review and respond")}</small>
       </span>
       <ArrowRight className="community-nudge-arrow" aria-hidden="true" />
     </Link>
@@ -84,9 +86,9 @@ function Suggestions({ network }) {
     >
       <header className="community-aside-heading">
         <h2 id="community-suggestions-title">
-          <UserPlus aria-hidden="true" /> People you may know
+          <UserPlus aria-hidden="true" /> {t("People you may know")}
         </h2>
-        <Link to={COMMUNITY_ROUTES.discover}>See all</Link>
+        <Link to={COMMUNITY_ROUTES.discover}>{t("See all")}</Link>
       </header>
       <ul className="community-suggestion-list">
         {suggestions.map((member) => (
@@ -113,7 +115,7 @@ function Suggestions({ network }) {
 export default function CommunityAside({ user, network, section }) {
   const requestCount = network.loading ? 0 : network.requests.length;
   return (
-    <aside className="community-v2-aside" aria-label="Your community">
+    <aside className="community-v2-aside" aria-label={t("Your community")}>
       <ProfileCard user={user} network={network} />
       {requestCount > 0 && section !== "requests" && (
         <RequestsNudge count={requestCount} />

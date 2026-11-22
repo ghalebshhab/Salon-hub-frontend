@@ -5,6 +5,7 @@ import {
   getCommunityCommentsApi,
 } from "../api/communityPostsApi.js";
 import useCommunityAction from "./useCommunityAction.js";
+import t from "../../../shared/i18n/t.js";
 
 export default function useCommunityComments({ onCommentAdded } = {}) {
   const [commentsByPost, setCommentsByPost] = useState({});
@@ -15,7 +16,7 @@ export default function useCommunityComments({ onCommentAdded } = {}) {
       const response = await runAction({
         key: `comments-${postId}`,
         action: () => getCommunityCommentsApi(postId),
-        errorMessage: "Comments could not be loaded.",
+        errorMessage: t("Comments could not be loaded."),
       });
       const page = response && requireData(response);
       if (page)

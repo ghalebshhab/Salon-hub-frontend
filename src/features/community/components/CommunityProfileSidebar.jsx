@@ -9,6 +9,7 @@ import {
 import { Link } from "react-router-dom";
 import { getInitials } from "../model/communityPresentation.js";
 import RoleSeal from "./CommunityRoleSeal.jsx";
+import t from "../../../shared/i18n/t.js";
 
 /**
  * The member's place at their salon, drawn as a ticket stub. The whole
@@ -20,26 +21,29 @@ function SalonPass({ profile, viewModel }) {
     <Link
       className={`pf-pass pf-tone-${role.tone}`}
       to={`/salons/${profile.salonId}`}
-      aria-label={`${salonRelationship} ${profile.salonName}. Open the salon page`}
+      aria-label={t("{salonRelationship} {salonName}. Open the salon page", {
+        salonRelationship,
+        salonName: profile.salonName,
+      })}
     >
       <span className="pf-pass-head">
-        <span className="pf-pass-kicker">Salon pass</span>
+        <span className="pf-pass-kicker">{t("Salon pass")}</span>
         <span className="pf-pass-stamp" aria-hidden="true">
           {getInitials(profile.salonName)}
         </span>
       </span>
       <strong className="pf-pass-salon">{profile.salonName}</strong>
       <span className="pf-pass-role">
-        <RoleSeal role={role} size={14} /> {role.label}
+        <RoleSeal role={role} size={14} /> {t(role.label)}
       </span>
       <span className="pf-pass-tear" aria-hidden="true" />
       <span className="pf-pass-foot">
         <span>
-          <small>{role.key === "owner" ? "Founded" : "Since"}</small>
+          <small>{role.key === "owner" ? t("Founded") : t("Since")}</small>
           <b>{tenure ? tenure.since : "—"}</b>
         </span>
         <span>
-          <small>Time here</small>
+          <small>{t("Time here")}</small>
           <b>{tenure ? tenure.length : "—"}</b>
         </span>
         <span className="pf-pass-go" aria-hidden="true">
@@ -58,13 +62,13 @@ export default function CommunityProfileSidebar({ profile, viewModel }) {
   return (
     <aside
       className="community-profile-sidebar pf-side"
-      aria-label={`${displayName}'s professional details`}
+      aria-label={t("{displayName}'s professional details", { displayName })}
     >
       {profile.salonId && <SalonPass profile={profile} viewModel={viewModel} />}
 
       <section className="pf-card">
         <h2 className="community-card-kicker">
-          <Sparkles size={14} aria-hidden="true" /> Specialties
+          <Sparkles size={14} aria-hidden="true" /> {t("Specialties")}
         </h2>
         {skills.length ? (
           <ul className="pf-skills">
@@ -73,14 +77,14 @@ export default function CommunityProfileSidebar({ profile, viewModel }) {
             ))}
           </ul>
         ) : (
-          <p className="pf-muted">No specialties shared yet.</p>
+          <p className="pf-muted">{t("No specialties shared yet.")}</p>
         )}
       </section>
 
       {locations.length > 0 && (
         <section className="pf-card">
           <h2 className="community-card-kicker">
-            <MapPin size={14} aria-hidden="true" /> Works around
+            <MapPin size={14} aria-hidden="true" /> {t("Works around")}
           </h2>
           <ul className="pf-places">
             {locations.map((place) => (
@@ -98,14 +102,17 @@ export default function CommunityProfileSidebar({ profile, viewModel }) {
           rel="noreferrer"
         >
           <BriefcaseBusiness size={18} aria-hidden="true" />
-          <strong>View portfolio</strong>
+          <strong>{t("View portfolio")}</strong>
           <ExternalLink size={15} aria-hidden="true" />
         </a>
       )}
 
       <p className="pf-note">
         <UsersRound size={18} aria-hidden="true" />
-        Connect to keep up with new work and conversations from {firstName}.
+        {t(
+          "Connect to keep up with new work and conversations from {firstName}.",
+          { firstName },
+        )}
       </p>
     </aside>
   );

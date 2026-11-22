@@ -3,6 +3,7 @@ import { requireData } from "../../../shared/api/response.js";
 import { showApiErrorToast } from "../../../shared/notifications/toast.jsx";
 import { searchCommunityPeopleApi } from "../api/communityRelationshipsApi.js";
 import { normalizeCommunitySearch } from "../model/communityPresentation.js";
+import t from "../../../shared/i18n/t.js";
 
 export default function useCommunityPeopleSearch() {
   const [people, setPeople] = useState([]);
@@ -44,7 +45,10 @@ export default function useCommunityPeopleSearch() {
       completedQueryRef.current = null;
       setError(true);
       if (retry) {
-        showApiErrorToast(requestError, "Community suggestions could not be loaded.");
+        showApiErrorToast(
+          requestError,
+          t("Community suggestions could not be loaded."),
+        );
       }
     } finally {
       if (sequence === sequenceRef.current && !controller.signal.aborted) {

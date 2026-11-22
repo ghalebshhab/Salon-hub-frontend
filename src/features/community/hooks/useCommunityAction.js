@@ -3,6 +3,7 @@ import {
   showApiErrorToast,
   showSuccessToast,
 } from "../../../shared/notifications/toast.jsx";
+import t from "../../../shared/i18n/t.js";
 
 export function isCommunityActionBusy(actions, key) {
   return actions instanceof Set ? actions.has(key) : actions === key;
@@ -27,7 +28,7 @@ export default function useCommunityAction() {
       } catch (error) {
         showApiErrorToast(
           error,
-          errorMessage || "The community action could not be completed.",
+          errorMessage || t("The community action could not be completed."),
         );
         return null;
       } finally {

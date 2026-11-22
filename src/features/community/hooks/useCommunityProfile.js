@@ -20,6 +20,7 @@ export default function useCommunityProfile(userId) {
     profile: member.profile,
     loading: member.loading,
     error: member.error,
+    failure: member.failure,
     posts: posts.posts,
     postPage: posts.postPage,
     postsLoading: posts.loading,

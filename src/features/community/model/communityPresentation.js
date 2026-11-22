@@ -1,3 +1,5 @@
+import t from "../../../shared/i18n/t.js";
+import { dateLocale } from "../../../shared/i18n/language.js";
 export function getInitials(name = "") {
   return (
     name
@@ -14,7 +16,7 @@ export function getPostAuthorName(post) {
   return post.salon?.name || post.author.displayName || post.author.userName;
 }
 
-export function formatPostDate(value, locale) {
+export function formatPostDate(value, locale = dateLocale()) {
   if (!value) return "";
   return new Date(value).toLocaleString(locale, {
     dateStyle: "medium",
@@ -27,9 +29,9 @@ export function isVideoMedia(url = "") {
 }
 
 export function getRelationshipLabel(member) {
-  if (member.relationship === "ACCEPTED") return "Friend";
-  if (member.incomingRequest) return "Requested you";
-  return "Pending";
+  if (member.relationship === "ACCEPTED") return t("Friend");
+  if (member.incomingRequest) return t("Requested you");
+  return t("Pending");
 }
 
 export function normalizeCommunitySearch(value = "") {

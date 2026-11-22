@@ -2,6 +2,7 @@ import { UserRoundPlus } from "lucide-react";
 import usePeopleSearchField from "../hooks/usePeopleSearchField.js";
 import PeopleSearchField from "./PeopleSearchField.jsx";
 import PeopleSearchResults from "./PeopleSearchResults.jsx";
+import t from "../../../shared/i18n/t.js";
 
 export default function PeopleDiscoveryPanel({
   people,
@@ -29,14 +30,20 @@ export default function PeopleDiscoveryPanel({
             <UserRoundPlus size={18} aria-hidden="true" />
           </span>
           <div>
-            <span className="community-card-kicker">Your network</span>
-            <h2 id="discovery-title">Discover people</h2>
+            <span className="community-card-kicker">{t("Your network")}</span>
+            <h2 id="discovery-title">{t("Discover people")}</h2>
           </div>
         </div>
-        <span className="community-discovery-count" role="status" aria-live="polite">
+        <span
+          className="community-discovery-count"
+          role="status"
+          aria-live="polite"
+        >
           {loading
-            ? "Searching"
-            : `${people.length} ${people.length === 1 ? "person" : "people"}`}
+            ? t("Searching")
+            : people.length === 1
+              ? t("1 person")
+              : t("{count} people", { count: people.length })}
         </span>
       </div>
 

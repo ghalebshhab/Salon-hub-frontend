@@ -12,6 +12,7 @@ import PhotoPickerButton from "../../../shared/components/PhotoPickerButton.jsx"
 import { isVideoMedia } from "../model/communityPresentation.js";
 import CommunityAvatar from "./CommunityAvatar.jsx";
 import { isCommunityActionBusy } from "../hooks/useCommunityAction.js";
+import t from "../../../shared/i18n/t.js";
 
 export default function CommunityComposer({ user, busy, onPublish }) {
   const [content, setContent] = useState("");
@@ -81,14 +82,16 @@ export default function CommunityComposer({ user, busy, onPublish }) {
     >
       <header className="community-composer-heading">
         <div>
-          <strong>Start a conversation</strong>
+          <strong>{t("Start a conversation")}</strong>
           <span className="community-composer-audience">
             {publishAsSalon ? (
               <Store size={13} aria-hidden="true" />
             ) : (
               <Globe2 size={13} aria-hidden="true" />
             )}
-            {publishAsSalon ? "Posting as your salon" : "SalonHub community"}
+            {publishAsSalon
+              ? t("Posting as your salon")
+              : t("SalonHub community")}
             <ChevronDown size={13} aria-hidden="true" />
           </span>
         </div>
@@ -96,7 +99,7 @@ export default function CommunityComposer({ user, busy, onPublish }) {
       </header>
       <div className="community-composer-top">
         <CommunityAvatar
-          name={displayName || user?.userName || "SalonHub member"}
+          name={displayName || user?.userName || t("SalonHub member")}
           imageUrl={user?.profilePictureUrl}
         />
         <textarea
@@ -106,8 +109,14 @@ export default function CommunityComposer({ user, busy, onPublish }) {
             if (publishError) setPublishError(false);
           }}
           maxLength={5000}
-          placeholder={`What would you like to share${user?.firstName ? `, ${user.firstName}` : ""}?`}
-          aria-label="Post content"
+          placeholder={
+            user?.firstName
+              ? t("What would you like to share, {name}?", {
+                  name: user.firstName,
+                })
+              : t("What would you like to share?")
+          }
+          aria-label={t("Post content")}
           aria-describedby={
             publishError ? "community-publish-error" : undefined
           }
@@ -126,8 +135,8 @@ export default function CommunityComposer({ user, busy, onPublish }) {
             if (mediaFile) clearMedia();
             setMediaUrl(event.target.value);
           }}
-          placeholder="Paste an image or video URL"
-          aria-label="Media URL"
+          placeholder={t("Paste an image or video URL")}
+          aria-label={t("Media URL")}
         />
       </div>
       {previewUrl && (
@@ -135,9 +144,13 @@ export default function CommunityComposer({ user, busy, onPublish }) {
           {previewIsVideo ? (
             <video src={previewUrl} controls preload="metadata" />
           ) : (
-            <img src={previewUrl} alt="Selected media preview" />
+            <img src={previewUrl} alt={t("Selected media preview")} />
           )}
-          <button type="button" onClick={clearMedia} aria-label="Remove media">
+          <button
+            type="button"
+            onClick={clearMedia}
+            aria-label={t("Remove media")}
+          >
             <X size={16} aria-hidden="true" />
           </button>
         </div>
@@ -148,7 +161,7 @@ export default function CommunityComposer({ user, busy, onPublish }) {
           id="community-publish-error"
           role="alert"
         >
-          Your post couldn&apos;t be published. Please try again.
+          {t("Your post couldn't be published. Please try again.")}
         </p>
       )}
       <footer>
@@ -160,13 +173,13 @@ export default function CommunityComposer({ user, busy, onPublish }) {
             aria-controls="community-media-input"
             onClick={() => setMediaOpen((open) => !open)}
           >
-            <Link2 size={18} aria-hidden="true" /> Media URL
+            <Link2 size={18} aria-hidden="true" /> {t("Media URL")}
           </button>
           <PhotoPickerButton
-            label="Photo"
+            label={t("Photo")}
             allowVideo
             busy={publishing}
-            busyLabel="Photo"
+            busyLabel={t("Photo")}
             className={mediaFile ? "is-active" : ""}
             onSelect={pickPhoto}
           />
@@ -177,7 +190,7 @@ export default function CommunityComposer({ user, busy, onPublish }) {
                 checked={publishAsSalon}
                 onChange={(event) => setPublishAsSalon(event.target.checked)}
               />
-              <Store size={17} aria-hidden="true" /> Post as salon
+              <Store size={17} aria-hidden="true" /> {t("Post as salon")}
             </label>
           )}
         </div>
@@ -192,12 +205,12 @@ export default function CommunityComposer({ user, busy, onPublish }) {
                 size={16}
                 className="community-spinning"
                 aria-hidden="true"
-              />{" "}
-              Publishing…
+              />
+              {t("Publishing…")}
             </>
           ) : (
             <>
-              <Send size={16} aria-hidden="true" /> Publish post
+              <Send size={16} aria-hidden="true" /> {t("Publish post")}
             </>
           )}
         </button>

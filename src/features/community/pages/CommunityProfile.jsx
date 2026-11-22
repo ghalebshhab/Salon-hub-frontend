@@ -2,7 +2,7 @@ import { ArrowLeft } from "lucide-react";
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import useAuth from "../../../shared/auth/useAuth.js";
-import Loading from "../../../shared/components/Loading.jsx";
+import { CommunityProfileSkeleton } from "../components/CommunitySkeletons.jsx";
 import ReportDialog from "../../moderation/components/ReportDialog.jsx";
 import CommunityProfileAbout from "../components/CommunityProfileAbout.jsx";
 import CommunityProfileActivity from "../components/CommunityProfileActivity.jsx";
@@ -11,20 +11,9 @@ import CommunityProfileSidebar from "../components/CommunityProfileSidebar.jsx";
 import useCommunityComments from "../hooks/useCommunityComments.js";
 import useCommunityProfile from "../hooks/useCommunityProfile.js";
 import { getCommunityProfileViewModel } from "../model/communityProfile.js";
-
-function ProfileError({ message }) {
-  return (
-    <main className="community-profile-page">
-      <section className="community-profile-error">
-        <h1>Profile unavailable</h1>
-        <p>{message || "This profile could not be loaded."}</p>
-        <Link className="btn btn-primary" to="/community">
-          Return to community
-        </Link>
-      </section>
-    </main>
-  );
-}
+import ErrorPage from "../../../shared/components/ErrorPage.jsx";
+import classifyError from "../../../shared/errors/classifyError.js";
+import t from "../../../shared/i18n/t.js";
 
 export default function CommunityProfile() {
   const [reportOpen, setReportOpen] = useState(false);
@@ -36,10 +25,16 @@ export default function CommunityProfile() {
   });
 
   if (profileState.loading && !profileState.profile) {
-    return <Loading message="Opening community profile…" />;
+    return <CommunityProfileSkeleton />;
   }
   if (profileState.error || !profileState.profile) {
-    return <ProfileError message={profileState.error} />;
+    return (
+      <ErrorPage
+        kind={classifyError(profileState.failure, {
+          notFoundKind: "profileUnavailable",
+        })}
+      />
+    );
   }
 
   const profile = profileState.profile;
@@ -55,7 +50,7 @@ export default function CommunityProfile() {
     <main className="community-profile-page">
       <div className="container community-profile-shell">
         <Link className="community-profile-back" to="/community">
-          <ArrowLeft size={17} /> Back to community
+          <ArrowLeft size={17} /> {t("Back to community")}
         </Link>
 
         <CommunityProfileHero

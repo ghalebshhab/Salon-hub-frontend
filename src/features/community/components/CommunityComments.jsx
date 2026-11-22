@@ -3,6 +3,7 @@ import { useState } from "react";
 import { isCommunityActionBusy } from "../hooks/useCommunityAction.js";
 import CommunityProfileLink from "./CommunityProfileLink.jsx";
 import ReportDialog from "../../moderation/components/ReportDialog.jsx";
+import t from "../../../shared/i18n/t.js";
 
 export default function CommunityComments({
   postId,
@@ -20,7 +21,7 @@ export default function CommunityComments({
   };
 
   return (
-    <section className="community-comments" aria-label="Comments">
+    <section className="community-comments" aria-label={t("Comments")}>
       {comments.map((comment) => (
         <div className="community-comment" key={comment.id}>
           <CommunityProfileLink user={comment.author} size="small" />
@@ -40,7 +41,9 @@ export default function CommunityComments({
             <button
               className="community-comment-report"
               type="button"
-              aria-label={`Report comment by ${comment.author.displayName || comment.author.userName}`}
+              aria-label={t("Report comment by {value}", {
+                value: comment.author.displayName || comment.author.userName,
+              })}
               onClick={() => setReporting(comment)}
             >
               <Flag size={14} />
@@ -49,20 +52,24 @@ export default function CommunityComments({
         </div>
       ))}
       {comments.length === 0 && (
-        <p className="community-comments-empty">Start the conversation.</p>
+        <p className="community-comments-empty">
+          {t("Start the conversation.")}
+        </p>
       )}
       <form className="community-comment-form" onSubmit={submit}>
         <input
           value={draft}
           onChange={(event) => setDraft(event.target.value)}
           maxLength={2000}
-          placeholder="Write a thoughtful comment…"
-          aria-label="Comment"
+          placeholder={t("Write a thoughtful comment…")}
+          aria-label={t("Comment")}
         />
         <button
           type="submit"
-          aria-label="Send comment"
-          disabled={!draft.trim() || isCommunityActionBusy(busy, `comment-${postId}`)}
+          aria-label={t("Send comment")}
+          disabled={
+            !draft.trim() || isCommunityActionBusy(busy, `comment-${postId}`)
+          }
         >
           <Send size={17} />
         </button>
@@ -71,7 +78,7 @@ export default function CommunityComments({
         <ReportDialog
           targetType="COMMENT"
           targetId={reporting.id}
-          targetLabel="comment"
+          targetLabel={t("comment")}
           onClose={() => setReporting(null)}
         />
       )}

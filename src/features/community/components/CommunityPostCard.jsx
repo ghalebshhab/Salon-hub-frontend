@@ -10,6 +10,7 @@ import CommunityProfileLink from "./CommunityProfileLink.jsx";
 import ReportDialog from "../../moderation/components/ReportDialog.jsx";
 import { isCommunityActionBusy } from "../hooks/useCommunityAction.js";
 import useCommunityPostCard from "../hooks/useCommunityPostCard.js";
+import t from "../../../shared/i18n/t.js";
 
 export default function CommunityPostCard({
   post,
@@ -35,7 +36,7 @@ export default function CommunityPostCard({
           <span className="community-profile-link-copy">
             <span className="community-post-author-line">
               <strong>{authorName}</strong>
-              {post.salon && <small>Salon</small>}
+              {post.salon && <small>{t("Salon")}</small>}
             </span>
             <small>
               @{post.author.userName} · {formatPostDate(post.createdAt)}
@@ -46,7 +47,7 @@ export default function CommunityPostCard({
           <button
             className="community-icon-button danger"
             type="button"
-            aria-label="Delete post"
+            aria-label={t("Delete post")}
             disabled={isCommunityActionBusy(busy, `delete-${post.id}`)}
             onClick={() => onDelete(post.id)}
           >
@@ -56,8 +57,8 @@ export default function CommunityPostCard({
           <button
             className="community-icon-button"
             type="button"
-            aria-label="Report post"
-            title="Report post"
+            aria-label={t("Report post")}
+            title={t("Report post")}
             onClick={interactions.openReport}
           >
             <Flag size={17} />
@@ -71,25 +72,31 @@ export default function CommunityPostCard({
           {isVideoMedia(post.mediaUrl) ? (
             <video controls preload="metadata" src={post.mediaUrl} />
           ) : (
-            <img src={post.mediaUrl} alt="Shared community media" />
+            <img src={post.mediaUrl} alt={t("Shared community media")} />
           )}
         </div>
       )}
 
-      <div className="community-post-engagement" aria-label="Post engagement">
+      <div
+        className="community-post-engagement"
+        aria-label={t("Post engagement")}
+      >
         <button
           className="community-like-summary"
           type="button"
           onClick={interactions.openLikes}
-          aria-label={`See ${post.likeCount} people who liked this post`}
+          aria-label={t("See {likeCount} people who liked this post", {
+            likeCount: post.likeCount,
+          })}
         >
           <span aria-hidden="true">
             <Heart size={11} fill="currentColor" />
           </span>
-          {post.likeCount} {post.likeCount === 1 ? "like" : "likes"}
+          {post.likeCount} {post.likeCount === 1 ? t("like") : t("likes")}
         </button>
         <button type="button" onClick={interactions.toggleComments}>
-          {post.commentCount} {post.commentCount === 1 ? "comment" : "comments"}
+          {post.commentCount}{" "}
+          {post.commentCount === 1 ? t("comment") : t("comments")}
         </button>
       </div>
 
@@ -99,13 +106,13 @@ export default function CommunityPostCard({
             post.likedByMe ? "community-action active" : "community-action"
           }
           type="button"
-          aria-label={post.likedByMe ? "Unlike post" : "Like post"}
+          aria-label={post.likedByMe ? t("Unlike post") : t("Like post")}
           aria-pressed={post.likedByMe}
           disabled={isCommunityActionBusy(busy, `like-${post.id}`)}
           onClick={() => onLike(post)}
         >
           <Heart size={19} fill={post.likedByMe ? "currentColor" : "none"} />
-          <span>{post.likedByMe ? "Liked" : "Like"}</span>
+          <span>{post.likedByMe ? t("Liked") : t("Like")}</span>
         </button>
         <button
           className={
@@ -116,10 +123,15 @@ export default function CommunityPostCard({
           type="button"
           onClick={interactions.toggleComments}
         >
-          <MessageCircle size={19} /> <span>Comment</span>
+          <MessageCircle size={19} /> <span>{t("Comment")}</span>
         </button>
-        <button className="community-action" type="button" onClick={interactions.sharePost}>
-          <Send size={18} /> <span>{interactions.shared ? "Link copied" : "Share"}</span>
+        <button
+          className="community-action"
+          type="button"
+          onClick={interactions.sharePost}
+        >
+          <Send size={18} />{" "}
+          <span>{interactions.shared ? t("Link copied") : t("Share")}</span>
         </button>
       </footer>
 
@@ -141,7 +153,7 @@ export default function CommunityPostCard({
         <ReportDialog
           targetType="POST"
           targetId={post.id}
-          targetLabel="post"
+          targetLabel={t("post")}
           onClose={interactions.closeReport}
         />
       )}

@@ -12,6 +12,7 @@ import usePhotoUpload from "../../media/hooks/usePhotoUpload.js";
 import CommunityAvatar from "./CommunityAvatar.jsx";
 import CommunityProfileActions from "./CommunityProfileActions.jsx";
 import RoleSeal from "./CommunityRoleSeal.jsx";
+import t from "../../../shared/i18n/t.js";
 
 export default function CommunityProfileHero({
   profile,
@@ -36,15 +37,15 @@ export default function CommunityProfileHero({
   };
 
   const stats = [
-    { label: "Posts", value: profile.postCount ?? postCount ?? 0 },
-    { label: "Friends", value: profile.friendCount ?? 0 },
-    { label: "Salons followed", value: profile.followedSalonCount ?? 0 },
+    { label: t("Posts"), value: profile.postCount ?? postCount ?? 0 },
+    { label: t("Friends"), value: profile.friendCount ?? 0 },
+    { label: t("Salons followed"), value: profile.followedSalonCount ?? 0 },
   ];
 
   return (
     <header className={`pf-hero pf-tone-${role.tone}`}>
       <div className="pf-cover" aria-hidden="true">
-        <span className="pf-cover-word">{role.label}</span>
+        <span className="pf-cover-word">{t(role.label)}</span>
       </div>
 
       <div className="pf-identity">
@@ -55,7 +56,7 @@ export default function CommunityProfileHero({
             size="profile"
             imageUrl={photoUrl || user.profilePictureUrl}
           />
-          <span className="pf-seal" title={role.label}>
+          <span className="pf-seal" title={t(role.label)}>
             <RoleSeal role={role} />
           </span>
         </div>
@@ -63,11 +64,12 @@ export default function CommunityProfileHero({
         <div className="pf-title">
           <div className="pf-badges">
             <span className="pf-role-badge">
-              <RoleSeal role={role} size={13} /> {role.label}
+              <RoleSeal role={role} size={13} /> {t(role.label)}
             </span>
             {profile.careerProfileEnabled && (
               <span className="pf-verified">
-                <BadgeCheck size={13} aria-hidden="true" /> Professional profile
+                <BadgeCheck size={13} aria-hidden="true" />{" "}
+                {t("Professional profile")}
               </span>
             )}
           </div>
@@ -84,9 +86,12 @@ export default function CommunityProfileHero({
               {tenure && (
                 <span className="pf-tenure">
                   <CalendarHeart size={14} aria-hidden="true" />
-                  {tenure.length === "New this month"
-                    ? "Joined this month"
-                    : `${tenure.length} · since ${tenure.since}`}
+                  {tenure.length === t("New this month")
+                    ? t("Joined this month")
+                    : t("{length} · since {since}", {
+                        length: tenure.length,
+                        since: tenure.since,
+                      })}
                 </span>
               )}
             </p>
@@ -100,10 +105,10 @@ export default function CommunityProfileHero({
                 className="community-profile-primary-action"
                 to="/profile/career"
               >
-                <UserPen size={16} /> Edit professional profile
+                <UserPen size={16} /> {t("Edit professional profile")}
               </Link>
               <PhotoPickerButton
-                label="Change photo"
+                label={t("Change photo")}
                 busy={uploading}
                 className="pf-photo-btn"
                 onSelect={uploadPhoto}
@@ -121,7 +126,7 @@ export default function CommunityProfileHero({
                 type="button"
                 onClick={onReport}
               >
-                <Flag size={15} /> Report profile
+                <Flag size={15} /> {t("Report profile")}
               </button>
             </>
           )}
@@ -131,7 +136,7 @@ export default function CommunityProfileHero({
       <dl className="pf-stats">
         {stats.map((stat) => (
           <div key={stat.label}>
-            <dt>{stat.label}</dt>
+            <dt>{t(stat.label)}</dt>
             <dd>{stat.value}</dd>
           </div>
         ))}

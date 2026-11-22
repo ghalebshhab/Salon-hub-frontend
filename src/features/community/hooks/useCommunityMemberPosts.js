@@ -7,6 +7,7 @@ import {
 } from "../api/communityPostsApi.js";
 import useCommunityAction from "./useCommunityAction.js";
 import { confirmAction } from "../../../shared/confirm/confirmStore.js";
+import t from "../../../shared/i18n/t.js";
 
 const PAGE_SIZE = 10;
 const EMPTY_PAGE = { page: 0, totalElements: 0, totalPages: 0, last: true };
@@ -14,7 +15,7 @@ const isCanceled = (error) =>
   error?.name === "CanceledError" || error?.name === "AbortError";
 
 function toPage(response) {
-  const page = requireData(response, "Member posts could not be loaded.");
+  const page = requireData(response, t("Member posts could not be loaded."));
   return {
     posts: page.content || [],
     pagination: {
@@ -65,7 +66,9 @@ export default function useCommunityMemberPosts(userId, { onDelete } = {}) {
       .then(() => loadPage(0, { signal: controller.signal }))
       .catch((requestError) => {
         if (!isCanceled(requestError)) {
-          setError(requestError.message || "Member posts could not be loaded.");
+          setError(
+            requestError.message || t("Member posts could not be loaded."),
+          );
         }
       })
       .finally(() => {
@@ -81,7 +84,7 @@ export default function useCommunityMemberPosts(userId, { onDelete } = {}) {
     try {
       await loadPage(0);
     } catch (requestError) {
-      setError(requestError.message || "Member posts could not be loaded.");
+      setError(requestError.message || t("Member posts could not be loaded."));
     } finally {
       setLoading(false);
     }
@@ -94,7 +97,7 @@ export default function useCommunityMemberPosts(userId, { onDelete } = {}) {
     try {
       await loadPage(postPage.page + 1, { append: true });
     } catch (requestError) {
-      setError(requestError.message || "More posts could not be loaded.");
+      setError(requestError.message || t("More posts could not be loaded."));
     } finally {
       setLoading(false);
     }
@@ -119,17 +122,18 @@ export default function useCommunityMemberPosts(userId, { onDelete } = {}) {
   const deletePost = useCallback(
     async (postId) => {
       const confirmed = await confirmAction({
-        title: "Delete this post?",
-        message:
+        title: t("Delete this post?"),
+        message: t(
           "The post, its photo, likes and comments will be deleted. You cannot undo this.",
-        confirmText: "Delete",
+        ),
+        confirmText: t("Delete"),
         danger: true,
       });
       if (!confirmed) return;
       const response = await runAction({
         key: `delete-${postId}`,
         action: () => deleteCommunityPostApi(postId),
-        successMessage: "Post removed.",
+        successMessage: t("Post removed."),
       });
       if (!response?.success) return;
       setPosts((current) => current.filter((post) => post.id !== postId));

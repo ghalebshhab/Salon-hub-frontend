@@ -1,5 +1,13 @@
-import { Check, Clock3, LoaderCircle, UserCheck, UserPlus, X } from "lucide-react";
+import {
+  Check,
+  Clock3,
+  LoaderCircle,
+  UserCheck,
+  UserPlus,
+  X,
+} from "lucide-react";
 import { isCommunityActionBusy } from "../hooks/useCommunityAction.js";
+import t from "../../../shared/i18n/t.js";
 
 export default function FriendshipActions({
   member,
@@ -11,14 +19,20 @@ export default function FriendshipActions({
   if (member.relationship === "ACCEPTED") {
     return (
       <span className="community-friend-status is-friend">
-        <UserCheck size={15} aria-hidden="true" /> Friends
+        <UserCheck size={15} aria-hidden="true" /> {t("Friends")}
       </span>
     );
   }
 
   if (member.relationship === "PENDING" && member.incomingRequest) {
-    const acceptBusy = isCommunityActionBusy(busy, `accept-${member.friendshipId}`);
-    const declineBusy = isCommunityActionBusy(busy, `decline-${member.friendshipId}`);
+    const acceptBusy = isCommunityActionBusy(
+      busy,
+      `accept-${member.friendshipId}`,
+    );
+    const declineBusy = isCommunityActionBusy(
+      busy,
+      `decline-${member.friendshipId}`,
+    );
     return (
       <span className="community-friend-actions">
         <button
@@ -28,7 +42,16 @@ export default function FriendshipActions({
           aria-busy={acceptBusy}
           onClick={() => onAccept(member.friendshipId)}
         >
-          {acceptBusy ? <LoaderCircle size={15} className="community-spinning" aria-hidden="true" /> : <Check size={15} aria-hidden="true" />} Accept
+          {acceptBusy ? (
+            <LoaderCircle
+              size={15}
+              className="community-spinning"
+              aria-hidden="true"
+            />
+          ) : (
+            <Check size={15} aria-hidden="true" />
+          )}{" "}
+          {t("Accept")}
         </button>
         <button
           className="community-friend-button is-secondary"
@@ -37,7 +60,16 @@ export default function FriendshipActions({
           aria-busy={declineBusy}
           onClick={() => onDecline(member.friendshipId)}
         >
-          {declineBusy ? <LoaderCircle size={15} className="community-spinning" aria-hidden="true" /> : <X size={15} aria-hidden="true" />} Decline
+          {declineBusy ? (
+            <LoaderCircle
+              size={15}
+              className="community-spinning"
+              aria-hidden="true"
+            />
+          ) : (
+            <X size={15} aria-hidden="true" />
+          )}{" "}
+          {t("Decline")}
         </button>
       </span>
     );
@@ -46,7 +78,7 @@ export default function FriendshipActions({
   if (member.relationship === "PENDING") {
     return (
       <span className="community-friend-status">
-        <Clock3 size={14} aria-hidden="true" /> Request sent
+        <Clock3 size={14} aria-hidden="true" /> {t("Request sent")}
       </span>
     );
   }
@@ -60,7 +92,16 @@ export default function FriendshipActions({
       aria-busy={connectBusy}
       onClick={() => onConnect(member.user.id)}
     >
-      {connectBusy ? <LoaderCircle size={15} className="community-spinning" aria-hidden="true" /> : <UserPlus size={15} aria-hidden="true" />} Add friend
+      {connectBusy ? (
+        <LoaderCircle
+          size={15}
+          className="community-spinning"
+          aria-hidden="true"
+        />
+      ) : (
+        <UserPlus size={15} aria-hidden="true" />
+      )}{" "}
+      {t("Add friend")}
     </button>
   );
 }

@@ -13,6 +13,7 @@ import {
 } from "../api/communityPostsApi.js";
 import useCommunityAction from "./useCommunityAction.js";
 import { confirmAction } from "../../../shared/confirm/confirmStore.js";
+import t from "../../../shared/i18n/t.js";
 
 export default function useCommunityPosts() {
   const [posts, setPosts] = useState([]);
@@ -36,7 +37,10 @@ export default function useCommunityPosts() {
       .catch((error) => {
         if (!controller.signal.aborted) {
           setFeedError(true);
-          showApiErrorToast(error, "The community feed could not be loaded.");
+          showApiErrorToast(
+            error,
+            t("The community feed could not be loaded."),
+          );
         }
       })
       .finally(() => {
@@ -77,17 +81,17 @@ export default function useCommunityPosts() {
             if (withMedia?.success && withMedia.data) return withMedia;
             showWarningToast(
               withMedia?.message ||
-                "The post is live, but its photo was not saved.",
+                t("The post is live, but its photo was not saved."),
             );
           } catch (error) {
             showApiErrorToast(
               error,
-              "The post is live, but its photo was not saved.",
+              t("The post is live, but its photo was not saved."),
             );
           }
           return created;
         },
-        successMessage: "Your post is live.",
+        successMessage: t("Your post is live."),
       });
       const post = response && requireData(response);
       if (post) setPosts((current) => [post, ...current]);
@@ -99,17 +103,18 @@ export default function useCommunityPosts() {
   const deletePost = useCallback(
     async (postId) => {
       const confirmed = await confirmAction({
-        title: "Delete this post?",
-        message:
+        title: t("Delete this post?"),
+        message: t(
           "The post, its photo, likes and comments will be deleted. You cannot undo this.",
-        confirmText: "Delete",
+        ),
+        confirmText: t("Delete"),
         danger: true,
       });
       if (!confirmed) return;
       const response = await runAction({
         key: `delete-${postId}`,
         action: () => deleteCommunityPostApi(postId),
-        successMessage: "Post removed.",
+        successMessage: t("Post removed."),
       });
       if (response?.success)
         setPosts((current) => current.filter((post) => post.id !== postId));

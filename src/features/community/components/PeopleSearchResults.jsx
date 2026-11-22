@@ -2,6 +2,7 @@ import { RotateCw } from "lucide-react";
 import CommunityProfileLink from "./CommunityProfileLink.jsx";
 import FriendshipActions from "./FriendshipActions.jsx";
 import HighlightedText from "../../../shared/components/HighlightedText.jsx";
+import t from "../../../shared/i18n/t.js";
 
 export default function PeopleSearchResults({
   people,
@@ -18,16 +19,16 @@ export default function PeopleSearchResults({
   if (loading && !people.length) {
     return (
       <p className="community-discovery-message">
-        Finding people in the community…
+        {t("Finding people in the community…")}
       </p>
     );
   }
   if (error) {
     return (
       <div className="community-discovery-message is-error" role="alert">
-        <span>We couldn&apos;t load people right now.</span>
+        <span>{t("We couldn't load people right now.")}</span>
         <button type="button" onClick={onRetry}>
-          <RotateCw size={15} aria-hidden="true" /> Try again
+          <RotateCw size={15} aria-hidden="true" /> {t("Try again")}
         </button>
       </div>
     );
@@ -36,8 +37,10 @@ export default function PeopleSearchResults({
     return (
       <p className="community-discovery-message">
         {search
-          ? "No people found. Try a different name or username."
-          : "No suggestions yet. Search by name or username to find your people."}
+          ? t("No people found. Try a different name or username.")
+          : t(
+              "No suggestions yet. Search by name or username to find your people.",
+            )}
       </p>
     );
   }
@@ -47,10 +50,10 @@ export default function PeopleSearchResults({
       <p className="community-discovery-caption">
         {search ? (
           <>
-            People starting with <strong>“{search}”</strong>
+            {t("People starting with")} <strong>“{search}”</strong>
           </>
         ) : (
-          "Suggested professionals"
+          t("Suggested professionals")
         )}
       </p>
       <ul className="community-people-grid" aria-busy={loading || undefined}>

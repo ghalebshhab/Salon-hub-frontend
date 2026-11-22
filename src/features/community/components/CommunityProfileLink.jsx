@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import CommunityAvatar from "./CommunityAvatar.jsx";
+import t from "../../../shared/i18n/t.js";
 
 export default function CommunityProfileLink({
   user,
@@ -18,7 +19,9 @@ export default function CommunityProfileLink({
         .filter(Boolean)
         .join(" ")}
       to={`/community/people/${user.id}`}
-      aria-label={`View ${user.displayName || user.userName}'s profile`}
+      aria-label={t("View {value}'s profile", {
+        value: user.displayName || user.userName,
+      })}
       onClick={onClick}
     >
       {showAvatar && (

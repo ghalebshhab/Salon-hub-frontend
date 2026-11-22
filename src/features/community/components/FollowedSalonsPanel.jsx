@@ -1,17 +1,28 @@
 import { ArrowRight, Store } from "lucide-react";
 import { Link } from "react-router-dom";
 import CommunityAvatar from "./CommunityAvatar.jsx";
+import t from "../../../shared/i18n/t.js";
 
-export default function FollowedSalonsPanel({ followedSalons, id = "followed-salons", loading = false }) {
+export default function FollowedSalonsPanel({
+  followedSalons,
+  id = "followed-salons",
+  loading = false,
+}) {
   return (
-    <section className="community-panel community-following-panel" id={id} aria-labelledby={`${id}-title`}>
+    <section
+      className="community-panel community-following-panel"
+      id={id}
+      aria-labelledby={`${id}-title`}
+    >
       <header className="community-panel-heading">
         <h2 id={`${id}-title`}>
-          <Store size={18} aria-hidden="true" /> Followed salons
+          <Store size={18} aria-hidden="true" /> {t("Followed salons")}
         </h2>
       </header>
       {loading ? (
-        <p className="community-network-loading" role="status">Loading followed salons…</p>
+        <p className="community-network-loading" role="status">
+          {t("Loading followed salons…")}
+        </p>
       ) : followedSalons.length ? (
         <ul className="community-salon-list">
           {followedSalons.map(({ salon }) => (
@@ -26,9 +37,13 @@ export default function FollowedSalonsPanel({ followedSalons, id = "followed-sal
         </ul>
       ) : (
         <div className="community-salon-empty">
-          <p>Your favorite studios will be easy to find here. Explore salons to start your list.</p>
+          <p>
+            {t(
+              "Your favorite studios will be easy to find here. Explore salons to start your list.",
+            )}
+          </p>
           <Link to="/#discover" className="community-salon-discover">
-            Explore salons <ArrowRight size={15} aria-hidden="true" />
+            {t("Explore salons")} <ArrowRight size={15} aria-hidden="true" />
           </Link>
         </div>
       )}

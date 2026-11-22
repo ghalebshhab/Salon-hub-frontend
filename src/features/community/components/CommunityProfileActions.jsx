@@ -8,6 +8,7 @@ import {
   X,
 } from "lucide-react";
 import { isCommunityActionBusy } from "../hooks/useCommunityAction.js";
+import t from "../../../shared/i18n/t.js";
 
 const BusyIcon = () => (
   <LoaderCircle className="community-spinning" size={16} aria-hidden="true" />
@@ -29,7 +30,7 @@ export default function CommunityProfileActions({
     return (
       <div className="community-profile-actions">
         <span className="community-profile-connection is-connected">
-          <UserCheck size={17} aria-hidden="true" /> Friends
+          <UserCheck size={17} aria-hidden="true" /> {t("Friends")}
         </span>
         <button
           className="community-profile-secondary-action"
@@ -38,7 +39,7 @@ export default function CommunityProfileActions({
           onClick={() => onRemove(member.friendshipId)}
         >
           {removing ? <BusyIcon /> : <UserRoundX size={16} />}
-          Remove
+          {t("Remove")}
         </button>
       </div>
     );
@@ -62,7 +63,7 @@ export default function CommunityProfileActions({
           onClick={() => onAccept(member.friendshipId)}
         >
           {accepting ? <BusyIcon /> : <Check size={16} />}
-          Accept request
+          {t("Accept request")}
         </button>
         <button
           className="community-profile-secondary-action"
@@ -71,7 +72,7 @@ export default function CommunityProfileActions({
           onClick={() => onDecline(member.friendshipId)}
         >
           {declining ? <BusyIcon /> : <X size={16} />}
-          Decline
+          {t("Decline")}
         </button>
       </div>
     );
@@ -85,7 +86,7 @@ export default function CommunityProfileActions({
     return (
       <div className="community-profile-actions">
         <span className="community-profile-connection">
-          <Clock3 size={16} aria-hidden="true" /> Request sent
+          <Clock3 size={16} aria-hidden="true" /> {t("Request sent")}
         </span>
         <button
           className="community-profile-secondary-action"
@@ -94,16 +95,13 @@ export default function CommunityProfileActions({
           onClick={() => onRemove(member.friendshipId)}
         >
           {canceling ? <BusyIcon /> : <X size={16} />}
-          Cancel
+          {t("Cancel")}
         </button>
       </div>
     );
   }
 
-  const connecting = isCommunityActionBusy(
-    busy,
-    `connect-${member.user.id}`,
-  );
+  const connecting = isCommunityActionBusy(busy, `connect-${member.user.id}`);
   return (
     <div className="community-profile-actions">
       <button
@@ -113,7 +111,7 @@ export default function CommunityProfileActions({
         onClick={() => onConnect(member.user.id)}
       >
         {connecting ? <BusyIcon /> : <UserPlus size={16} />}
-        Add friend
+        {t("Add friend")}
       </button>
     </div>
   );

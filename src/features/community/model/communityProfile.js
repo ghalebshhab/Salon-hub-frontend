@@ -1,3 +1,5 @@
+import t from "../../../shared/i18n/t.js";
+import { dateLocale } from "../../../shared/i18n/language.js";
 /**
  * How a member's role reads on their profile. Professionals get a craft
  * title, not a job-board word: an employee is the salon's "Resident artist".
@@ -6,38 +8,40 @@
 const PROFILE_ROLES = {
   OWNER: {
     key: "owner",
-    label: "Founder & owner",
-    salonPhrase: "Founder & owner of",
+    label: t("Founder & owner"),
+    salonPhrase: t("Founder & owner of"),
     tone: "gold",
-    summary: "Building a salon, a team, and memorable client experiences.",
+    summary: t("Building a salon, a team, and memorable client experiences."),
   },
   MANAGER: {
     key: "manager",
-    label: "Salon manager",
-    salonPhrase: "Salon manager & resident artist at",
+    label: t("Salon manager"),
+    salonPhrase: t("Salon manager & resident artist at"),
     tone: "rose",
-    summary: "Runs the day at the salon and keeps every visit on time.",
+    summary: t("Runs the day at the salon and keeps every visit on time."),
   },
   EMPLOYEE: {
     key: "artist",
-    label: "Resident artist",
-    salonPhrase: "Resident artist at",
+    label: t("Resident artist"),
+    salonPhrase: t("Resident artist at"),
     tone: "rose",
-    summary: "Practicing and growing their craft within the salon community.",
+    summary: t(
+      "Practicing and growing their craft within the salon community.",
+    ),
   },
   ADMIN: {
     key: "team",
-    label: "SalonHub team",
-    salonPhrase: "On the team at",
+    label: t("SalonHub team"),
+    salonPhrase: t("On the team at"),
     tone: "ink",
-    summary: "Helping keep the SalonHub community useful and welcoming.",
+    summary: t("Helping keep the SalonHub community useful and welcoming."),
   },
   USER: {
     key: "explorer",
-    label: "Salon explorer",
-    salonPhrase: "Connected to",
+    label: t("Salon explorer"),
+    salonPhrase: t("Connected to"),
     tone: "sage",
-    summary: "Discovering salons, professionals, and ideas across SalonHub.",
+    summary: t("Discovering salons, professionals, and ideas across SalonHub."),
   },
 };
 
@@ -69,17 +73,24 @@ export function salonTenure(since, now = new Date()) {
     (now.getFullYear() - start.getFullYear()) * 12 +
     (now.getMonth() - start.getMonth());
   if (now.getDate() < start.getDate()) months -= 1;
-  const startLabel = start.toLocaleDateString(undefined, {
+  const startLabel = start.toLocaleDateString(dateLocale(), {
     month: "long",
     year: "numeric",
   });
-  if (months < 1) return { length: "New this month", since: startLabel };
+  if (months < 1) return { length: t("New this month"), since: startLabel };
   const years = Math.floor(months / 12);
   const rest = months % 12;
-  const parts = [];
-  if (years) parts.push(`${years} ${years === 1 ? "year" : "years"}`);
-  if (rest) parts.push(`${rest} ${rest === 1 ? "month" : "months"}`);
-  return { length: parts.join(" "), since: startLabel };
+  const yearText =
+    years === 1 ? t("1 year") : t("{count} years", { count: years });
+  const monthText =
+    rest === 1 ? t("1 month") : t("{count} months", { count: rest });
+  const length =
+    years && rest
+      ? t("{years} {months}", { years: yearText, months: monthText })
+      : years
+        ? yearText
+        : monthText;
+  return { length, since: startLabel };
 }
 
 export function getCommunityProfileViewModel(profile, currentUserId) {

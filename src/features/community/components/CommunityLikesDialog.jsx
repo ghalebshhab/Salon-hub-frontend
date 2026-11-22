@@ -2,6 +2,7 @@ import { Heart, X } from "lucide-react";
 import { useEffect } from "react";
 import useCommunityPostLikes from "../hooks/useCommunityPostLikes.js";
 import CommunityProfileLink from "./CommunityProfileLink.jsx";
+import t from "../../../shared/i18n/t.js";
 
 export default function CommunityLikesDialog({ postId, onClose }) {
   const { likes, loading, error } = useCommunityPostLikes(postId);
@@ -33,13 +34,13 @@ export default function CommunityLikesDialog({ postId, onClose }) {
               <Heart size={15} fill="currentColor" />
             </span>
             <div>
-              <h2 id={`likes-title-${postId}`}>People who liked this</h2>
-              <p>Discover the people engaging with this post.</p>
+              <h2 id={`likes-title-${postId}`}>{t("People who liked this")}</h2>
+              <p>{t("Discover the people engaging with this post.")}</p>
             </div>
           </div>
           <button
             type="button"
-            aria-label="Close likes"
+            aria-label={t("Close likes")}
             onClick={onClose}
             autoFocus
           >
@@ -47,12 +48,12 @@ export default function CommunityLikesDialog({ postId, onClose }) {
           </button>
         </header>
         <div className="community-likes-list">
-          {loading && <p className="community-muted">Loading likes…</p>}
+          {loading && <p className="community-muted">{t("Loading likes…")}</p>}
           {error && <p className="community-likes-error">{error}</p>}
           {!loading && !error && !likes.length && (
             <div className="community-likes-empty">
               <Heart size={24} />
-              <p>No likes yet. Be the first to show some love.</p>
+              <p>{t("No likes yet. Be the first to show some love.")}</p>
             </div>
           )}
           {likes.map((like) => (
@@ -66,7 +67,9 @@ export default function CommunityLikesDialog({ postId, onClose }) {
                 <strong>{like.user.displayName || like.user.userName}</strong>
                 <small>@{like.user.userName}</small>
               </span>
-              <span className="community-view-profile">View profile</span>
+              <span className="community-view-profile">
+                {t("View profile")}
+              </span>
             </CommunityProfileLink>
           ))}
         </div>

@@ -8,6 +8,7 @@ import {
   getFollowedSalonsApi,
   setSalonFollowApi,
 } from "../api/communitySalonFollowsApi.js";
+import t from "../../../shared/i18n/t.js";
 
 export default function useSalonFollow(salonId, enabled) {
   const [followed, setFollowed] = useState(false);
@@ -40,9 +41,11 @@ export default function useSalonFollow(salonId, enabled) {
     try {
       requireData(await setSalonFollowApi(salonId, !followed));
       setFollowed((value) => !value);
-      showSuccessToast(followed ? "Salon unfollowed." : "Salon followed.");
+      showSuccessToast(
+        followed ? t("Salon unfollowed.") : t("Salon followed."),
+      );
     } catch (error) {
-      showApiErrorToast(error, "Salon following could not be updated.");
+      showApiErrorToast(error, t("Salon following could not be updated."));
     } finally {
       setBusy(false);
     }

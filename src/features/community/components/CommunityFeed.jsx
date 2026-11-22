@@ -5,6 +5,7 @@ import CommunityEmptyFeed from "./CommunityEmptyFeed.jsx";
 import CommunityFeedHeading from "./CommunityFeedHeading.jsx";
 import CommunityFeedSkeleton from "./CommunityFeedSkeleton.jsx";
 import CommunityPostCard from "./CommunityPostCard.jsx";
+import t from "../../../shared/i18n/t.js";
 
 export default function CommunityFeed({ user, posts, comments }) {
   return (
@@ -25,9 +26,9 @@ export default function CommunityFeed({ user, posts, comments }) {
         <CommunityFeedSkeleton />
       ) : posts.feedError ? (
         <div className="community-feed-error" role="alert">
-          <span>We couldn&apos;t load the community feed.</span>
+          <span>{t("We couldn't load the community feed.")}</span>
           <button type="button" onClick={posts.retryFeed}>
-            <RotateCw size={15} aria-hidden="true" /> Try again
+            <RotateCw size={15} aria-hidden="true" /> {t("Try again")}
           </button>
         </div>
       ) : posts.posts.length ? (

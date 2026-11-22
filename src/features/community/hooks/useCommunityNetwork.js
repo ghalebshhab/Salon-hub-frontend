@@ -8,6 +8,7 @@ import {
 } from "../api/communityRelationshipsApi.js";
 import useCommunityPeopleSearch from "./useCommunityPeopleSearch.js";
 import useCommunityRelationshipActions from "./useCommunityRelationshipActions.js";
+import t from "../../../shared/i18n/t.js";
 
 function readList(result) {
   if (result.status !== "fulfilled") return [];
@@ -44,7 +45,10 @@ export default function useCommunityNetwork() {
       .then(() => refreshSummary({ signal: controller.signal }))
       .catch((error) => {
         if (!controller.signal.aborted) {
-          showApiErrorToast(error, "Community connections could not be loaded.");
+          showApiErrorToast(
+            error,
+            t("Community connections could not be loaded."),
+          );
         }
       })
       .finally(() => {

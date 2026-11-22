@@ -1,6 +1,12 @@
 import { useState } from "react";
+import t from "../../../shared/i18n/t.js";
 
-export default function useCommunityPostCard({ post, authorName, comments, onLoadComments }) {
+export default function useCommunityPostCard({
+  post,
+  authorName,
+  comments,
+  onLoadComments,
+}) {
   const [commentsOpen, setCommentsOpen] = useState(false);
   const [shared, setShared] = useState(false);
   const [likesOpen, setLikesOpen] = useState(false);
@@ -17,7 +23,7 @@ export default function useCommunityPostCard({ post, authorName, comments, onLoa
     try {
       if (navigator.share) {
         await navigator.share({
-          title: `${authorName} on SalonHub`,
+          title: t("{authorName} on SalonHub", { authorName }),
           text: post.content,
           url: shareUrl,
         });

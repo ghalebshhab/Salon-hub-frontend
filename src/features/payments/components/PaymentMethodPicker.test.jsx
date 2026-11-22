@@ -38,6 +38,8 @@ it("lets the customer pick a card method when the salon accepts it", () => {
     />,
   );
 
-  fireEvent.click(screen.getByRole("radio", { name: /Card after the service/ }));
+  fireEvent.click(
+    screen.getByRole("radio", { name: /Card after the service/ }),
+  );
   expect(onChange).toHaveBeenCalledWith("CARD_POSTPAID");
 });

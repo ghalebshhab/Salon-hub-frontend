@@ -27,7 +27,10 @@ describe("payment model", () => {
 
   it("names methods and statuses", () => {
     expect(getMethodLabel("CASH")).toBe("Cash at the salon");
-    expect(getPaymentStatus("PAID")).toEqual({ label: "Paid", tone: "success" });
+    expect(getPaymentStatus("PAID")).toEqual({
+      label: "Paid",
+      tone: "success",
+    });
     expect(getPaymentStatus("NEW").tone).toBe("muted");
     expect(isCardMethod("CARD_PREPAID")).toBe(true);
     expect(isCardMethod("CASH")).toBe(false);

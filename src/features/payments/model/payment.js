@@ -1,3 +1,5 @@
+import t from "../../../shared/i18n/t.js";
+import { dateLocale } from "../../../shared/i18n/language.js";
 /**
  * Payment rules and labels for the UI. The server sends money as whole fils
  * (1 JOD = 1000 fils), so the UI never adds decimals itself.
@@ -7,19 +9,19 @@ export const FILS_PER_DINAR = 1000;
 
 export const PAYMENT_METHODS = {
   CASH: {
-    label: "Cash at the salon",
-    short: "Cash",
-    hint: "Pay the salon when your service is done.",
+    label: t("Cash at the salon"),
+    short: t("Cash"),
+    hint: t("Pay the salon when your service is done."),
   },
   CARD_POSTPAID: {
-    label: "Card after the service",
-    short: "Card after",
-    hint: "Get a secure payment link when your service is done.",
+    label: t("Card after the service"),
+    short: t("Card after"),
+    hint: t("Get a secure payment link when your service is done."),
   },
   CARD_PREPAID: {
-    label: "Card now",
-    short: "Card now",
-    hint: "The amount is held now and taken only after the service.",
+    label: t("Card now"),
+    short: t("Card now"),
+    hint: t("The amount is held now and taken only after the service."),
   },
 };
 
@@ -27,25 +29,25 @@ export const PAYMENT_METHODS = {
 export const CARD_METHODS = ["CARD_POSTPAID", "CARD_PREPAID"];
 
 export const PAYMENT_STATUSES = {
-  UNPAID: { label: "Not paid yet", tone: "warning" },
-  AUTHORIZED: { label: "Card on hold", tone: "info" },
-  PAID: { label: "Paid", tone: "success" },
-  PARTIALLY_REFUNDED: { label: "Partly refunded", tone: "info" },
-  REFUNDED: { label: "Refunded", tone: "muted" },
-  VOIDED: { label: "Closed, no charge", tone: "muted" },
-  FAILED: { label: "Payment failed", tone: "danger" },
+  UNPAID: { label: t("Not paid yet"), tone: "warning" },
+  AUTHORIZED: { label: t("Card on hold"), tone: "info" },
+  PAID: { label: t("Paid"), tone: "success" },
+  PARTIALLY_REFUNDED: { label: t("Partly refunded"), tone: "info" },
+  REFUNDED: { label: t("Refunded"), tone: "muted" },
+  VOIDED: { label: t("Closed, no charge"), tone: "muted" },
+  FAILED: { label: t("Payment failed"), tone: "danger" },
 };
 
 export const TRANSACTION_LABELS = {
-  CASH_RECEIVED: "Cash received",
-  AUTHORIZE: "Card hold",
-  CAPTURE: "Card charged",
-  VOID: "Closed without charge",
-  REFUND: "Refund",
-  METHOD_CHANGED: "Method changed",
+  CASH_RECEIVED: t("Cash received"),
+  AUTHORIZE: t("Card hold"),
+  CAPTURE: t("Card charged"),
+  VOID: t("Closed without charge"),
+  REFUND: t("Refund"),
+  METHOD_CHANGED: t("Method changed"),
 };
 
-const NUMBER = new Intl.NumberFormat("en-US", {
+const NUMBER = new Intl.NumberFormat(dateLocale(), {
   minimumFractionDigits: 3,
   maximumFractionDigits: 3,
 });
@@ -56,7 +58,7 @@ export function formatMoney(fils, currency = "JOD") {
   if (fils === null || fils === undefined || !Number.isFinite(value)) {
     return "—";
   }
-  return `${NUMBER.format(value / FILS_PER_DINAR)} ${currency}`;
+  return `${NUMBER.format(value / FILS_PER_DINAR)} ${t(currency)}`;
 }
 
 /** Dinars as typed or sent in a price ("19.50") → whole fils. */
@@ -66,15 +68,15 @@ export function toFils(dinars) {
 }
 
 export function getMethodLabel(method) {
-  return PAYMENT_METHODS[method]?.label || "Payment";
+  return PAYMENT_METHODS[method]?.label || t("Payment");
 }
 
 export function getMethodShort(method) {
-  return PAYMENT_METHODS[method]?.short || "Payment";
+  return PAYMENT_METHODS[method]?.short || t("Payment");
 }
 
 export function getPaymentStatus(status) {
-  return PAYMENT_STATUSES[status] || { label: "Unknown", tone: "muted" };
+  return PAYMENT_STATUSES[status] || { label: t("Unknown"), tone: "muted" };
 }
 
 export function isCardMethod(method) {
@@ -119,8 +121,8 @@ export function periodRange(period, today = new Date()) {
 }
 
 export const REPORT_PERIODS = [
-  { key: "today", label: "Today" },
-  { key: "7d", label: "7 days" },
-  { key: "month", label: "This month" },
-  { key: "30d", label: "30 days" },
+  { key: "today", label: t("Today") },
+  { key: "7d", label: t("7 days") },
+  { key: "month", label: t("This month") },
+  { key: "30d", label: t("30 days") },
 ];

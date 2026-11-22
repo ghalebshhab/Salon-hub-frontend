@@ -7,8 +7,10 @@ import {
   getMethodLabel,
   getPaymentStatus,
 } from "../model/payment.js";
+import t from "../../../shared/i18n/t.js";
+import { dateLocale } from "../../../shared/i18n/language.js";
 
-const DATE_TIME = new Intl.DateTimeFormat("en-GB", {
+const DATE_TIME = new Intl.DateTimeFormat(dateLocale(), {
   day: "numeric",
   month: "short",
   year: "numeric",
@@ -52,7 +54,7 @@ export default function ReceiptDialog({ bookingId, onClose }) {
             className="icon-button"
             type="button"
             onClick={() => window.print()}
-            aria-label="Print receipt"
+            aria-label={t("Print receipt")}
             disabled={!receipt}
           >
             <Printer size={17} aria-hidden="true" />
@@ -61,7 +63,7 @@ export default function ReceiptDialog({ bookingId, onClose }) {
             className="icon-button"
             type="button"
             onClick={onClose}
-            aria-label="Close receipt"
+            aria-label={t("Close receipt")}
           >
             <X size={17} aria-hidden="true" />
           </button>
@@ -77,7 +79,7 @@ export default function ReceiptDialog({ bookingId, onClose }) {
 
         {!loading && error && (
           <div className="receipt-body">
-            <h2 id={`${id}-title`}>Receipt</h2>
+            <h2 id={`${id}-title`}>{t("Receipt")}</h2>
             <p className="accept-warning" role="alert">
               {error}
             </p>
@@ -91,52 +93,58 @@ export default function ReceiptDialog({ bookingId, onClose }) {
               <h2 id={`${id}-title`}>{receipt.salonName}</h2>
               <p>
                 {receipt.receiptNumber
-                  ? `Receipt ${receipt.receiptNumber}`
-                  : `Booking #${receipt.bookingId}`}
+                  ? t("Receipt {receiptNumber}", {
+                      receiptNumber: receipt.receiptNumber,
+                    })
+                  : t("Booking #{bookingId}", { bookingId: receipt.bookingId })}
               </p>
               <span className={`pay-pill tone-${status.tone}`}>
-                {status.label}
+                {t(status.label)}
               </span>
             </header>
 
             <dl className="receipt-meta">
               <div>
-                <dt>Guest</dt>
+                <dt>{t("Guest")}</dt>
                 <dd>{receipt.customerName}</dd>
               </div>
               <div>
-                <dt>Appointment</dt>
+                <dt>{t("Appointment")}</dt>
                 <dd>
                   {receipt.bookingDate} ·{" "}
                   {receipt.bookingTime?.toString().slice(0, 5)}
                 </dd>
               </div>
               <div>
-                <dt>Method</dt>
+                <dt>{t("Method")}</dt>
                 <dd>{getMethodLabel(receipt.method)}</dd>
               </div>
               {receipt.paidAt && (
                 <div>
-                  <dt>Paid</dt>
+                  <dt>{t("Paid")}</dt>
                   <dd>{formatDateTime(receipt.paidAt)}</dd>
                 </div>
               )}
               {receipt.confirmedByName && (
                 <div>
-                  <dt>Received by</dt>
+                  <dt>{t("Received by")}</dt>
                   <dd>{receipt.confirmedByName}</dd>
                 </div>
               )}
             </dl>
 
             <table className="receipt-lines">
-              <caption className="sr-only">Services</caption>
+              <caption className="sr-only">{t("Services")}</caption>
               <tbody>
                 {receipt.lines.map((line, index) => (
                   <tr key={`${line.name}-${index}`}>
                     <th scope="row">
                       {line.name}
-                      <small>{line.durationMinutes} min</small>
+                      <small>
+                        {t("{durationMinutes} min", {
+                          durationMinutes: line.durationMinutes,
+                        })}
+                      </small>
                     </th>
                     <td>{formatMoney(line.amountFils, currency)}</td>
                   </tr>
@@ -145,22 +153,22 @@ export default function ReceiptDialog({ bookingId, onClose }) {
               <tfoot>
                 {receipt.refundedFils > 0 && (
                   <tr>
-                    <th scope="row">Refunded</th>
+                    <th scope="row">{t("Refunded")}</th>
                     <td>−{formatMoney(receipt.refundedFils, currency)}</td>
                   </tr>
                 )}
                 <tr className="receipt-total">
-                  <th scope="row">Total</th>
+                  <th scope="row">{t("Total")}</th>
                   <td>{formatMoney(receipt.amountFils, currency)}</td>
                 </tr>
                 {receipt.netFils !== null && receipt.netFils !== undefined && (
                   <>
                     <tr className="receipt-owner">
-                      <th scope="row">SalonHub commission</th>
+                      <th scope="row">{t("SalonHub commission")}</th>
                       <td>−{formatMoney(receipt.commissionFils, currency)}</td>
                     </tr>
                     <tr className="receipt-owner">
-                      <th scope="row">Your net</th>
+                      <th scope="row">{t("Your net")}</th>
                       <td>{formatMoney(receipt.netFils, currency)}</td>
                     </tr>
                   </>
@@ -169,8 +177,11 @@ export default function ReceiptDialog({ bookingId, onClose }) {
             </table>
 
             {receipt.transactions?.length > 0 && (
-              <section className="receipt-ledger" aria-label="Payment history">
-                <h3>History</h3>
+              <section
+                className="receipt-ledger"
+                aria-label={t("Payment history")}
+              >
+                <h3>{t("History")}</h3>
                 <ol>
                   {receipt.transactions.map((entry, index) => (
                     <li key={`${entry.type}-${index}`}>
@@ -181,7 +192,7 @@ export default function ReceiptDialog({ bookingId, onClose }) {
                         <small>
                           {formatDateTime(entry.createdAt)} · {entry.actorName}
                         </small>
-                        {entry.note && <small>{entry.note}</small>}
+                        {entry.note && <small>{t(entry.note)}</small>}
                       </span>
                       {entry.amountFils > 0 && (
                         <em>{formatMoney(entry.amountFils, currency)}</em>
@@ -192,7 +203,7 @@ export default function ReceiptDialog({ bookingId, onClose }) {
               </section>
             )}
 
-            <p className="receipt-foot">Thank you for visiting.</p>
+            <p className="receipt-foot">{t("Thank you for visiting.")}</p>
           </div>
         )}
       </div>

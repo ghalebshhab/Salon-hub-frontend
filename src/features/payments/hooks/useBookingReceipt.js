@@ -2,6 +2,7 @@ import { useCallback } from "react";
 import useQuery from "../../../shared/hooks/useQuery.js";
 import { requireData } from "../../../shared/api/response.js";
 import { getBookingPaymentApi } from "../api/paymentApi.js";
+import t from "../../../shared/i18n/t.js";
 
 /** Receipt of one booking; loads only while `bookingId` is set. */
 export default function useBookingReceipt(bookingId) {
@@ -10,7 +11,7 @@ export default function useBookingReceipt(bookingId) {
       bookingId
         ? requireData(
             await getBookingPaymentApi(bookingId, { signal }),
-            "Could not load the receipt",
+            t("Could not load the receipt"),
           )
         : null,
     [bookingId],
@@ -22,7 +23,9 @@ export default function useBookingReceipt(bookingId) {
     receipt: data,
     loading: Boolean(bookingId) && loading,
     error: error
-      ? error?.response?.data?.message || error?.message || "Could not load the receipt"
+      ? error?.response?.data?.message ||
+        error?.message ||
+        t("Could not load the receipt")
       : "",
     refetch,
   };

@@ -5,6 +5,7 @@ import {
   PAYMENT_METHODS,
   formatMoney,
 } from "../model/payment.js";
+import t from "../../../shared/i18n/t.js";
 
 const ICONS = {
   CASH: Banknote,
@@ -29,7 +30,7 @@ export default function PaymentMethodPicker({
   return (
     <fieldset className="pay-picker" aria-describedby={`${id}-terms`}>
       <legend className="pay-picker-legend">
-        <span>How do you want to pay?</span>
+        <span>{t("How do you want to pay?")}</span>
         <strong>{formatMoney(totalFils)}</strong>
       </legend>
 
@@ -56,13 +57,17 @@ export default function PaymentMethodPicker({
                 <Icon size={18} />
               </span>
               <span className="pay-option-body">
-                <strong>{PAYMENT_METHODS[method].label}</strong>
+                <strong>{t(PAYMENT_METHODS[method].label)}</strong>
                 <small>
-                  {available ? PAYMENT_METHODS[method].hint : "Coming soon"}
+                  {available ? PAYMENT_METHODS[method].hint : t("Coming soon")}
                 </small>
               </span>
               {!available && (
-                <Lock className="pay-option-lock" size={14} aria-hidden="true" />
+                <Lock
+                  className="pay-option-lock"
+                  size={14}
+                  aria-hidden="true"
+                />
               )}
             </label>
           );
@@ -72,8 +77,10 @@ export default function PaymentMethodPicker({
       <p className="pay-picker-terms" id={`${id}-terms`}>
         <ShieldCheck size={15} aria-hidden="true" />
         <span>
-          Nothing is charged now. Free cancellation until {freeCancelHours}{" "}
-          hours before your appointment.
+          {t(
+            "Nothing is charged now. Free cancellation until {freeCancelHours} hours before your appointment.",
+            { freeCancelHours },
+          )}
         </span>
       </p>
     </fieldset>

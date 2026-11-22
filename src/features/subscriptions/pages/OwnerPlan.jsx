@@ -15,24 +15,32 @@ import {
   formatDate,
   usageRows,
 } from "../model/plan.js";
+import { PlanBodyBones } from "../components/PlanSkeleton.jsx";
+import t from "../../../shared/i18n/t.js";
+import { PAGE_HEADS } from "../../../shared/copy/pageHeads.js";
 
 function StatusPill({ look }) {
-  return <span className={`plan-pill is-${look.tone}`}>{look.label}</span>;
+  return <span className={`plan-pill is-${look.tone}`}>{t(look.label)}</span>;
 }
 
 /** Plan time left in words, for the summary card. */
 function accessText(subscription) {
   const { status, daysLeft, accessEndsAt } = subscription;
   if (status === "ENDED" || daysLeft == null) {
-    return "Free has no end date. Upgrade at any time.";
+    return t("Free has no end date. Upgrade at any time.");
   }
-  const days = daysLeft === 1 ? "1 day" : `${daysLeft} days`;
+  const days =
+    daysLeft === 1 ? t("1 day") : t("{count} days", { count: daysLeft });
   const date = formatDate(accessEndsAt);
-  if (status === "TRIAL") return `Your free trial ends in ${days}, on ${date}.`;
+  if (status === "TRIAL")
+    return t("Your free trial ends in {days}, on {date}.", { days, date });
   if (status === "GRACE") {
-    return `Your plan ended. Pay within ${days} (by ${date}) to keep it.`;
+    return t("Your plan ended. Pay within {days} (by {date}) to keep it.", {
+      days,
+      date,
+    });
   }
-  return `Paid until ${date} (${days} left).`;
+  return t("Paid until {date} ({days} left).", { date, days });
 }
 
 function UsageMeter({ row }) {
@@ -43,18 +51,19 @@ function UsageMeter({ row }) {
     <li className={`plan-meter ${full ? "is-full" : ""}`}>
       <div className="plan-meter-text">
         <span>
-          {row.label}
-          {row.hint && <small> · {row.hint}</small>}
+          {t(row.label)}
+          {row.hint && <small> · {t(row.hint)}</small>}
         </span>
         <strong>
-          {row.used} {unlimited ? "· unlimited" : `of ${row.max}`}
+          {row.used}{" "}
+          {unlimited ? t("· unlimited") : t("of {max}", { max: row.max })}
         </strong>
       </div>
       {!unlimited && (
         <span
           className="plan-meter-bar"
           role="meter"
-          aria-label={row.label}
+          aria-label={t(row.label)}
           aria-valuemin={0}
           aria-valuemax={row.max}
           aria-valuenow={row.used}
@@ -70,13 +79,13 @@ function CurrentPlan({ subscription }) {
   const look = STATUS_LOOK[subscription.status] || STATUS_LOOK.ENDED;
   const limits = subscription.limits;
   return (
-    <section className="owner-panel plan-current" aria-label="Your plan">
+    <section className="owner-panel plan-current" aria-label={t("Your plan")}>
       <div className="plan-current-head">
         <span className="plan-current-icon" aria-hidden="true">
           <Crown size={20} />
         </span>
         <div>
-          <span className="eyebrow">Your plan</span>
+          <span className="eyebrow">{t("Your plan")}</span>
           <h2>
             {limits.name} <StatusPill look={look} />
           </h2>
@@ -90,9 +99,13 @@ function CurrentPlan({ subscription }) {
       </ul>
       <p className="plan-current-foot">
         <History size={14} aria-hidden="true" />
-        Dashboard history: {limits.analyticsMaxDays} days
+        {t("Dashboard history: {analyticsMaxDays} days", {
+          analyticsMaxDays: limits.analyticsMaxDays,
+        })}
         {limits.features.includes("CARD_PAYMENTS") &&
-          ` · Card payment fee: ${feeText(limits.cardFeeBps)}`}
+          t(" · Card payment fee: {value}", {
+            value: feeText(limits.cardFeeBps),
+          })}
       </p>
     </section>
   );
@@ -100,30 +113,44 @@ function CurrentPlan({ subscription }) {
 
 function OpenRequest({ request, payTo, cancelling, onCancel }) {
   return (
-    <section className="owner-panel plan-open" aria-label="Request waiting">
+    <section
+      className="owner-panel plan-open"
+      aria-label={t("Request waiting")}
+    >
       <div className="plan-open-head">
         <Clock3 size={20} aria-hidden="true" />
         <div>
           <h2>
-            Request for {request.plan === "BUSINESS" ? "Business" : "Pro"}{" "}
+            {request.plan === "BUSINESS"
+              ? t("Request for Business")
+              : t("Request for Pro")}{" "}
             <StatusPill look={REQUEST_STATUS_LOOK.PENDING} />
           </h2>
           <p>
-            {formatMoney(request.amountFils, request.currency)},{" "}
-            {request.billingCycle === "YEARLY" ? "yearly" : "monthly"}, by{" "}
-            {METHOD_LABELS[request.method]}. Sent on{" "}
-            {formatDate(request.createdAt)}.
+            {t("{amount}, {cycle}, by {method}. Sent on {date}.", {
+              amount: formatMoney(request.amountFils, request.currency),
+              cycle:
+                request.billingCycle === "YEARLY" ? t("yearly") : t("monthly"),
+              method: t(METHOD_LABELS[request.method] || ""),
+              date: formatDate(request.createdAt),
+            })}
           </p>
           {request.method === "CLIQ" && (
             <>
-              <p>If you did not pay yet, send the transfer to:</p>
+              <p>{t("If you did not pay yet, send the transfer to:")}</p>
               <CliqDetails payTo={payTo} />
             </>
           )}
           {request.method === "CASH" && (
-            <p>Our team contacts you to collect the cash.</p>
+            <p>{t("Our team contacts you to collect the cash.")}</p>
           )}
-          {request.reference && <p>Your reference: {request.reference}</p>}
+          {request.reference && (
+            <p>
+              {t("Your reference: {reference}", {
+                reference: request.reference,
+              })}
+            </p>
+          )}
         </div>
       </div>
       <button
@@ -132,7 +159,7 @@ function OpenRequest({ request, payTo, cancelling, onCancel }) {
         disabled={cancelling}
         onClick={onCancel}
       >
-        {cancelling ? "Cancelling…" : "Cancel request"}
+        {cancelling ? t("Cancelling…") : t("Cancel request")}
       </button>
     </section>
   );
@@ -146,7 +173,7 @@ function RecentRequests({ requests }) {
       className="owner-panel plan-history"
       aria-labelledby="plan-history"
     >
-      <h2 id="plan-history">Past requests</h2>
+      <h2 id="plan-history">{t("Past requests")}</h2>
       <ul>
         {done.map((request) => {
           const look = REQUEST_STATUS_LOOK[request.status];
@@ -154,8 +181,10 @@ function RecentRequests({ requests }) {
             <li key={request.id}>
               <div>
                 <strong>
-                  {request.plan === "BUSINESS" ? "Business" : "Pro"},{" "}
-                  {request.billingCycle === "YEARLY" ? "yearly" : "monthly"}
+                  {request.plan === "BUSINESS" ? t("Business") : t("Pro")},{" "}
+                  {request.billingCycle === "YEARLY"
+                    ? t("yearly")
+                    : t("monthly")}
                 </strong>
                 <small>
                   {formatMoney(request.amountFils, request.currency)} ·{" "}
@@ -163,7 +192,11 @@ function RecentRequests({ requests }) {
                   {formatDate(request.createdAt)}
                 </small>
                 {request.rejectionReason && (
-                  <small>Reason: {request.rejectionReason}</small>
+                  <small>
+                    {t("Reason: {rejectionReason}", {
+                      rejectionReason: request.rejectionReason,
+                    })}
+                  </small>
                 )}
               </div>
               {look && <StatusPill look={look} />}
@@ -172,15 +205,6 @@ function RecentRequests({ requests }) {
         })}
       </ul>
     </section>
-  );
-}
-
-function PlanSkeleton() {
-  return (
-    <div className="plan-skeleton" aria-busy="true" aria-label="Loading">
-      <span className="skeleton-block" />
-      <span className="skeleton-block" />
-    </div>
   );
 }
 
@@ -212,11 +236,12 @@ export default function OwnerPlan() {
   };
   const cancel = async (request) => {
     const ok = await confirmAction({
-      title: "Cancel this request?",
-      message:
+      title: t("Cancel this request?"),
+      message: t(
         "If you already paid, keep the request so we can find your payment.",
-      confirmText: "Cancel request",
-      cancelText: "Keep it",
+      ),
+      confirmText: t("Cancel request"),
+      cancelText: t("Keep it"),
       danger: true,
     });
     if (ok) cancelRequest(request.id);
@@ -229,26 +254,32 @@ export default function OwnerPlan() {
     <main className="container section plan-page">
       <header className="plan-page-head">
         <div>
-          <span className="eyebrow">Billing</span>
-          <h1>My plan</h1>
-          <p>What your plan includes, what you use, and how to upgrade.</p>
+          <span className="eyebrow">{t(PAGE_HEADS.plan.eyebrow)}</span>
+          <h1>{t(PAGE_HEADS.plan.title)}</h1>
+          <p>{t(PAGE_HEADS.plan.text)}</p>
         </div>
         {supportPhone && (
           <a className="btn btn-secondary" href={`tel:${supportPhone}`}>
             <Phone size={16} aria-hidden="true" />
-            Call us
+            {t("Call us")}
           </a>
         )}
       </header>
 
-      {loading && <PlanSkeleton />}
+      {loading && (
+        <div role="status" aria-label={t("Loading")}>
+          <div aria-hidden="true">
+            <PlanBodyBones />
+          </div>
+        </div>
+      )}
       {!loading && (error || !subscription) && (
         <div className="empty-state">
-          <h2>Your plan could not be loaded</h2>
-          <p>Check your connection, then try again.</p>
+          <h2>{t("Your plan could not be loaded")}</h2>
+          <p>{t("Check your connection, then try again.")}</p>
           <button type="button" className="btn btn-primary" onClick={refetch}>
             <RefreshCw size={16} aria-hidden="true" />
-            Try again
+            {t("Try again")}
           </button>
         </div>
       )}
@@ -291,8 +322,9 @@ export default function OwnerPlan() {
           />
           {openRequest && (
             <p className="plan-note">
-              You can send a new request after we review the one that is
-              waiting, or after you cancel it.
+              {t(
+                "You can send a new request after we review the one that is waiting, or after you cancel it.",
+              )}
             </p>
           )}
 

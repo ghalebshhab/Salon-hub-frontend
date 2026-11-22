@@ -1,6 +1,7 @@
 import { Banknote, Send, Smartphone, X } from "lucide-react";
 import { useId, useState } from "react";
 import { BILLING_CYCLES, planPrice } from "../model/plan.js";
+import t from "../../../shared/i18n/t.js";
 
 const MAX_REFERENCE = 120;
 
@@ -10,12 +11,12 @@ export function CliqDetails({ payTo }) {
   return (
     <dl className="plan-payto">
       <div>
-        <dt>CliQ alias</dt>
+        <dt>{t("CliQ alias")}</dt>
         <dd>{payTo.cliqAlias}</dd>
       </div>
       {payTo.cliqName && (
         <div>
-          <dt>Name</dt>
+          <dt>{t("Name")}</dt>
           <dd>{payTo.cliqName}</dd>
         </div>
       )}
@@ -57,19 +58,21 @@ export default function PlanRequestForm({
     >
       <header className="plan-request-head">
         <div>
-          <span className="eyebrow">Upgrade</span>
+          <span className="eyebrow">{t("Upgrade")}</span>
           <h2 id={`${id}-title`}>
             {plan.name}, {cycleLabel}: {planPrice(plan, cycle)}
           </h2>
           <p>
-            Pay, then send this request. We turn on {plan.name} when we confirm
-            the payment, normally within one working day.
+            {t(
+              "Pay, then send this request. We turn on {name} when we confirm the payment, normally within one working day.",
+              { name: plan.name },
+            )}
           </p>
         </div>
         <button
           type="button"
           className="icon-button"
-          aria-label="Close the upgrade form"
+          aria-label={t("Close the upgrade form")}
           onClick={onClose}
         >
           <X size={18} />
@@ -77,7 +80,7 @@ export default function PlanRequestForm({
       </header>
       <form onSubmit={submit}>
         <fieldset className="plan-methods">
-          <legend>How do you pay?</legend>
+          <legend>{t("How do you pay?")}</legend>
           <label className={`plan-method ${cliqReady ? "" : "is-locked"}`}>
             <input
               type="radio"
@@ -89,11 +92,11 @@ export default function PlanRequestForm({
             />
             <Smartphone size={18} aria-hidden="true" />
             <span>
-              <strong>CliQ transfer</strong>
+              <strong>{t("CliQ transfer")}</strong>
               <small>
                 {cliqReady
-                  ? "Instant transfer from your bank app."
-                  : "Not available yet."}
+                  ? t("Instant transfer from your bank app.")
+                  : t("Not available yet.")}
               </small>
             </span>
           </label>
@@ -107,8 +110,8 @@ export default function PlanRequestForm({
             />
             <Banknote size={18} aria-hidden="true" />
             <span>
-              <strong>Cash</strong>
-              <small>Our team contacts you to collect it.</small>
+              <strong>{t("Cash")}</strong>
+              <small>{t("Our team contacts you to collect it.")}</small>
             </span>
           </label>
         </fieldset>
@@ -116,19 +119,21 @@ export default function PlanRequestForm({
         {method === "CLIQ" && (
           <div className="plan-cliq">
             <p>
-              Send {planPrice(plan, cycle)} to this CliQ alias. Write your salon
-              name in the transfer note.
+              {t(
+                "Send {amount} to this CliQ alias. Write your salon name in the transfer note.",
+                { amount: planPrice(plan, cycle) },
+              )}
             </p>
             <CliqDetails payTo={payTo} />
             <label className="plan-field" htmlFor={`${id}-reference`}>
-              <span>Transfer reference (optional)</span>
+              <span>{t("Transfer reference (optional)")}</span>
               <input
                 id={`${id}-reference`}
                 type="text"
                 maxLength={MAX_REFERENCE}
                 value={reference}
                 autoComplete="off"
-                placeholder="For example, the number in your bank app"
+                placeholder={t("For example, the number in your bank app")}
                 onChange={(event) => setReference(event.target.value)}
               />
             </label>
@@ -137,11 +142,11 @@ export default function PlanRequestForm({
 
         <div className="plan-request-actions">
           <button type="button" className="btn btn-secondary" onClick={onClose}>
-            Cancel
+            {t("Cancel")}
           </button>
           <button type="submit" className="btn btn-primary" disabled={sending}>
             <Send size={16} aria-hidden="true" />
-            {sending ? "Sending…" : "Send request"}
+            {sending ? t("Sending…") : t("Send request")}
           </button>
         </div>
       </form>

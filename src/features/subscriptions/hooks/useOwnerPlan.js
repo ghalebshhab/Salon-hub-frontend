@@ -11,6 +11,7 @@ import {
   getSubscriptionPlansApi,
   requestPlanApi,
 } from "../api/subscriptionApi.js";
+import t from "../../../shared/i18n/t.js";
 
 /** The owner's plan page: current plan, the price list and plan requests. */
 export default function useOwnerPlan() {
@@ -20,7 +21,7 @@ export default function useOwnerPlan() {
   );
   const subscriptionQuery = useQuery(subscriptionLoader, {
     initialData: null,
-    errorMessage: "Your plan could not be loaded.",
+    errorMessage: t("Your plan could not be loaded."),
   });
   const plansLoader = useCallback(
     (signal) => getSubscriptionPlansApi(signal),
@@ -28,7 +29,7 @@ export default function useOwnerPlan() {
   );
   const plansQuery = useQuery(plansLoader, {
     initialData: [],
-    errorMessage: "The plans could not be loaded.",
+    errorMessage: t("The plans could not be loaded."),
   });
 
   // The answer of a request or a cancel replaces the loaded plan at once,
@@ -50,13 +51,13 @@ export default function useOwnerPlan() {
         const next = await requestPlanApi(payload);
         setUpdated(next);
         showSuccessToast(
-          "We turn on your plan when we confirm the payment.",
-          "Request sent",
+          t("We turn on your plan when we confirm the payment."),
+          t("Request sent"),
         );
         return true;
       } catch (error) {
         showErrorToast(
-          getApiErrorMessage(error, "Your request could not be sent."),
+          getApiErrorMessage(error, t("Your request could not be sent.")),
         );
         return false;
       } finally {
@@ -71,10 +72,10 @@ export default function useOwnerPlan() {
       setCancellingId(requestId);
       try {
         setUpdated(await cancelPlanRequestApi(requestId));
-        showSuccessToast("Your request is cancelled.", "Cancelled");
+        showSuccessToast(t("Your request is cancelled."), t("Cancelled"));
       } catch (error) {
         showErrorToast(
-          getApiErrorMessage(error, "Your request could not be cancelled."),
+          getApiErrorMessage(error, t("Your request could not be cancelled.")),
         );
       } finally {
         setCancellingId(null);

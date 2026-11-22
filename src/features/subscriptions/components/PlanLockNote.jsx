@@ -1,5 +1,6 @@
 import { Lock } from "lucide-react";
 import { Link } from "react-router-dom";
+import t from "../../../shared/i18n/t.js";
 
 /** A short note that a feature needs a higher plan, with a link to the plan page. */
 export default function PlanLockNote({ children }) {
@@ -8,7 +9,7 @@ export default function PlanLockNote({ children }) {
       <Lock size={14} aria-hidden="true" />
       <span>
         {children}
-        <Link to="/owner/plan">See plans</Link>
+        <Link to="/owner/plan">{t("See plans")}</Link>
       </span>
     </p>
   );

@@ -5,6 +5,7 @@ import {
   showSuccessToast,
 } from "../../../shared/notifications/toast.jsx";
 import { formatMoney } from "../model/payment.js";
+import t from "../../../shared/i18n/t.js";
 
 /**
  * "Cash received" flow for the employee and the owner: `request(booking)`
@@ -26,12 +27,18 @@ export default function useCashPayment({ onRecorded } = {}) {
       setSaving(true);
       const response = await recordCashPaymentApi(target.id);
       if (!response.success) {
-        showErrorToast(response.message || "Could not record the payment.");
+        showErrorToast(response.message || t("Could not record the payment."));
         return;
       }
       showSuccessToast(
-        `${formatMoney(response.data?.amountFils, response.data?.currency)} recorded. Receipt ${response.data?.receiptNumber || ""} is ready.`,
-        "Cash received",
+        t("{amount} recorded. Receipt {receipt} is ready.", {
+          amount: formatMoney(
+            response.data?.amountFils,
+            response.data?.currency,
+          ),
+          receipt: response.data?.receiptNumber || "",
+        }),
+        t("Cash received"),
       );
       setTarget(null);
       onRecorded?.(response.data);
@@ -39,7 +46,7 @@ export default function useCashPayment({ onRecorded } = {}) {
       showErrorToast(
         error?.response?.data?.message ||
           error?.message ||
-          "Could not record the payment.",
+          t("Could not record the payment."),
       );
     } finally {
       setSaving(false);

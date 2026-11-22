@@ -5,6 +5,7 @@ import {
   getPaymentSettingsApi,
   updatePaymentSettingsApi,
 } from "../api/paymentApi.js";
+import t from "../../../shared/i18n/t.js";
 
 /** Owner payment settings. `save` resolves to `{ ok, message, data }`. */
 export default function usePaymentSettings(salonId, { onError } = {}) {
@@ -29,7 +30,7 @@ export default function usePaymentSettings(salonId, { onError } = {}) {
       if (!response.success) {
         return {
           ok: false,
-          message: response.message || "Could not save the settings.",
+          message: response.message || t("Could not save the settings."),
         };
       }
       refetch();
@@ -40,7 +41,7 @@ export default function usePaymentSettings(salonId, { onError } = {}) {
         message:
           error?.response?.data?.message ||
           error?.message ||
-          "Could not save the settings.",
+          t("Could not save the settings."),
       };
     } finally {
       setSaving(false);

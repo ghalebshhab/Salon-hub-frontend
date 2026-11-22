@@ -14,21 +14,26 @@ import { Link } from "react-router-dom";
 import CashReceivedDialog from "../components/CashReceivedDialog.jsx";
 import PaymentSettingsPanel from "../components/PaymentSettingsPanel.jsx";
 import useOwnerPayments from "../hooks/useOwnerPayments.js";
-import {
-  REPORT_PERIODS,
-  formatMoney,
-  formatRate,
-} from "../model/payment.js";
+import { REPORT_PERIODS, formatMoney, formatRate } from "../model/payment.js";
+import t from "../../../shared/i18n/t.js";
+import { PAGE_HEADS } from "../../../shared/copy/pageHeads.js";
 
-function Kpi({ icon: Icon, label, value, detail, tone = "", featured = false }) {
+function Kpi({
+  icon: Icon,
+  label,
+  value,
+  detail,
+  tone = "",
+  featured = false,
+}) {
   return (
     <article className={`pay-kpi ${featured ? "is-featured" : ""} ${tone}`}>
       <span className="pay-kpi-icon" aria-hidden="true">
         <Icon size={18} />
       </span>
-      <span className="pay-kpi-label">{label}</span>
+      <span className="pay-kpi-label">{t(label)}</span>
       <strong className="pay-kpi-value">{value}</strong>
-      {detail && <small className="pay-kpi-detail">{detail}</small>}
+      {detail && <small className="pay-kpi-detail">{t(detail)}</small>}
     </article>
   );
 }
@@ -67,15 +72,12 @@ export default function OwnerPayments() {
     <main className="container section pay-page">
       <header className="pay-page-head">
         <div>
-          <span className="eyebrow">Money</span>
-          <h1>Payments</h1>
-          <p>
-            What your salon received, what guests still owe, and how they can
-            pay.
-          </p>
+          <span className="eyebrow">{t(PAGE_HEADS.payments.eyebrow)}</span>
+          <h1>{t(PAGE_HEADS.payments.title)}</h1>
+          <p>{t(PAGE_HEADS.payments.text)}</p>
         </div>
         <div className="pay-page-tools">
-          <div className="pay-periods" role="group" aria-label="Period">
+          <div className="pay-periods" role="group" aria-label={t("Period")}>
             {REPORT_PERIODS.map((item) => (
               <button
                 key={item.key}
@@ -84,7 +86,7 @@ export default function OwnerPayments() {
                 aria-pressed={period === item.key}
                 onClick={() => setPeriod(item.key)}
               >
-                {item.label}
+                {t(item.label)}
               </button>
             ))}
           </div>
@@ -92,7 +94,7 @@ export default function OwnerPayments() {
             className="icon-button"
             type="button"
             onClick={refresh}
-            aria-label="Refresh payments"
+            aria-label={t("Refresh payments")}
             disabled={summaryRefreshing}
           >
             <RefreshCw
@@ -114,48 +116,61 @@ export default function OwnerPayments() {
       ) : summaryError || !summary ? (
         <div className="empty-state">
           <Wallet size={28} aria-hidden="true" />
-          <h3>Payments are not available</h3>
+          <h3>{t("Payments are not available")}</h3>
           <p>
             {summaryError?.response?.data?.message ||
               summaryError?.message ||
-              "Payments show here when your salon is active and approved."}
+              t("Payments show here when your salon is active and approved.")}
           </p>
           <button className="btn btn-primary" type="button" onClick={refresh}>
-            Try again
+            {t("Try again")}
           </button>
         </div>
       ) : (
-        <section className="pay-kpis" aria-label="Payment summary">
+        <section className="pay-kpis" aria-label={t("Payment summary")}>
           <Kpi
             featured
             icon={CircleDollarSign}
-            label="Collected"
+            label={t("Collected")}
             value={formatMoney(summary.collectedFils, currency)}
-            detail={`${summary.paidCount} paid appointment${summary.paidCount === 1 ? "" : "s"}`}
+            detail={
+              summary.paidCount === 1
+                ? t("1 paid appointment")
+                : t("{count} paid appointments", { count: summary.paidCount })
+            }
           />
           <Kpi
             icon={Banknote}
-            label="Cash"
+            label={t("Cash")}
             value={formatMoney(summary.cashFils, currency)}
           />
           <Kpi
             icon={CreditCard}
-            label="Card"
+            label={t("Card")}
             value={formatMoney(summary.cardFils, currency)}
-            detail={summary.cardFils === 0 ? "Not connected yet" : null}
+            detail={summary.cardFils === 0 ? t("Not connected yet") : null}
           />
           <Kpi
             icon={HandCoins}
             tone={summary.outstandingCount > 0 ? "tone-warning" : ""}
-            label="Still unpaid"
+            label={t("Still unpaid")}
             value={formatMoney(summary.outstandingFils, currency)}
-            detail={`${summary.outstandingCount} finished appointment${summary.outstandingCount === 1 ? "" : "s"}, all time`}
+            detail={
+              summary.outstandingCount === 1
+                ? t("1 finished appointment, all time")
+                : t("{count} finished appointments, all time", {
+                    count: summary.outstandingCount,
+                  })
+            }
           />
           <Kpi
             icon={Percent}
-            label="Your net"
+            label={t("Your net")}
             value={formatMoney(summary.netFils, currency)}
-            detail={`Commission ${formatRate(summary.commissionRateBps)} · refunds ${formatMoney(summary.refundedFils, currency)}`}
+            detail={t("Commission {rate} · refunds {money}", {
+              rate: formatRate(summary.commissionRateBps),
+              money: formatMoney(summary.refundedFils, currency),
+            })}
           />
         </section>
       )}
@@ -167,8 +182,8 @@ export default function OwnerPayments() {
               <HandCoins size={18} />
             </span>
             <div>
-              <h2 id="pay-unpaid-title">Finished but not paid</h2>
-              <p>Confirm cash here when a guest pays after the visit.</p>
+              <h2 id="pay-unpaid-title">{t("Finished but not paid")}</h2>
+              <p>{t("Confirm cash here when a guest pays after the visit.")}</p>
             </div>
           </header>
 
@@ -179,15 +194,15 @@ export default function OwnerPayments() {
             </div>
           ) : outstanding.length === 0 ? (
             <div className="pay-empty">
-              <strong>All settled</strong>
-              <p>Every finished appointment is paid.</p>
+              <strong>{t("All settled")}</strong>
+              <p>{t("Every finished appointment is paid.")}</p>
             </div>
           ) : (
             <ul className="pay-unpaid-list">
               {outstanding.map((booking) => (
                 <li key={booking.id}>
                   <div className="pay-unpaid-who">
-                    <strong>{booking.customerName || "Guest"}</strong>
+                    <strong>{booking.customerName || t("Guest")}</strong>
                     <small>
                       {booking.bookingDate} ·{" "}
                       {booking.bookingTime?.toString().slice(0, 5)}
@@ -204,7 +219,7 @@ export default function OwnerPayments() {
                       className="btn btn-secondary btn-small"
                       to={`/owner/bookings?bookingId=${booking.id}`}
                     >
-                      Open
+                      {t("Open")}
                     </Link>
                     {booking.payment?.collectable && (
                       <button
@@ -213,7 +228,7 @@ export default function OwnerPayments() {
                         onClick={() => cash.request(booking)}
                       >
                         <HandCoins size={15} aria-hidden="true" />
-                        Cash received
+                        {t("Cash received")}
                       </button>
                     )}
                   </div>
@@ -223,23 +238,25 @@ export default function OwnerPayments() {
           )}
 
           {(page > 0 || hasNextPage) && (
-            <nav className="pay-pager" aria-label="Unpaid pages">
+            <nav className="pay-pager" aria-label={t("Unpaid pages")}>
               <button
                 className="icon-button"
                 type="button"
                 disabled={page === 0}
                 onClick={() => setPage(page - 1)}
-                aria-label="Previous page"
+                aria-label={t("Previous page")}
               >
                 <ChevronLeft size={17} aria-hidden="true" />
               </button>
-              <span>Page {page + 1}</span>
+              <span>
+                {t("Page")} {page + 1}
+              </span>
               <button
                 className="icon-button"
                 type="button"
                 disabled={!hasNextPage}
                 onClick={() => setPage(page + 1)}
-                aria-label="Next page"
+                aria-label={t("Next page")}
               >
                 <ChevronRight size={17} aria-hidden="true" />
               </button>

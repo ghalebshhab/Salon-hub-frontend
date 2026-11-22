@@ -15,6 +15,7 @@ import PlanLockNote from "../../subscriptions/components/PlanLockNote.jsx";
 import useMySubscription from "../../subscriptions/hooks/useMySubscription.js";
 import usePaymentSettings from "../hooks/usePaymentSettings.js";
 import { formatRate } from "../model/payment.js";
+import t from "../../../shared/i18n/t.js";
 
 const toForm = (settings) => ({
   cashEnabled: settings.cashEnabled,
@@ -41,8 +42,8 @@ function MethodToggle({
         <Icon size={17} />
       </span>
       <span className="pay-option-body">
-        <strong>{label}</strong>
-        <small>{hint}</small>
+        <strong>{t(label)}</strong>
+        <small>{t(hint)}</small>
       </span>
       <input
         type="checkbox"
@@ -72,7 +73,7 @@ export default function PaymentSettingsPanel({ salonId }) {
     fees: Boolean(features && !features.includes("CANCELLATION_FEES")),
     rule: Boolean(features && !features.includes("MISSED_VISIT_RULE")),
   };
-  const planName = subscription?.limits?.name || "Free";
+  const planName = subscription?.limits?.name || t("Free");
   // A locked fee may only go down from the saved value.
   const feeMax = (field) =>
     planLocks.fees ? Number(settings?.[field] || 0) : 100;
@@ -97,7 +98,7 @@ export default function PaymentSettingsPanel({ salonId }) {
       return;
     }
     setDraft(null);
-    showSuccessToast("Payment settings saved.");
+    showSuccessToast(t("Payment settings saved."));
   };
 
   return (
@@ -107,8 +108,8 @@ export default function PaymentSettingsPanel({ salonId }) {
           <SlidersHorizontal size={18} />
         </span>
         <div>
-          <h2 id={`${id}-title`}>Payment settings</h2>
-          <p>What guests can choose, and your cancellation rules.</p>
+          <h2 id={`${id}-title`}>{t("Payment settings")}</h2>
+          <p>{t("What guests can choose, and your cancellation rules.")}</p>
         </div>
       </header>
 
@@ -121,21 +122,21 @@ export default function PaymentSettingsPanel({ salonId }) {
       ) : (
         <form className="pay-settings-form" onSubmit={submit}>
           <fieldset className="pay-toggles">
-            <legend>Accepted methods</legend>
+            <legend>{t("Accepted methods")}</legend>
             <MethodToggle
               icon={Banknote}
-              label="Cash at the salon"
-              hint="Staff confirm the cash after the service."
+              label={t("Cash at the salon")}
+              hint={t("Staff confirm the cash after the service.")}
               checked={form.cashEnabled}
               onChange={set("cashEnabled")}
             />
             <MethodToggle
               icon={CreditCard}
-              label="Card after the service"
+              label={t("Card after the service")}
               hint={
                 gatewayReady
-                  ? "Guest pays with a secure link."
-                  : "Needs a payment provider"
+                  ? t("Guest pays with a secure link.")
+                  : t("Needs a payment provider")
               }
               checked={form.cardPostpaidEnabled}
               disabled={
@@ -145,11 +146,11 @@ export default function PaymentSettingsPanel({ salonId }) {
             />
             <MethodToggle
               icon={CreditCard}
-              label="Card now"
+              label={t("Card now")}
               hint={
                 gatewayReady
-                  ? "Amount is held when booking."
-                  : "Needs a payment provider"
+                  ? t("Amount is held when booking.")
+                  : t("Needs a payment provider")
               }
               checked={form.cardPrepaidEnabled}
               disabled={
@@ -159,21 +160,26 @@ export default function PaymentSettingsPanel({ salonId }) {
             />
             {planLocks.card && (
               <PlanLockNote>
-                Card payment is part of Pro and Business, not {planName}.
+                {t(
+                  "Card payment is part of Pro and Business, not {planName}.",
+                  { planName },
+                )}
               </PlanLockNote>
             )}
             {!gatewayReady && (
               <p className="pay-note">
                 <Lock size={14} aria-hidden="true" />
-                Card payments open when SalonHub connects a payment provider.
+                {t(
+                  "Card payments open when SalonHub connects a payment provider.",
+                )}
               </p>
             )}
           </fieldset>
 
           <fieldset className="pay-rules">
-            <legend>Cancellation rules</legend>
+            <legend>{t("Cancellation rules")}</legend>
             <label>
-              <span>Free cancellation (hours before)</span>
+              <span>{t("Free cancellation (hours before)")}</span>
               <input
                 type="number"
                 min={0}
@@ -185,7 +191,7 @@ export default function PaymentSettingsPanel({ salonId }) {
               />
             </label>
             <label>
-              <span>Late cancellation fee (%)</span>
+              <span>{t("Late cancellation fee (%)")}</span>
               <input
                 type="number"
                 min={0}
@@ -197,7 +203,7 @@ export default function PaymentSettingsPanel({ salonId }) {
               />
             </label>
             <label>
-              <span>No-show fee (%)</span>
+              <span>{t("No-show fee (%)")}</span>
               <input
                 type="number"
                 min={0}
@@ -210,33 +216,38 @@ export default function PaymentSettingsPanel({ salonId }) {
             </label>
             {planLocks.fees && (
               <PlanLockNote>
-                Late-cancel and no-show fees are part of Pro and Business.
+                {t(
+                  "Late-cancel and no-show fees are part of Pro and Business.",
+                )}
               </PlanLockNote>
             )}
             <p className="pay-note">
-              Fees apply only to bookings paid by card in advance. Cash guests
-              are never charged a fee.
+              {t(
+                "Fees apply only to bookings paid by card in advance. Cash guests are never charged a fee.",
+              )}
             </p>
           </fieldset>
 
           <fieldset className="pay-rules pay-no-show-rule">
-            <legend>Missed-visit rule</legend>
+            <legend>{t("Missed-visit rule")}</legend>
             <MethodToggle
               icon={UserX}
-              label="Ask repeat no-shows to pay in advance"
-              hint="Protects your time from customers who often do not come."
+              label={t("Ask repeat no-shows to pay in advance")}
+              hint={t(
+                "Protects your time from customers who often do not come.",
+              )}
               checked={form.noShowRuleOn}
               disabled={planLocks.rule && !form.noShowRuleOn}
               onChange={set("noShowRuleOn")}
             />
             {planLocks.rule && (
               <PlanLockNote>
-                The missed-visit rule is part of Pro and Business.
+                {t("The missed-visit rule is part of Pro and Business.")}
               </PlanLockNote>
             )}
             {form.noShowRuleOn && (
               <label>
-                <span>Missed visits before the rule applies</span>
+                <span>{t("Missed visits before the rule applies")}</span>
                 <input
                   type="number"
                   min={1}
@@ -250,14 +261,16 @@ export default function PaymentSettingsPanel({ salonId }) {
             )}
             <p className="pay-note">
               {gatewayReady && form.cardPrepaidEnabled
-                ? "These customers can book only with “Card now”."
-                : "Until card payment is on, these customers cannot book online and are asked to contact you."}
+                ? t("These customers can book only with “Card now”.")
+                : t(
+                    "Until card payment is on, these customers cannot book online and are asked to contact you.",
+                  )}
             </p>
           </fieldset>
 
           <footer className="pay-settings-foot">
             <span className="pay-commission">
-              Card payment fee on your plan:{" "}
+              {t("Card payment fee on your plan:")}
               <strong>{formatRate(settings.commissionRateBps)}</strong>
             </span>
             <button
@@ -266,7 +279,7 @@ export default function PaymentSettingsPanel({ salonId }) {
               disabled={saving || !draft}
             >
               <Save size={16} aria-hidden="true" />
-              {saving ? "Saving…" : "Save settings"}
+              {saving ? t("Saving…") : t("Save settings")}
             </button>
           </footer>
         </form>

@@ -6,6 +6,7 @@ import {
   hasReceipt,
   isCardMethod,
 } from "../model/payment.js";
+import t from "../../../shared/i18n/t.js";
 
 /**
  * One payment line for a booking card: method, amount, status, and the
@@ -30,12 +31,14 @@ export default function PaymentStrip({
         <Icon size={17} />
       </span>
       <div className="pay-strip-body">
-        <span className="pay-strip-method">{getMethodLabel(payment.method)}</span>
+        <span className="pay-strip-method">
+          {getMethodLabel(payment.method)}
+        </span>
         <strong className="pay-strip-amount">
           {formatMoney(payment.amountFils, payment.currency)}
         </strong>
       </div>
-      <span className={`pay-pill tone-${status.tone}`}>{status.label}</span>
+      <span className={`pay-pill tone-${status.tone}`}>{t(status.label)}</span>
       {(collectable || (onReceipt && hasReceipt(payment))) && (
         <div className="pay-strip-actions">
           {collectable && (
@@ -46,7 +49,7 @@ export default function PaymentStrip({
               disabled={collecting}
             >
               <HandCoins size={16} aria-hidden="true" />
-              Cash received
+              {t("Cash received")}
             </button>
           )}
           {onReceipt && hasReceipt(payment) && (
@@ -56,7 +59,7 @@ export default function PaymentStrip({
               onClick={onReceipt}
             >
               <ReceiptText size={16} aria-hidden="true" />
-              Receipt
+              {t("Receipt")}
             </button>
           )}
         </div>

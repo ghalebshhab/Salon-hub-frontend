@@ -11,6 +11,7 @@ import {
   getMySalonServicesApi,
   updateSalonServiceApi,
 } from "../api/salonServicesApi.js";
+import t from "../../../shared/i18n/t.js";
 
 export default function useEditSalonService() {
   const { serviceId } = useParams();
@@ -27,7 +28,7 @@ export default function useEditSalonService() {
       const service = services?.find(
         (item) => String(item.id) === String(serviceId),
       );
-      if (!service) throw new Error("Service not found");
+      if (!service) throw new Error(t("Service not found"));
       return service;
     },
     [serviceId],
@@ -40,6 +41,8 @@ export default function useEditSalonService() {
   const formData = draft ?? {
     name: service?.name || "",
     description: service?.description || "",
+    nameAr: service?.nameAr || "",
+    descriptionAr: service?.descriptionAr || "",
     price: service?.price ?? "",
     durationMinutes: service?.durationMinutes ?? "",
     isActive: service?.isActive ?? true,
@@ -72,17 +75,17 @@ export default function useEditSalonService() {
       const response = await updateSalonServiceApi(serviceId, requestBody);
 
       if (response.success) {
-        showSuccessToast("Service updated successfully");
+        showSuccessToast(t("Service updated successfully"));
         navigate("/owner/services");
       } else {
-        showErrorToast(response.message || "Failed to update service");
+        showErrorToast(response.message || t("Failed to update service"));
       }
     } catch (error) {
       console.error(error);
       showErrorToast(
         error?.response?.data?.message ||
           error?.message ||
-          "Failed to update service",
+          t("Failed to update service"),
       );
     } finally {
       setSubmitting(false);

@@ -6,6 +6,7 @@ import {
   showErrorToast,
 } from "../../../shared/notifications/toast.jsx";
 import { createSalonServiceApi } from "../api/salonServicesApi.js";
+import t from "../../../shared/i18n/t.js";
 
 export default function useCreateSalonService() {
   const navigate = useNavigate();
@@ -13,6 +14,8 @@ export default function useCreateSalonService() {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
+    nameAr: "",
+    descriptionAr: "",
     price: "",
     durationMinutes: "",
   });
@@ -45,17 +48,17 @@ export default function useCreateSalonService() {
       const response = await createSalonServiceApi(requestBody);
 
       if (response.success) {
-        showSuccessToast("Service created successfully");
+        showSuccessToast(t("Service created successfully"));
         navigate("/owner/services");
       } else {
-        showErrorToast(response.message || "Failed to create service");
+        showErrorToast(response.message || t("Failed to create service"));
       }
     } catch (error) {
       console.error(error);
       showErrorToast(
         error?.response?.data?.message ||
           error?.message ||
-          "Failed to create service",
+          t("Failed to create service"),
       );
     } finally {
       setSubmitting(false);

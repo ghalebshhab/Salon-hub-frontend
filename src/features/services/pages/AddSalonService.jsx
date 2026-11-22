@@ -1,5 +1,7 @@
 import useCreateSalonService from "../hooks/useCreateSalonService.js";
 import Button from "../../../shared/components/Button.jsx";
+import t from "../../../shared/i18n/t.js";
+import { PAGE_HEADS } from "../../../shared/copy/pageHeads.js";
 
 function CreateSalonService() {
   const { formData, submitting, handleChange, handleSubmit } =
@@ -9,42 +11,75 @@ function CreateSalonService() {
     <section className="container section">
       <div className="profile-header">
         <div>
-          <span className="eyebrow">New service</span>
-          <h1>Add Salon Service</h1>
-          <p>Create a service that customers can see in your salon profile.</p>
+          <span className="eyebrow">{t(PAGE_HEADS.addService.eyebrow)}</span>
+          <h1>{t(PAGE_HEADS.addService.title)}</h1>
+          <p>{t(PAGE_HEADS.addService.text)}</p>
         </div>
 
         <Button variant="secondary" to="/owner/services">
-          Back to Services
+          {t("Back to Services")}
         </Button>
       </div>
 
       <form className="form-card" onSubmit={handleSubmit}>
         <div className="form-group">
-          <label>Service Name</label>
+          <label>{t("Service Name")}</label>
           <input
             type="text"
             name="name"
-            placeholder="Example: Haircut"
+            placeholder={t("Example: Haircut")}
             value={formData.name}
             onChange={handleChange}
           />
         </div>
 
         <div className="form-group">
-          <label>Description</label>
+          <label>{t("Description")}</label>
           <textarea
             name="description"
-            placeholder="Describe this service..."
+            placeholder={t("Describe this service...")}
             value={formData.description}
             onChange={handleChange}
             rows="4"
           />
         </div>
 
+        <div className="form-group">
+          <label htmlFor="service-name-ar">{t("Service name in Arabic")}</label>
+          <input
+            id="service-name-ar"
+            type="text"
+            name="nameAr"
+            dir="rtl"
+            lang="ar"
+            value={formData.nameAr}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="service-description-ar">
+            {t("Description in Arabic")}
+          </label>
+          <textarea
+            id="service-description-ar"
+            name="descriptionAr"
+            dir="rtl"
+            lang="ar"
+            value={formData.descriptionAr}
+            onChange={handleChange}
+            rows="3"
+          />
+          <small className="form-hint">
+            {t(
+              "Optional. Leave the Arabic empty and SalonHub translates your English for you.",
+            )}
+          </small>
+        </div>
+
         <div className="form-grid-two">
           <div className="form-group">
-            <label>Price JD</label>
+            <label>{t("Price JD")}</label>
             <input
               type="number"
               name="price"
@@ -57,7 +92,7 @@ function CreateSalonService() {
           </div>
 
           <div className="form-group">
-            <label>Duration Minutes</label>
+            <label>{t("Duration Minutes")}</label>
             <input
               type="number"
               name="durationMinutes"
@@ -70,7 +105,7 @@ function CreateSalonService() {
         </div>
 
         <Button type="submit" disabled={submitting}>
-          {submitting ? "Creating..." : "Create Service"}
+          {submitting ? t("Creating...") : t("Create Service")}
         </Button>
       </form>
     </section>

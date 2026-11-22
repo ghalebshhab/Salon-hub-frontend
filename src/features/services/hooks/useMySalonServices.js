@@ -12,6 +12,7 @@ import {
   deleteSalonServiceApi,
 } from "../api/salonServicesApi.js";
 import { confirmAction } from "../../../shared/confirm/confirmStore.js";
+import t from "../../../shared/i18n/t.js";
 
 export default function useMySalonServices() {
   const loader = useCallback(
@@ -27,9 +28,9 @@ export default function useMySalonServices() {
 
   const handleDelete = async (serviceId) => {
     const confirmDelete = await confirmAction({
-      title: "Disable this service?",
-      message: "Customers will no longer be able to book it.",
-      confirmText: "Disable",
+      title: t("Disable this service?"),
+      message: t("Customers will no longer be able to book it."),
+      confirmText: t("Disable"),
       danger: true,
     });
 
@@ -39,14 +40,14 @@ export default function useMySalonServices() {
       const response = await deleteSalonServiceApi(serviceId);
 
       if (response.success) {
-        showSuccessToast("Service disabled successfully");
+        showSuccessToast(t("Service disabled successfully"));
         loadServices();
       } else {
-        showErrorToast(response.message || "Failed to disable service");
+        showErrorToast(response.message || t("Failed to disable service"));
       }
     } catch (error) {
       console.error(error);
-      showErrorToast(error?.message || "Failed to disable service");
+      showErrorToast(error?.message || t("Failed to disable service"));
     }
   };
 

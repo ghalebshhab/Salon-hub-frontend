@@ -1,6 +1,7 @@
 import { CalendarDays, X } from "lucide-react";
 import { Link } from "react-router-dom";
 import { selectionTotals } from "../../model/serviceMenu.js";
+import t from "../../../../shared/i18n/t.js";
 
 /**
  * Sticks to the bottom of the screen while the customer builds a visit:
@@ -12,10 +13,10 @@ export default function ServiceSelectionBar({ selected, booking, onClear }) {
   const ids = selected.map((service) => service.id);
 
   return (
-    <div className="menu-bar" role="region" aria-label="Your visit">
+    <div className="menu-bar" role="region" aria-label={t("Your visit")}>
       <div className="menu-bar-copy" aria-live="polite">
         <strong>
-          {totals.count} {totals.count === 1 ? "service" : "services"}
+          {totals.count} {totals.count === 1 ? t("service") : t("services")}
         </strong>
         <span>
           {totals.duration} · {totals.price}
@@ -25,7 +26,7 @@ export default function ServiceSelectionBar({ selected, booking, onClear }) {
         className="menu-bar-clear"
         type="button"
         onClick={onClear}
-        aria-label="Remove all chosen services"
+        aria-label={t("Remove all chosen services")}
       >
         <X size={16} aria-hidden="true" />
       </button>
@@ -35,7 +36,7 @@ export default function ServiceSelectionBar({ selected, booking, onClear }) {
         state={booking.state(ids)}
       >
         <CalendarDays size={16} aria-hidden="true" />
-        {booking.signedIn ? "Choose a time" : "Sign in to book"}
+        {booking.signedIn ? t("Choose a time") : t("Sign in to book")}
       </Link>
     </div>
   );

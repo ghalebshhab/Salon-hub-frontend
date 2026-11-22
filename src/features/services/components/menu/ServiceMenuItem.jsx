@@ -1,5 +1,7 @@
 import { Check, Clock3, Plus } from "lucide-react";
 import { serviceDuration, servicePrice } from "../../model/serviceMenu.js";
+import { serviceDescription, serviceName } from "../../model/serviceText.js";
+import t from "../../../../shared/i18n/t.js";
 
 /**
  * One tile of the salon's menu: number, name, short description, time and
@@ -13,7 +15,8 @@ export default function ServiceMenuItem({
   disabled = false,
   onToggle,
 }) {
-  const name = service.name || "Service";
+  const name = serviceName(service) || t("Service");
+  const description = serviceDescription(service)?.trim();
   const blocked = disabled && !selected;
   const className = [
     "menu-item",
@@ -44,16 +47,16 @@ export default function ServiceMenuItem({
               <Plus size={18} aria-hidden="true" />
             )}
             <span className="sr-only">
-              {selected ? `Remove ${name}` : `Add ${name}`}
+              {selected
+                ? t("Remove {name}", { name })
+                : t("Add {name}", { name })}
             </span>
           </button>
         )}
       </div>
 
       <h3>{name}</h3>
-      {service.description?.trim() && (
-        <p className="menu-item-description">{service.description}</p>
-      )}
+      {description && <p className="menu-item-description">{description}</p>}
 
       <div className="menu-item-foot">
         <span className="menu-item-duration">

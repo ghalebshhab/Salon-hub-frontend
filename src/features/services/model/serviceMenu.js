@@ -1,5 +1,6 @@
 import { formatMoney, toFils } from "../../payments/model/payment.js";
 import { formatDuration } from "../../bookings/model/booking.js";
+import t from "../../../shared/i18n/t.js";
 
 /** Search and sort show only for a menu of this size or more. */
 export const MENU_TOOLS_MIN = 6;
@@ -7,10 +8,10 @@ export const MENU_TOOLS_MIN = 6;
 export const MAX_SERVICES_PER_VISIT = 10;
 
 export const MENU_SORTS = [
-  { value: "salon", label: "Salon's order" },
-  { value: "price-asc", label: "Price: low to high" },
-  { value: "price-desc", label: "Price: high to low" },
-  { value: "duration", label: "Shortest first" },
+  { value: "salon", label: t("Salon's order") },
+  { value: "price-asc", label: t("Price: low to high") },
+  { value: "price-desc", label: t("Price: high to low") },
+  { value: "duration", label: t("Shortest first") },
 ];
 
 const priceOf = (service) => Number(service.price) || 0;
@@ -24,8 +25,15 @@ export function visibleServices(services, { query = "", sort = "salon" }) {
   const words = query.trim().toLowerCase().split(/\s+/).filter(Boolean);
   const matches = words.length
     ? services.filter((service) => {
-        const text =
-          `${service.name || ""} ${service.description || ""}`.toLowerCase();
+        const text = [
+          service.name,
+          service.description,
+          service.nameAr,
+          service.descriptionAr,
+        ]
+          .filter(Boolean)
+          .join(" ")
+          .toLowerCase();
         return words.every((word) => text.includes(word));
       })
     : services;

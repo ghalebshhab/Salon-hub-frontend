@@ -10,6 +10,7 @@ import {
   menuSummary,
   visibleServices,
 } from "../model/serviceMenu.js";
+import t from "../../../shared/i18n/t.js";
 
 function MenuSkeleton() {
   return (
@@ -58,11 +59,11 @@ function SalonServicesList({ salonId, booking = null }) {
   if (error && !services.length) {
     return (
       <div className="menu-empty" role="alert">
-        <h3>The services could not be loaded</h3>
-        <p>Check your connection and try again.</p>
+        <h3>{t("The services could not be loaded")}</h3>
+        <p>{t("Check your connection and try again.")}</p>
         <button className="btn btn-secondary" type="button" onClick={refetch}>
           <RefreshCw size={16} aria-hidden="true" />
-          Try again
+          {t("Try again")}
         </button>
       </div>
     );
@@ -74,8 +75,12 @@ function SalonServicesList({ salonId, booking = null }) {
         <span className="menu-empty-icon" aria-hidden="true">
           <Scissors size={24} />
         </span>
-        <h3>The menu is coming soon</h3>
-        <p>This salon has not added its services yet. Call the salon to ask.</p>
+        <h3>{t("The menu is coming soon")}</h3>
+        <p>
+          {t(
+            "This salon has not added its services yet. Call the salon to ask.",
+          )}
+        </p>
       </div>
     );
   }
@@ -87,21 +92,24 @@ function SalonServicesList({ salonId, booking = null }) {
       <div className="menu-top">
         <p className="menu-summary">
           <strong>{summary.count}</strong>
-          {summary.count === 1 ? " service" : " services"}
+          {summary.count === 1 ? t(" service") : t(" services")}
           <span aria-hidden="true"> · </span>
-          from <strong>{summary.fromPrice}</strong>
+          {t("from")} <strong>{summary.fromPrice}</strong>
           {summary.shortest && (
             <>
               <span aria-hidden="true"> · </span>
               {summary.shortest === summary.longest
                 ? summary.shortest
-                : `${summary.shortest} to ${summary.longest}`}
+                : t("{shortest} to {longest}", {
+                    shortest: summary.shortest,
+                    longest: summary.longest,
+                  })}
             </>
           )}
         </p>
         {booking && (
           <p className="menu-hint">
-            Add one or more services, then choose a time.
+            {t("Add one or more services, then choose a time.")}
           </p>
         )}
       </div>
@@ -110,23 +118,23 @@ function SalonServicesList({ salonId, booking = null }) {
         <div className="menu-tools">
           <label className="menu-search">
             <Search size={16} aria-hidden="true" />
-            <span className="sr-only">Search services</span>
+            <span className="sr-only">{t("Search services")}</span>
             <input
               type="search"
               value={query}
-              placeholder="Search services"
+              placeholder={t("Search services")}
               onChange={(event) => setQuery(event.target.value)}
             />
           </label>
           <label className="menu-sort">
-            <span className="sr-only">Sort services</span>
+            <span className="sr-only">{t("Sort services")}</span>
             <select
               value={sort}
               onChange={(event) => setSort(event.target.value)}
             >
               {MENU_SORTS.map((item) => (
                 <option key={item.value} value={item.value}>
-                  {item.label}
+                  {t(item.label)}
                 </option>
               ))}
             </select>
@@ -149,20 +157,25 @@ function SalonServicesList({ salonId, booking = null }) {
         </ul>
       ) : (
         <div className="menu-empty is-compact">
-          <p>No service matches “{query.trim()}”.</p>
+          <p>
+            {t("No service matches “")}
+            {query.trim()}”.
+          </p>
           <button
             className="btn btn-secondary btn-small"
             type="button"
             onClick={() => setQuery("")}
           >
-            Clear search
+            {t("Clear search")}
           </button>
         </div>
       )}
 
       {full && (
         <p className="menu-hint" role="status">
-          One visit can have up to {MAX_SERVICES_PER_VISIT} services.
+          {t("One visit can have up to {MAX_SERVICES_PER_VISIT} services.", {
+            MAX_SERVICES_PER_VISIT,
+          })}
         </p>
       )}
 

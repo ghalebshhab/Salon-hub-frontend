@@ -4,43 +4,47 @@ import AuthShell from "../components/AuthShell.jsx";
 import AuthField from "../components/AuthField.jsx";
 import AuthSubmitButton from "../components/AuthSubmitButton.jsx";
 import PasswordField from "../components/PasswordField.jsx";
+import t from "../../../shared/i18n/t.js";
+import { AUTH_COPY } from "../model/authCopy.js";
+
+const COPY = AUTH_COPY.register;
 
 function Register() {
   const { form, loading, handleChange, handleSubmit } = useRegister();
   return (
     <AuthShell
-      eyebrow="Join the community"
-      title="Make room for what’s next"
-      intro="Create one SalonHub account to book great services, manage a salon, or grow your career."
+      eyebrow={t(COPY.eyebrow)}
+      title={t(COPY.title)}
+      intro={t(COPY.intro)}
     >
       <form className="auth-form" onSubmit={handleSubmit}>
         <div className="auth-form-row">
           <AuthField
             id="register-first-name"
             name="firstName"
-            label="First name"
+            label={t("First name")}
             value={form.firstName}
             onChange={handleChange}
-            placeholder="Ahmad"
+            placeholder={t("Ahmad")}
             autoComplete="given-name"
           />
           <AuthField
             id="register-last-name"
             name="lastName"
-            label="Last name"
+            label={t("Last name")}
             value={form.lastName}
             onChange={handleChange}
-            placeholder="Ali"
+            placeholder={t("Ali")}
             autoComplete="family-name"
           />
         </div>
         <AuthField
           id="register-username"
           name="userName"
-          label="Username"
+          label={t("Username")}
           value={form.userName}
           onChange={handleChange}
-          placeholder="ahmadali"
+          placeholder={t("ahmadali")}
           autoComplete="username"
           required
         />
@@ -48,7 +52,7 @@ function Register() {
           <AuthField
             id="register-email"
             name="email"
-            label="Email address"
+            label={t("Email address")}
             type="email"
             value={form.email}
             onChange={handleChange}
@@ -59,7 +63,7 @@ function Register() {
           <AuthField
             id="register-phone"
             name="phoneNumber"
-            label="Phone number"
+            label={t("Phone number")}
             type="tel"
             value={form.phoneNumber}
             onChange={handleChange}
@@ -71,31 +75,26 @@ function Register() {
         <PasswordField
           id="register-password"
           name="password"
-          label="Password"
+          label={t("Password")}
           value={form.password}
           onChange={handleChange}
-          placeholder="Create a strong password"
+          placeholder={t("Create a strong password")}
           autoComplete="new-password"
           required
         />
-        <p className="auth-hint">
-          Use the password rules required by your SalonHub account.
-        </p>
+        <p className="auth-hint">{t(COPY.hint[0])}</p>
         <AuthSubmitButton
           loading={loading}
-          loadingLabel="Creating your account…"
+          loadingLabel={t("Creating your account…")}
         >
-          Create account
+          {t("Create account")}
         </AuthSubmitButton>
       </form>
-      <div className="auth-note">
-        Your normal user profile is created automatically. You can upgrade to a
-        career profile later—no career fields are needed here.
-      </div>
+      <div className="auth-note">{t(COPY.note[0])}</div>
       <p className="auth-footer">
-        Already have an account?{" "}
+        {t(COPY.footer[0])}
         <Link className="auth-link" to="/login">
-          Sign in
+          {t(COPY.footer[1])}
         </Link>
       </p>
     </AuthShell>

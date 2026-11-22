@@ -6,6 +6,7 @@ import {
 } from "../../../shared/notifications/toast.jsx";
 import { registerApi } from "../api/authApi.js";
 import { getApiErrorMessage } from "../../../shared/api/response.js";
+import t from "../../../shared/i18n/t.js";
 
 export default function useRegister() {
   const navigate = useNavigate();
@@ -36,12 +37,12 @@ export default function useRegister() {
       const response = await registerApi(form);
 
       if (!response.success) {
-        showErrorToast(response.message || "Register failed");
+        showErrorToast(response.message || t("Register failed"));
         return;
       }
 
       showSuccessToast(
-        response.message || "Account created. Check your email.",
+        response.message || t("Account created. Check your email."),
       );
       navigate("/verify-email", {
         replace: true,
@@ -53,7 +54,7 @@ export default function useRegister() {
       });
     } catch (error) {
       showErrorToast(
-        getApiErrorMessage(error, "Registration could not be completed."),
+        getApiErrorMessage(error, t("Registration could not be completed.")),
       );
     } finally {
       setLoading(false);

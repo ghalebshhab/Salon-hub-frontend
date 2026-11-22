@@ -6,6 +6,7 @@ import {
   showErrorToast,
   showSuccessToast,
 } from "../../../shared/notifications/toast.jsx";
+import t from "../../../shared/i18n/t.js";
 
 export default function usePasswordResetCode() {
   const location = useLocation();
@@ -33,7 +34,7 @@ export default function usePasswordResetCode() {
         code: form.code,
       });
       if (!response.success) throw new Error(response.message);
-      showSuccessToast(response.message || "Code accepted.");
+      showSuccessToast(response.message || t("Code accepted."));
       navigate("/reset-password", {
         replace: true,
         state: {
@@ -43,7 +44,7 @@ export default function usePasswordResetCode() {
       });
     } catch (error) {
       showErrorToast(
-        getApiErrorMessage(error, "The reset code could not be verified."),
+        getApiErrorMessage(error, t("The reset code could not be verified.")),
       );
     } finally {
       setLoading(false);

@@ -3,6 +3,10 @@ import AuthField from "../components/AuthField.jsx";
 import AuthShell from "../components/AuthShell.jsx";
 import AuthSubmitButton from "../components/AuthSubmitButton.jsx";
 import useEmailVerification from "../hooks/useEmailVerification.js";
+import t from "../../../shared/i18n/t.js";
+import { AUTH_COPY } from "../model/authCopy.js";
+
+const COPY = AUTH_COPY.verifyEmail;
 
 export default function EmailVerification() {
   const {
@@ -17,15 +21,15 @@ export default function EmailVerification() {
 
   return (
     <AuthShell
-      eyebrow="Secure your account"
-      title="Verify your email"
-      intro="Enter the six-digit code sent to your email. This keeps your account and salon activity protected."
+      eyebrow={t(COPY.eyebrow)}
+      title={t(COPY.title)}
+      intro={t(COPY.intro)}
     >
       <form className="auth-form" onSubmit={handleSubmit}>
         <AuthField
           id="verification-email"
           name="email"
-          label="Email address"
+          label={t("Email address")}
           type="email"
           value={form.email}
           onChange={handleChange}
@@ -36,7 +40,7 @@ export default function EmailVerification() {
         <AuthField
           id="verification-code"
           name="code"
-          label="Verification code"
+          label={t("Verification code")}
           value={form.code}
           onChange={handleChange}
           placeholder="000000"
@@ -45,14 +49,14 @@ export default function EmailVerification() {
           pattern="[0-9]{6}"
           maxLength={6}
           className="auth-code-input"
-          hint="The code contains exactly six digits and expires after 10 minutes."
+          hint={t(COPY.codeHint)}
           required
         />
         <AuthSubmitButton
           loading={loading}
-          loadingLabel="Verifying your email…"
+          loadingLabel={t("Verifying your email…")}
         >
-          Verify email
+          {t("Verify email")}
         </AuthSubmitButton>
         <button
           className="auth-secondary-action"
@@ -61,16 +65,16 @@ export default function EmailVerification() {
           disabled={resending || cooldown > 0 || !form.email.trim()}
         >
           {resending
-            ? "Sending a new code…"
+            ? t("Sending a new code…")
             : cooldown > 0
-              ? `Send a new code in ${cooldown}s`
-              : "Send a new verification code"}
+              ? t("Send a new code in {cooldown}s", { cooldown })
+              : t("Send a new verification code")}
         </button>
       </form>
       <p className="auth-footer">
-        Already verified?{" "}
+        {t(COPY.footer[0])}
         <Link className="auth-link" to="/login" state={{ email: form.email }}>
-          Sign in
+          {t(COPY.footer[1])}
         </Link>
       </p>
     </AuthShell>

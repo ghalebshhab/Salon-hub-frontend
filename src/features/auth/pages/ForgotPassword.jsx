@@ -3,21 +3,25 @@ import AuthField from "../components/AuthField.jsx";
 import AuthShell from "../components/AuthShell.jsx";
 import AuthSubmitButton from "../components/AuthSubmitButton.jsx";
 import useForgotPassword from "../hooks/useForgotPassword.js";
+import t from "../../../shared/i18n/t.js";
+import { AUTH_COPY } from "../model/authCopy.js";
+
+const COPY = AUTH_COPY.forgotPassword;
 
 export default function ForgotPassword() {
   const { email, setEmail, loading, handleSubmit } = useForgotPassword();
 
   return (
     <AuthShell
-      eyebrow="Account recovery"
-      title="Reset your password"
-      intro="Tell us which account you need to recover. We’ll send a short-lived verification code if the email belongs to an account."
+      eyebrow={t(COPY.eyebrow)}
+      title={t(COPY.title)}
+      intro={t(COPY.intro)}
     >
       <form className="auth-form" onSubmit={handleSubmit}>
         <AuthField
           id="recovery-email"
           name="email"
-          label="Email address"
+          label={t("Email address")}
           type="email"
           value={email}
           onChange={(event) => setEmail(event.target.value)}
@@ -27,19 +31,16 @@ export default function ForgotPassword() {
         />
         <AuthSubmitButton
           loading={loading}
-          loadingLabel="Sending reset instructions…"
+          loadingLabel={t("Sending reset instructions…")}
         >
-          Continue
+          {t("Continue")}
         </AuthSubmitButton>
       </form>
-      <div className="auth-note">
-        For your privacy, SalonHub shows the same response whether or not an
-        account exists for this email.
-      </div>
+      <div className="auth-note">{t(COPY.note[0])}</div>
       <p className="auth-footer">
-        Remembered your password?{" "}
+        {t(COPY.footer[0])}
         <Link className="auth-link" to="/login" state={{ email }}>
-          Back to sign in
+          {t(COPY.footer[1])}
         </Link>
       </p>
     </AuthShell>

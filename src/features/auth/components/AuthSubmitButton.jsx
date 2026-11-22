@@ -1,6 +1,7 @@
+import t from "../../../shared/i18n/t.js";
 export default function AuthSubmitButton({
   loading,
-  loadingLabel = "Please wait…",
+  loadingLabel = t("Please wait…"),
   disabled = false,
   children,
 }) {

@@ -1,3 +1,4 @@
+import t from "../../../shared/i18n/t.js";
 export default function AuthField({
   id,
   label,
@@ -18,11 +19,11 @@ export default function AuthField({
           }
           {...props}
         />
-        <label htmlFor={id}>{label}</label>
+        <label htmlFor={id}>{t(label)}</label>
       </div>
       {hint && (
         <p id={`${id}-hint`} className="auth-hint">
-          {hint}
+          {t(hint)}
         </p>
       )}
       {error && (

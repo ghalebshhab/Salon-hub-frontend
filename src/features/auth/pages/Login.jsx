@@ -4,20 +4,24 @@ import AuthShell from "../components/AuthShell.jsx";
 import AuthField from "../components/AuthField.jsx";
 import AuthSubmitButton from "../components/AuthSubmitButton.jsx";
 import PasswordField from "../components/PasswordField.jsx";
+import t from "../../../shared/i18n/t.js";
+import { AUTH_COPY } from "../model/authCopy.js";
+
+const COPY = AUTH_COPY.login;
 
 function Login() {
   const { form, loading, handleChange, handleSubmit } = useLogin();
   return (
     <AuthShell
-      eyebrow="Sign in"
-      title="Welcome back"
-      intro="Your next appointment, your saved places, and your SalonHub community are waiting."
+      eyebrow={t(COPY.eyebrow)}
+      title={t(COPY.title)}
+      intro={t(COPY.intro)}
     >
       <form className="auth-form" onSubmit={handleSubmit}>
         <AuthField
           id="login-email"
           name="email"
-          label="Email address"
+          label={t("Email address")}
           type="email"
           value={form.email}
           onChange={handleChange}
@@ -28,37 +32,34 @@ function Login() {
         <PasswordField
           id="login-password"
           name="password"
-          label="Password"
+          label={t("Password")}
           value={form.password}
           onChange={handleChange}
-          placeholder="Enter your password"
+          placeholder={t("Enter your password")}
           autoComplete="current-password"
           required
         />
         <div className="auth-inline">
-          <span>Secure access to your account</span>
+          <span>{t(COPY.inline[0])}</span>
           <Link className="auth-link" to="/forgot-password">
-            Forgot password?
+            {t(COPY.inline[1])}
           </Link>
         </div>
-        <AuthSubmitButton loading={loading} loadingLabel="Signing you in…">
-          Sign in
+        <AuthSubmitButton loading={loading} loadingLabel={t("Signing you in…")}>
+          {t("Sign in")}
         </AuthSubmitButton>
       </form>
-      <div className="auth-note">
-        Your profile keeps bookings, salon relationships, and career progress in
-        one place.
-      </div>
+      <div className="auth-note">{t(COPY.note[0])}</div>
       <p className="auth-footer">
-        New to SalonHub?{" "}
+        {t(COPY.footer[0])}
         <Link className="auth-link" to="/register">
-          Create an account
+          {t(COPY.footer[1])}
         </Link>
         <span className="auth-footer-separator" aria-hidden="true">
           ·
         </span>
         <Link className="auth-link" to="/verify-email">
-          Verify email
+          {t(COPY.footer[2])}
         </Link>
       </p>
     </AuthShell>

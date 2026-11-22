@@ -3,6 +3,10 @@ import AuthShell from "../components/AuthShell.jsx";
 import AuthSubmitButton from "../components/AuthSubmitButton.jsx";
 import PasswordField from "../components/PasswordField.jsx";
 import useResetPassword from "../hooks/useResetPassword.js";
+import t from "../../../shared/i18n/t.js";
+import { AUTH_COPY } from "../model/authCopy.js";
+
+const COPY = AUTH_COPY.resetPassword;
 
 export default function ResetPassword() {
   const { form, loading, hasResetAuthorization, handleChange, handleSubmit } =
@@ -10,15 +14,15 @@ export default function ResetPassword() {
 
   return (
     <AuthShell
-      eyebrow="Account recovery"
-      title="Choose a new password"
-      intro="Use a strong password you have not used before. Your existing signed-in sessions will no longer be valid."
+      eyebrow={t(COPY.eyebrow)}
+      title={t(COPY.title)}
+      intro={t(COPY.intro)}
     >
       {!hasResetAuthorization && (
         <div className="auth-flow-status" role="alert">
-          Verify a current password reset code before choosing a new password.
+          {t(COPY.status[0])}
           <Link className="auth-link" to="/forgot-password">
-            Request a code
+            {t(COPY.status[1])}
           </Link>
         </div>
       )}
@@ -26,34 +30,34 @@ export default function ResetPassword() {
         <PasswordField
           id="new-password"
           name="newPassword"
-          label="New password"
+          label={t("New password")}
           value={form.newPassword}
           onChange={handleChange}
-          placeholder="Create a strong password"
+          placeholder={t("Create a strong password")}
           autoComplete="new-password"
           required
         />
         <PasswordField
           id="confirm-new-password"
           name="confirmPassword"
-          label="Confirm new password"
+          label={t("Confirm new password")}
           value={form.confirmPassword}
           onChange={handleChange}
-          placeholder="Repeat your new password"
+          placeholder={t("Repeat your new password")}
           autoComplete="new-password"
           required
         />
         <AuthSubmitButton
           loading={loading}
-          loadingLabel="Securing your new password…"
+          loadingLabel={t("Securing your new password…")}
           disabled={!hasResetAuthorization}
         >
-          Save new password
+          {t("Save new password")}
         </AuthSubmitButton>
       </form>
       <p className="auth-footer">
         <Link className="auth-link" to="/login">
-          Return to sign in
+          {t(COPY.footer[0])}
         </Link>
       </p>
     </AuthShell>

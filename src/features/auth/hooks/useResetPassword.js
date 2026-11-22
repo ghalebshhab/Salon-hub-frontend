@@ -6,6 +6,7 @@ import {
   showErrorToast,
   showSuccessToast,
 } from "../../../shared/notifications/toast.jsx";
+import t from "../../../shared/i18n/t.js";
 
 export default function useResetPassword() {
   const location = useLocation();
@@ -24,7 +25,7 @@ export default function useResetPassword() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (!resetToken) {
-      showErrorToast("Request and verify a new password reset code first.");
+      showErrorToast(t("Request and verify a new password reset code first."));
       navigate("/forgot-password", { replace: true });
       return;
     }
@@ -32,11 +33,11 @@ export default function useResetPassword() {
       setLoading(true);
       const response = await resetPasswordApi({ resetToken, ...form });
       if (!response.success) throw new Error(response.message);
-      showSuccessToast(response.message || "Password updated successfully.");
+      showSuccessToast(response.message || t("Password updated successfully."));
       navigate("/login", { replace: true });
     } catch (error) {
       showErrorToast(
-        getApiErrorMessage(error, "The password could not be reset."),
+        getApiErrorMessage(error, t("The password could not be reset.")),
       );
     } finally {
       setLoading(false);

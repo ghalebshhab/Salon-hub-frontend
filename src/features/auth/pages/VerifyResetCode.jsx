@@ -3,21 +3,25 @@ import AuthField from "../components/AuthField.jsx";
 import AuthShell from "../components/AuthShell.jsx";
 import AuthSubmitButton from "../components/AuthSubmitButton.jsx";
 import usePasswordResetCode from "../hooks/usePasswordResetCode.js";
+import t from "../../../shared/i18n/t.js";
+import { AUTH_COPY } from "../model/authCopy.js";
+
+const COPY = AUTH_COPY.verifyResetCode;
 
 export default function VerifyResetCode() {
   const { form, loading, handleChange, handleSubmit } = usePasswordResetCode();
 
   return (
     <AuthShell
-      eyebrow="Account recovery"
-      title="Check your inbox"
-      intro="Enter the six-digit recovery code. After it is verified, you can choose a new password."
+      eyebrow={t(COPY.eyebrow)}
+      title={t(COPY.title)}
+      intro={t(COPY.intro)}
     >
       <form className="auth-form" onSubmit={handleSubmit}>
         <AuthField
           id="reset-code-email"
           name="email"
-          label="Email address"
+          label={t("Email address")}
           type="email"
           value={form.email}
           onChange={handleChange}
@@ -28,7 +32,7 @@ export default function VerifyResetCode() {
         <AuthField
           id="reset-code"
           name="code"
-          label="Password reset code"
+          label={t("Password reset code")}
           value={form.code}
           onChange={handleChange}
           placeholder="000000"
@@ -37,20 +41,20 @@ export default function VerifyResetCode() {
           pattern="[0-9]{6}"
           maxLength={6}
           className="auth-code-input"
-          hint="The code expires after 10 minutes and can only be used once."
+          hint={t(COPY.codeHint)}
           required
         />
         <AuthSubmitButton
           loading={loading}
-          loadingLabel="Verifying your reset code…"
+          loadingLabel={t("Verifying your reset code…")}
         >
-          Verify code
+          {t("Verify code")}
         </AuthSubmitButton>
       </form>
       <p className="auth-footer">
-        Need another code?{" "}
+        {t(COPY.footer[0])}
         <Link className="auth-link" to="/forgot-password">
-          Start again
+          {t(COPY.footer[1])}
         </Link>
       </p>
     </AuthShell>

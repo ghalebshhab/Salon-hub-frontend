@@ -8,6 +8,7 @@ import {
   showErrorToast,
   showSuccessToast,
 } from "../../../shared/notifications/toast.jsx";
+import t from "../../../shared/i18n/t.js";
 
 export default function useChangePassword() {
   const navigate = useNavigate();
@@ -36,12 +37,12 @@ export default function useChangePassword() {
       const email = user?.email || "";
       clearAuthData();
       showSuccessToast(
-        response.message || "Password changed. Please sign in again.",
+        response.message || t("Password changed. Please sign in again."),
       );
       navigate("/login", { replace: true, state: { email } });
     } catch (error) {
       showErrorToast(
-        getApiErrorMessage(error, "Your password could not be changed."),
+        getApiErrorMessage(error, t("Your password could not be changed.")),
       );
     } finally {
       setLoading(false);

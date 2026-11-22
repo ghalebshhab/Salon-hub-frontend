@@ -1,9 +1,10 @@
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
+import t from "../../../shared/i18n/t.js";
 
 export default function PasswordField({
   id,
-  label = "Password",
+  label = t("Password"),
   placeholder,
   ...props
 }) {
@@ -18,12 +19,12 @@ export default function PasswordField({
           placeholder={placeholder || " "}
           {...props}
         />
-        <label htmlFor={id}>{label}</label>
+        <label htmlFor={id}>{t(label)}</label>
         <button
           type="button"
           className="auth-password-toggle"
           onClick={() => setVisible((value) => !value)}
-          aria-label={visible ? "Hide password" : "Show password"}
+          aria-label={visible ? t("Hide password") : t("Show password")}
           aria-pressed={visible}
         >
           <span className="auth-password-toggle-pulse" aria-hidden="true" />

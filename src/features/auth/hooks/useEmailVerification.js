@@ -6,6 +6,7 @@ import {
   showErrorToast,
   showSuccessToast,
 } from "../../../shared/notifications/toast.jsx";
+import t from "../../../shared/i18n/t.js";
 
 export default function useEmailVerification() {
   const location = useLocation();
@@ -46,13 +47,15 @@ export default function useEmailVerification() {
         code: form.code,
       });
       if (!response.success) throw new Error(response.message);
-      showSuccessToast(response.message || "Email verified successfully.");
+      showSuccessToast(response.message || t("Email verified successfully."));
       navigate("/login", {
         replace: true,
         state: { email: form.email.trim() },
       });
     } catch (error) {
-      showErrorToast(getApiErrorMessage(error, "Email verification failed."));
+      showErrorToast(
+        getApiErrorMessage(error, t("Email verification failed.")),
+      );
     } finally {
       setLoading(false);
     }
@@ -67,10 +70,12 @@ export default function useEmailVerification() {
       });
       if (!response.success) throw new Error(response.message);
       setCooldown(60);
-      showSuccessToast(response.message || "A new verification code was sent.");
+      showSuccessToast(
+        response.message || t("A new verification code was sent."),
+      );
     } catch (error) {
       showErrorToast(
-        getApiErrorMessage(error, "The code could not be resent."),
+        getApiErrorMessage(error, t("The code could not be resent.")),
       );
     } finally {
       setResending(false);

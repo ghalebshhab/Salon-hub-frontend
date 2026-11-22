@@ -6,6 +6,7 @@ import {
   showErrorToast,
   showSuccessToast,
 } from "../../../shared/notifications/toast.jsx";
+import t from "../../../shared/i18n/t.js";
 
 export default function useForgotPassword() {
   const navigate = useNavigate();
@@ -19,14 +20,14 @@ export default function useForgotPassword() {
       const response = await forgotPasswordApi({ email: email.trim() });
       if (!response.success) throw new Error(response.message);
       showSuccessToast(
-        response.message || "Check your email for a reset code.",
+        response.message || t("Check your email for a reset code."),
       );
       navigate("/verify-reset-code", {
         state: { email: email.trim() },
       });
     } catch (error) {
       showErrorToast(
-        getApiErrorMessage(error, "Password recovery could not start."),
+        getApiErrorMessage(error, t("Password recovery could not start.")),
       );
     } finally {
       setLoading(false);

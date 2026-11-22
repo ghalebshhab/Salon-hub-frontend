@@ -14,6 +14,7 @@ import {
   isVideo,
   postedDate,
 } from "../../model/workGallery.js";
+import t from "../../../../shared/i18n/t.js";
 
 /**
  * Full view of one piece of work on a native modal <dialog>. Arrow keys
@@ -46,7 +47,7 @@ export default function WorkLightbox({
     <dialog
       ref={dialogRef}
       className="wk-lightbox"
-      aria-label={`Work ${index + 1} of ${count}`}
+      aria-label={t("Work {value} of {count}", { value: index + 1, count })}
       onKeyDown={onKeyDown}
     >
       <div className="wk-lightbox-stage">
@@ -73,7 +74,7 @@ export default function WorkLightbox({
               type="button"
               className="wk-nav is-prev"
               onClick={() => go(-1)}
-              aria-label="Previous work"
+              aria-label={t("Previous work")}
             >
               <ChevronLeft size={22} aria-hidden="true" />
             </button>
@@ -81,7 +82,7 @@ export default function WorkLightbox({
               type="button"
               className="wk-nav is-next"
               onClick={() => go(1)}
-              aria-label="Next work"
+              aria-label={t("Next work")}
             >
               <ChevronRight size={22} aria-hidden="true" />
             </button>
@@ -91,7 +92,7 @@ export default function WorkLightbox({
           type="button"
           className="wk-close"
           onClick={onClose}
-          aria-label="Close full view"
+          aria-label={t("Close full view")}
         >
           <X size={20} aria-hidden="true" />
         </button>
@@ -100,12 +101,12 @@ export default function WorkLightbox({
       <div className="wk-lightbox-info">
         <div className="wk-lightbox-copy">
           <p className="wk-lightbox-meta">
-            <strong>{item.employeeName || "Salon team"}</strong>
-            <span>{item.employeeSpecialty || "Salon professional"}</span>
+            <strong>{item.employeeName || t("Salon team")}</strong>
+            <span>{item.employeeSpecialty || t("Salon professional")}</span>
             {date && <span>{date}</span>}
           </p>
           {item.caption && (
-            <p className="wk-lightbox-caption">{item.caption}</p>
+            <p className="wk-lightbox-caption">{t(item.caption)}</p>
           )}
         </div>
         <div className="wk-lightbox-actions">
@@ -121,7 +122,7 @@ export default function WorkLightbox({
               onClick={() => onDelete(item)}
             >
               <Trash2 size={15} aria-hidden="true" />
-              Delete
+              {t("Delete")}
             </button>
           )}
           {booking && item.employeeId != null && (
@@ -131,7 +132,9 @@ export default function WorkLightbox({
               state={booking.state(item.employeeId)}
             >
               <CalendarDays size={15} aria-hidden="true" />
-              {booking.signedIn ? `Book with ${artist}` : "Sign in to book"}
+              {booking.signedIn
+                ? t("Book with {artist}", { artist })
+                : t("Sign in to book")}
             </Link>
           )}
         </div>

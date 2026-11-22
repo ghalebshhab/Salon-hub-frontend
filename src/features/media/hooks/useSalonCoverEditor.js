@@ -7,6 +7,7 @@ import {
   uploadSalonCoverApi,
   uploadSalonCoverFromDriveApi,
 } from "../api/mediaApi.js";
+import t from "../../../shared/i18n/t.js";
 
 export default function useSalonCoverEditor(onUploaded) {
   const [selection, setSelection] = useState(null);
@@ -30,7 +31,9 @@ export default function useSalonCoverEditor(onUploaded) {
     setUploading(false);
     setProgress(null);
     setNotice(
-      "Upload request cancelled. The server may still finish saving; refresh your salon before retrying.",
+      t(
+        "Upload request cancelled. The server may still finish saving; refresh your salon before retrying.",
+      ),
     );
   };
 
@@ -38,7 +41,7 @@ export default function useSalonCoverEditor(onUploaded) {
     if (request.current) return;
     if (!selection?.file && !selection?.remoteUrl) {
       showErrorToast(
-        "Choose a picture from your device or Google Drive first.",
+        t("Choose a picture from your device or Google Drive first."),
       );
       return;
     }
@@ -68,20 +71,20 @@ export default function useSalonCoverEditor(onUploaded) {
       if (controller.signal.aborted) return;
       if (!response.success) {
         const message =
-          response.message || "Could not upload the salon picture.";
+          response.message || t("Could not upload the salon picture.");
         setError(message);
         showErrorToast(message);
         return;
       }
       onUploaded?.(response.data?.secureUrl);
       setSelection(null);
-      showSuccessToast("Salon profile picture updated.");
+      showSuccessToast(t("Salon profile picture updated."));
     } catch (error) {
       if (controller.signal.aborted) return;
       const message =
         error?.response?.data?.message ||
         error?.message ||
-        "Could not upload the salon picture.";
+        t("Could not upload the salon picture.");
       setError(message);
       showErrorToast(message);
     } finally {

@@ -30,6 +30,7 @@ import { prototypeRoles } from "./prototypeData.js";
 import usePrototypeWorkspace from "./usePrototypeWorkspace.js";
 // Loaded with this lazy route only, not in the global stylesheet.
 import "./prototype.css";
+import t from "../../shared/i18n/t.js";
 
 const sectionIcons = {
   overview: LayoutDashboard,
@@ -156,7 +157,7 @@ export default function Prototype() {
       >
         {prototypeRoles.map((item) => (
           <button
-            aria-label={item.label}
+            aria-label={t(item.label)}
             className={workspace.role === item.id ? "active" : ""}
             type="button"
             onClick={() => workspace.setRole(item.id)}
@@ -172,8 +173,8 @@ export default function Prototype() {
               )}
             </span>
             <span>
-              <strong>{item.label}</strong>
-              <small>{item.description}</small>
+              <strong>{t(item.label)}</strong>
+              <small>{t(item.description)}</small>
             </span>
             <ChevronRight size={18} />
           </button>
@@ -185,7 +186,10 @@ export default function Prototype() {
           <div>
             <span className="prototype-sidebar-label">Preview as</span>
             <strong>
-              {prototypeRoles.find((item) => item.id === workspace.role)?.label}
+              {t(
+                prototypeRoles.find((item) => item.id === workspace.role)
+                  ?.label,
+              )}
             </strong>
           </div>
           <nav aria-label="Prototype sections">
@@ -199,7 +203,7 @@ export default function Prototype() {
                   key={item.id}
                 >
                   <Icon size={17} />
-                  <span>{item.label}</span>
+                  <span>{t(item.label)}</span>
                   <ChevronRight size={15} />
                 </button>
               );

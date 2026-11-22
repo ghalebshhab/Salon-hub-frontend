@@ -4,6 +4,7 @@ import {
   optimizedCloudinaryImage,
 } from "../../model/cloudinaryMedia.js";
 import { altText, firstName, isVideo } from "../../model/workGallery.js";
+import t from "../../../../shared/i18n/t.js";
 
 /** One square in the mosaic. A click opens the full view. */
 export default function WorkTile({ item, large = false, onOpen }) {
@@ -18,7 +19,7 @@ export default function WorkTile({ item, large = false, onOpen }) {
       type="button"
       className={`wk-tile${large ? " is-large" : ""}`}
       onClick={onOpen}
-      aria-label={`Open ${altText(item)}`}
+      aria-label={t("Open {value}", { value: altText(item) })}
     >
       {video && !poster ? (
         <video
@@ -53,7 +54,7 @@ export default function WorkTile({ item, large = false, onOpen }) {
 
       <span className="wk-tile-info" aria-hidden="true">
         <strong>{firstName(item.employeeName)}</strong>
-        {item.caption && <span>{item.caption}</span>}
+        {item.caption && <span>{t(item.caption)}</span>}
       </span>
     </button>
   );

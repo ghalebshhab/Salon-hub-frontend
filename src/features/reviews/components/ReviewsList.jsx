@@ -12,6 +12,7 @@ import {
   ratingBreakdown,
   visibleReviews,
 } from "../model/salonReviews.js";
+import t from "../../../shared/i18n/t.js";
 
 function ReviewsSkeleton() {
   return (
@@ -60,11 +61,11 @@ function ReviewsList({ salonId }) {
   if (error && !reviews.length) {
     return (
       <div className="rv-empty" role="alert">
-        <h3>The reviews could not be loaded</h3>
-        <p>Check your connection and try again.</p>
+        <h3>{t("The reviews could not be loaded")}</h3>
+        <p>{t("Check your connection and try again.")}</p>
         <button className="btn btn-secondary" type="button" onClick={refetch}>
           <RefreshCw size={16} aria-hidden="true" />
-          Try again
+          {t("Try again")}
         </button>
       </div>
     );
@@ -76,10 +77,11 @@ function ReviewsList({ salonId }) {
         <span className="rv-empty-icon" aria-hidden="true">
           <MessageSquareQuote size={24} />
         </span>
-        <h3>No reviews yet</h3>
+        <h3>{t("No reviews yet")}</h3>
         <p>
-          Guests can review the salon after a completed visit. Book a visit and
-          be the first to share how it went.
+          {t(
+            "Guests can review the salon after a completed visit. Book a visit and be the first to share how it went.",
+          )}
         </p>
       </div>
     );
@@ -115,22 +117,26 @@ function ReviewsList({ salonId }) {
             <p className="rv-showing" aria-live="polite">
               {stars ? (
                 <>
-                  Showing {filtered.length} {stars}-star{" "}
-                  {filtered.length === 1 ? "review" : "reviews"}
+                  {filtered.length === 1
+                    ? t("Showing 1 {stars}-star review", { stars })
+                    : t("Showing {count} {stars}-star reviews", {
+                        count: filtered.length,
+                        stars,
+                      })}
                   <button
                     type="button"
                     className="rv-clear"
                     onClick={() => pickStars(null)}
                   >
-                    Show all
+                    {t("Show all")}
                   </button>
                 </>
               ) : (
-                `All ${reviews.length} reviews`
+                t("All {length} reviews", { length: reviews.length })
               )}
             </p>
             <label className="rv-sort">
-              <span className="sr-only">Sort reviews</span>
+              <span className="sr-only">{t("Sort reviews")}</span>
               <select
                 value={sort}
                 onChange={(event) => {
@@ -140,7 +146,7 @@ function ReviewsList({ salonId }) {
               >
                 {REVIEW_SORTS.map((item) => (
                   <option key={item.value} value={item.value}>
-                    {item.label}
+                    {t(item.label)}
                   </option>
                 ))}
               </select>
@@ -166,8 +172,11 @@ function ReviewsList({ salonId }) {
             className="btn btn-secondary rv-show-more"
             onClick={() => setShownCount((count) => count + REVIEWS_PAGE_SIZE)}
           >
-            Show {Math.min(hidden, REVIEWS_PAGE_SIZE)} more{" "}
-            {hidden === 1 ? "review" : "reviews"}
+            {hidden === 1
+              ? t("Show 1 more review")
+              : t("Show {count} more reviews", {
+                  count: Math.min(hidden, REVIEWS_PAGE_SIZE),
+                })}
           </button>
         )}
       </div>

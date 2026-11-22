@@ -22,45 +22,56 @@ import {
 } from "../model/assistantIdentity.js";
 import AssistantCards from "./AssistantCards.jsx";
 import LamsaOrb from "./LamsaOrb.jsx";
+import t from "../../../shared/i18n/t.js";
+
+// The server puts the city name inside "Best salons in {city}".
+function suggestionText(suggestion) {
+  const city = String(suggestion).match(/^Best salons in (.+)$/);
+  return city
+    ? t("Best salons in {city}", { city: t(city[1]) })
+    : t(suggestion);
+}
 
 function capabilities(isOwner) {
   return [
     {
       icon: Star,
-      title: "Top salons near you",
-      text: "Best rated in every governorate",
+      title: t("Top salons near you"),
+      text: t("Best rated in every governorate"),
       prompt: "Top rated salons",
     },
     isOwner
       ? {
           icon: UsersRound,
-          title: "Grow your team",
-          text: "Members open to work",
+          title: t("Grow your team"),
+          text: t("Members open to work"),
           prompt: "Find employees for my salon",
         }
       : {
           icon: BriefcaseBusiness,
-          title: "Jobs that fit you",
-          text: "Matched to your career profile",
+          title: t("Jobs that fit you"),
+          text: t("Matched to your career profile"),
           prompt: "Open jobs for me",
         },
     {
       icon: Compass,
-      title: "Find any page",
-      text: "Bookings, profile, settings",
+      title: t("Find any page"),
+      text: t("Bookings, profile, settings"),
       prompt: "Where do I see my bookings?",
     },
     {
       icon: MessageCircleQuestion,
-      title: "How Salonhub works",
-      text: "Booking, reviews, hiring",
+      title: t("How Salonhub works"),
+      text: t("Booking, reviews, hiring"),
       prompt: "How does Salonhub work?",
     },
   ];
 }
 
 function greetingFor(firstName) {
-  return firstName ? `Welcome, ${firstName}!` : "Welcome to Salonhub!";
+  return firstName
+    ? t("Welcome, {firstName}!", { firstName })
+    : t("Welcome to Salonhub!");
 }
 
 /** Big welcome for the assistant page: who the assistant is, what to ask. */
@@ -71,11 +82,13 @@ function PageWelcome({ onPick }) {
       <LamsaOrb size="xl" animated live />
       <h2>
         {greetingFor(user?.firstName)}
-        <span>How can I help today?</span>
+        <span>{t("How can I help today?")}</span>
       </h2>
       <p>
-        {ASSISTANT_MEANING} I answer from live Salonhub data, so every salon,
-        rating and job I show is real.
+        {t(
+          "{ASSISTANT_MEANING} I answer from live Salonhub data, so every salon, rating and job I show is real.",
+          { ASSISTANT_MEANING },
+        )}
       </p>
       <ul className="lamsa-capabilities">
         {capabilities(isOwner).map(({ icon: Icon, title, text, prompt }) => (
@@ -89,11 +102,11 @@ function PageWelcome({ onPick }) {
                 <Icon />
               </span>
               <span className="lamsa-capability-text">
-                <strong>{title}</strong>
-                <small>{text}</small>
+                <strong>{t(title)}</strong>
+                <small>{t(text)}</small>
               </span>
               <span className="lamsa-capability-prompt">
-                “{prompt}”
+                “{t(prompt)}”
                 <ArrowRight aria-hidden="true" />
               </span>
             </button>
@@ -112,17 +125,18 @@ function PanelWelcome({ onPick }) {
       <LamsaOrb size="lg" animated live />
       <h3>{greetingFor(auth.user?.firstName)}</h3>
       <p>
-        Ask me for the best salons in your governorate, open jobs, people for
-        your team, or how anything works.
+        {t(
+          "Ask me for the best salons in your governorate, open jobs, people for your team, or how anything works.",
+        )}
       </p>
       <div
         className="lamsa-starters"
         role="group"
-        aria-label="Suggested questions"
+        aria-label={t("Suggested questions")}
       >
         {starterPrompts(auth).map((prompt) => (
           <button type="button" key={prompt} onClick={() => onPick(prompt)}>
-            {prompt}
+            {t(prompt)}
             <ArrowRight aria-hidden="true" />
           </button>
         ))}
@@ -135,7 +149,7 @@ function Message({ message, last, onPick, onNavigate }) {
   if (message.role === "user") {
     return (
       <li className="lamsa-message is-user">
-        <p className="lamsa-bubble">{message.text}</p>
+        <p className="lamsa-bubble">{t(message.text)}</p>
       </li>
     );
   }
@@ -156,18 +170,18 @@ function Message({ message, last, onPick, onNavigate }) {
         </span>
         <p className="lamsa-bubble">
           <span className="sr-only">{ASSISTANT_NAME}: </span>
-          {message.text}
+          {t(message.text)}
         </p>
         {!message.error && (
           <AssistantCards message={message} onNavigate={onNavigate} />
         )}
         {message.links?.length > 0 && (
-          <nav className="lamsa-links" aria-label="Related pages">
+          <nav className="lamsa-links" aria-label={t("Related pages")}>
             {message.links.map((link) => (
               <Link key={link.to} to={link.to} onClick={onNavigate}>
                 <span>
-                  <strong>{link.label}</strong>
-                  {link.description && <small>{link.description}</small>}
+                  <strong>{t(link.label)}</strong>
+                  {link.description && <small>{t(link.description)}</small>}
                 </span>
                 <ArrowRight aria-hidden="true" />
               </Link>
@@ -175,14 +189,18 @@ function Message({ message, last, onPick, onNavigate }) {
           </nav>
         )}
         {last && message.suggestions?.length > 0 && (
-          <div className="lamsa-suggestions" role="group" aria-label="Ask next">
+          <div
+            className="lamsa-suggestions"
+            role="group"
+            aria-label={t("Ask next")}
+          >
             {message.suggestions.map((suggestion) => (
               <button
                 type="button"
                 key={suggestion}
                 onClick={() => onPick(suggestion)}
               >
-                {suggestion}
+                {suggestionText(suggestion)}
               </button>
             ))}
           </div>
@@ -212,7 +230,7 @@ function Composer({ onSend, pending, autoFocus, showHint }) {
   return (
     <form className="lamsa-composer" onSubmit={submit}>
       <label className="sr-only" htmlFor={inputId}>
-        Message {ASSISTANT_NAME}
+        {t("Message {ASSISTANT_NAME}", { ASSISTANT_NAME })}
       </label>
       <textarea
         id={inputId}
@@ -220,7 +238,7 @@ function Composer({ onSend, pending, autoFocus, showHint }) {
         rows={1}
         value={text}
         maxLength={MAX_MESSAGE_LENGTH}
-        placeholder={`Ask ${ASSISTANT_NAME} anything…`}
+        placeholder={t("Ask {ASSISTANT_NAME} anything…", { ASSISTANT_NAME })}
         onChange={(event) => setText(event.target.value)}
         onKeyDown={(event) => {
           if (
@@ -241,14 +259,14 @@ function Composer({ onSend, pending, autoFocus, showHint }) {
         type="submit"
         className="lamsa-send"
         disabled={!text.trim() || pending}
-        aria-label="Send message"
+        aria-label={t("Send message")}
       >
         <ArrowUp aria-hidden="true" />
       </button>
       {showHint && (
         <span className="lamsa-composer-hint" aria-hidden="true">
-          <kbd>Enter</kbd> to send · <kbd>Shift</kbd> + <kbd>Enter</kbd> for a
-          new line
+          <kbd>{t("Enter")}</kbd> {t("to send ·")} <kbd>{t("Shift")}</kbd> +{" "}
+          <kbd>{t("Enter")}</kbd> {t("for a new line")}
         </span>
       )}
     </form>
@@ -303,7 +321,9 @@ export default function AssistantConversation({
             className="lamsa-messages"
             role="log"
             aria-live="polite"
-            aria-label={`Conversation with ${ASSISTANT_NAME}`}
+            aria-label={t("Conversation with {ASSISTANT_NAME}", {
+              ASSISTANT_NAME,
+            })}
           >
             {messages.map((message, index) => (
               <Message
@@ -322,7 +342,9 @@ export default function AssistantConversation({
                     {ASSISTANT_NAME}
                   </span>
                   <p className="lamsa-bubble">
-                    <span className="sr-only">{ASSISTANT_NAME} is writing</span>
+                    <span className="sr-only">
+                      {t("{ASSISTANT_NAME} is writing", { ASSISTANT_NAME })}
+                    </span>
                     <span className="lamsa-dots" aria-hidden="true">
                       <i />
                       <i />
@@ -343,8 +365,10 @@ export default function AssistantConversation({
           showHint={page}
         />
         <p className="lamsa-disclaimer">
-          {ASSISTANT_NAME} answers from Salonhub data. Check details on the
-          salon page.
+          {t(
+            "{ASSISTANT_NAME} answers from Salonhub data. Check details on the salon page.",
+            { ASSISTANT_NAME },
+          )}
         </p>
       </div>
     </div>

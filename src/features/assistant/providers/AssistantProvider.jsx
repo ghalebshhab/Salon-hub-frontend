@@ -14,6 +14,7 @@ import {
   toHistory,
   userMessage,
 } from "../model/assistantConversation.js";
+import t from "../../../shared/i18n/t.js";
 
 /**
  * One conversation per browser tab and member, shared by the floating panel
@@ -73,7 +74,9 @@ export default function AssistantProvider({ userId, pages = [], children }) {
           { signal: controller.signal },
         );
         if (response?.success === false || !response?.data) {
-          append(errorMessage(response?.message || "Lamsa could not answer."));
+          append(
+            errorMessage(response?.message || t("Lamsa could not answer.")),
+          );
         } else {
           append(assistantMessage(response.data, matchPages(pages, text)));
         }
@@ -81,7 +84,7 @@ export default function AssistantProvider({ userId, pages = [], children }) {
         if (controller.signal.aborted) return;
         append(
           errorMessage(
-            getApiErrorMessage(error, "Lamsa could not answer. Try again."),
+            getApiErrorMessage(error, t("Lamsa could not answer. Try again.")),
           ),
         );
       } finally {

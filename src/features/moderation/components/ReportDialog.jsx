@@ -1,14 +1,15 @@
 import { Flag, ShieldAlert, X } from "lucide-react";
 import { useState } from "react";
 import useReport from "../hooks/useReport.js";
+import t from "../../../shared/i18n/t.js";
 
 const reasons = [
-  ["SPAM", "Spam or misleading"],
-  ["HARASSMENT", "Harassment or bullying"],
-  ["INAPPROPRIATE_CONTENT", "Inappropriate content"],
-  ["IMPERSONATION", "Impersonation"],
-  ["SCAM", "Scam or unsafe activity"],
-  ["OTHER", "Something else"],
+  ["SPAM", t("Spam or misleading")],
+  ["HARASSMENT", t("Harassment or bullying")],
+  ["INAPPROPRIATE_CONTENT", t("Inappropriate content")],
+  ["IMPERSONATION", t("Impersonation")],
+  ["SCAM", t("Scam or unsafe activity")],
+  ["OTHER", t("Something else")],
 ];
 
 export default function ReportDialog({
@@ -50,23 +51,24 @@ export default function ReportDialog({
             <ShieldAlert size={19} />
           </span>
           <div>
-            <p>Safety report</p>
-            <h2>Report {targetLabel}</h2>
+            <p>{t("Safety report")}</p>
+            <h2>{t("Report {targetLabel}", { targetLabel })}</h2>
           </div>
           <button
             type="button"
-            aria-label="Close report dialog"
+            aria-label={t("Close report dialog")}
             onClick={onClose}
           >
             <X size={19} />
           </button>
         </header>
         <p className="report-dialog-intro">
-          Tell our moderation team what happened. The reported account will not
-          see who submitted the report.
+          {t(
+            "Tell our moderation team what happened. The reported account will not see who submitted the report.",
+          )}
         </p>
         <fieldset>
-          <legend>What is the problem?</legend>
+          <legend>{t("What is the problem?")}</legend>
           {reasons.map(([value, label]) => (
             <label
               className={reason === value ? "is-selected" : ""}
@@ -79,12 +81,12 @@ export default function ReportDialog({
                 checked={reason === value}
                 onChange={() => setReason(value)}
               />
-              <span>{label}</span>
+              <span>{t(label)}</span>
             </label>
           ))}
         </fieldset>
         <label className="report-details-label" htmlFor="report-details">
-          Additional details <small>Optional</small>
+          {t("Additional details")} <small>{t("Optional")}</small>
         </label>
         <textarea
           id="report-details"
@@ -92,18 +94,19 @@ export default function ReportDialog({
           rows={4}
           value={details}
           onChange={(event) => setDetails(event.target.value)}
-          placeholder="Add context that will help the moderation team…"
+          placeholder={t("Add context that will help the moderation team…")}
         />
         <footer>
           <button className="btn btn-secondary" type="button" onClick={onClose}>
-            Cancel
+            {t("Cancel")}
           </button>
           <button
             className="btn btn-primary"
             type="submit"
             disabled={submitting}
           >
-            <Flag size={16} /> {submitting ? "Submitting…" : "Submit report"}
+            <Flag size={16} />{" "}
+            {submitting ? t("Submitting…") : t("Submit report")}
           </button>
         </footer>
       </form>

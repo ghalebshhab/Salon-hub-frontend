@@ -7,6 +7,7 @@ import { ASSISTANT_PATH } from "../model/assistantRoutes.js";
 import AssistantConversation from "./AssistantConversation.jsx";
 import LamsaOrb from "./LamsaOrb.jsx";
 import { ASSISTANT_NAME, ASSISTANT_ROLE } from "../model/assistantIdentity.js";
+import t from "../../../shared/i18n/t.js";
 
 /**
  * Floating launcher and small chat panel, available on every page. The
@@ -56,7 +57,8 @@ export default function AssistantDock() {
             <LamsaOrb size="md" animated className="lamsa-panel-orb" />
             <div>
               <h2 id="lamsa-panel-title">
-                {ASSISTANT_NAME} <span className="lamsa-ai-badge">AI</span>
+                {ASSISTANT_NAME}{" "}
+                <span className="lamsa-ai-badge">{t("AI")}</span>
               </h2>
               <p>
                 <span className="lamsa-live-dot" aria-hidden="true" />
@@ -68,8 +70,8 @@ export default function AssistantDock() {
                 <button
                   type="button"
                   onClick={reset}
-                  aria-label="Start a new chat"
-                  title="New chat"
+                  aria-label={t("Start a new chat")}
+                  title={t("New chat")}
                 >
                   <RotateCcw aria-hidden="true" />
                 </button>
@@ -77,16 +79,16 @@ export default function AssistantDock() {
               <Link
                 to={ASSISTANT_PATH}
                 onClick={closePanel}
-                aria-label="Open the full assistant page"
-                title="Full page"
+                aria-label={t("Open the full assistant page")}
+                title={t("Full page")}
               >
                 <Maximize2 aria-hidden="true" />
               </Link>
               <button
                 type="button"
                 onClick={closePanel}
-                aria-label={`Close ${ASSISTANT_NAME}`}
-                title="Close"
+                aria-label={t("Close {ASSISTANT_NAME}", { ASSISTANT_NAME })}
+                title={t("Close")}
               >
                 <X aria-hidden="true" />
               </button>
@@ -105,14 +107,20 @@ export default function AssistantDock() {
               openPanel();
             }}
           >
-            <strong>Hi there! I am {ASSISTANT_NAME}, your AI guide.</strong>
-            <span>Ask me for the best salons near you, jobs, or help.</span>
+            <strong>
+              {t("Hi there! I am {ASSISTANT_NAME}, your AI guide.", {
+                ASSISTANT_NAME,
+              })}
+            </strong>
+            <span>
+              {t("Ask me for the best salons near you, jobs, or help.")}
+            </span>
           </button>
           <button
             type="button"
             className="lamsa-greeting-close"
             onClick={greeting.dismiss}
-            aria-label="Hide the greeting"
+            aria-label={t("Hide the greeting")}
           >
             <X aria-hidden="true" />
           </button>
@@ -129,8 +137,11 @@ export default function AssistantDock() {
         aria-expanded={panelOpen}
         aria-label={
           panelOpen
-            ? `Close ${ASSISTANT_NAME}`
-            : `Ask ${ASSISTANT_NAME}, the ${ASSISTANT_ROLE}`
+            ? t("Close {ASSISTANT_NAME}", { ASSISTANT_NAME })
+            : t("Ask {ASSISTANT_NAME}, the {ASSISTANT_ROLE}", {
+                ASSISTANT_NAME,
+                ASSISTANT_ROLE,
+              })
         }
       >
         {panelOpen ? (
@@ -147,10 +158,10 @@ export default function AssistantDock() {
         )}
         <span className="lamsa-launcher-label" aria-hidden="true">
           <span className="lamsa-launcher-text">
-            <strong>Ask {ASSISTANT_NAME}</strong>
-            <small>AI assistant</small>
+            <strong>{t("Ask {ASSISTANT_NAME}", { ASSISTANT_NAME })}</strong>
+            <small>{t("AI assistant")}</small>
           </span>
-          <span className="lamsa-ai-badge">AI</span>
+          <span className="lamsa-ai-badge">{t("AI")}</span>
         </span>
       </button>
     </div>

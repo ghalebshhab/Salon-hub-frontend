@@ -11,6 +11,7 @@ import {
   filterByArtist,
   gallerySummary,
 } from "../model/workGallery.js";
+import t from "../../../shared/i18n/t.js";
 
 function GallerySkeleton() {
   return (
@@ -24,8 +25,6 @@ function GallerySkeleton() {
     </div>
   );
 }
-
-const plural = (count, word) => `${count} ${word}${count === 1 ? "" : "s"}`;
 
 /**
  * The salon's work as a photo mosaic. Tiles open a full view where guests
@@ -74,11 +73,11 @@ export default function SalonWorkGallery({ salonId, booking = null }) {
   if (error && !items.length) {
     return (
       <div className="wk-empty" role="alert">
-        <h3>The gallery could not be loaded</h3>
-        <p>Check your connection and try again.</p>
+        <h3>{t("The gallery could not be loaded")}</h3>
+        <p>{t("Check your connection and try again.")}</p>
         <button className="btn btn-secondary" type="button" onClick={refetch}>
           <RefreshCw size={16} aria-hidden="true" />
-          Try again
+          {t("Try again")}
         </button>
       </div>
     );
@@ -92,11 +91,11 @@ export default function SalonWorkGallery({ salonId, booking = null }) {
           <span className="wk-empty-icon" aria-hidden="true">
             <Images size={24} />
           </span>
-          <h3>No work published yet</h3>
+          <h3>{t("No work published yet")}</h3>
           <p>
             {canPublish
-              ? "Share your first photo or video to show guests what you do."
-              : "Photos and videos from the team will show here soon."}
+              ? t("Share your first photo or video to show guests what you do.")
+              : t("Photos and videos from the team will show here soon.")}
           </p>
         </div>
       </div>
@@ -109,20 +108,31 @@ export default function SalonWorkGallery({ salonId, booking = null }) {
 
       <div className="wk-top">
         <p className="wk-summary">
-          {summary.photos > 0 && plural(summary.photos, "photo")}
+          {summary.photos > 0 &&
+            (summary.photos === 1
+              ? t("1 photo")
+              : t("{count} photos", { count: summary.photos }))}
           {summary.photos > 0 && summary.videos > 0 && " · "}
-          {summary.videos > 0 && plural(summary.videos, "video")}
-          {summary.artists > 1 && ` · by ${summary.artists} professionals`}
+          {summary.videos > 0 &&
+            (summary.videos === 1
+              ? t("1 video")
+              : t("{count} videos", { count: summary.videos }))}
+          {summary.artists > 1 &&
+            t(" · by {artists} professionals", { artists: summary.artists })}
         </p>
         {artists.length > 1 && (
-          <div className="wk-filters" role="group" aria-label="Show work by">
+          <div
+            className="wk-filters"
+            role="group"
+            aria-label={t("Show work by")}
+          >
             <button
               type="button"
               className="wk-chip"
               aria-pressed={artistId === null}
               onClick={() => pickArtist(null)}
             >
-              All
+              {t("All")}
             </button>
             {artists.map((artist) => (
               <button
@@ -175,10 +185,12 @@ export default function SalonWorkGallery({ salonId, booking = null }) {
           }
         >
           {gallery.loadingMore
-            ? "Loading…"
+            ? t("Loading…")
             : hiddenHere > 0
-              ? `Show ${Math.min(hiddenHere, GALLERY_PREVIEW_COUNT)} more`
-              : "Load more work"}
+              ? t("Show {value} more", {
+                  value: Math.min(hiddenHere, GALLERY_PREVIEW_COUNT),
+                })
+              : t("Load more work")}
         </button>
       )}
 

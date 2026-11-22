@@ -4,6 +4,7 @@ import LamsaBackdrop from "../components/LamsaBackdrop.jsx";
 import LamsaOrb from "../components/LamsaOrb.jsx";
 import useAssistant from "../hooks/useAssistant.js";
 import { ASSISTANT_NAME, ASSISTANT_ROLE } from "../model/assistantIdentity.js";
+import t from "../../../shared/i18n/t.js";
 
 /**
  * Full-page chat. One calm stage over a living backdrop: an identity bar,
@@ -17,7 +18,7 @@ export default function AssistantPage() {
     <div className="lamsa-page container">
       <section
         className={`lamsa-stage ${started ? "has-messages" : ""}`.trim()}
-        aria-label={`Chat with ${ASSISTANT_NAME}`}
+        aria-label={t("Chat with {ASSISTANT_NAME}", { ASSISTANT_NAME })}
       >
         <LamsaBackdrop thinking={pending} />
         <header className="lamsa-stage-bar">
@@ -25,11 +26,13 @@ export default function AssistantPage() {
           <div className="lamsa-stage-title">
             <h1>
               {ASSISTANT_NAME}
-              <span className="lamsa-ai-badge">AI</span>
+              <span className="lamsa-ai-badge">{t("AI")}</span>
             </h1>
             <p>
               <span className="lamsa-live-dot" aria-hidden="true" />
-              {pending ? "Writing…" : `Online · ${ASSISTANT_ROLE}`}
+              {pending
+                ? t("Writing…")
+                : t("Online · {ASSISTANT_ROLE}", { ASSISTANT_ROLE })}
             </p>
           </div>
           {started && (
@@ -37,10 +40,10 @@ export default function AssistantPage() {
               type="button"
               className="lamsa-stage-reset"
               onClick={reset}
-              aria-label="Start a new chat"
+              aria-label={t("Start a new chat")}
             >
               <RotateCcw aria-hidden="true" />
-              <span>New chat</span>
+              <span>{t("New chat")}</span>
             </button>
           )}
         </header>

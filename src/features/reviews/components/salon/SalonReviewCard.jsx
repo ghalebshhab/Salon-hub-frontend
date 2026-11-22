@@ -11,6 +11,7 @@ import {
   reviewerInitials,
   reviewerName,
 } from "../../model/salonReviews.js";
+import t from "../../../../shared/i18n/t.js";
 
 /** One guest review. Every review comes from a completed booking. */
 /** The reviewer's circle: their photo or initials. */
@@ -61,7 +62,7 @@ export default function SalonReviewCard({ review, featured = false }) {
               <Link
                 className="rv-name-link"
                 to={profilePath}
-                title={`View ${name}'s profile`}
+                title={t("View {name}'s profile", { name })}
               >
                 {name}
               </Link>
@@ -71,7 +72,7 @@ export default function SalonReviewCard({ review, featured = false }) {
           </h3>
           <span className="rv-verified">
             <BadgeCheck size={14} aria-hidden="true" />
-            Verified visit
+            {t("Verified visit")}
           </span>
         </div>
         <time
@@ -95,12 +96,14 @@ export default function SalonReviewCard({ review, featured = false }) {
               aria-expanded={expanded}
               onClick={() => setExpanded((value) => !value)}
             >
-              {expanded ? "Show less" : "Read more"}
+              {expanded ? t("Show less") : t("Read more")}
             </button>
           )}
         </p>
       ) : (
-        <p className="rv-card-comment is-empty">Rated without a comment.</p>
+        <p className="rv-card-comment is-empty">
+          {t("Rated without a comment.")}
+        </p>
       )}
     </article>
   );

@@ -33,7 +33,9 @@ it("includes the approved owner dashboard in the prototype", () => {
   fireEvent.click(screen.getByRole("button", { name: "Salon owner" }));
   fireEvent.click(screen.getByRole("button", { name: "Owner dashboard" }));
   expect(
-    screen.getByRole("heading", { name: "Good morning, Rania" }),
+    screen.getByRole("heading", {
+      name: /^Good (morning|afternoon|evening), Rania$/,
+    }),
   ).toBeDefined();
   expect(screen.getByText("Top performer")).toBeDefined();
   expect(screen.getByText("Customers who booked your salon")).toBeDefined();

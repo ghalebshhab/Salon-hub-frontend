@@ -6,6 +6,10 @@ import {
   formatNotificationDate,
   getNotificationTitle,
 } from "../model/notification.js";
+import t from "../../../shared/i18n/t.js";
+import { NotificationRowsBones } from "../components/NotificationsSkeleton.jsx";
+import { notificationMessage } from "../model/notificationText.js";
+import { PAGE_HEADS } from "../../../shared/copy/pageHeads.js";
 
 export default function NotificationsPage() {
   const navigate = useNavigate();
@@ -48,9 +52,11 @@ export default function NotificationsPage() {
             <Bell size={22} />
           </span>
           <div>
-            <p className="notifications-eyebrow">SALONHUB UPDATES</p>
-            <h1>Notifications</h1>
-            <p>Keep up with bookings, salon news, and friend activity.</p>
+            <p className="notifications-eyebrow">
+              {t(PAGE_HEADS.notifications.eyebrow)}
+            </p>
+            <h1>{t(PAGE_HEADS.notifications.title)}</h1>
+            <p>{t(PAGE_HEADS.notifications.text)}</p>
           </div>
         </div>
         <button
@@ -59,7 +65,7 @@ export default function NotificationsPage() {
           onClick={() => markAllAsRead().catch(() => {})}
           disabled={!unreadCount}
         >
-          <CheckCheck size={17} /> Mark all as read
+          <CheckCheck size={17} /> {t("Mark all as read")}
         </button>
       </header>
       {error && (
@@ -68,14 +74,16 @@ export default function NotificationsPage() {
         </p>
       )}
       {loading && notifications.length === 0 ? (
-        <div className="notifications-page-empty">
-          Loading your notifications…
+        <div role="status" aria-label={t("Loading your notifications…")}>
+          <div aria-hidden="true">
+            <NotificationRowsBones />
+          </div>
         </div>
       ) : notifications.length === 0 ? (
         <div className="notifications-page-empty">
           <Bell size={27} />
-          <h2>Nothing new yet</h2>
-          <p>Booking, salon, and friend updates will show here.</p>
+          <h2>{t("Nothing new yet")}</h2>
+          <p>{t("Booking, salon, and friend updates will show here.")}</p>
         </div>
       ) : (
         <div className="notifications-page-list">
@@ -96,7 +104,7 @@ export default function NotificationsPage() {
                     {formatNotificationDate(notification.createdAt)}
                   </time>
                 </span>
-                <span>{notification.message}</span>
+                <span>{notificationMessage(notification.message)}</span>
                 {notification.salonName && (
                   <span className="notifications-page-salon">
                     {notification.salonName}
@@ -119,7 +127,7 @@ export default function NotificationsPage() {
             )
           }
         >
-          {loading ? "Loading…" : "Load more"}
+          {loading ? t("Loading…") : t("Load more")}
         </button>
       )}
     </section>

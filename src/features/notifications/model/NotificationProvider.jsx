@@ -10,6 +10,7 @@ import {
   markAllNotificationsReadApi,
   markNotificationReadApi,
 } from "../api/notificationsApi.js";
+import t from "../../../shared/i18n/t.js";
 
 export function NotificationProvider({ children, enabled = true }) {
   const [unreadCount, setUnreadCount] = useState(0);
@@ -20,7 +21,10 @@ export function NotificationProvider({ children, enabled = true }) {
 
   const refreshUnreadCount = useCallback(async (config = {}) => {
     const response = await getUnreadNotificationCountApi(config);
-    const data = requireData(response, "Unable to load unread notifications");
+    const data = requireData(
+      response,
+      t("Unable to load unread notifications"),
+    );
     setUnreadCount(Number(data?.unreadCount) || 0);
     return data;
   }, []);
@@ -34,7 +38,7 @@ export function NotificationProvider({ children, enabled = true }) {
           { page, size: 20 },
           { signal },
         );
-        const data = requireData(response, "Unable to load notifications");
+        const data = requireData(response, t("Unable to load notifications"));
         const items = Array.isArray(data?.content) ? data.content : [];
         setNotifications((current) => {
           if (!append) return items;
@@ -52,7 +56,7 @@ export function NotificationProvider({ children, enabled = true }) {
           loadError?.name !== "AbortError"
         ) {
           setError(
-            getApiErrorMessage(loadError, "Unable to load notifications"),
+            getApiErrorMessage(loadError, t("Unable to load notifications")),
           );
         }
         throw loadError;
@@ -66,7 +70,7 @@ export function NotificationProvider({ children, enabled = true }) {
   const markAsRead = useCallback(
     async (notificationId) => {
       const response = await markNotificationReadApi(notificationId);
-      const updated = requireData(response, "Unable to update notification");
+      const updated = requireData(response, t("Unable to update notification"));
       setNotifications((current) =>
         current.map((notification) => {
           if (notification.id !== notificationId) return notification;
@@ -81,7 +85,7 @@ export function NotificationProvider({ children, enabled = true }) {
 
   const markAllAsRead = useCallback(async () => {
     const response = await markAllNotificationsReadApi();
-    const data = requireData(response, "Unable to update notifications");
+    const data = requireData(response, t("Unable to update notifications"));
     setUnreadCount(Number(data?.unreadCount) || 0);
     setNotifications((current) =>
       current.map((notification) => ({ ...notification, read: true })),

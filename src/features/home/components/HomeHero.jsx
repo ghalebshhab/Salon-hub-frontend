@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import ScrollReveal from "../../../shared/components/ScrollReveal.jsx";
+import t from "../../../shared/i18n/t.js";
 
 export default function HomeHero() {
   return (
@@ -18,43 +19,43 @@ export default function HomeHero() {
       <div className="container editorial-hero-grid">
         <ScrollReveal className="editorial-hero-copy">
           <span className="editorial-eyebrow">
-            <Sparkles size={15} /> Beauty, business, and opportunity
+            <Sparkles size={15} /> {t("Beauty, business, and opportunity")}
           </span>
           <h1>
-            Your next great
+            {t("Your next great")}
             <br />
-            <em>salon experience</em> starts here.
+            <em>{t("salon experience")}</em> {t("starts here.")}
           </h1>
           <p>
-            Discover trusted salons, book with clarity, build your career, and
-            grow your team through one considered platform made for
-            Jordan&apos;s beauty community.
+            {t(
+              "Discover trusted salons, book with clarity, build your career, and grow your team through one considered platform made for Jordan's beauty community.",
+            )}
           </p>
           <div className="editorial-hero-actions">
             <Link className="btn btn-primary" to="/register">
-              Get started <ArrowRight size={17} />
+              {t("Get started")} <ArrowRight size={17} />
             </Link>
             <Link className="btn btn-secondary" to="/hiring-posts">
-              Explore careers
+              {t("Explore careers")}
             </Link>
           </div>
           <div className="editorial-trust-row">
             <span>
-              <BadgeCheck size={17} /> Approved salons
+              <BadgeCheck size={17} /> {t("Approved salons")}
             </span>
             <span>
-              <ShieldCheck size={17} /> Protected accounts
+              <ShieldCheck size={17} /> {t("Protected accounts")}
             </span>
             <span>
-              <MapPin size={17} /> Made for Jordan
+              <MapPin size={17} /> {t("Made for Jordan")}
             </span>
           </div>
           <Link
             className="editorial-scroll-cue"
             to="/#discover"
-            aria-label="Scroll to discover salons"
+            aria-label={t("Scroll to discover salons")}
           >
-            Scroll to explore
+            {t("Scroll to explore")}
             <span aria-hidden="true">
               <ArrowDown size={15} />
             </span>
@@ -65,8 +66,10 @@ export default function HomeHero() {
           <div className="editorial-appointment-card">
             <div className="editorial-card-heading">
               <div>
-                <span className="editorial-eyebrow">A simpler visit</span>
-                <h2>Everything stays clear.</h2>
+                <span className="editorial-eyebrow">
+                  {t("A simpler visit")}
+                </span>
+                <h2>{t("Everything stays clear.")}</h2>
               </div>
               <span className="editorial-icon-tile">
                 <Scissors size={22} />
@@ -74,34 +77,35 @@ export default function HomeHero() {
             </div>
             <div className="editorial-appointment-line">
               <span>
-                <CalendarDays size={17} /> Appointment request
+                <CalendarDays size={17} /> {t("Appointment request")}
               </span>
-              <strong>Pending</strong>
+              <strong>{t("Pending")}</strong>
             </div>
             <div className="editorial-appointment-line">
               <span>
-                <UserCheck size={17} /> Qualified employee
+                <UserCheck size={17} /> {t("Qualified employee")}
               </span>
-              <strong>Matched</strong>
+              <strong>{t("Matched")}</strong>
             </div>
             <div className="editorial-progress" aria-hidden="true">
               <span />
             </div>
             <p>
-              From service selection to the salon&apos;s decision, every step is
-              easy to follow.
+              {t(
+                "From service selection to the salon's decision, every step is easy to follow.",
+              )}
             </p>
           </div>
           <div className="editorial-mini-stats">
             <div>
-              <span>For customers</span>
-              <strong>Book</strong>
-              <small>with confidence</small>
+              <span>{t("For customers")}</span>
+              <strong>{t("Book")}</strong>
+              <small>{t("with confidence")}</small>
             </div>
             <div>
-              <span>For professionals</span>
-              <strong>Grow</strong>
-              <small>with the right team</small>
+              <span>{t("For professionals")}</span>
+              <strong>{t("Grow")}</strong>
+              <small>{t("with the right team")}</small>
             </div>
           </div>
         </ScrollReveal>

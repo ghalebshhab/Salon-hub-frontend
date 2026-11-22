@@ -1,3 +1,5 @@
+import t from "../../../shared/i18n/t.js";
+import { dateLocale } from "../../../shared/i18n/language.js";
 /** Rules and helpers for the reviews section on the salon page. */
 
 export const REVIEWS_PAGE_SIZE = 6;
@@ -7,9 +9,9 @@ export const STAR_VALUES = [5, 4, 3, 2, 1];
 export const REVIEW_TOOLS_MIN = 4;
 
 export const REVIEW_SORTS = [
-  { value: "newest", label: "Newest first" },
-  { value: "highest", label: "Highest rated" },
-  { value: "lowest", label: "Lowest rated" },
+  { value: "newest", label: t("Newest first") },
+  { value: "highest", label: t("Highest rated") },
+  { value: "lowest", label: t("Lowest rated") },
 ];
 
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -22,12 +24,12 @@ export function roundRating(value) {
 
 /** A short word for the average, like the labels on booking sites. */
 export function ratingLabel(value) {
-  if (value >= 4.6) return "Excellent";
-  if (value >= 4) return "Very good";
-  if (value >= 3) return "Good";
-  if (value >= 2) return "Fair";
-  if (value > 0) return "Poor";
-  return "No ratings yet";
+  if (value >= 4.6) return t("Excellent");
+  if (value >= 4) return t("Very good");
+  if (value >= 3) return t("Good");
+  if (value >= 2) return t("Fair");
+  if (value > 0) return t("Poor");
+  return t("No ratings yet");
 }
 
 /** How many reviews have each star value, with the share of the total. */
@@ -84,7 +86,7 @@ export function reviewerName(fullName) {
     .trim()
     .split(/\s+/)
     .filter(Boolean);
-  if (!parts.length) return "Guest";
+  if (!parts.length) return t("Guest");
   if (parts.length === 1) return parts[0];
   return `${parts[0]} ${parts[parts.length - 1][0].toUpperCase()}.`;
 }
@@ -115,14 +117,14 @@ export function relativeDate(value, now = Date.now()) {
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return "";
   const days = Math.floor((now - date.getTime()) / DAY_MS);
-  if (days <= 0) return "Today";
-  if (days === 1) return "Yesterday";
-  if (days < 7) return `${days} days ago`;
+  if (days <= 0) return t("Today");
+  if (days === 1) return t("Yesterday");
+  if (days < 7) return t("{days} days ago", { days });
   if (days < 30) {
     const weeks = Math.floor(days / 7);
-    return weeks === 1 ? "1 week ago" : `${weeks} weeks ago`;
+    return weeks === 1 ? t("1 week ago") : t("{weeks} weeks ago", { weeks });
   }
-  return date.toLocaleDateString(undefined, {
+  return date.toLocaleDateString(dateLocale(), {
     month: "short",
     year: "numeric",
   });
@@ -131,5 +133,5 @@ export function relativeDate(value, now = Date.now()) {
 export function fullDate(value) {
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return "";
-  return date.toLocaleDateString(undefined, { dateStyle: "long" });
+  return date.toLocaleDateString(dateLocale(), { dateStyle: "long" });
 }

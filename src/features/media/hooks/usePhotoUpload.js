@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { showWarningToast } from "../../../shared/notifications/toast.jsx";
 import { uploadProfilePictureApi } from "../api/mediaApi.js";
+import t from "../../../shared/i18n/t.js";
 
 const UPLOADERS = {
   profilePicture: uploadProfilePictureApi,
@@ -15,13 +16,13 @@ export default function usePhotoUpload(target = "profilePicture") {
     try {
       const response = await UPLOADERS[target](file);
       if (!response?.success || !response.data?.secureUrl) {
-        showWarningToast(response?.message || "Could not upload the photo.");
+        showWarningToast(response?.message || t("Could not upload the photo."));
         return null;
       }
       return response.data.secureUrl;
     } catch (error) {
       showWarningToast(
-        error?.response?.data?.message || "Could not upload the photo.",
+        error?.response?.data?.message || t("Could not upload the photo."),
       );
       return null;
     } finally {

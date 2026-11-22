@@ -14,6 +14,7 @@ import {
   SectionHeading,
   StatusPill,
 } from "./PrototypePrimitives.jsx";
+import t from "../../shared/i18n/t.js";
 
 function CustomerBookingCard({ booking, onUpdate }) {
   const pendingProposal = booking.rescheduleProposals.find(
@@ -56,7 +57,7 @@ function CustomerBookingCard({ booking, onUpdate }) {
             <p>
               {pendingProposal.proposedDate} at {pendingProposal.proposedTime}
             </p>
-            <small>{pendingProposal.note}</small>
+            <small>{t(pendingProposal.note)}</small>
           </div>
           <div className="prototype-card-actions">
             <button
@@ -170,7 +171,7 @@ export function CustomerBookingsView({ bookings, onUpdate }) {
             onClick={() => setFilter(item)}
             key={item}
           >
-            {item}
+            {t(item)}
             <span>
               {
                 bookings.filter(
@@ -228,7 +229,7 @@ function OwnerBookingCard({ booking, employees, onUpdate }) {
       <BookingSummary booking={booking} />
       {booking.note && (
         <p className="prototype-owner-note">
-          <strong>Customer note:</strong> {booking.note}
+          <strong>Customer note:</strong> {t(booking.note)}
         </p>
       )}
       {["PENDING", "ACCEPTED"].includes(booking.status) && (
@@ -403,7 +404,7 @@ export function EmployeeBookingsView({ bookings }) {
               <BookingSummary booking={booking} />
               {booking.note && (
                 <p className="prototype-owner-note">
-                  <strong>Customer note:</strong> {booking.note}
+                  <strong>Customer note:</strong> {t(booking.note)}
                 </p>
               )}
             </article>

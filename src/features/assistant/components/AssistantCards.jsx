@@ -9,15 +9,16 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { salonInitials } from "../../salons/model/salonInitials.js";
+import t from "../../../shared/i18n/t.js";
 
 function Rating({ value, count }) {
   if (value == null || !count) {
-    return <span className="lamsa-card-muted">No reviews yet</span>;
+    return <span className="lamsa-card-muted">{t("No reviews yet")}</span>;
   }
   return (
     <span
       className="lamsa-rating"
-      aria-label={`${value} stars from ${count} reviews`}
+      aria-label={t("{value} stars from {count} reviews", { value, count })}
     >
       <Star aria-hidden="true" />
       <strong>{value.toFixed(1)}</strong>
@@ -47,14 +48,15 @@ export function SalonCard({ salon, rank, onNavigate }) {
           <span className="lamsa-card-meta">
             <span>
               <MapPin aria-hidden="true" />
-              {salon.governorate ?? salon.location}
+              {t(salon.governorate ?? salon.location)}
             </span>
             <Rating value={salon.averageRating} count={salon.reviewCount} />
           </span>
           {salon.openSeats > 0 && (
             <span className="lamsa-chip is-accent">
-              {salon.openSeats} free {salon.openSeats === 1 ? "seat" : "seats"}{" "}
-              in team
+              {t("{openSeats} free", { openSeats: salon.openSeats })}{" "}
+              {salon.openSeats === 1 ? t("seat") : t("seats")}
+              {t("in team")}
             </span>
           )}
         </span>
@@ -76,7 +78,7 @@ export function JobCard({ job, onNavigate }) {
           <BriefcaseBusiness />
         </span>
         <span className="lamsa-card-body">
-          <strong className="lamsa-card-title">{job.title}</strong>
+          <strong className="lamsa-card-title">{t(job.title)}</strong>
           <span className="lamsa-card-meta">
             <span>{job.salonName}</span>
             {job.location && (
@@ -97,7 +99,12 @@ export function JobCard({ job, onNavigate }) {
           )}
         </span>
         {job.matchScore != null && (
-          <span className="lamsa-match" aria-label={`${job.matchScore}% match`}>
+          <span
+            className="lamsa-match"
+            aria-label={t("{matchScore}% match", {
+              matchScore: job.matchScore,
+            })}
+          >
             {job.matchScore}%
           </span>
         )}
@@ -121,7 +128,11 @@ export function CandidateCard({ person, onNavigate }) {
           <strong className="lamsa-card-title">{person.name}</strong>
           <span className="lamsa-card-meta">
             {person.yearsOfExperience != null && (
-              <span>{person.yearsOfExperience} yrs experience</span>
+              <span>
+                {t("{yearsOfExperience} yrs experience", {
+                  yearsOfExperience: person.yearsOfExperience,
+                })}
+              </span>
             )}
             {person.preferredLocations?.[0] && (
               <span>
@@ -150,11 +161,13 @@ export function RankingBlock({ ranking, onNavigate }) {
   return (
     <section
       className="lamsa-ranking"
-      aria-label={`Top salons in ${ranking.governorate}`}
+      aria-label={t("Top salons in {governorate}", {
+        governorate: t(ranking.governorate),
+      })}
     >
       <h4>
         <MapPin aria-hidden="true" />
-        {ranking.governorate}
+        {t(ranking.governorate)}
       </h4>
       <ol className="lamsa-card-list">
         {ranking.salons.map((salon, index) => (
@@ -190,7 +203,7 @@ export default function AssistantCards({ message, onNavigate }) {
         </div>
       )}
       {jobs?.length > 0 && (
-        <CardGroup icon={BriefcaseBusiness} label="Open jobs">
+        <CardGroup icon={BriefcaseBusiness} label={t("Open jobs")}>
           {jobs.map((job) => (
             <JobCard key={job.id} job={job} onNavigate={onNavigate} />
           ))}
@@ -201,10 +214,10 @@ export default function AssistantCards({ message, onNavigate }) {
           icon={intent === "JOBS" ? UsersRound : ranked ? Star : Store}
           label={
             intent === "JOBS"
-              ? "Salons with free seats"
+              ? t("Salons with free seats")
               : ranked
-                ? "Best rated"
-                : "Salons"
+                ? t("Best rated")
+                : t("Salons")
           }
           ordered={ranked}
         >
@@ -219,7 +232,7 @@ export default function AssistantCards({ message, onNavigate }) {
         </CardGroup>
       )}
       {candidates?.length > 0 && (
-        <CardGroup icon={UsersRound} label="Open to work">
+        <CardGroup icon={UsersRound} label={t("Open to work")}>
           {candidates.map((person) => (
             <CandidateCard
               key={person.userId}
@@ -239,7 +252,7 @@ function CardGroup({ icon: Icon, label, ordered = false, children }) {
     <div className="lamsa-card-group">
       <span className="lamsa-card-group-label">
         <Icon aria-hidden="true" />
-        {label}
+        {t(label)}
       </span>
       <List className="lamsa-card-list">{children}</List>
     </div>

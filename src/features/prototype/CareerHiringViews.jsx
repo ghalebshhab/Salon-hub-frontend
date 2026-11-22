@@ -19,6 +19,7 @@ import {
   StatusPill,
 } from "./PrototypePrimitives.jsx";
 import { initialCareerProfile } from "./prototypeData.js";
+import t from "../../shared/i18n/t.js";
 
 export function CareersView({ posts, onApply }) {
   const sortedPosts = [...posts].sort((a, b) => b.matchScore - a.matchScore);
@@ -42,7 +43,7 @@ export function CareersView({ posts, onApply }) {
               <div className="prototype-card-heading">
                 <div>
                   <span className="eyebrow">{post.salonName}</span>
-                  <h3>{post.title}</h3>
+                  <h3>{t(post.title)}</h3>
                 </div>
                 <StatusPill value={post.matchLevel} />
               </div>
@@ -101,7 +102,7 @@ export function MyApplicationsView({ applications }) {
             <div className="prototype-card-heading">
               <div>
                 <span className="eyebrow">{application.salonName}</span>
-                <h3>{application.title}</h3>
+                <h3>{t(application.title)}</h3>
               </div>
               <StatusPill value={application.status} />
             </div>
@@ -110,7 +111,7 @@ export function MyApplicationsView({ applications }) {
               <strong>{application.matchScore}% match</strong>
               <StatusPill value={application.matchLevel} />
             </div>
-            <p>{application.note}</p>
+            <p>{t(application.note)}</p>
             <div className="prototype-chips">
               {application.skills.map((skill) => (
                 <span key={skill}>{skill}</span>
@@ -178,7 +179,7 @@ export function HiringApplicationsView({ applications, onDecision, onInvite }) {
                   <div>
                     <h3>{candidate.candidate}</h3>
                     <p>
-                      {candidate.title} · {candidate.years} years experience
+                      {t(candidate.title)} · {candidate.years} years experience
                     </p>
                   </div>
                   <StatusPill value={candidate.status} />
@@ -188,7 +189,9 @@ export function HiringApplicationsView({ applications, onDecision, onInvite }) {
                     <span key={skill}>{skill}</span>
                   ))}
                 </div>
-                <p className="prototype-candidate-note">“{candidate.note}”</p>
+                <p className="prototype-candidate-note">
+                  “{t(candidate.note)}”
+                </p>
                 <div className="prototype-card-footer">
                   <span>{candidate.email}</span>
                   <span>{candidate.phone}</span>
@@ -279,7 +282,7 @@ export function InvitationsView({
               <span>
                 <strong>{candidate.candidate}</strong>
                 <small>
-                  {candidate.title} · {candidate.matchScore}% match
+                  {t(candidate.title)} · {candidate.matchScore}% match
                 </small>
               </span>
               <ArrowRight size={17} />

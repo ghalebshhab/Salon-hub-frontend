@@ -7,6 +7,7 @@ import {
   Scissors,
   UserRound,
 } from "lucide-react";
+import t from "../../shared/i18n/t.js";
 
 export function StatusPill({ value }) {
   return (
@@ -25,7 +26,7 @@ export function MetricCard({ icon: Icon, value, label, tone = "primary" }) {
         <Icon size={20} />
       </span>
       <strong>{value}</strong>
-      <p>{label}</p>
+      <p>{t(label)}</p>
     </article>
   );
 }
@@ -71,9 +72,9 @@ export function SectionHeading({ eyebrow, title, description, action }) {
   return (
     <header className="prototype-section-heading">
       <div>
-        <span className="eyebrow">{eyebrow}</span>
-        <h2>{title}</h2>
-        <p>{description}</p>
+        <span className="eyebrow">{t(eyebrow)}</span>
+        <h2>{t(title)}</h2>
+        <p>{t(description)}</p>
       </div>
       {action}
     </header>
@@ -88,7 +89,7 @@ export function ProfileSnapshot({ profile }) {
         <span className="eyebrow">Career profile</span>
         <h3>{profile.name}</h3>
         <p>
-          {profile.title} · {profile.location}
+          {t(profile.title)} · {profile.location}
         </p>
         <div className="prototype-chips">
           {profile.skills.map((skill) => (
@@ -120,8 +121,8 @@ export function EmptyPrototype({ title, description }) {
   return (
     <div className="prototype-empty">
       <BriefcaseBusiness size={28} />
-      <h3>{title}</h3>
-      <p>{description}</p>
+      <h3>{t(title)}</h3>
+      <p>{t(description)}</p>
     </div>
   );
 }

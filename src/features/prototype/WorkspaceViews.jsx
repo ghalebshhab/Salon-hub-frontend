@@ -18,6 +18,7 @@ import {
   StatusPill,
 } from "./PrototypePrimitives.jsx";
 import { initialCareerProfile } from "./prototypeData.js";
+import t from "../../shared/i18n/t.js";
 
 const roleCopy = {
   customer: {
@@ -124,9 +125,9 @@ export function OverviewView({
     <div className="prototype-view">
       <section className="prototype-overview-hero">
         <div>
-          <span className="eyebrow">{copy.eyebrow}</span>
-          <h2>{copy.title}</h2>
-          <p>{copy.description}</p>
+          <span className="eyebrow">{t(copy.eyebrow)}</span>
+          <h2>{t(copy.title)}</h2>
+          <p>{t(copy.description)}</p>
           <div className="prototype-card-actions">
             <button
               className="btn btn-primary"
@@ -166,7 +167,7 @@ export function OverviewView({
           <MetricCard
             icon={Icon}
             value={value}
-            label={label}
+            label={t(label)}
             tone={tone}
             key={label}
           />
@@ -326,7 +327,7 @@ export function NotificationsView({ notifications, onRead, onReadAll }) {
               )}
             </span>
             <span>
-              <strong>{notification.title}</strong>
+              <strong>{t(notification.title)}</strong>
               <p>{notification.message}</p>
               <small>{notification.time}</small>
             </span>

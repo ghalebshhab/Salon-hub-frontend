@@ -14,6 +14,7 @@ import {
 } from "../api/mediaApi.js";
 import { confirmAction } from "../../../shared/confirm/confirmStore.js";
 import { GALLERY_PAGE_SIZE } from "../model/workGallery.js";
+import t from "../../../shared/i18n/t.js";
 
 const apiMessage = (error, fallback) =>
   error?.response?.data?.message || error?.message || fallback;
@@ -73,7 +74,7 @@ export default function useSalonWorkGallery(salonId) {
         page,
       }));
     } catch (loadError) {
-      showErrorToast(apiMessage(loadError, "Could not load more work."));
+      showErrorToast(apiMessage(loadError, t("Could not load more work.")));
     } finally {
       setLoadingMore(false);
     }
@@ -82,7 +83,7 @@ export default function useSalonWorkGallery(salonId) {
   /** Returns true when the work is published. */
   const publish = async () => {
     if (!selection?.file && !selection?.remoteUrl) {
-      showErrorToast("Choose a work photo or video first.");
+      showErrorToast(t("Choose a work photo or video first."));
       return false;
     }
     try {
@@ -97,10 +98,12 @@ export default function useSalonWorkGallery(salonId) {
       setSelection(null);
       setCaption("");
       refetch();
-      showSuccessToast("Your work was published to the salon gallery.");
+      showSuccessToast(t("Your work was published to the salon gallery."));
       return true;
     } catch (publishError) {
-      showErrorToast(apiMessage(publishError, "Could not publish this media."));
+      showErrorToast(
+        apiMessage(publishError, t("Could not publish this media.")),
+      );
       return false;
     } finally {
       setPublishing(false);
@@ -110,9 +113,9 @@ export default function useSalonWorkGallery(salonId) {
   /** Returns true when the work is deleted. */
   const remove = async (mediaId) => {
     const confirmed = await confirmAction({
-      title: "Delete this work?",
-      message: "It will be removed from the salon gallery and from storage.",
-      confirmText: "Delete",
+      title: t("Delete this work?"),
+      message: t("It will be removed from the salon gallery and from storage."),
+      confirmText: t("Delete"),
       danger: true,
     });
     if (!confirmed) return false;
@@ -123,10 +126,12 @@ export default function useSalonWorkGallery(salonId) {
         return false;
       }
       refetch();
-      showSuccessToast("Work removed from the gallery.");
+      showSuccessToast(t("Work removed from the gallery."));
       return true;
     } catch (removeError) {
-      showErrorToast(apiMessage(removeError, "Could not remove this media."));
+      showErrorToast(
+        apiMessage(removeError, t("Could not remove this media.")),
+      );
       return false;
     }
   };

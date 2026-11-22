@@ -6,6 +6,7 @@ import {
   showSuccessToast,
   showWarningToast,
 } from "../../../shared/notifications/toast.jsx";
+import t from "../../../shared/i18n/t.js";
 
 export default function useCreateReviewModal({
   booking,
@@ -18,14 +19,14 @@ export default function useCreateReviewModal({
 
   const submitReview = async () => {
     if (!booking?.id) {
-      showErrorToast("Booking was not found.", "Review failed");
+      showErrorToast(t("Booking was not found."), t("Review failed"));
       return;
     }
 
     if (rating < 1 || rating > 5) {
       showWarningToast(
-        "Please choose a rating between 1 and 5.",
-        "Invalid rating",
+        t("Please choose a rating between 1 and 5."),
+        t("Invalid rating"),
       );
       return;
     }
@@ -41,8 +42,8 @@ export default function useCreateReviewModal({
 
       if (response.success) {
         showSuccessToast(
-          "Thank you for sharing your experience.",
-          "Review added",
+          t("Thank you for sharing your experience."),
+          t("Review added"),
         );
 
         if (onReviewCreated) {
@@ -52,8 +53,8 @@ export default function useCreateReviewModal({
         onClose();
       } else {
         showErrorToast(
-          response.message || "Could not add review.",
-          "Review failed",
+          response.message || t("Could not add review."),
+          t("Review failed"),
         );
       }
     } catch (error) {
@@ -61,8 +62,8 @@ export default function useCreateReviewModal({
       showErrorToast(
         error?.response?.data?.message ||
           error?.message ||
-          "Could not add review.",
-        "Review failed",
+          t("Could not add review."),
+        t("Review failed"),
       );
     } finally {
       setSubmitting(false);

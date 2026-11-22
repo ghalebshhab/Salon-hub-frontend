@@ -6,6 +6,8 @@ import {
   formatNotificationDate,
   getNotificationTitle,
 } from "../model/notification.js";
+import t from "../../../shared/i18n/t.js";
+import { notificationMessage } from "../model/notificationText.js";
 
 function NotificationBell() {
   const [open, setOpen] = useState(false);
@@ -75,7 +77,9 @@ function NotificationBell() {
         className="notification-bell-button"
         type="button"
         aria-label={
-          unreadCount ? `Notifications, ${unreadCount} unread` : "Notifications"
+          unreadCount
+            ? t("Notifications, {unreadCount} unread", { unreadCount })
+            : t("Notifications")
         }
         aria-expanded={open}
         aria-haspopup="dialog"
@@ -91,14 +95,16 @@ function NotificationBell() {
       {open && (
         <section
           className="notification-popover"
-          aria-label="Notifications"
+          aria-label={t("Notifications")}
           role="dialog"
         >
           <header className="notification-popover-header">
             <div>
-              <h2>Notifications</h2>
+              <h2>{t("Notifications")}</h2>
               <span>
-                {unreadCount ? `${unreadCount} unread` : "You're all caught up"}
+                {unreadCount
+                  ? t("{unreadCount} unread", { unreadCount })
+                  : t("You're all caught up")}
               </span>
             </div>
             <button
@@ -107,18 +113,20 @@ function NotificationBell() {
               onClick={markAll}
               disabled={!unreadCount}
             >
-              <CheckCheck size={16} /> Mark all read
+              <CheckCheck size={16} /> {t("Mark all read")}
             </button>
           </header>
           {loading && notifications.length === 0 ? (
-            <p className="notification-feedback">Loading notifications…</p>
+            <p className="notification-feedback">
+              {t("Loading notifications…")}
+            </p>
           ) : error && notifications.length === 0 ? (
             <p className="notification-feedback notification-feedback-error">
               {error}
             </p>
           ) : notifications.length === 0 ? (
             <p className="notification-feedback">
-              Booking, salon, and community updates will appear here.
+              {t("Booking, salon, and community updates will appear here.")}
             </p>
           ) : (
             <div className="notification-list">
@@ -134,7 +142,7 @@ function NotificationBell() {
                     <strong>
                       {getNotificationTitle(notification.eventType)}
                     </strong>
-                    <span>{notification.message}</span>
+                    <span>{notificationMessage(notification.message)}</span>
                     <time dateTime={notification.createdAt}>
                       {formatNotificationDate(notification.createdAt)}
                     </time>
@@ -151,7 +159,7 @@ function NotificationBell() {
               navigate("/notifications");
             }}
           >
-            View all notifications
+            {t("View all notifications")}
           </button>
         </section>
       )}

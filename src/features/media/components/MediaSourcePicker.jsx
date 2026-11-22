@@ -1,12 +1,13 @@
 import { Cloud, ImagePlus, Upload, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { showWarningToast } from "../../../shared/notifications/toast.jsx";
+import t from "../../../shared/i18n/t.js";
 
 const IMAGE_LIMIT = 8 * 1024 * 1024;
 const VIDEO_LIMIT = 40 * 1024 * 1024;
 
 export default function MediaSourcePicker({
-  label = "Media",
+  label = t("Media"),
   currentUrl,
   allowVideo = false,
   compact = false,
@@ -30,15 +31,17 @@ export default function MediaSourcePicker({
     const video = file.type.startsWith("video/");
     if ((!video && !file.type.startsWith("image/")) || (video && !allowVideo)) {
       showWarningToast(
-        allowVideo ? "Choose an image or video." : "Choose an image file.",
+        allowVideo
+          ? t("Choose an image or video.")
+          : t("Choose an image file."),
       );
       return;
     }
     if (file.size > (video ? VIDEO_LIMIT : IMAGE_LIMIT)) {
       showWarningToast(
         video
-          ? "Videos must be 40 MB or smaller."
-          : "Images must be 8 MB or smaller.",
+          ? t("Videos must be 40 MB or smaller.")
+          : t("Images must be 8 MB or smaller."),
       );
       return;
     }
@@ -58,7 +61,7 @@ export default function MediaSourcePicker({
   const applyDriveUrl = () => {
     const normalized = remoteUrl.trim();
     if (!/^https:\/\/(drive|docs)\.google\.com\//i.test(normalized)) {
-      showWarningToast("Paste a public Google Drive share link.");
+      showWarningToast(t("Paste a public Google Drive share link."));
       return;
     }
     setPreview("");
@@ -91,15 +94,17 @@ export default function MediaSourcePicker({
     >
       <div className="media-picker-heading">
         <div>
-          <span className="media-picker-label">{label}</span>
-          <small>Cloudinary stores and optimizes the uploaded file.</small>
+          <span className="media-picker-label">{t(label)}</span>
+          <small>
+            {t("Cloudinary stores and optimizes the uploaded file.")}
+          </small>
         </div>
         {(preview || remoteUrl) && (
           <button
             type="button"
             className="media-clear-button"
             onClick={clear}
-            aria-label="Clear selected media"
+            aria-label={t("Clear selected media")}
           >
             <X size={16} />
           </button>
@@ -111,7 +116,7 @@ export default function MediaSourcePicker({
           {isVideo ? (
             <video src={preview} controls />
           ) : (
-            <img src={preview || currentUrl} alt="Selected preview" />
+            <img src={preview || currentUrl} alt={t("Selected preview")} />
           )}
         </div>
       )}
@@ -119,21 +124,21 @@ export default function MediaSourcePicker({
       <div
         className="media-picker-tabs"
         role="tablist"
-        aria-label={`${label} source`}
+        aria-label={t("{label} source", { label })}
       >
         <button
           type="button"
           className={mode === "device" ? "active" : ""}
           onClick={() => setMode("device")}
         >
-          <Upload size={16} /> Device
+          <Upload size={16} /> {t("Device")}
         </button>
         <button
           type="button"
           className={mode === "drive" ? "active" : ""}
           onClick={() => setMode("drive")}
         >
-          <Cloud size={16} /> Google Drive
+          <Cloud size={16} /> {t("Google Drive")}
         </button>
       </div>
 
@@ -154,7 +159,7 @@ export default function MediaSourcePicker({
             className="media-device-button"
             onClick={() => inputRef.current?.click()}
           >
-            <ImagePlus size={19} /> Choose photo from device
+            <ImagePlus size={19} /> {t("Choose photo from device")}
           </button>
         </>
       ) : (
@@ -164,21 +169,21 @@ export default function MediaSourcePicker({
             value={remoteUrl}
             onChange={(event) => setRemoteUrl(event.target.value)}
             placeholder="https://drive.google.com/file/d/..."
-            aria-label="Public Google Drive share link"
+            aria-label={t("Public Google Drive share link")}
           />
           <button
             type="button"
             className="btn btn-secondary"
             onClick={applyDriveUrl}
           >
-            Use link
+            {t("Use link")}
           </button>
           <a
             href="https://drive.google.com/drive/my-drive"
             target="_blank"
             rel="noreferrer"
           >
-            Open Google Drive
+            {t("Open Google Drive")}
           </a>
         </div>
       )}

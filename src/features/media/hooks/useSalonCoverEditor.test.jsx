@@ -65,7 +65,7 @@ it("shows transfer progress and waits for confirmed persistence before success",
   expect(config.showLoading).toBe(false); // Keep the cancel button reachable.
   expect(
     screen
-      .getByRole("button", { name: "Choose from device" })
+      .getByRole("button", { name: "Choose photo from device" })
       .matches(":disabled"),
   ).toBe(true);
   expect(

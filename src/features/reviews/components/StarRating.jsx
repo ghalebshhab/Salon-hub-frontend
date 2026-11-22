@@ -1,4 +1,5 @@
 import { Star } from "lucide-react";
+import t from "../../../shared/i18n/t.js";
 
 /**
  * Read-only stars with part fill (4.5 shows four and a half stars).
@@ -10,7 +11,7 @@ export default function StarRating({ value = 0, size = 16, className = "" }) {
     <span
       className={`star-rating ${className}`.trim()}
       role="img"
-      aria-label={`${rating} out of 5 stars`}
+      aria-label={t("{rating} out of 5 stars", { rating })}
     >
       {[1, 2, 3, 4, 5].map((position) => {
         const fill = Math.max(0, Math.min(1, rating - (position - 1)));

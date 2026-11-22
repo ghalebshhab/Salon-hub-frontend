@@ -1,6 +1,7 @@
 import { useId, useState } from "react";
 import { ChevronDown, UploadCloud } from "lucide-react";
 import MediaSourcePicker from "../MediaSourcePicker.jsx";
+import t from "../../../../shared/i18n/t.js";
 
 const CAPTION_MAX = 300;
 
@@ -36,9 +37,9 @@ export default function WorkPublisher({
           <UploadCloud size={20} />
         </span>
         <span className="wk-publisher-title">
-          <strong>Share your latest work</strong>
+          <strong>{t("Share your latest work")}</strong>
           <span>
-            A photo or a short video, from your device or Google Drive.
+            {t("A photo or a short video, from your device or Google Drive.")}
           </span>
         </span>
         <ChevronDown
@@ -51,19 +52,19 @@ export default function WorkPublisher({
       {open && (
         <div className="wk-publisher-panel" id={panelId}>
           <MediaSourcePicker
-            label="Work photo or video"
+            label={t("Work photo or video")}
             allowVideo
             compact
             onChange={setSelection}
           />
           <label className="form-group">
-            <span>Caption</span>
+            <span>{t("Caption")}</span>
             <textarea
               value={caption}
               onChange={(event) => setCaption(event.target.value)}
               maxLength={CAPTION_MAX}
               rows="3"
-              placeholder="Describe the style, technique or result…"
+              placeholder={t("Describe the style, technique or result…")}
             />
             <small className="wk-publisher-count">
               {caption.length} / {CAPTION_MAX}
@@ -75,7 +76,7 @@ export default function WorkPublisher({
             disabled={publishing || !selection}
             onClick={submit}
           >
-            {publishing ? "Publishing…" : "Publish work"}
+            {publishing ? t("Publishing…") : t("Publish work")}
           </button>
         </div>
       )}

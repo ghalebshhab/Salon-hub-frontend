@@ -1,3 +1,5 @@
+import t from "../../../shared/i18n/t.js";
+import { dateLocale } from "../../../shared/i18n/language.js";
 /** Rules and helpers for the salon work gallery. */
 
 export const GALLERY_PAGE_SIZE = 24;
@@ -11,7 +13,7 @@ export function firstName(name) {
   return (
     String(name || "")
       .trim()
-      .split(/\s+/)[0] || "the artist"
+      .split(/\s+/)[0] || t("the artist")
   );
 }
 
@@ -48,13 +50,16 @@ export function gallerySummary(items, total) {
 }
 
 export function altText(item) {
-  const who = item.employeeName || "the salon team";
-  if (item.caption) return `${item.caption}, by ${who}`;
-  return isVideo(item) ? `Video by ${who}` : `Work by ${who}`;
+  const who = item.employeeName || t("the salon team");
+  if (item.caption)
+    return t("{caption}, by {who}", { caption: item.caption, who });
+  return isVideo(item)
+    ? t("Video by {who}", { who })
+    : t("Work by {who}", { who });
 }
 
 export function postedDate(value) {
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return "";
-  return date.toLocaleDateString(undefined, { dateStyle: "medium" });
+  return date.toLocaleDateString(dateLocale(), { dateStyle: "medium" });
 }

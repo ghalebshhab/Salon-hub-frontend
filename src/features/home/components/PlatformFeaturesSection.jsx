@@ -6,6 +6,7 @@ import {
 } from "lucide-react";
 import ScrollReveal from "../../../shared/components/ScrollReveal.jsx";
 import { platformFeatures } from "../content/homeContent.js";
+import t from "../../../shared/i18n/t.js";
 
 const featureIcons = {
   salon: Building2,
@@ -20,11 +21,12 @@ export default function PlatformFeaturesSection() {
       <div className="container editorial-section">
         <ScrollReveal className="editorial-section-heading centered">
           <div>
-            <span className="editorial-index">03 / One platform</span>
-            <h2>Designed for every side of salon life.</h2>
+            <span className="editorial-index">{t("03 / One platform")}</span>
+            <h2>{t("Designed for every side of salon life.")}</h2>
             <p>
-              Useful tools meet a calm interface, so customers, professionals,
-              and owners can focus on the next decision.
+              {t(
+                "Useful tools meet a calm interface, so customers, professionals, and owners can focus on the next decision.",
+              )}
             </p>
           </div>
         </ScrollReveal>
@@ -41,8 +43,8 @@ export default function PlatformFeaturesSection() {
                   <span>{number}</span>
                   <Icon size={21} />
                 </div>
-                <h3>{title}</h3>
-                <p>{text}</p>
+                <h3>{t(title)}</h3>
+                <p>{t(text)}</p>
               </ScrollReveal>
             );
           })}

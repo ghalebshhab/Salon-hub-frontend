@@ -12,6 +12,20 @@ import LamsaOrb from "../../assistant/components/LamsaOrb.jsx";
 import { ASSISTANT_NAME } from "../../assistant/model/assistantIdentity.js";
 import useAssistant from "../../assistant/hooks/useAssistant.js";
 import useAssistantInsights from "../../assistant/hooks/useAssistantInsights.js";
+import t from "../../../shared/i18n/t.js";
+
+// The server writes the seat count inside the owner summary sentence.
+function summaryText(summary) {
+  const seats = String(summary || "").match(
+    /^Your team has (\d+) free seats?\. These members are open to work\.$/,
+  );
+  if (!seats) return t(summary);
+  return seats[1] === "1"
+    ? t("Your team has 1 free seat. These members are open to work.")
+    : t("Your team has {count} free seats. These members are open to work.", {
+        count: seats[1],
+      });
+}
 
 function GovernorateRankings({ rankings }) {
   const [active, setActive] = useState(0);
@@ -33,7 +47,7 @@ function GovernorateRankings({ rankings }) {
       <div
         className="lamsa-picks-tabs"
         role="tablist"
-        aria-label="Governorates"
+        aria-label={t("Governorates")}
         onKeyDown={onKeyDown}
       >
         {rankings.map((item, itemIndex) => (
@@ -51,7 +65,7 @@ function GovernorateRankings({ rankings }) {
             onClick={() => setActive(itemIndex)}
           >
             <MapPin aria-hidden="true" />
-            {item.governorate}
+            {t(item.governorate)}
           </button>
         ))}
       </div>
@@ -83,10 +97,10 @@ function OpportunityCard({ opportunity }) {
     <article className="lamsa-opportunity">
       <span className="lamsa-opportunity-eyebrow">
         <Sparkles aria-hidden="true" />
-        {audience === "owner" ? "For your salon" : "Opportunities"}
+        {audience === "owner" ? t("For your salon") : t("Opportunities")}
       </span>
-      <h3>{title}</h3>
-      <p>{summary}</p>
+      <h3>{t(title)}</h3>
+      <p>{summaryText(summary)}</p>
       {jobs.length > 0 && (
         <ul className="lamsa-card-list">
           {jobs.slice(0, 3).map((job) => (
@@ -110,7 +124,7 @@ function OpportunityCard({ opportunity }) {
       )}
       {empty && (
         <p className="lamsa-opportunity-empty">
-          Nothing open right now. New posts appear here first.
+          {t("Nothing open right now. New posts appear here first.")}
         </p>
       )}
       {action && (
@@ -118,7 +132,7 @@ function OpportunityCard({ opportunity }) {
           className="btn btn-secondary btn-small lamsa-opportunity-action"
           to={action.to}
         >
-          {action.label}
+          {t(action.label)}
           <ArrowRight aria-hidden="true" />
         </Link>
       )}
@@ -141,20 +155,24 @@ export default function AssistantPicksSection() {
     >
       <ScrollReveal className="editorial-section-heading">
         <div>
-          <span className="editorial-index">02 / {ASSISTANT_NAME}’s picks</span>
+          <span className="editorial-index">
+            {t("02 / {ASSISTANT_NAME}’s picks", { ASSISTANT_NAME })}
+          </span>
           <h2 id="lamsa-picks-title">
-            The best salons, governorate by governorate.
+            {t("The best salons, governorate by governorate.")}
           </h2>
           <p>
-            {ASSISTANT_NAME} ranks salons from real customer reviews and points
-            you to the openings that fit you. Ask her anything about Salonhub.
+            {t(
+              "{ASSISTANT_NAME} ranks salons from real customer reviews and points you to the openings that fit you. Ask her anything about Salonhub.",
+              { ASSISTANT_NAME },
+            )}
           </p>
         </div>
         <button type="button" className="lamsa-ask-chip" onClick={openPanel}>
           <LamsaOrb size="sm" animated />
           <span>
-            <strong>Ask {ASSISTANT_NAME}</strong>
-            <small>Your AI assistant</small>
+            <strong>{t("Ask {ASSISTANT_NAME}", { ASSISTANT_NAME })}</strong>
+            <small>{t("Your AI assistant")}</small>
           </span>
         </button>
       </ScrollReveal>
@@ -166,7 +184,9 @@ export default function AssistantPicksSection() {
           )}
           {status === "error" && (
             <p className="lamsa-picks-empty">
-              {ASSISTANT_NAME}’s picks are not available right now.
+              {t("{ASSISTANT_NAME}’s picks are not available right now.", {
+                ASSISTANT_NAME,
+              })}
             </p>
           )}
           {status === "ready" && rankings.length > 0 && (
@@ -175,13 +195,14 @@ export default function AssistantPicksSection() {
           {status === "ready" && rankings.length === 0 && (
             <div className="lamsa-picks-empty">
               <LamsaOrb size="lg" className="lamsa-picks-empty-mark" />
-              <strong>Rankings start with the first reviews.</strong>
+              <strong>{t("Rankings start with the first reviews.")}</strong>
               <span>
-                After customers rate their visits, the best salons of each
-                governorate show here.
+                {t(
+                  "After customers rate their visits, the best salons of each governorate show here.",
+                )}
               </span>
               <a className="btn btn-secondary btn-small" href="#discover">
-                Browse salons
+                {t("Browse salons")}
               </a>
             </div>
           )}

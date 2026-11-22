@@ -1,6 +1,8 @@
 import { Activity, CalendarDays, Star } from "lucide-react";
 import { initials } from "../model/dashboardModel.js";
 import { getOwnerStatusLook, money } from "../model/dashboardFormat.js";
+import t from "../../../shared/i18n/t.js";
+import { dateLocale } from "../../../shared/i18n/language.js";
 
 function CustomerCard({ customer }) {
   return (
@@ -15,31 +17,31 @@ function CustomerCard({ customer }) {
       <span
         className={`owner-customer-type type-${customer.type.toLowerCase()}`}
       >
-        {customer.type}
+        {t(customer.type)}
       </span>
       <dl>
         <div>
-          <dt>Bookings</dt>
+          <dt>{t("Bookings")}</dt>
           <dd>{customer.bookings.length}</dd>
         </div>
         <div>
-          <dt>Completed</dt>
+          <dt>{t("Completed")}</dt>
           <dd>{customer.completed}</dd>
         </div>
         <div>
-          <dt>Total spent</dt>
+          <dt>{t("Total spent")}</dt>
           <dd>{money(customer.spent)}</dd>
         </div>
         <div>
-          <dt>Average value</dt>
+          <dt>{t("Average value")}</dt>
           <dd>{money(customer.averageValue)}</dd>
         </div>
         <div>
-          <dt>Favorite service</dt>
+          <dt>{t("Favorite service")}</dt>
           <dd>{customer.favoriteService}</dd>
         </div>
         <div>
-          <dt>Last employee</dt>
+          <dt>{t("Last employee")}</dt>
           <dd>{customer.preferredEmployee}</dd>
         </div>
       </dl>
@@ -58,13 +60,13 @@ function ReviewsPanel({ reviews }) {
     <article className="owner-panel">
       <div className="owner-panel-heading">
         <div>
-          <span className="eyebrow">Customer voice</span>
-          <h2>Latest verified reviews</h2>
+          <span className="eyebrow">{t("Customer voice")}</span>
+          <h2>{t("Latest verified reviews")}</h2>
         </div>
         <span className="owner-rating">
           <Star size={15} fill="currentColor" aria-hidden="true" />
           {average}
-          <small>{reviews.length} reviews</small>
+          <small>{t("{length} reviews", { length: reviews.length })}</small>
         </span>
       </div>
       {reviews.slice(0, 5).map((review) => (
@@ -78,7 +80,9 @@ function ReviewsPanel({ reviews }) {
               <span
                 className="review-stars"
                 role="img"
-                aria-label={`${review.rating} out of 5 stars`}
+                aria-label={t("{rating} out of 5 stars", {
+                  rating: review.rating,
+                })}
               >
                 {[1, 2, 3, 4, 5].map((star) => (
                   <Star
@@ -92,19 +96,20 @@ function ReviewsPanel({ reviews }) {
               </span>
             </div>
             <p>
-              {review.comment || "Rating submitted without a written comment."}
+              {review.comment ||
+                t("Rating submitted without a written comment.")}
             </p>
             <small>
-              {review.serviceNames?.join(", ") || "Completed booking"} ·{" "}
-              {review.employeeName || "Employee unavailable"} ·{" "}
-              {new Date(review.createdAt).toLocaleDateString("en-GB")}
+              {review.serviceNames?.join(", ") || t("Completed booking")} ·{" "}
+              {review.employeeName || t("Employee unavailable")} ·{" "}
+              {new Date(review.createdAt).toLocaleDateString(dateLocale())}
             </small>
           </div>
         </div>
       ))}
       {!reviews.length && (
         <p className="owner-panel-empty">
-          Verified completed-booking reviews will appear here.
+          {t("Verified completed-booking reviews will appear here.")}
         </p>
       )}
     </article>
@@ -116,8 +121,8 @@ function ActivityPanel({ activity = [] }) {
     <article className="owner-panel">
       <div className="owner-panel-heading">
         <div>
-          <span className="eyebrow">Latest activity</span>
-          <h2>What happened recently</h2>
+          <span className="eyebrow">{t("Latest activity")}</span>
+          <h2>{t("What happened recently")}</h2>
         </div>
         <Activity size={18} aria-hidden="true" />
       </div>
@@ -133,11 +138,11 @@ function ActivityPanel({ activity = [] }) {
                 )}
               </span>
               <div>
-                <strong>{event.title}</strong>
-                <p>{event.text}</p>
+                <strong>{t(event.title)}</strong>
+                <p>{t(event.text)}</p>
                 <small>
                   <time dateTime={event.at}>
-                    {new Date(event.at).toLocaleString("en-GB", {
+                    {new Date(event.at).toLocaleString(dateLocale(), {
                       day: "numeric",
                       month: "short",
                       hour: "2-digit",
@@ -147,7 +152,7 @@ function ActivityPanel({ activity = [] }) {
                   {event.status && (
                     <>
                       {" · "}
-                      {getOwnerStatusLook(event.status).label}
+                      {t(getOwnerStatusLook(event.status).label)}
                     </>
                   )}
                 </small>
@@ -157,7 +162,7 @@ function ActivityPanel({ activity = [] }) {
         </ol>
       ) : (
         <p className="owner-panel-empty">
-          New booking requests and reviews show here.
+          {t("New booking requests and reviews show here.")}
         </p>
       )}
     </article>
@@ -170,14 +175,17 @@ export default function CustomerInsights({ customers, reviews, activity }) {
       <section className="owner-panel owner-customers">
         <div className="owner-panel-heading">
           <div>
-            <span className="eyebrow">Customer insights</span>
-            <h2>Customers who booked your salon</h2>
+            <span className="eyebrow">{t("Customer insights")}</span>
+            <h2>{t("Customers who booked your salon")}</h2>
             <p>
-              Visit frequency, value, favorite services, and employee
-              relationships.
+              {t(
+                "Visit frequency, value, favorite services, and employee relationships.",
+              )}
             </p>
           </div>
-          <span className="owner-rank">{customers.length} customers</span>
+          <span className="owner-rank">
+            {t("{length} customers", { length: customers.length })}
+          </span>
         </div>
         <div className="owner-customer-grid">
           {customers.slice(0, 8).map((customer) => (
@@ -186,7 +194,7 @@ export default function CustomerInsights({ customers, reviews, activity }) {
         </div>
         {!customers.length && (
           <p className="owner-panel-empty">
-            Customer insights appear after the salon receives bookings.
+            {t("Customer insights appear after the salon receives bookings.")}
           </p>
         )}
       </section>

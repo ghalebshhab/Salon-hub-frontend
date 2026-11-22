@@ -1,5 +1,6 @@
 import { ExternalLink, Sparkles } from "lucide-react";
 import { money } from "../model/dashboardFormat.js";
+import t from "../../../shared/i18n/t.js";
 
 const rating = (value) => (value ? value.toFixed(1) : "—");
 
@@ -22,10 +23,10 @@ export default function TeamPerformance({
       <article className="owner-panel owner-top-performer">
         <div className="owner-panel-heading">
           <div>
-            <span className="eyebrow">Team spotlight</span>
-            <h2>Top performer</h2>
+            <span className="eyebrow">{t("Team spotlight")}</span>
+            <h2>{t("Top performer")}</h2>
           </div>
-          {top && <span className="owner-rank">#1 this period</span>}
+          {top && <span className="owner-rank">{t("#1 this period")}</span>}
         </div>
         {top ? (
           <>
@@ -38,7 +39,7 @@ export default function TeamPerformance({
                 <p>{top.specialty}</p>
                 <span className="owner-score">
                   <Sparkles size={15} />
-                  {top.score} performance score
+                  {t("{score} performance score", { score: top.score })}
                 </span>
               </div>
             </div>
@@ -63,7 +64,7 @@ export default function TeamPerformance({
               ].map(([label, value, max]) => (
                 <div key={label}>
                   <div>
-                    <span>{label}</span>
+                    <span>{t(label)}</span>
                     <b>
                       {label === "Revenue generated"
                         ? money(value)
@@ -83,26 +84,28 @@ export default function TeamPerformance({
               type="button"
               onClick={() => onSelectEmployee(top)}
             >
-              View employee details <ExternalLink size={15} />
+              {t("View employee details")} <ExternalLink size={15} />
             </button>
           </>
         ) : (
           <p className="owner-panel-empty">
-            Active employees will appear here after joining the salon.
+            {t("Active employees will appear here after joining the salon.")}
           </p>
         )}
       </article>
       <article className="owner-panel owner-leaderboard">
         <div className="owner-panel-heading">
           <div>
-            <span className="eyebrow">Team health</span>
-            <h2>Leaderboard</h2>
-            <p>35% bookings · 25% services · 25% ratings · 15% revenue</p>
+            <span className="eyebrow">{t("Team health")}</span>
+            <h2>{t("Leaderboard")}</h2>
+            <p>
+              {t("35% bookings · 25% services · 25% ratings · 15% revenue")}
+            </p>
           </div>
           <select
             value={sort}
             onChange={(event) => onSortChange(event.target.value)}
-            aria-label="Sort employees"
+            aria-label={t("Sort employees")}
           >
             {[
               "Overall performance",
@@ -111,7 +114,9 @@ export default function TeamPerformance({
               "Rating",
               "Revenue",
             ].map((item) => (
-              <option key={item}>{item}</option>
+              <option key={item} value={item}>
+                {t(item)}
+              </option>
             ))}
           </select>
         </div>
@@ -131,11 +136,15 @@ export default function TeamPerformance({
               </span>
               <span className="leaderboard-metric">
                 <b>{employee.bookings}</b>
-                <small>bookings</small>
+                <small>{t("bookings")}</small>
               </span>
               <span className="leaderboard-metric">
                 <b>{rating(employee.rating)}</b>
-                <small>{employee.ratingCount} ratings</small>
+                <small>
+                  {t("{ratingCount} ratings", {
+                    ratingCount: employee.ratingCount,
+                  })}
+                </small>
               </span>
               <span className="owner-score-number">{employee.score}</span>
             </button>

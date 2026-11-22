@@ -1,6 +1,7 @@
 import httpClient from "../../../shared/api/httpClient.js";
 import { requireData } from "../../../shared/api/response.js";
 import { fromSalonResponse } from "../../salons/model/salonForm.js";
+import t from "../../../shared/i18n/t.js";
 
 /** Salon, team, services, reviews and the bookings of one period. */
 export async function getOwnerDashboardApi(signal, { from, to } = {}) {
@@ -10,7 +11,7 @@ export async function getOwnerDashboardApi(signal, { from, to } = {}) {
   });
   const dashboard = requireData(
     response.data,
-    "The owner dashboard could not be loaded.",
+    t("The owner dashboard could not be loaded."),
   );
   return {
     ...dashboard,
@@ -31,7 +32,7 @@ export async function getOwnerDashboardSummaryApi(signal, params) {
   });
   return requireData(
     response.data,
-    "The dashboard totals could not be loaded.",
+    t("The dashboard totals could not be loaded."),
   );
 }
 
@@ -44,7 +45,7 @@ export async function exportOwnerBookingsApi({ from, to }) {
     const response = await httpClient.get("/owner/dashboard/export", {
       params: { from, to },
       responseType: "blob",
-      loadingMessage: "Preparing your CSV file…",
+      loadingMessage: t("Preparing your CSV file…"),
       timeout: 60000,
     });
     return response.data;

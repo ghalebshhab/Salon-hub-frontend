@@ -1,3 +1,6 @@
+import t from "../../../shared/i18n/t.js";
+import { serviceName } from "../../services/model/serviceText.js";
+import { dateLocale } from "../../../shared/i18n/language.js";
 const DAY_MS = 86_400_000;
 const ACTIVE_STATUSES = new Set(["ACTIVE", "ACCEPTED"]);
 /** Bookings the salon lost after the customer asked for them. */
@@ -163,7 +166,7 @@ function buildEmployeePerformance(employees, bookings, reviews) {
       id: employee.id,
       name: employee.fullName,
       initials: initials(employee.fullName),
-      specialty: employee.specialty || "Salon professional",
+      specialty: employee.specialty || t("Salon professional"),
       status: employee.status || "ACTIVE",
       bookings: completedBookings.length,
       assignedBookings: assigned.length,
@@ -237,7 +240,7 @@ function buildCustomers(bookings) {
       booking.customerPhoneNumber;
     const current = map.get(key) || {
       id: key,
-      name: booking.customerName || "Customer",
+      name: booking.customerName || t("Customer"),
       email: booking.customerEmail,
       phone: booking.customerPhoneNumber,
       bookings: [],
@@ -257,8 +260,8 @@ function buildCustomers(bookings) {
         .flatMap(serviceItems)
         .forEach((service) =>
           serviceCounts.set(
-            service.name,
-            (serviceCounts.get(service.name) || 0) + 1,
+            serviceName(service),
+            (serviceCounts.get(serviceName(service)) || 0) + 1,
           ),
         );
       const favoriteService =
@@ -321,9 +324,9 @@ function buildChart(bookings, range, bounds) {
     return {
       key,
       label: short
-        ? date.toLocaleDateString("en-GB", { weekday: "short" })
+        ? date.toLocaleDateString(dateLocale(), { weekday: "short" })
         : String(date.getDate()),
-      fullLabel: date.toLocaleDateString("en-GB", {
+      fullLabel: date.toLocaleDateString(dateLocale(), {
         weekday: "short",
         day: "numeric",
         month: "short",
@@ -342,15 +345,15 @@ function buildActivity(bookings, reviews, limit = 6) {
       type: "booking",
       at: booking.createdAt,
       status: bookingStatus(booking),
-      title: `Booking request from ${booking.customerName || "a customer"}`,
-      text: `${
-        serviceItems(booking)
-          .map((service) => service.name)
-          .join(", ") || "Salon visit"
-      } on ${booking.bookingDate} at ${String(booking.bookingTime || "").slice(
-        0,
-        5,
-      )}`,
+      title: t("Booking request from {value}", {
+        value: booking.customerName || t("a customer"),
+      }),
+      text: t("{value} on {bookingDate} at {value2}", {
+        value:
+          serviceItems(booking).map(serviceName).join(", ") || t("Salon visit"),
+        bookingDate: booking.bookingDate,
+        value2: String(booking.bookingTime || "").slice(0, 5),
+      }),
     }));
   const rated = reviews
     .filter((review) => review.createdAt)
@@ -358,10 +361,15 @@ function buildActivity(bookings, reviews, limit = 6) {
       id: `review-${review.id}`,
       type: "review",
       at: review.createdAt,
-      title: `${review.customerName || "A customer"} gave ${review.rating} stars`,
+      title: t("{value} gave {rating} stars", {
+        value: review.customerName || t("A customer"),
+        rating: review.rating,
+      }),
       text: review.employeeName
-        ? `For a visit with ${review.employeeName}.`
-        : "For a completed visit.",
+        ? t("For a visit with {employeeName}.", {
+            employeeName: review.employeeName,
+          })
+        : t("For a completed visit."),
     }));
   return [...requests, ...rated]
     .sort((a, b) => new Date(b.at) - new Date(a.at))
@@ -408,9 +416,7 @@ export function buildOwnerDashboard(raw, range, now = new Date()) {
       return {
         ...review,
         employeeName: booking?.assignedEmployeeName,
-        serviceNames: serviceItems(booking || {}).map(
-          (service) => service.name,
-        ),
+        serviceNames: serviceItems(booking || {}).map(serviceName),
       };
     })
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
@@ -488,9 +494,9 @@ function serverChart(days) {
     return {
       key: day.date,
       label: short
-        ? date.toLocaleDateString("en-GB", { weekday: "short" })
+        ? date.toLocaleDateString(dateLocale(), { weekday: "short" })
         : String(date.getDate()),
-      fullLabel: date.toLocaleDateString("en-GB", {
+      fullLabel: date.toLocaleDateString(dateLocale(), {
         weekday: "short",
         day: "numeric",
         month: "short",

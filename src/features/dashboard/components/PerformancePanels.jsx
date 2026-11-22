@@ -1,4 +1,5 @@
 import { money } from "../model/dashboardFormat.js";
+import t from "../../../shared/i18n/t.js";
 
 /** Bars get too thin for value labels above this count. */
 const DENSE_BARS = 14;
@@ -14,18 +15,24 @@ function Chart({ data, mode, range }) {
     (top, item) => (Number(item[mode]) > Number(top?.[mode] || 0) ? item : top),
     null,
   );
-  const summary = `${mode === "revenue" ? "Revenue" : "Bookings"}, ${range.toLowerCase()}: total ${formatValue(mode, total)}${
-    best
-      ? `, highest on ${best.fullLabel} with ${formatValue(mode, best[mode])}`
-      : ""
-  }.`;
+  const summary = t("{value}, {lowerCase}: total {value2}{value3}.", {
+    value: mode === "revenue" ? t("Revenue") : t("Bookings"),
+    lowerCase: t(range),
+    value2: formatValue(mode, total),
+    value3: best
+      ? t(", highest on {fullLabel} with {value}", {
+          fullLabel: best.fullLabel,
+          value: formatValue(mode, best[mode]),
+        })
+      : "",
+  });
 
   return (
     <figure className="owner-chart-figure">
       <div
         className={`owner-chart ${dense ? "is-dense" : ""}`}
         role="img"
-        aria-label={summary}
+        aria-label={t(summary)}
       >
         <div className="chart-y" aria-hidden="true">
           <span>{formatValue(mode, max)}</span>
@@ -55,7 +62,7 @@ function Chart({ data, mode, range }) {
                 />
               </div>
               <small className={dense && index % 5 ? "is-hidden" : ""}>
-                {item.label}
+                {t(item.label)}
               </small>
             </div>
           ))}
@@ -82,15 +89,19 @@ export default function PerformancePanels({
       <article className="owner-panel owner-analytics">
         <div className="owner-panel-heading">
           <div>
-            <span className="eyebrow">Performance</span>
-            <h2>Revenue & bookings</h2>
+            <span className="eyebrow">{t("Performance")}</span>
+            <h2>{t("Revenue & bookings")}</h2>
             <p>
               {range === "Today"
-                ? "Today, hour by hour."
-                : `${range}, day by day.`}
+                ? t("Today, hour by hour.")
+                : t("{range}, day by day.", { range: t(range) })}
             </p>
           </div>
-          <div className="owner-toggle" role="group" aria-label="Chart data">
+          <div
+            className="owner-toggle"
+            role="group"
+            aria-label={t("Chart data")}
+          >
             {modes.map(([key, label]) => (
               <button
                 key={key}
@@ -99,7 +110,7 @@ export default function PerformancePanels({
                 aria-pressed={chartMode === key}
                 onClick={() => onChartModeChange(key)}
               >
-                {label}
+                {t(label)}
               </button>
             ))}
           </div>
@@ -108,30 +119,31 @@ export default function PerformancePanels({
           <Chart data={data.dayData} mode={chartMode} range={range} />
         ) : (
           <p className="owner-panel-empty owner-chart-empty">
-            No bookings in this period yet. Pick a longer date range to see
-            more.
+            {t(
+              "No bookings in this period yet. Pick a longer date range to see more.",
+            )}
           </p>
         )}
         <div className="chart-legend">
           <span>
             <i className={`legend-dot ${chartMode}`} aria-hidden="true" />
             {chartMode === "revenue"
-              ? "Revenue from completed visits"
-              : "All booking requests"}
+              ? t("Revenue from completed visits")
+              : t("All booking requests")}
           </span>
           <strong>
             {chartMode === "revenue"
               ? money(data.summary.revenue)
-              : `${data.bookings.length} bookings`}
+              : t("{length} bookings", { length: data.bookings.length })}
           </strong>
         </div>
       </article>
       <article className="owner-panel owner-breakdown">
         <div className="owner-panel-heading">
           <div>
-            <span className="eyebrow">Revenue mix</span>
-            <h2>Top services</h2>
-            <p>Which services bring the most money.</p>
+            <span className="eyebrow">{t("Revenue mix")}</span>
+            <h2>{t("Top services")}</h2>
+            <p>{t("Which services bring the most money.")}</p>
           </div>
         </div>
         {data.services.some((service) => service.completed > 0) ? (
@@ -145,7 +157,9 @@ export default function PerformancePanels({
                 <div
                   className="service-meter"
                   role="meter"
-                  aria-label={`${service.name} share of revenue`}
+                  aria-label={t("{name} share of revenue", {
+                    name: service.name,
+                  })}
                   aria-valuemin={0}
                   aria-valuemax={100}
                   aria-valuenow={service.share}
@@ -153,14 +167,17 @@ export default function PerformancePanels({
                   <span style={{ width: `${service.share}%` }} />
                 </div>
                 <small>
-                  {service.completed} completed · {service.share}% of revenue
+                  {t("{completed} completed · {share}% of revenue", {
+                    completed: service.completed,
+                    share: service.share,
+                  })}
                 </small>
               </li>
             ))}
           </ul>
         ) : (
           <p className="owner-panel-empty">
-            Your top services show here after visits are completed.
+            {t("Your top services show here after visits are completed.")}
           </p>
         )}
       </article>

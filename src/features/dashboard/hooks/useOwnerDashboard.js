@@ -5,6 +5,7 @@ import {
   getOwnerDashboardSummaryApi,
 } from "../api/dashboardApi.js";
 import { buildOwnerDashboard, rangeRequest } from "../model/dashboardModel.js";
+import t from "../../../shared/i18n/t.js";
 
 /** Loads the period's bookings and the server totals together for one range. */
 export default function useOwnerDashboard(range, profile) {
@@ -26,7 +27,7 @@ export default function useOwnerDashboard(range, profile) {
   );
   const query = useQuery(loader, {
     initialData: null,
-    errorMessage: "The owner dashboard could not be loaded.",
+    errorMessage: t("The owner dashboard could not be loaded."),
     // A refresh or a new range keeps the dashboard on screen meanwhile.
     keepPreviousData: true,
   });

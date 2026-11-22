@@ -4,6 +4,9 @@ import useModalDialog from "../../../shared/hooks/useModalDialog.js";
 import { bookingStatus } from "../model/dashboardModel.js";
 import { money, paymentLabel } from "../model/dashboardFormat.js";
 import OwnerStatusPill from "./OwnerStatusPill.jsx";
+import t from "../../../shared/i18n/t.js";
+import { serviceName } from "../../services/model/serviceText.js";
+import { dateLocale } from "../../../shared/i18n/language.js";
 
 /**
  * A side panel on a native modal <dialog>: focus stays inside, Escape and a
@@ -23,7 +26,7 @@ function Drawer({ title, closeLabel, onClose, children }) {
         <X aria-hidden="true" />
       </button>
       <span className="eyebrow" id={titleId}>
-        {title}
+        {t(title)}
       </span>
       {children}
     </dialog>
@@ -33,8 +36,8 @@ function Drawer({ title, closeLabel, onClose, children }) {
 function EmployeeDrawer({ employee, onClose }) {
   return (
     <Drawer
-      title="Employee details"
-      closeLabel="Close employee details"
+      title={t("Employee details")}
+      closeLabel={t("Close employee details")}
       onClose={onClose}
     >
       <div className="drawer-person">
@@ -50,45 +53,51 @@ function EmployeeDrawer({ employee, onClose }) {
       <div className="drawer-stats">
         <div>
           <b>{employee.bookings}</b>
-          <small>Completed visits</small>
+          <small>{t("Completed visits")}</small>
         </div>
         <div>
           <b>{employee.services}</b>
-          <small>Services done</small>
+          <small>{t("Services done")}</small>
         </div>
         <div>
           <b>{money(employee.revenue)}</b>
-          <small>Revenue</small>
+          <small>{t("Revenue")}</small>
         </div>
         <div>
           <b>{employee.rating ? employee.rating.toFixed(1) : "—"}</b>
-          <small>{employee.ratingCount} customer ratings</small>
+          <small>
+            {t("{ratingCount} customer ratings", {
+              ratingCount: employee.ratingCount,
+            })}
+          </small>
         </div>
       </div>
-      <h3>Contact</h3>
+      <h3>{t("Contact")}</h3>
       <p className="drawer-note">
-        {employee.email || "No email"}
+        {employee.email || t("No email")}
         <br />
-        {employee.phoneNumber || "No phone number"}
+        {employee.phoneNumber || t("No phone number")}
       </p>
-      <h3>Assigned services</h3>
+      <h3>{t("Assigned services")}</h3>
       <div className="skill-list">
         {employee.skills.length ? (
           employee.skills.map((skill) => <span key={skill}>{skill}</span>)
         ) : (
-          <span>No services assigned</span>
+          <span>{t("No services assigned")}</span>
         )}
       </div>
-      <h3>Performance score</h3>
+      <h3>{t("Performance score")}</h3>
       <p className="drawer-note">
-        {employee.score}/100, from completed visits, services, verified ratings
-        and revenue in this period.
+        {t(
+          "{score}/100, from completed visits, services, verified ratings and revenue in this period.",
+          { score: employee.score },
+        )}
       </p>
       <Link
         className="btn btn-primary owner-full-button"
         to={`/owner/employees/${employee.id}/setup`}
       >
-        Manage schedule and services
+        {t("Manage schedule and services")}
       </Link>
     </Drawer>
   );
@@ -98,15 +107,15 @@ function BookingDrawer({ booking, onClose }) {
   const services = booking.services || [];
   return (
     <Drawer
-      title="Booking details"
-      closeLabel="Close booking details"
+      title={t("Booking details")}
+      closeLabel={t("Close booking details")}
       onClose={onClose}
     >
       <h2>#{booking.id}</h2>
       <p className="drawer-subtitle">
-        Requested{" "}
+        {t("Requested")}
         {booking.createdAt
-          ? new Date(booking.createdAt).toLocaleString("en-GB")
+          ? new Date(booking.createdAt).toLocaleString(dateLocale())
           : "—"}
       </p>
       <div className="drawer-booking-status">
@@ -115,34 +124,37 @@ function BookingDrawer({ booking, onClose }) {
       </div>
       <div className="drawer-detail-list">
         <div>
-          <small>Customer</small>
-          <strong>{booking.customerName || "Customer"}</strong>
+          <small>{t("Customer")}</small>
+          <strong>{booking.customerName || t("Customer")}</strong>
           <span>{booking.customerEmail || booking.customerPhoneNumber}</span>
         </div>
         <div>
-          <small>Appointment</small>
+          <small>{t("Appointment")}</small>
           <strong>
             {booking.bookingDate} · {String(booking.bookingTime).slice(0, 5)}
           </strong>
           <span>
-            {services.map((service) => service.name).join(", ") ||
-              "No services listed"}
+            {services.map(serviceName).join(", ") || t("No services listed")}
             {booking.totalDurationMinutes
-              ? ` · ${booking.totalDurationMinutes} min`
+              ? t(" · {totalDurationMinutes} min", {
+                  totalDurationMinutes: booking.totalDurationMinutes,
+                })
               : ""}
           </span>
         </div>
         <div>
-          <small>Assigned employee</small>
-          <strong>{booking.assignedEmployeeName || "Not assigned yet"}</strong>
+          <small>{t("Assigned employee")}</small>
+          <strong>
+            {booking.assignedEmployeeName || t("Not assigned yet")}
+          </strong>
         </div>
         <div>
-          <small>Payment</small>
+          <small>{t("Payment")}</small>
           <strong>{paymentLabel(booking.payment)}</strong>
         </div>
         {booking.ownerNote && (
           <div>
-            <small>Salon note</small>
+            <small>{t("Salon note")}</small>
             <strong>{booking.ownerNote}</strong>
           </div>
         )}
@@ -151,7 +163,7 @@ function BookingDrawer({ booking, onClose }) {
         className="btn btn-secondary owner-full-button"
         to="/owner/bookings"
       >
-        Open in booking management
+        {t("Open in booking management")}
       </Link>
     </Drawer>
   );

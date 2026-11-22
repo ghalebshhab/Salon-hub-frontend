@@ -5,6 +5,7 @@ import {
   showErrorToast,
   showSuccessToast,
 } from "../../../shared/notifications/toast.jsx";
+import t from "../../../shared/i18n/t.js";
 
 /** Saves a Blob as a file through a temporary link. */
 function saveFile(blob, fileName) {
@@ -29,9 +30,9 @@ export default function useExportBookings() {
     try {
       const blob = await exportOwnerBookingsApi({ from, to });
       saveFile(blob, `salonhub-bookings-${from}-to-${to}.csv`);
-      showSuccessToast("Your CSV file is downloading.", "Export ready");
+      showSuccessToast(t("Your CSV file is downloading."), t("Export ready"));
     } catch (error) {
-      showErrorToast(error.message || "The bookings could not be exported.");
+      showErrorToast(error.message || t("The bookings could not be exported."));
     } finally {
       setBusy(false);
     }

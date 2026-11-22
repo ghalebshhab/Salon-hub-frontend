@@ -1,6 +1,7 @@
 import { ArrowRight, Flame, Lock } from "lucide-react";
 import { Link } from "react-router-dom";
 import { formatMoney } from "../../payments/model/payment.js";
+import t from "../../../shared/i18n/t.js";
 
 /** Jordan's week starts on Saturday. ISO weekday numbers: 1 Monday … 7 Sunday. */
 const WEEK = [
@@ -30,18 +31,26 @@ function BusyHours({ points }) {
     (top, point) => (point.bookings > (top?.bookings || 0) ? point : top),
     null,
   );
-  const busiestDay = WEEK.find(([day]) => day === busiest?.dayOfWeek)?.[1];
+  const busiestDay = t(WEEK.find(([day]) => day === busiest?.dayOfWeek)?.[1]);
 
   return (
     <article className="owner-panel owner-busy-hours">
       <div className="owner-panel-heading">
         <div>
-          <span className="eyebrow">Busy hours</span>
-          <h2>When customers come</h2>
+          <span className="eyebrow">{t("Busy hours")}</span>
+          <h2>{t("When customers come")}</h2>
           <p>
             {busiest
-              ? `Busiest time: ${busiestDay} at ${hourLabel(busiest.hour)}, ${busiest.bookings} ${busiest.bookings === 1 ? "visit" : "visits"}.`
-              : "Confirmed and completed visits by day and start hour."}
+              ? t(
+                  "Busiest time: {busiestDay} at {value}, {bookings} {value2}.",
+                  {
+                    busiestDay,
+                    value: hourLabel(busiest.hour),
+                    bookings: busiest.bookings,
+                    value2: busiest.bookings === 1 ? t("visit") : t("visits"),
+                  },
+                )
+              : t("Confirmed and completed visits by day and start hour.")}
           </p>
         </div>
         <Flame size={18} aria-hidden="true" />
@@ -50,7 +59,7 @@ function BusyHours({ points }) {
         <div className="busy-scroll">
           <table className="busy-table">
             <caption className="sr-only">
-              Number of visits by weekday and start hour
+              {t("Number of visits by weekday and start hour")}
             </caption>
             <thead>
               <tr>
@@ -65,7 +74,7 @@ function BusyHours({ points }) {
             <tbody>
               {WEEK.map(([day, label]) => (
                 <tr key={day}>
-                  <th scope="row">{label}</th>
+                  <th scope="row">{t(label)}</th>
                   {columns.map((hour) => {
                     const count = counts.get(`${day}-${hour}`) || 0;
                     const level = count ? Math.ceil((count / max) * 4) : 0;
@@ -73,7 +82,7 @@ function BusyHours({ points }) {
                       <td
                         key={hour}
                         className={`busy-cell level-${level}`}
-                        title={`${label} ${hourLabel(hour)}: ${count} ${count === 1 ? "visit" : "visits"}`}
+                        title={`${t(label)} ${hourLabel(hour)}: ${count} ${count === 1 ? t("visit") : t("visits")}`}
                       >
                         <span className="sr-only">{count}</span>
                       </td>
@@ -84,16 +93,18 @@ function BusyHours({ points }) {
             </tbody>
           </table>
           <div className="busy-legend" aria-hidden="true">
-            <span>Quiet</span>
+            <span>{t("Quiet")}</span>
             {[0, 1, 2, 3, 4].map((level) => (
               <i className={`busy-cell level-${level}`} key={level} />
             ))}
-            <span>Busy</span>
+            <span>{t("Busy")}</span>
           </div>
         </div>
       ) : (
         <p className="owner-panel-empty">
-          Busy hours show here after customers book visits in this period.
+          {t(
+            "Busy hours show here after customers book visits in this period.",
+          )}
         </p>
       )}
     </article>
@@ -107,9 +118,9 @@ function PaymentHealth({ payments, currency }) {
     <article className="owner-panel owner-payment-health">
       <div className="owner-panel-heading">
         <div>
-          <span className="eyebrow">Payments</span>
-          <h2>Completed visits</h2>
-          <p>Money received and money still open for this period.</p>
+          <span className="eyebrow">{t("Payments")}</span>
+          <h2>{t("Completed visits")}</h2>
+          <p>{t("Money received and money still open for this period.")}</p>
         </div>
       </div>
       {total ? (
@@ -117,7 +128,7 @@ function PaymentHealth({ payments, currency }) {
           <div
             className="pay-split"
             role="meter"
-            aria-label="Share of completed visit value that is paid"
+            aria-label={t("Share of completed visit value that is paid")}
             aria-valuemin={0}
             aria-valuemax={100}
             aria-valuenow={paidShare}
@@ -128,26 +139,32 @@ function PaymentHealth({ payments, currency }) {
             <div>
               <dt>
                 <i className="dot is-paid" aria-hidden="true" />
-                Paid
+                {t("Paid")}
               </dt>
               <dd>
                 {formatMoney(payments.paidFils, currency)}
-                <small>{payments.paidCount} visits</small>
+                <small>
+                  {t("{paidCount} visits", { paidCount: payments.paidCount })}
+                </small>
               </dd>
             </div>
             <div>
               <dt>
                 <i className="dot is-unpaid" aria-hidden="true" />
-                Not paid yet
+                {t("Not paid yet")}
               </dt>
               <dd>
                 {formatMoney(payments.unpaidFils, currency)}
-                <small>{payments.unpaidCount} visits</small>
+                <small>
+                  {t("{unpaidCount} visits", {
+                    unpaidCount: payments.unpaidCount,
+                  })}
+                </small>
               </dd>
             </div>
             {payments.refundedFils > 0 && (
               <div>
-                <dt>Refunded</dt>
+                <dt>{t("Refunded")}</dt>
                 <dd>{formatMoney(payments.refundedFils, currency)}</dd>
               </div>
             )}
@@ -155,11 +172,11 @@ function PaymentHealth({ payments, currency }) {
         </>
       ) : (
         <p className="owner-panel-empty">
-          No payment records for completed visits in this period.
+          {t("No payment records for completed visits in this period.")}
         </p>
       )}
       <Link className="text-link owner-panel-link" to="/owner/payments">
-        Open payments <ArrowRight size={14} aria-hidden="true" />
+        {t("Open payments")} <ArrowRight size={14} aria-hidden="true" />
       </Link>
     </article>
   );
@@ -171,14 +188,15 @@ function LockedInsights() {
     <section className="owner-panel owner-insights-locked">
       <Lock size={20} aria-hidden="true" />
       <div>
-        <span className="eyebrow">Pro and Business</span>
-        <h2>Busy hours, returning customers and payment health</h2>
+        <span className="eyebrow">{t("Pro and Business")}</span>
+        <h2>{t("Busy hours, returning customers and payment health")}</h2>
         <p>
-          See when customers come, how many come back and which visits are not
-          paid yet. Upgrade your plan to turn on these insights.
+          {t(
+            "See when customers come, how many come back and which visits are not paid yet. Upgrade your plan to turn on these insights.",
+          )}
         </p>
         <Link className="btn btn-primary" to="/owner/plan">
-          See plans <ArrowRight size={15} aria-hidden="true" />
+          {t("See plans")} <ArrowRight size={15} aria-hidden="true" />
         </Link>
       </div>
     </section>

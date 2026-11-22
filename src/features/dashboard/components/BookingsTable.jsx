@@ -8,6 +8,9 @@ import {
   paymentLabel,
 } from "../model/dashboardFormat.js";
 import OwnerStatusPill from "./OwnerStatusPill.jsx";
+import t from "../../../shared/i18n/t.js";
+import { serviceName } from "../../services/model/serviceText.js";
+import { dateLocale } from "../../../shared/i18n/language.js";
 
 /** Rows shown here; the full list lives in booking management. */
 const TABLE_LIMIT = 12;
@@ -41,12 +44,12 @@ export default function BookingsTable({
     <section className="owner-panel owner-bookings">
       <div className="owner-panel-heading owner-bookings-heading">
         <div>
-          <span className="eyebrow">Operations</span>
-          <h2>Bookings in this period</h2>
-          <p>Newest first. Select a row to see the details.</p>
+          <span className="eyebrow">{t("Operations")}</span>
+          <h2>{t("Bookings in this period")}</h2>
+          <p>{t("Newest first. Select a row to see the details.")}</p>
         </div>
         <Link className="text-link" to="/owner/bookings">
-          View all <ExternalLink size={14} />
+          {t("View all")} <ExternalLink size={14} />
         </Link>
       </div>
       <div className="owner-toolbar">
@@ -54,8 +57,8 @@ export default function BookingsTable({
           <Search size={16} aria-hidden="true" />
           <input
             type="search"
-            aria-label="Search bookings"
-            placeholder="Search customer, booking, employee"
+            aria-label={t("Search bookings")}
+            placeholder={t("Search customer, booking, employee")}
             value={query}
             onChange={(event) => onQueryChange(event.target.value)}
           />
@@ -67,19 +70,19 @@ export default function BookingsTable({
           onClick={onToggleFilters}
         >
           <Filter size={15} aria-hidden="true" />
-          Filters
+          {t("Filters")}
         </button>
         {showFilters && (
           <select
             className="owner-filter-select"
             value={statusFilter}
             onChange={(event) => onFilterChange(event.target.value)}
-            aria-label="Booking status filter"
+            aria-label={t("Booking status filter")}
           >
-            <option value="ALL">All statuses</option>
+            <option value="ALL">{t("All statuses")}</option>
             {BOOKING_FILTER_STATUSES.map((item) => (
               <option value={item} key={item}>
-                {getOwnerStatusLook(item).label}
+                {t(getOwnerStatusLook(item).label)}
               </option>
             ))}
           </select>
@@ -89,15 +92,15 @@ export default function BookingsTable({
         <table className="owner-table">
           <thead>
             <tr>
-              <th>Booking</th>
-              <th>Customer</th>
-              <th>Appointment</th>
-              <th>Assigned employee</th>
-              <th>Status</th>
-              <th>Booking value</th>
-              <th>Rating</th>
+              <th>{t("Booking")}</th>
+              <th>{t("Customer")}</th>
+              <th>{t("Appointment")}</th>
+              <th>{t("Assigned employee")}</th>
+              <th>{t("Status")}</th>
+              <th>{t("Booking value")}</th>
+              <th>{t("Rating")}</th>
               <th>
-                <span className="sr-only">Details</span>
+                <span className="sr-only">{t("Details")}</span>
               </th>
             </tr>
           </thead>
@@ -108,7 +111,9 @@ export default function BookingsTable({
                   <strong>#{booking.id}</strong>
                   <small>
                     {booking.createdAt
-                      ? new Date(booking.createdAt).toLocaleDateString()
+                      ? new Date(booking.createdAt).toLocaleDateString(
+                          dateLocale(),
+                        )
                       : "—"}
                   </small>
                 </td>
@@ -118,7 +123,7 @@ export default function BookingsTable({
                       {initials(booking.customerName)}
                     </span>
                     <span>
-                      <strong>{booking.customerName || "Customer"}</strong>
+                      <strong>{booking.customerName || t("Customer")}</strong>
                       <small>
                         {booking.customerEmail || booking.customerPhoneNumber}
                       </small>
@@ -131,13 +136,13 @@ export default function BookingsTable({
                     {String(booking.bookingTime).slice(0, 5)}
                   </strong>
                   <small>
-                    {(booking.services || [])
-                      .map((service) => service.name)
-                      .join(", ")}{" "}
-                    · {booking.totalDurationMinutes} min
+                    {(booking.services || []).map(serviceName).join(", ")}
+                    {t("· {totalDurationMinutes} min", {
+                      totalDurationMinutes: booking.totalDurationMinutes,
+                    })}
                   </small>
                 </td>
-                <td>{booking.assignedEmployeeName || "Unassigned"}</td>
+                <td>{booking.assignedEmployeeName || t("Unassigned")}</td>
                 <td>
                   <OwnerStatusPill status={bookingStatus(booking)} />
                 </td>
@@ -150,7 +155,7 @@ export default function BookingsTable({
                   <button
                     className="owner-row-button"
                     type="button"
-                    aria-label={`Open booking #${booking.id}`}
+                    aria-label={t("Open booking #{id}", { id: booking.id })}
                     onClick={(event) => {
                       event.stopPropagation();
                       onSelectBooking(booking);
@@ -166,9 +171,12 @@ export default function BookingsTable({
       </div>
       {filtered.length > TABLE_LIMIT && (
         <p className="owner-table-more">
-          Showing {TABLE_LIMIT} of {filtered.length} bookings.{" "}
+          {t("Showing {TABLE_LIMIT} of {length} bookings.", {
+            TABLE_LIMIT,
+            length: filtered.length,
+          })}
           <Link className="text-link" to="/owner/bookings">
-            See all in booking management
+            {t("See all in booking management")}
           </Link>
         </p>
       )}
@@ -177,13 +185,13 @@ export default function BookingsTable({
           <Search size={24} aria-hidden="true" />
           {bookings.length ? (
             <>
-              <strong>No bookings match these filters.</strong>
+              <strong>{t("No bookings match these filters.")}</strong>
               <button className="text-link" type="button" onClick={onClear}>
-                Clear filters
+                {t("Clear filters")}
               </button>
             </>
           ) : (
-            <strong>No bookings in this period.</strong>
+            <strong>{t("No bookings in this period.")}</strong>
           )}
         </div>
       )}

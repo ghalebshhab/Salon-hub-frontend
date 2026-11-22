@@ -1,6 +1,7 @@
 import { Download, Lock } from "lucide-react";
 import { Link } from "react-router-dom";
 import useExportBookings from "../hooks/useExportBookings.js";
+import t from "../../../shared/i18n/t.js";
 
 /**
  * Downloads the bookings of the selected range as CSV. On plans without the
@@ -14,11 +15,11 @@ export default function ExportBookingsButton({ range, locked = false }) {
       <Link
         className="owner-export-button is-locked"
         to="/owner/plan"
-        title="CSV export is part of the Business plan"
+        title={t("CSV export is part of the Business plan")}
       >
         <Lock size={14} aria-hidden="true" />
-        Export CSV
-        <span className="owner-export-plan">Business</span>
+        {t("Export CSV")}
+        <span className="owner-export-plan">{t("Business")}</span>
       </Link>
     );
   }
@@ -30,10 +31,12 @@ export default function ExportBookingsButton({ range, locked = false }) {
       onClick={() => exportBookings(range)}
       disabled={busy}
       aria-busy={busy}
-      title={`Download the bookings of ${range.toLowerCase()} as a CSV file`}
+      title={t("Download the bookings of {range} as a CSV file", {
+        range: t(range),
+      })}
     >
       <Download size={14} aria-hidden="true" />
-      {busy ? "Exporting…" : "Export CSV"}
+      {busy ? t("Exporting…") : t("Export CSV")}
     </button>
   );
 }

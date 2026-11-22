@@ -2,6 +2,7 @@ import { CalendarDays, Eye, RefreshCw, Settings2, Store } from "lucide-react";
 import { Link } from "react-router-dom";
 import { DASHBOARD_RANGES, rangeAllowed } from "../model/dashboardModel.js";
 import { greeting, timeLabel } from "../model/dashboardFormat.js";
+import t from "../../../shared/i18n/t.js";
 
 export default function DashboardHeader({
   data,
@@ -13,8 +14,8 @@ export default function DashboardHeader({
   workspaceActions = false,
   metaActions = null,
 }) {
-  const firstName = data.profile?.firstName || "Owner";
-  const salonName = data.salon?.name || data.salon?.salonName || "My salon";
+  const firstName = data.profile?.firstName || t("Owner");
+  const salonName = data.salon?.name || data.salon?.salonName || t("My salon");
   const isOpen =
     String(data.salon?.state || data.salon?.openningStatus).toUpperCase() ===
     "OPEN";
@@ -28,18 +29,20 @@ export default function DashboardHeader({
     <>
       <header className="owner-dashboard-header">
         <div>
-          <span className="eyebrow">Salon workspace</span>
+          <span className="eyebrow">{t("Salon workspace")}</span>
           <h1>
             {greeting()}, {firstName}
           </h1>
-          <p>How your salon is doing: money, bookings, team and customers.</p>
+          <p>
+            {t("How your salon is doing: money, bookings, team and customers.")}
+          </p>
         </div>
         <div className="owner-header-actions">
           {workspaceActions ? (
             <Link
               className="owner-select"
               to="/owner/my-salon"
-              aria-label={`Open ${salonName} workspace`}
+              aria-label={t("Open {salonName} workspace", { salonName })}
             >
               <Store size={15} aria-hidden="true" />
               {salonName}
@@ -51,7 +54,7 @@ export default function DashboardHeader({
             </span>
           )}
           <select
-            aria-label="Date range"
+            aria-label={t("Date range")}
             value={range}
             onChange={(event) => onRangeChange(event.target.value)}
           >
@@ -60,7 +63,9 @@ export default function DashboardHeader({
               const locked = !rangeAllowed(item.label, historyDays);
               return (
                 <option key={item.key} value={item.label} disabled={locked}>
-                  {locked ? `${item.label} (upgrade)` : item.label}
+                  {locked
+                    ? t("{label} (upgrade)", { label: t(item.label) })
+                    : t(item.label)}
                 </option>
               );
             })}
@@ -68,12 +73,12 @@ export default function DashboardHeader({
           {publicSalonPath ? (
             <Link className="btn btn-primary" to={publicSalonPath}>
               <Eye size={16} aria-hidden="true" />
-              View public salon
+              {t("View public salon")}
             </Link>
           ) : (
             <Link className="btn btn-primary" to="/owner/my-salon">
               <Eye size={16} aria-hidden="true" />
-              View salon
+              {t("View salon")}
             </Link>
           )}
         </div>
@@ -85,19 +90,25 @@ export default function DashboardHeader({
             aria-hidden="true"
           />
           {isOpen
-            ? `Open now${closeTime ? ` · closes at ${closeTime}` : ""}`
-            : "Salon is closed now"}
+            ? t("Open now{value}", {
+                value: closeTime
+                  ? t(" · closes at {closeTime}", { closeTime })
+                  : "",
+              })
+            : t("Salon is closed now")}
         </span>
         {updated && (
           <span aria-live="polite">
-            {refreshing ? "Updating…" : `Updated at ${updated}`}
+            {refreshing
+              ? t("Updating…")
+              : t("Updated at {updated}", { updated })}
           </span>
         )}
         <button
           className={`owner-icon-button ${refreshing ? "is-refreshing" : ""}`}
           type="button"
-          title="Refresh dashboard"
-          aria-label="Refresh dashboard"
+          title={t("Refresh dashboard")}
+          aria-label={t("Refresh dashboard")}
           disabled={refreshing}
           onClick={onRefresh}
         >
@@ -105,8 +116,8 @@ export default function DashboardHeader({
         </button>
         <Link
           className="owner-icon-button"
-          title="Manage salon"
-          aria-label="Manage salon"
+          title={t("Manage salon")}
+          aria-label={t("Manage salon")}
           to="/owner/my-salon/edit"
         >
           <Settings2 size={15} aria-hidden="true" />
@@ -114,8 +125,8 @@ export default function DashboardHeader({
         {workspaceActions && (
           <Link
             className="owner-icon-button"
-            title="Manage bookings"
-            aria-label="Manage bookings"
+            title={t("Manage bookings")}
+            aria-label={t("Manage bookings")}
             to="/owner/bookings"
           >
             <CalendarDays size={15} aria-hidden="true" />

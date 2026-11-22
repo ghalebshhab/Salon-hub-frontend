@@ -20,6 +20,7 @@ import {
 } from "../model/dashboardModel.js";
 import useMySubscription from "../../subscriptions/hooks/useMySubscription.js";
 import PlanStatusBanner from "../../subscriptions/components/PlanStatusBanner.jsx";
+import t from "../../../shared/i18n/t.js";
 
 export default function OwnerDashboard() {
   const { user } = useAuth();
@@ -72,22 +73,26 @@ export default function OwnerDashboard() {
         <div className="empty-state">
           <Building2 size={30} aria-hidden="true" />
           <h1>
-            {noSalon ? "Create your salon workspace" : "Dashboard unavailable"}
+            {noSalon
+              ? t("Create your salon workspace")
+              : t("Dashboard unavailable")}
           </h1>
           <p>
             {noSalon
-              ? "The owner dashboard becomes available after you create a salon."
+              ? t(
+                  "The owner dashboard becomes available after you create a salon.",
+                )
               : error?.response?.data?.message ||
                 error?.message ||
-                "The dashboard data could not be loaded."}
+                t("The dashboard data could not be loaded.")}
           </p>
           {noSalon ? (
             <Link className="btn btn-primary" to="/owner/create-salon">
-              Create salon
+              {t("Create salon")}
             </Link>
           ) : (
             <button className="btn btn-primary" type="button" onClick={refetch}>
-              Try again
+              {t("Try again")}
             </button>
           )}
         </div>
@@ -145,9 +150,9 @@ export default function OwnerDashboard() {
           activity={data.activity}
         />
         <footer className="owner-dashboard-footer">
-          <span>Only you can see this page.</span>
+          <span>{t("Only you can see this page.")}</span>
           <Link className="text-link" to="/owner/my-salon">
-            Manage salon profile
+            {t("Manage salon profile")}
           </Link>
         </footer>
       </div>

@@ -14,6 +14,7 @@ import {
 import { Link } from "react-router-dom";
 import { formatMoney } from "../../payments/model/payment.js";
 import { money } from "../model/dashboardFormat.js";
+import t from "../../../shared/i18n/t.js";
 
 /**
  * Change versus the previous period. `lowerIsBetter` flips the color, so a
@@ -22,14 +23,15 @@ import { money } from "../model/dashboardFormat.js";
 function Trend({ change, unit = "%", lowerIsBetter = false }) {
   if (change == null) return null;
   const value = Number(change);
-  if (!value) return <span className="owner-trend is-flat">No change</span>;
+  if (!value)
+    return <span className="owner-trend is-flat">{t("No change")}</span>;
   const up = value > 0;
   const good = lowerIsBetter ? !up : up;
   const Icon = up ? ArrowUpRight : ArrowDownRight;
   return (
     <span className={`owner-trend ${good ? "trend-up" : "trend-down"}`}>
       <Icon size={14} aria-hidden="true" />
-      <span className="sr-only">{up ? "Up" : "Down"} </span>
+      <span className="sr-only">{up ? t("Up") : t("Down")} </span>
       {Math.abs(value)}
       {unit}
     </span>
@@ -42,11 +44,11 @@ function StatCard({ icon: Icon, label, value, detail, trend }) {
       <span className="owner-stat-icon" aria-hidden="true">
         <Icon size={18} />
       </span>
-      <p>{label}</p>
+      <p>{t(label)}</p>
       <strong>{value}</strong>
       <div className="owner-stat-foot">
         {trend}
-        <small>{detail}</small>
+        <small>{t(detail)}</small>
       </div>
     </article>
   );
@@ -56,16 +58,16 @@ function MiniStat({ icon: Icon, label, value, to }) {
   const body = (
     <>
       <Icon size={16} aria-hidden="true" />
-      <span>{label}</span>
+      <span>{t(label)}</span>
       <strong>{value}</strong>
     </>
   );
   return to ? (
     <Link className="owner-mini-stat is-link" to={to}>
-      {body}
+      {t(body)}
     </Link>
   ) : (
-    <div className="owner-mini-stat">{body}</div>
+    <div className="owner-mini-stat">{t(body)}</div>
   );
 }
 
@@ -73,84 +75,92 @@ function MiniStat({ icon: Icon, label, value, to }) {
 export default function DashboardStats({ summary, insights = null }) {
   const unpaid = insights?.payments;
   return (
-    <section className="owner-stats" aria-label="Key numbers">
+    <section className="owner-stats" aria-label={t("Key numbers")}>
       <div className="owner-stats-grid">
         <StatCard
           icon={Wallet}
-          label="Revenue"
+          label={t("Revenue")}
           value={money(summary.revenue)}
-          detail="From completed visits, vs. previous period"
+          detail={t("From completed visits, vs. previous period")}
           trend={<Trend change={summary.revenueChange} />}
         />
         <StatCard
           icon={CalendarCheck2}
-          label="Completed visits"
+          label={t("Completed visits")}
           value={summary.completed}
-          detail="vs. previous period"
+          detail={t("vs. previous period")}
           trend={<Trend change={summary.completedChange} />}
         />
         <StatCard
           icon={CalendarX2}
-          label="Cancel & no-show rate"
+          label={t("Cancel & no-show rate")}
           value={`${summary.cancellation}%`}
           detail={
             insights
-              ? `No-show: ${insights.noShowRate}% of confirmed visits`
-              : "Of all bookings in this period"
+              ? t("No-show: {noShowRate}% of confirmed visits", {
+                  noShowRate: insights.noShowRate,
+                })
+              : t("Of all bookings in this period")
           }
           trend={
             <Trend
               change={summary.cancellationChange}
-              unit=" pts"
+              unit={` ${t("pts")}`}
               lowerIsBetter
             />
           }
         />
         <StatCard
           icon={Star}
-          label="Salon rating"
+          label={t("Salon rating")}
           value={summary.rating ? summary.rating.toFixed(1) : "—"}
-          detail={`${summary.ratingCount} verified ${
-            summary.ratingCount === 1 ? "review" : "reviews"
-          }`}
+          detail={t("{ratingCount} verified {value}", {
+            ratingCount: summary.ratingCount,
+            value: summary.ratingCount === 1 ? t("review") : t("reviews"),
+          })}
         />
       </div>
       <div className="owner-mini-stats">
         <MiniStat
           icon={Clock3}
-          label="Requests to answer"
+          label={t("Requests to answer")}
           value={summary.pending}
           to={summary.pending ? "/owner/bookings" : undefined}
         />
         {insights?.advanced ? (
           <MiniStat
             icon={UserRound}
-            label={`Returning (${insights.returning} of ${summary.customers})`}
+            label={t("Returning ({returning} of {customers})", {
+              returning: insights.returning,
+              customers: summary.customers,
+            })}
             value={`${insights.returningRate}%`}
           />
         ) : (
           <MiniStat
             icon={UserRound}
-            label="Customers"
+            label={t("Customers")}
             value={summary.customers}
           />
         )}
         <MiniStat
           icon={TrendingUp}
-          label="Average visit value"
+          label={t("Average visit value")}
           value={money(summary.averageValue)}
         />
         {unpaid ? (
           <MiniStat
             icon={WalletCards}
-            label={`Not paid yet (${unpaid.unpaidCount})`}
+            label={t("Not paid yet ({unpaidCount})", {
+              unpaidCount: unpaid.unpaidCount,
+            })}
             value={formatMoney(unpaid.unpaidFils, insights.currency)}
             to={unpaid.unpaidCount ? "/owner/payments" : undefined}
           />
         ) : (
           <MiniStat
             icon={UsersRound}
-            label="Active team"
+            label={t("Active team")}
             value={summary.employees}
           />
         )}

@@ -19,11 +19,13 @@ import SalonCoverPlaceholder from "../components/SalonCoverPlaceholder.jsx";
 import { useState } from "react";
 import ConfirmDialog from "../../../shared/components/ConfirmDialog.jsx";
 import EmptyState from "../../../shared/components/EmptyState.jsx";
-import Loading from "../../../shared/components/Loading.jsx";
+import { MySalonSkeleton } from "../components/OwnerSalonSkeletons.jsx";
 import useMySalon from "../hooks/useMySalon.js";
 import SalonStatusBadge from "../components/SalonStatusBadge.jsx";
 import SalonCoverEditor from "../components/SalonCoverEditor.jsx";
 import { optimizedCloudinaryImage } from "../../media/model/cloudinaryMedia.js";
+import t from "../../../shared/i18n/t.js";
+import { salonDescription } from "../model/salonPage.js";
 
 function MySalon() {
   const [uploadedImage, setUploadedImage] = useState("");
@@ -38,17 +40,17 @@ function MySalon() {
     handleResubmitSalon,
     handleDeleteSalon,
   } = useMySalon();
-  if (loading) return <Loading message="Loading your salon…" />;
+  if (loading) return <MySalonSkeleton />;
   if (error || !salon)
     return (
       <section className="container section">
         <EmptyState
-          title="No salon found"
-          message={error || "Create a salon to get started."}
+          title={t("No salon found")}
+          message={error || t("Create a salon to get started.")}
         />
         <Link className="btn btn-primary" to="/owner/create-salon">
           <Plus size={18} />
-          Create My Salon
+          {t("Create My Salon")}
         </Link>
       </section>
     );
@@ -88,29 +90,29 @@ function MySalon() {
                 target="_blank"
                 rel="noreferrer"
               >
-                <MapPin size={17} /> {salon.city}
+                <MapPin size={17} /> {t(salon.city)}
               </a>
             ) : (
               <p className="my-salon-location">
                 <MapPin size={17} />
-                {salon.city}
+                {t(salon.city)}
               </p>
             )}
             <div className="my-salon-hero-actions">
               <Link className="btn btn-secondary" to="/owner/my-salon/edit">
                 <Edit3 size={18} />
-                Edit Salon
+                {t("Edit Salon")}
               </Link>
               <Link className="btn btn-primary" to={`/salons/${salon.salonId}`}>
                 <Eye size={18} />
-                Public View
+                {t("Public View")}
               </Link>
               <button
                 className="btn btn-danger"
                 onClick={() => setDeleteSalonModalOpen(true)}
               >
                 <Trash2 size={18} />
-                Delete Salon
+                {t("Delete Salon")}
               </button>
             </div>
           </div>
@@ -118,42 +120,53 @@ function MySalon() {
         <div className="my-salon-actions-grid">
           <Link className="my-salon-action-card" to="/owner/dashboard">
             <LayoutDashboard />
-            <h3>Owner Dashboard</h3>
-            <p>Open your salon performance, bookings, team, services, and customer insights.</p>
+            <h3>{t("Owner Dashboard")}</h3>
+            <p>
+              {t(
+                "Open your salon performance, bookings, team, services, and customer insights.",
+              )}
+            </p>
           </Link>
           <Link className="my-salon-action-card" to="/owner/employees">
             <CalendarClock />
-            <h3>Employees & Schedules</h3>
-            <p>Assign service skills and weekly working hours.</p>
+            <h3>{t("Employees & Schedules")}</h3>
+            <p>{t("Assign service skills and weekly working hours.")}</p>
           </Link>
           <Link className="my-salon-action-card" to="/owner/bookings">
             <CalendarDays />
-            <h3>Booking Requests</h3>
-            <p>Review customer requests and manage appointments.</p>
+            <h3>{t("Booking Requests")}</h3>
+            <p>{t("Review customer requests and manage appointments.")}</p>
           </Link>
           <Link className="my-salon-action-card" to="/owner/create-hiring-post">
             <BriefcaseBusiness />
-            <h3>Create Hiring Post</h3>
-            <p>Publish an opening for your salon.</p>
+            <h3>{t("Create Hiring Post")}</h3>
+            <p>{t("Publish an opening for your salon.")}</p>
           </Link>
           <Link className="my-salon-action-card" to="/owner/applications">
             <UsersRound />
-            <h3>Hiring Applications</h3>
-            <p>Review candidates who applied.</p>
+            <h3>{t("Hiring Applications")}</h3>
+            <p>{t("Review candidates who applied.")}</p>
           </Link>
         </div>
         {salon.status === "Rejected" && (
           <section className="my-salon-panel salon-resubmission-panel">
             <div>
-              <span className="eyebrow">Action required</span>
-              <h2>Update the rejected details, then resubmit your salon.</h2>
+              <span className="eyebrow">{t("Action required")}</span>
+              <h2>
+                {t("Update the rejected details, then resubmit your salon.")}
+              </h2>
               <p>
                 {salon.rejectionReason ||
-                  "The administrator requested changes to your salon details."}
+                  t(
+                    "The administrator requested changes to your salon details.",
+                  )}
               </p>
               <small>
-                {salon.remainingResubmissions ?? 0} resubmission
-                {salon.remainingResubmissions === 1 ? "" : "s"} remaining
+                {salon.remainingResubmissions === 1
+                  ? t("1 resubmission remaining")
+                  : t("{count} resubmissions remaining", {
+                      count: salon.remainingResubmissions ?? 0,
+                    })}
               </small>
             </div>
             <button
@@ -165,14 +178,16 @@ function MySalon() {
               }
             >
               <RefreshCw size={18} />
-              {resubmittingSalon ? "Resubmitting…" : "Resubmit for review"}
+              {resubmittingSalon
+                ? t("Resubmitting…")
+                : t("Resubmit for review")}
             </button>
           </section>
         )}
         <div className="my-salon-dashboard-layout">
           <aside className="my-salon-sidebar">
             <div className="my-salon-side-card">
-              <h3>Contact Details</h3>
+              <h3>{t("Contact Details")}</h3>
               <p>
                 <Phone size={16} />
                 {salon.phoneNumber || "—"}
@@ -183,15 +198,15 @@ function MySalon() {
               </p>
               <p>
                 <MapPin size={16} />
-                {salon.city || "—"}
+                {salon.city ? t(salon.city) : "—"}
               </p>
             </div>
             <div className="my-salon-side-card">
-              <h3>Capacity</h3>
+              <h3>{t("Capacity")}</h3>
               <p>
                 <UsersRound size={16} />
                 {salon.currentNumOfEmployees ?? 0} /{" "}
-                {salon.maxNumOfEmployees ?? "—"} employees
+                {salon.maxNumOfEmployees ?? "—"} {t("employees")}
               </p>
               <p>
                 <Clock size={16} />
@@ -201,17 +216,17 @@ function MySalon() {
           </aside>
           <main className="my-salon-main-content">
             <section className="my-salon-panel">
-              <h2>About the salon</h2>
-              <p>{salon.description || "No description provided."}</p>
+              <h2>{t("About the salon")}</h2>
+              <p>{salonDescription(salon) || t("No description provided.")}</p>
             </section>
           </main>
         </div>
       </div>
       <ConfirmDialog
         open={deleteSalonModalOpen}
-        title="Delete your salon?"
-        message="This will remove your salon from the platform."
-        confirmText="Delete salon"
+        title={t("Delete your salon?")}
+        message={t("This will remove your salon from the platform.")}
+        confirmText={t("Delete salon")}
         danger
         loading={deletingSalon}
         onCancel={() => setDeleteSalonModalOpen(false)}

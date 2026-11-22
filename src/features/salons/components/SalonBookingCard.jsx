@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import GoogleMapEmbed from "./GoogleMapEmbed.jsx";
 import { googleMapsDirectionsLink } from "../model/jordanMapLocation.js";
 import { dayTimeline, displayTime } from "../model/salonAbout.js";
+import t from "../../../shared/i18n/t.js";
 
 /** Today on a 24-hour bar: the open hours and a marker for now. */
 function DayBar({ salon, now }) {
@@ -21,9 +22,9 @@ function DayBar({ salon, now }) {
         <span className="sb-day-now" style={{ left: `${timeline.now}%` }} />
       </div>
       <div className="sb-day-scale">
-        <span>12 AM</span>
-        <span>12 PM</span>
-        <span>12 AM</span>
+        <span>{t("12 AM")}</span>
+        <span>{t("12 PM")}</span>
+        <span>{t("12 AM")}</span>
       </div>
     </div>
   );
@@ -54,7 +55,7 @@ export default function SalonBookingCard({
         <div className="sb-today-row">
           <span className="sb-pill">
             <span className="sh-dot" aria-hidden="true" />
-            {status.title}
+            {t(status.title)}
           </span>
           {open && close && (
             <span className="sb-today-hours">
@@ -63,7 +64,7 @@ export default function SalonBookingCard({
             </span>
           )}
         </div>
-        <p className="sb-detail">{status.detail}</p>
+        <p className="sb-detail">{t(status.detail)}</p>
         <DayBar salon={salon} now={now} />
       </div>
 
@@ -74,7 +75,7 @@ export default function SalonBookingCard({
           state={primary.state}
         >
           <PrimaryIcon size={18} aria-hidden="true" />
-          {primary.label}
+          {t(primary.label)}
         </Link>
 
         {(salon.phoneNumber || directionsUrl) && (
@@ -82,7 +83,7 @@ export default function SalonBookingCard({
             {salon.phoneNumber && (
               <a className="sb-quick-item" href={`tel:${salon.phoneNumber}`}>
                 <Phone size={18} aria-hidden="true" />
-                <span>Call</span>
+                <span>{t("Call")}</span>
               </a>
             )}
             {directionsUrl && (
@@ -93,7 +94,7 @@ export default function SalonBookingCard({
                 rel="noreferrer"
               >
                 <Navigation size={18} aria-hidden="true" />
-                <span>Directions</span>
+                <span>{t("Directions")}</span>
               </a>
             )}
           </div>
@@ -105,20 +106,22 @@ export default function SalonBookingCard({
           type="button"
           className="sb-map"
           onClick={onOpenMap}
-          aria-label={`Open the map for ${salon.name}`}
+          aria-label={t("Open the map for {name}", { name: salon.name })}
         >
           <GoogleMapEmbed
             point={mapPoint}
             interactive={false}
-            title={`Map of ${salon.name}`}
+            title={t("Map of {name}", { name: salon.name })}
           />
           <span className="sb-map-pin" aria-hidden="true">
             <MapPin size={18} fill="currentColor" />
           </span>
           <span className="sb-map-label" aria-hidden="true">
             <span>
-              <strong>{salon.city || "Salon location"}</strong>
-              <small>Tap to open the map</small>
+              <strong>
+                {salon.city ? t(salon.city) : t("Salon location")}
+              </strong>
+              <small>{t("Tap to open the map")}</small>
             </span>
             <Expand size={16} />
           </span>

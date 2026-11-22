@@ -1,3 +1,5 @@
+import t from "../../../shared/i18n/t.js";
+import { dateLocale } from "../../../shared/i18n/language.js";
 /** Helpers for the "About" section on the salon page. */
 
 export const STORY_PREVIEW_LENGTH = 420;
@@ -16,17 +18,19 @@ export function displayTime(value) {
   const minutes = toMinutes(value);
   if (minutes === null) return "";
   const date = new Date(2000, 0, 1, Math.floor(minutes / 60), minutes % 60);
-  return date.toLocaleTimeString(undefined, {
+  return date.toLocaleTimeString(dateLocale(), {
     hour: "numeric",
     minute: "2-digit",
   });
 }
 
 function durationText(minutes) {
-  if (minutes < 60) return `${minutes} min`;
+  if (minutes < 60) return t("{minutes} min", { minutes });
   const hours = Math.floor(minutes / 60);
   const rest = minutes % 60;
-  return rest ? `${hours} h ${rest} min` : `${hours} h`;
+  return rest
+    ? t("{hours} h {minutes} min", { hours, minutes: rest })
+    : t("{hours} h", { hours });
 }
 
 /**
@@ -40,15 +44,15 @@ export function hoursStatus({ openTime, closeTime, state }, now = new Date()) {
   if (open === null || close === null || open === close) {
     return {
       tone: "unknown",
-      title: "Hours not listed",
-      detail: "Call the salon to check when it is open.",
+      title: t("Hours not listed"),
+      detail: t("Call the salon to check when it is open."),
     };
   }
   if (state && state !== "OPEN") {
     return {
       tone: "closed",
-      title: "Closed now",
-      detail: "The salon is not taking guests at the moment.",
+      title: t("Closed now"),
+      detail: t("The salon is not taking guests at the moment."),
     };
   }
 
@@ -63,14 +67,17 @@ export function hoursStatus({ openTime, closeTime, state }, now = new Date()) {
     if (left <= SOON_MINUTES) {
       return {
         tone: "soon",
-        title: "Closes soon",
-        detail: `Closes at ${displayTime(closeTime)}, in ${durationText(left)}.`,
+        title: t("Closes soon"),
+        detail: t("Closes at {time}, in {left}.", {
+          time: displayTime(closeTime),
+          left: durationText(left),
+        }),
       };
     }
     return {
       tone: "open",
-      title: "Open now",
-      detail: `Until ${displayTime(closeTime)} today.`,
+      title: t("Open now"),
+      detail: t("Until {time} today.", { time: displayTime(closeTime) }),
     };
   }
 
@@ -78,10 +85,13 @@ export function hoursStatus({ openTime, closeTime, state }, now = new Date()) {
   const opensToday = !overnight && current < open;
   return {
     tone: "closed",
-    title: "Closed now",
+    title: t("Closed now"),
     detail: opensToday
-      ? `Opens at ${displayTime(openTime)}, in ${durationText(until)}.`
-      : `Opens at ${displayTime(openTime)} tomorrow.`,
+      ? t("Opens at {time}, in {left}.", {
+          time: displayTime(openTime),
+          left: durationText(until),
+        })
+      : t("Opens at {time} tomorrow.", { time: displayTime(openTime) }),
   };
 }
 
@@ -98,7 +108,10 @@ export function memberSince(value) {
   if (!value) return "";
   const date = new Date(`${String(value).slice(0, 10)}T00:00:00`);
   if (Number.isNaN(date.getTime())) return "";
-  return date.toLocaleDateString(undefined, { month: "long", year: "numeric" });
+  return date.toLocaleDateString(dateLocale(), {
+    month: "long",
+    year: "numeric",
+  });
 }
 
 export function initials(name) {

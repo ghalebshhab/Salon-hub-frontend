@@ -6,6 +6,7 @@ import {
   getSalonClosuresApi,
   removeSalonClosureApi,
 } from "../api/salonApi.js";
+import t from "../../../shared/i18n/t.js";
 
 const errorMessage = (error, fallback) =>
   error?.response?.data?.message || error?.message || fallback;
@@ -37,7 +38,7 @@ export default function useSalonClosures(salonId, { onError } = {}) {
       if (!response.success) {
         return {
           ok: false,
-          message: response.message || "Could not save the closure.",
+          message: response.message || t("Could not save the closure."),
         };
       }
       refetch();
@@ -49,7 +50,7 @@ export default function useSalonClosures(salonId, { onError } = {}) {
     } catch (error) {
       return {
         ok: false,
-        message: errorMessage(error, "Could not save the closure."),
+        message: errorMessage(error, t("Could not save the closure.")),
       };
     } finally {
       setSaving(false);
@@ -62,7 +63,7 @@ export default function useSalonClosures(salonId, { onError } = {}) {
       if (!response.success) {
         return {
           ok: false,
-          message: response.message || "Could not remove the closure.",
+          message: response.message || t("Could not remove the closure."),
         };
       }
       refetch();
@@ -70,7 +71,7 @@ export default function useSalonClosures(salonId, { onError } = {}) {
     } catch (error) {
       return {
         ok: false,
-        message: errorMessage(error, "Could not remove the closure."),
+        message: errorMessage(error, t("Could not remove the closure.")),
       };
     }
   };

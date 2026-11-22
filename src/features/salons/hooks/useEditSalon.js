@@ -14,11 +14,13 @@ import {
 } from "../api/salonApi.js";
 import { SALON_CITIES } from "../model/salonCities.js";
 import { fromSalonResponse, toSalonPayload } from "../model/salonForm.js";
+import t from "../../../shared/i18n/t.js";
 
 export function toSalonForm(salon) {
   return {
     name: salon?.name || "",
     description: salon?.description || "",
+    descriptionAr: salon?.descriptionAr || "",
     email: salon?.email || "",
     phoneNumber: salon?.phoneNumber || "",
     city: salon?.city || "",
@@ -40,19 +42,19 @@ export function toSalonForm(salon) {
 export function isValid(form, saved = {}) {
   const changed = (field) => form[field].trim() !== (saved[field] || "").trim();
   if (changed("name") && form.name.trim().length <= 3) {
-    showWarningToast("Salon name must contain more than 3 characters.");
+    showWarningToast(t("Salon name must contain more than 3 characters."));
     return false;
   }
   if (changed("description") && form.description.trim().length <= 10) {
-    showWarningToast("Description must contain more than 10 characters.");
+    showWarningToast(t("Description must contain more than 10 characters."));
     return false;
   }
   if (form.openTime >= form.closeTime) {
-    showWarningToast("Closing time must be later than opening time.");
+    showWarningToast(t("Closing time must be later than opening time."));
     return false;
   }
   if (Number(form.maxNumOfEmployees) < 1) {
-    showWarningToast("Team capacity must be at least one.");
+    showWarningToast(t("Team capacity must be at least one."));
     return false;
   }
   return true;
@@ -102,7 +104,7 @@ export default function useEditSalon() {
         toSalonPayload(next),
       );
       if (!response.success) {
-        showErrorToast(response.message || "Could not update salon.");
+        showErrorToast(response.message || t("Could not update salon."));
         return false;
       }
       const stored = response.data ? fromSalonResponse(response.data) : {};
@@ -112,6 +114,8 @@ export default function useEditSalon() {
         ...stored,
         salonId: salon.salonId,
         description: next.description,
+        // A blank Arabic story is translated on the server in the background.
+        descriptionAr: next.descriptionAr || salon.descriptionAr || "",
         // The server rebuilds the link from the coordinates; prefer its values.
         googleMapsUrl: response.data?.googleMapsUrl ?? next.googleMapsUrl,
         latitude: response.data?.latitude ?? next.latitude,
@@ -127,7 +131,7 @@ export default function useEditSalon() {
       showErrorToast(
         error?.response?.data?.message ||
           error?.message ||
-          "Could not update salon.",
+          t("Could not update salon."),
       );
       return false;
     } finally {
@@ -135,7 +139,7 @@ export default function useEditSalon() {
     }
   };
 
-  const save = () => persist(form, "Salon section updated.");
+  const save = () => persist(form, t("Salon section updated."));
 
   /**
    * Saves only the map pin through its own endpoint, so other profile fields
@@ -143,7 +147,7 @@ export default function useEditSalon() {
    * (toasts render below a modal dialog).
    */
   const saveLocation = async ({ latitude, longitude, city }) => {
-    if (!salon?.salonId) throw new Error("Salon not loaded yet.");
+    if (!salon?.salonId) throw new Error(t("Salon not loaded yet."));
     setSaving(true);
     try {
       const response = await updateSalonLocationApi(salon.salonId, {
@@ -152,7 +156,7 @@ export default function useEditSalon() {
         city: SALON_CITIES.includes(city) ? city : null,
       });
       if (!response.success || !response.data) {
-        throw new Error(response.message || "Could not save the location.");
+        throw new Error(response.message || t("Could not save the location."));
       }
       const stored = response.data;
       const location = {
@@ -166,14 +170,14 @@ export default function useEditSalon() {
       // Keep any unsaved edits in other sections; only refresh location fields.
       setDraft((current) => (current ? { ...current, ...location } : current));
       showSuccessToast(
-        latitude == null ? "Map pin removed." : "Salon location saved.",
+        latitude == null ? t("Map pin removed.") : t("Salon location saved."),
       );
       return true;
     } catch (error) {
       throw new Error(
         error?.response?.data?.message ||
           error?.message ||
-          "Could not save the location.",
+          t("Could not save the location."),
         { cause: error },
       );
     } finally {

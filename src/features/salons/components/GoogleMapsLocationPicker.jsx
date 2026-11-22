@@ -7,6 +7,7 @@ import {
   isInsideJordan,
   JORDAN_MAP_BOUNDS,
 } from "../model/jordanMapLocation.js";
+import t from "../../../shared/i18n/t.js";
 
 const OVERVIEW_ZOOM = 8;
 const STREET_ZOOM = 17;
@@ -63,7 +64,7 @@ export default function GoogleMapsLocationPicker({
           map: initialPoint ? map : null,
           position: initialPoint || DEFAULT_MAP_CENTER,
           draggable: true,
-          title: "Salon location",
+          title: t("Salon location"),
         });
         mapRef.current = map;
         markerRef.current = marker;
@@ -71,7 +72,7 @@ export default function GoogleMapsLocationPicker({
         const geocoder = new window.google.maps.Geocoder();
         const search = new PlaceAutocompleteElement({
           includedRegionCodes: ["jo"],
-          placeholder: "Search the salon name, street or area",
+          placeholder: t("Search the salon name, street or area"),
         });
         searchHost.replaceChildren(search);
 
@@ -166,12 +167,12 @@ export default function GoogleMapsLocationPicker({
           className="map-picker-canvas"
           ref={mapNodeRef}
           role="application"
-          aria-label="Map of Jordan. Click to place the salon pin."
+          aria-label={t("Map of Jordan. Click to place the salon pin.")}
         />
         {!ready && (
           <div className="map-picker-loading" role="status">
             <LoaderCircle className="spin" aria-hidden="true" />
-            Loading Google Maps…
+            {t("Loading Google Maps…")}
           </div>
         )}
       </div>

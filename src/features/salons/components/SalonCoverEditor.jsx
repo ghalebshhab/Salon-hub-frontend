@@ -2,6 +2,7 @@ import { Camera, Save, X } from "lucide-react";
 import { useState } from "react";
 import MediaSourcePicker from "../../media/components/MediaSourcePicker.jsx";
 import useSalonCoverEditor from "../../media/hooks/useSalonCoverEditor.js";
+import t from "../../../shared/i18n/t.js";
 
 export default function SalonCoverEditor({ currentUrl, onUploaded }) {
   const [open, setOpen] = useState(false);
@@ -26,7 +27,7 @@ export default function SalonCoverEditor({ currentUrl, onUploaded }) {
         type="button"
         onClick={() => setOpen(true)}
       >
-        <Camera size={17} /> Change picture
+        <Camera size={17} /> {t("Change picture")}
       </button>
     );
   }
@@ -41,15 +42,15 @@ export default function SalonCoverEditor({ currentUrl, onUploaded }) {
           setSelection(null);
           setOpen(false);
         }}
-        aria-label="Close picture editor"
+        aria-label={t("Close picture editor")}
       >
         <X size={16} />
       </button>
       <fieldset className="salon-cover-selection" disabled={uploading}>
-        <legend className="visually-hidden">Salon picture source</legend>
+        <legend className="visually-hidden">{t("Salon picture source")}</legend>
         <MediaSourcePicker
           key={currentUrl}
-          label="Change salon picture"
+          label={t("Change salon picture")}
           currentUrl={currentUrl}
           compact
           onChange={setSelection}
@@ -60,19 +61,19 @@ export default function SalonCoverEditor({ currentUrl, onUploaded }) {
           <p role="status">
             {selection?.file
               ? progress === 100
-                ? "Picture sent. Waiting for the server to save…"
+                ? t("Picture sent. Waiting for the server to save…")
                 : progress === null
-                  ? "Sending picture…"
-                  : `Sending picture: ${progress}%`
-              : "Importing picture from Google Drive…"}
+                  ? t("Sending picture…")
+                  : t("Sending picture: {progress}%", { progress })
+              : t("Importing picture from Google Drive…")}
           </p>
           <progress
-            aria-label="Picture transfer progress"
+            aria-label={t("Picture transfer progress")}
             max="100"
             value={progress ?? undefined}
           />
           <button className="btn btn-secondary" type="button" onClick={cancel}>
-            Cancel upload
+            {t("Cancel upload")}
           </button>
         </div>
       )}
@@ -84,7 +85,7 @@ export default function SalonCoverEditor({ currentUrl, onUploaded }) {
         onClick={upload}
         disabled={uploading || (!selection?.file && !selection?.remoteUrl)}
       >
-        <Save size={17} /> {uploading ? "Uploading…" : "Save picture"}
+        <Save size={17} /> {uploading ? t("Uploading…") : t("Save picture")}
       </button>
     </div>
   );

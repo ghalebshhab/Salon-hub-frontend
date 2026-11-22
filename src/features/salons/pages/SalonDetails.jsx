@@ -1,12 +1,6 @@
-import {
-  CalendarDays,
-  Flag,
-  PencilLine,
-  Scissors,
-  UserPlus,
-} from "lucide-react";
+import { CalendarDays, Flag, PencilLine, UserPlus } from "lucide-react";
 import { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import useSalonDetails from "../hooks/useSalonDetails.js";
 import SalonClosureNotice from "../components/SalonClosureNotice.jsx";
 import SalonServicesList from "../../services/components/SalonServicesList.jsx";
@@ -14,7 +8,6 @@ import ReviewsList from "../../reviews/components/ReviewsList.jsx";
 import useSalonRating from "../../reviews/hooks/useSalonRating.js";
 import useAuth from "../../../shared/auth/useAuth.js";
 import useNow from "../../../shared/hooks/useNow.js";
-import useSmoothWheel from "../../../shared/hooks/useSmoothWheel.js";
 import useJoinSalonRequest from "../../employment/hooks/useJoinSalonRequest.js";
 import SalonTeam from "../components/team/SalonTeam.jsx";
 import SalonAbout from "../components/about/SalonAbout.jsx";
@@ -28,13 +21,18 @@ import ReportDialog from "../../moderation/components/ReportDialog.jsx";
 import SalonLocationDialog from "../components/SalonLocationDialog.jsx";
 import { toMapPoint } from "../model/jordanMapLocation.js";
 import { hoursStatus } from "../model/salonAbout.js";
+import ErrorPage from "../../../shared/components/ErrorPage.jsx";
+import classifyError from "../../../shared/errors/classifyError.js";
+import t from "../../../shared/i18n/t.js";
+
+import SalonPageSkeleton from "../components/SalonPageSkeleton.jsx";
 
 function PageSection({ id, eyebrow, title, intro, children }) {
   return (
     <section className="sp-section" id={id} aria-labelledby={`${id}-heading`}>
       <div className="sp-heading">
-        {eyebrow && <span className="sp-eyebrow">{eyebrow}</span>}
-        <h2 id={`${id}-heading`}>{title}</h2>
+        {eyebrow && <span className="sp-eyebrow">{t(eyebrow)}</span>}
+        <h2 id={`${id}-heading`}>{t(title)}</h2>
         {intro && <p>{intro}</p>}
       </div>
       {children}
@@ -46,43 +44,27 @@ function SalonDetails() {
   const [reportOpen, setReportOpen] = useState(false);
   const [mapOpen, setMapOpen] = useState(false);
   const { salonId: routeSalonId } = useParams();
-  const { salon, employees, loading } = useSalonDetails();
+  const { salon, employees, loading, error, refetch } = useSalonDetails();
   const { loggedIn, user } = useAuth();
   const { joining, requestJoin } = useJoinSalonRequest();
   const rating = useSalonRating(routeSalonId);
   const now = useNow();
   const asideRef = useCenteredSticky();
-  useSmoothWheel();
   const visibleSalonId = salon?.salonId ?? salon?.id;
   const salonFollow = useSalonFollow(
     visibleSalonId,
     loggedIn && Boolean(salon),
   );
 
-  if (loading) {
-    return (
-      <section className="sp" aria-label="Loading salon profile">
-        <div className="container sp-skeleton">
-          <div className="skeleton-block sp-skeleton-cover" />
-          <div className="skeleton-block sp-skeleton-bar" />
-          <div className="skeleton-block sp-skeleton-section" />
-        </div>
-      </section>
-    );
-  }
+  if (loading) return <SalonPageSkeleton />;
 
   if (!salon) {
+    // A missing, closed or blocked salon looks the same to visitors.
     return (
-      <section className="container section">
-        <div className="empty-state salon-not-found">
-          <Scissors aria-hidden="true" />
-          <h1>Salon not found</h1>
-          <p>We could not find this salon. It may no longer be available.</p>
-          <Link className="btn btn-primary" to="/">
-            Browse salons
-          </Link>
-        </div>
-      </section>
+      <ErrorPage
+        kind={classifyError(error, { notFoundKind: "salonUnavailable" })}
+        onRetry={refetch}
+      />
     );
   }
 
@@ -99,27 +81,27 @@ function SalonDetails() {
 
   // Owners manage their salon; everyone else books (after sign-in).
   const primary = ownsSalon
-    ? { to: "/owner/my-salon/edit", label: "Edit salon", icon: PencilLine }
+    ? { to: "/owner/my-salon/edit", label: t("Edit salon"), icon: PencilLine }
     : loggedIn
-      ? { to: bookingPath, label: "Book appointment", icon: CalendarDays }
+      ? { to: bookingPath, label: t("Book appointment"), icon: CalendarDays }
       : {
           to: "/login",
           state: { from: bookingPath },
-          label: "Sign in to book",
+          label: t("Sign in to book"),
           icon: CalendarDays,
         };
 
   const moreActions = [
     canRequestJoin && {
       key: "join",
-      label: joining ? "Sending request…" : "Request to join the team",
+      label: joining ? t("Sending request…") : t("Request to join the team"),
       icon: UserPlus,
       disabled: joining,
       onClick: () => requestJoin(salonId),
     },
     !loggedIn && {
       key: "sign-in-join",
-      label: "Sign in to join the team",
+      label: t("Sign in to join the team"),
       icon: UserPlus,
       to: "/login",
       state: { from: salonPath },
@@ -127,7 +109,7 @@ function SalonDetails() {
     loggedIn &&
       !ownsSalon && {
         key: "report",
-        label: "Report salon",
+        label: t("Report salon"),
         icon: Flag,
         onClick: () => setReportOpen(true),
       },
@@ -177,41 +159,49 @@ function SalonDetails() {
           <main className="sp-main">
             <PageSection
               id="services"
-              eyebrow="The menu"
-              title="Services and prices"
-              intro="Prices and times as the salon lists them. Pick what you need for one visit and book it in one step."
+              eyebrow={t("The menu")}
+              title={t("Services and prices")}
+              intro={t(
+                "Prices and times as the salon lists them. Pick what you need for one visit and book it in one step.",
+              )}
             >
               <SalonServicesList salonId={salonId} booking={servicesBooking} />
             </PageSection>
 
             <PageSection
               id="team"
-              eyebrow="Meet the team"
-              title={`The people behind ${salon.name}`}
-              intro="See what each professional does best and book with the one you like, or let the salon choose for you."
+              eyebrow={t("Meet the team")}
+              title={t("The people behind {name}", { name: salon.name })}
+              intro={t(
+                "See what each professional does best and book with the one you like, or let the salon choose for you.",
+              )}
             >
               <SalonTeam employees={employees} booking={teamBooking} />
             </PageSection>
 
             <PageSection
               id="work"
-              eyebrow="Portfolio"
-              title="Recent work"
-              intro="Photos and videos from the professionals who work here."
+              eyebrow={t("Portfolio")}
+              title={t("Recent work")}
+              intro={t(
+                "Photos and videos from the professionals who work here.",
+              )}
             >
               <SalonWorkGallery salonId={salonId} booking={teamBooking} />
             </PageSection>
 
             <PageSection
               id="reviews"
-              eyebrow="Guest reviews"
-              title="What guests are saying"
-              intro="Every review comes from a guest who finished a visit at this salon."
+              eyebrow={t("Guest reviews")}
+              title={t("What guests are saying")}
+              intro={t(
+                "Every review comes from a guest who finished a visit at this salon.",
+              )}
             >
               <ReviewsList salonId={salonId} />
             </PageSection>
 
-            <PageSection id="about" title="About">
+            <PageSection id="about" title={t("About")}>
               <SalonAbout salon={salon} onOpenMap={mapPoint ? openMap : null} />
             </PageSection>
           </main>
@@ -219,7 +209,7 @@ function SalonDetails() {
           <aside
             ref={asideRef}
             className="sp-aside"
-            aria-label="Plan your visit"
+            aria-label={t("Plan your visit")}
           >
             <SalonBookingCard
               salon={salon}

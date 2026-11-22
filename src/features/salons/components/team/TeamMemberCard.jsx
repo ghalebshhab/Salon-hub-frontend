@@ -9,6 +9,7 @@ import {
   specialtyOf,
 } from "../../model/salonTeam.js";
 import { memberProfilePath } from "../../../community/model/communityRoutes.js";
+import t from "../../../../shared/i18n/t.js";
 
 /**
  * One professional, kept compact: photo, full name, specialty and years,
@@ -18,7 +19,7 @@ import { memberProfilePath } from "../../../community/model/communityRoutes.js";
 export default function TeamMemberCard({ employee, booking }) {
   const [bioOpen, setBioOpen] = useState(false);
   const bioId = useId();
-  const name = employee.fullName || "Salon professional";
+  const name = employee.fullName || t("Salon professional");
   const specialty = specialtyOf(employee);
   const bio = employee.professionalBio?.trim();
   const longBio = bio && bio.length > BIO_PREVIEW_LENGTH;
@@ -52,8 +53,8 @@ export default function TeamMemberCard({ employee, booking }) {
             <span className="team-card-specialty">{specialty}</span>
             {years > 0 && (
               <span className="team-card-years">
-                {years} {years === 1 ? "yr" : "yrs"}
-                <span className="sr-only"> of experience</span>
+                {t(years === 1 ? "{years} yr" : "{years} yrs", { years })}
+                <span className="sr-only"> {t("of experience")}</span>
               </span>
             )}
           </p>
@@ -74,14 +75,17 @@ export default function TeamMemberCard({ employee, booking }) {
               aria-controls={bioId}
               onClick={() => setBioOpen((open) => !open)}
             >
-              {bioOpen ? "Show less" : "Read more"}
+              {bioOpen ? t("Show less") : t("Read more")}
             </button>
           )}
         </div>
       )}
 
       {skills.length > 0 && (
-        <ul className="team-card-skills" aria-label={`${name}'s skills`}>
+        <ul
+          className="team-card-skills"
+          aria-label={t("{name}'s skills", { name })}
+        >
           {skills.slice(0, CARD_SKILL_COUNT).map((skill) => (
             <li key={skill}>{skill}</li>
           ))}
@@ -104,8 +108,8 @@ export default function TeamMemberCard({ employee, booking }) {
         >
           <CalendarDays size={15} aria-hidden="true" />
           {booking.signedIn
-            ? `Book with ${firstName(name)}`
-            : "Sign in to book"}
+            ? t("Book with {name}", { name: firstName(name) })
+            : t("Sign in to book")}
         </Link>
       )}
     </article>

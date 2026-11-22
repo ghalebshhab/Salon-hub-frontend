@@ -1,8 +1,9 @@
 import { BadgeCheck, Crown } from "lucide-react";
+import t from "../../../shared/i18n/t.js";
 
 const BADGES = {
-  PRO: { label: "Pro salon", icon: BadgeCheck },
-  BUSINESS: { label: "Business salon", icon: Crown },
+  PRO: { label: t("Pro salon"), icon: BadgeCheck },
+  BUSINESS: { label: t("Business salon"), icon: Crown },
 };
 
 /** The paid-plan badge a salon earns on public pages. Nothing on Free. */
@@ -13,10 +14,10 @@ export default function SalonPlanBadge({ badge, className = "" }) {
   return (
     <span
       className={`salon-plan-badge is-${badge.toLowerCase()} ${className}`.trim()}
-      title={`${look.label} on SalonHub`}
+      title={t("{label} on SalonHub", { label: look.label })}
     >
       <Icon size={13} aria-hidden="true" />
-      {look.label}
+      {t(look.label)}
     </span>
   );
 }

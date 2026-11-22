@@ -12,6 +12,7 @@ import {
   uploadSalonCoverApi,
   uploadSalonCoverFromDriveApi,
 } from "../../media/api/mediaApi.js";
+import t from "../../../shared/i18n/t.js";
 
 const initialForm = {
   name: "",
@@ -41,18 +42,18 @@ export default function useCreateSalon() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (form.description.trim().length < 10) {
-      showWarningToast("Description must contain at least 10 characters.");
+      showWarningToast(t("Description must contain at least 10 characters."));
       return;
     }
     if (form.openTime >= form.closeTime) {
-      showWarningToast("Closing time must be later than opening time.");
+      showWarningToast(t("Closing time must be later than opening time."));
       return;
     }
     try {
       setLoading(true);
       const response = await createSalonApi(toSalonPayload(form));
       if (!response.success) {
-        showErrorToast(response.message || "Failed to submit salon");
+        showErrorToast(response.message || t("Failed to submit salon"));
         return;
       }
       let imageUploaded = true;
@@ -69,15 +70,17 @@ export default function useCreateSalon() {
       }
       showSuccessToast(
         imageUploaded
-          ? "Salon request submitted for review."
-          : "Salon request was submitted, but its picture still needs to be uploaded.",
+          ? t("Salon request submitted for review.")
+          : t(
+              "Salon request was submitted, but its picture still needs to be uploaded.",
+            ),
       );
       navigate("/owner/my-salon");
     } catch (error) {
       showErrorToast(
         error?.response?.data?.message ||
           error?.message ||
-          "Failed to submit salon",
+          t("Failed to submit salon"),
       );
     } finally {
       setLoading(false);

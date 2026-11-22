@@ -25,6 +25,8 @@ import {
   storyParagraphs,
   titleCase,
 } from "../../model/salonAbout.js";
+import t from "../../../../shared/i18n/t.js";
+import { salonDescription } from "../../model/salonPage.js";
 
 /** Short stories read better without the large first letter. */
 const DROP_CAP_MIN_LENGTH = 120;
@@ -42,11 +44,11 @@ function OwnerCard({ salon, since }) {
         <span>{initials(owner || salon.name)}</span>
       </span>
       <span className="ab-host-copy">
-        <span className="ab-host-label">Meet the founder</span>
+        <span className="ab-host-label">{t("Meet the founder")}</span>
         {owner && <strong className="ab-host-name">{owner}</strong>}
         <small>
-          Founder and owner
-          {since && ` · on SalonHub since ${since}`}
+          {t("Founder and owner")}
+          {since && t(" · on SalonHub since {since}", { since })}
         </small>
       </span>
     </>
@@ -57,7 +59,9 @@ function OwnerCard({ salon, since }) {
     <Link
       className="ab-host is-link"
       to={memberProfilePath(salon.ownerId)}
-      aria-label={`View ${owner || "the owner"}'s profile`}
+      aria-label={t("View {value}'s profile", {
+        value: owner || t("the owner"),
+      })}
     >
       {content}
     </Link>
@@ -66,16 +70,18 @@ function OwnerCard({ salon, since }) {
 
 function SalonStory({ salon }) {
   const [expanded, setExpanded] = useState(false);
-  const paragraphs = storyParagraphs(salon.description);
-  const long = String(salon.description || "").length > STORY_PREVIEW_LENGTH;
+  const story = salonDescription(salon);
+  const paragraphs = storyParagraphs(story);
+  const long = String(story || "").length > STORY_PREVIEW_LENGTH;
   const since = memberSince(salon.createdAt);
 
   if (!paragraphs.length) {
     return (
       <div className="ab-story">
         <p className="ab-story-empty">
-          This salon has not written its story yet. Call or email the salon to
-          learn more about it.
+          {t(
+            "This salon has not written its story yet. Call or email the salon to learn more about it.",
+          )}
         </p>
         <OwnerCard salon={salon} since={since} />
       </div>
@@ -87,8 +93,7 @@ function SalonStory({ salon }) {
       <div
         className={[
           "ab-story-text",
-          String(salon.description).length >= DROP_CAP_MIN_LENGTH &&
-            "has-drop-cap",
+          String(story).length >= DROP_CAP_MIN_LENGTH && "has-drop-cap",
           long && !expanded && "is-clamped",
         ]
           .filter(Boolean)
@@ -107,7 +112,7 @@ function SalonStory({ salon }) {
           aria-controls="salon-story"
           onClick={() => setExpanded((value) => !value)}
         >
-          {expanded ? "Show less" : "Read the full story"}
+          {expanded ? t("Show less") : t("Read the full story")}
         </button>
       )}
       <OwnerCard salon={salon} since={since} />
@@ -125,16 +130,16 @@ function HoursCard({ salon }) {
     <div className={`ab-hours tone-${status.tone}`}>
       <div className="ab-hours-head">
         <Clock3 size={18} aria-hidden="true" />
-        <span>Opening hours</span>
+        <span>{t("Opening hours")}</span>
       </div>
       <p className="ab-hours-status" aria-live="polite">
         <span className="ab-dot" aria-hidden="true" />
-        <strong>{status.title}</strong>
+        <strong>{t(status.title)}</strong>
       </p>
-      <p className="ab-hours-detail">{status.detail}</p>
+      <p className="ab-hours-detail">{t(status.detail)}</p>
       {open && close && (
         <p className="ab-hours-range">
-          <span>Every day</span>
+          <span>{t("Every day")}</span>
           <strong>
             {open} – {close}
           </strong>
@@ -160,9 +165,9 @@ export default function SalonAbout({ salon, onOpenMap = null }) {
   const copyPhone = async () => {
     try {
       await navigator.clipboard.writeText(salon.phoneNumber);
-      showSuccessToast("Phone number copied.");
+      showSuccessToast(t("Phone number copied."));
     } catch {
-      showErrorToast("Could not copy the number. Select it and copy it.");
+      showErrorToast(t("Could not copy the number. Select it and copy it."));
     }
   };
 
@@ -178,26 +183,30 @@ export default function SalonAbout({ salon, onOpenMap = null }) {
             <UsersRound size={16} aria-hidden="true" />
             <span>
               <strong>{team}</strong>{" "}
-              {team === 1 ? "professional" : "professionals"}
+              {team === 1 ? t("professional") : t("professionals")}
             </span>
           </li>
           {salon.city && (
             <li>
               <MapPin size={16} aria-hidden="true" />
-              <span>{salon.city}</span>
+              <span>{t(salon.city)}</span>
             </li>
           )}
           {since && (
             <li>
               <CalendarCheck2 size={16} aria-hidden="true" />
-              <span>Since {since}</span>
+              <span>{t("Since {since}", { since })}</span>
             </li>
           )}
         </ul>
       </div>
 
       {(salon.phoneNumber || salon.email || directions) && (
-        <div className="ab-contact" role="group" aria-label="Contact the salon">
+        <div
+          className="ab-contact"
+          role="group"
+          aria-label={t("Contact the salon")}
+        >
           {salon.phoneNumber && (
             <div className="ab-contact-item">
               <a className="ab-contact-main" href={`tel:${salon.phoneNumber}`}>
@@ -205,7 +214,7 @@ export default function SalonAbout({ salon, onOpenMap = null }) {
                   <Phone size={18} />
                 </span>
                 <span>
-                  <small>Call</small>
+                  <small>{t("Call")}</small>
                   <strong dir="ltr">{salon.phoneNumber}</strong>
                 </span>
               </a>
@@ -213,7 +222,7 @@ export default function SalonAbout({ salon, onOpenMap = null }) {
                 type="button"
                 className="ab-copy"
                 onClick={copyPhone}
-                aria-label="Copy phone number"
+                aria-label={t("Copy phone number")}
               >
                 <Copy size={16} aria-hidden="true" />
               </button>
@@ -226,7 +235,7 @@ export default function SalonAbout({ salon, onOpenMap = null }) {
                   <Mail size={18} />
                 </span>
                 <span>
-                  <small>Email</small>
+                  <small>{t("Email")}</small>
                   <strong>{salon.email}</strong>
                 </span>
               </a>
@@ -244,8 +253,10 @@ export default function SalonAbout({ salon, onOpenMap = null }) {
                     <Navigation size={18} />
                   </span>
                   <span>
-                    <small>Directions</small>
-                    <strong>{salon.city || "See on the map"}</strong>
+                    <small>{t("Directions")}</small>
+                    <strong>
+                      {salon.city ? t(salon.city) : t("See on the map")}
+                    </strong>
                   </span>
                 </button>
               ) : (
@@ -259,8 +270,10 @@ export default function SalonAbout({ salon, onOpenMap = null }) {
                     <Navigation size={18} />
                   </span>
                   <span>
-                    <small>Directions</small>
-                    <strong>{salon.city || "Open Google Maps"}</strong>
+                    <small>{t("Directions")}</small>
+                    <strong>
+                      {salon.city ? t(salon.city) : t("Open Google Maps")}
+                    </strong>
                   </span>
                 </a>
               )}

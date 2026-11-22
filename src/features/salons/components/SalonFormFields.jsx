@@ -2,6 +2,7 @@ import { MapPin } from "lucide-react";
 import MediaSourcePicker from "../../media/components/MediaSourcePicker.jsx";
 import { SALON_CITIES } from "../model/salonCities.js";
 import SalonLocationField from "./SalonLocationField.jsx";
+import t from "../../../shared/i18n/t.js";
 
 export default function SalonFormFields({ form, setForm, onChange }) {
   const setTime = (field, value) =>
@@ -28,7 +29,7 @@ export default function SalonFormFields({ form, setForm, onChange }) {
     <>
       <div className="form-row">
         <div className="form-group">
-          <label htmlFor="salon-name">Salon name</label>
+          <label htmlFor="salon-name">{t("Salon name")}</label>
           <input
             id="salon-name"
             name="name"
@@ -38,7 +39,7 @@ export default function SalonFormFields({ form, setForm, onChange }) {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="salon-email">Salon email</label>
+          <label htmlFor="salon-email">{t("Salon email")}</label>
           <input
             id="salon-email"
             name="email"
@@ -50,7 +51,7 @@ export default function SalonFormFields({ form, setForm, onChange }) {
         </div>
       </div>
       <div className="form-group">
-        <label htmlFor="salon-description">Description</label>
+        <label htmlFor="salon-description">{t("Description")}</label>
         <textarea
           id="salon-description"
           name="description"
@@ -63,7 +64,7 @@ export default function SalonFormFields({ form, setForm, onChange }) {
       </div>
       <div className="form-row">
         <div className="form-group">
-          <label htmlFor="salon-phone">Phone number</label>
+          <label htmlFor="salon-phone">{t("Phone number")}</label>
           <input
             id="salon-phone"
             name="phoneNumber"
@@ -74,7 +75,7 @@ export default function SalonFormFields({ form, setForm, onChange }) {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="salon-city">City</label>
+          <label htmlFor="salon-city">{t("City")}</label>
           <select
             id="salon-city"
             name="city"
@@ -82,16 +83,18 @@ export default function SalonFormFields({ form, setForm, onChange }) {
             onChange={onChange}
             required
           >
-            <option value="">Select a city</option>
+            <option value="">{t("Select a city")}</option>
             {SALON_CITIES.map((city) => (
-              <option key={city}>{city}</option>
+              <option key={city} value={city}>
+                {t(city)}
+              </option>
             ))}
           </select>
         </div>
       </div>
       <div className="form-row">
         <div className="form-group">
-          <label htmlFor="salon-opening-time">Opening time</label>
+          <label htmlFor="salon-opening-time">{t("Opening time")}</label>
           <input
             id="salon-opening-time"
             type="time"
@@ -101,7 +104,7 @@ export default function SalonFormFields({ form, setForm, onChange }) {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="salon-closing-time">Closing time</label>
+          <label htmlFor="salon-closing-time">{t("Closing time")}</label>
           <input
             id="salon-closing-time"
             type="time"
@@ -113,7 +116,9 @@ export default function SalonFormFields({ form, setForm, onChange }) {
       </div>
       <div className="form-row">
         <div className="form-group">
-          <label htmlFor="salon-employee-capacity">Maximum employees</label>
+          <label htmlFor="salon-employee-capacity">
+            {t("Maximum employees")}
+          </label>
           <input
             id="salon-employee-capacity"
             name="maxNumOfEmployees"
@@ -130,10 +135,11 @@ export default function SalonFormFields({ form, setForm, onChange }) {
           <div>
             <MapPin size={19} />
             <div>
-              <strong>Salon location on Google Maps</strong>
+              <strong>{t("Salon location on Google Maps")}</strong>
               <small>
-                Optional, but guests find you faster with a map pin and
-                directions.
+                {t(
+                  "Optional, but guests find you faster with a map pin and directions.",
+                )}
               </small>
             </div>
           </div>
@@ -141,8 +147,8 @@ export default function SalonFormFields({ form, setForm, onChange }) {
         <SalonLocationField
           latitude={form.latitude}
           longitude={form.longitude}
-          setLabel="Map pin selected"
-          confirmLabel="Use this location"
+          setLabel={t("Map pin selected")}
+          confirmLabel={t("Use this location")}
           onConfirm={setMapLocation}
           onRemove={() =>
             setMapLocation({
@@ -154,7 +160,7 @@ export default function SalonFormFields({ form, setForm, onChange }) {
         />
       </div>
       <MediaSourcePicker
-        label="Salon profile picture"
+        label={t("Salon profile picture")}
         currentUrl={form.coverPreviewUrl || form.profilePictureUrl}
         onChange={setMedia}
       />

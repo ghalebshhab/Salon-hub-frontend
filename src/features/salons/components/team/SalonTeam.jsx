@@ -4,11 +4,11 @@ import TeamMemberCard from "./TeamMemberCard.jsx";
 import {
   ALL_SPECIALTIES,
   TEAM_PREVIEW_COUNT,
-  plural,
   specialtyFilters,
   specialtyOf,
   teamSummary,
 } from "../../model/salonTeam.js";
+import t from "../../../../shared/i18n/t.js";
 
 /**
  * The salon's professionals on the public page: a short summary, a
@@ -27,10 +27,11 @@ export default function SalonTeam({ employees = [], booking = null }) {
         <span className="team-empty-icon" aria-hidden="true">
           <UsersRound size={26} />
         </span>
-        <h3>The team is on its way</h3>
+        <h3>{t("The team is on its way")}</h3>
         <p>
-          Professionals show here after they join the salon. You can still book,
-          and the salon chooses who serves you.
+          {t(
+            "Professionals show here after they join the salon. You can still book, and the salon chooses who serves you.",
+          )}
         </p>
       </div>
     );
@@ -45,21 +46,23 @@ export default function SalonTeam({ employees = [], booking = null }) {
 
   return (
     <div className="team">
-      <ul className="team-summary" aria-label="Team at a glance">
+      <ul className="team-summary" aria-label={t("Team at a glance")}>
         <li>
           <strong>{summary.people}</strong>
-          {summary.people === 1 ? "professional" : "professionals"}
+          {summary.people === 1 ? t("professional") : t("professionals")}
         </li>
         {summary.years > 0 && (
           <li>
             <strong>{summary.years}</strong>
-            {summary.years === 1 ? "year" : "years"} of combined experience
+            {summary.years === 1 ? t("year") : t("years")}{" "}
+            {t("of combined experience")}
           </li>
         )}
         {summary.services > 0 && (
           <li>
             <strong>{summary.services}</strong>
-            {summary.services === 1 ? "service" : "services"} covered
+            {summary.services === 1 ? t("service") : t("services")}{" "}
+            {t("covered")}
           </li>
         )}
       </ul>
@@ -68,14 +71,14 @@ export default function SalonTeam({ employees = [], booking = null }) {
         <div
           className="team-filters"
           role="group"
-          aria-label="Filter the team by specialty"
+          aria-label={t("Filter the team by specialty")}
         >
           <span className="team-filters-label" aria-hidden="true">
-            Specialty
+            {t("Specialty")}
           </span>
           {[
             {
-              label: "Everyone",
+              label: t("Everyone"),
               value: ALL_SPECIALTIES,
               count: employees.length,
             },
@@ -91,7 +94,7 @@ export default function SalonTeam({ employees = [], booking = null }) {
                 setShowAll(false);
               }}
             >
-              {item.label}
+              {t(item.label)}
               <span aria-hidden="true">{item.count}</span>
             </button>
           ))}
@@ -117,7 +120,9 @@ export default function SalonTeam({ employees = [], booking = null }) {
           type="button"
           onClick={() => setShowAll(true)}
         >
-          Show {plural(hidden, "more professional")}
+          {hidden === 1
+            ? t("Show 1 more professional")
+            : t("Show {count} more professionals", { count: hidden })}
         </button>
       )}
     </div>

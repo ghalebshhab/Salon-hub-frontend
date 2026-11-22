@@ -2,7 +2,6 @@ import { useCallback } from "react";
 import { useParams } from "react-router-dom";
 import { requireData } from "../../../shared/api/response.js";
 import useQuery from "../../../shared/hooks/useQuery.js";
-import { showErrorToast } from "../../../shared/notifications/toast.jsx";
 import { getSalonByIdApi } from "../api/salonApi.js";
 import { getSalonEmployeesApi } from "../../employees/api/salonEmployeesApi.js";
 
@@ -21,12 +20,13 @@ export default function useSalonDetails() {
     },
     [salonId],
   );
-  const { data, loading } = useQuery(loader, {
-    onError: showErrorToast,
-  });
+  // No toast: a salon that cannot load gets the full error page instead.
+  const { data, loading, error, refetch } = useQuery(loader);
   return {
     salon: data?.salon || null,
     employees: data?.employees || [],
     loading,
+    error,
+    refetch,
   };
 }

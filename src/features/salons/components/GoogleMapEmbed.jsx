@@ -1,4 +1,5 @@
 import { googleMapsEmbedUrl } from "../model/jordanMapLocation.js";
+import t from "../../../shared/i18n/t.js";
 
 const apiKey = () => import.meta.env.VITE_GOOGLE_MAPS_API_KEY?.trim() || "";
 
@@ -14,7 +15,7 @@ export default function GoogleMapEmbed({
       <iframe
         key={`${point.lat},${point.lng}`}
         src={googleMapsEmbedUrl(point.lat, point.lng, apiKey())}
-        title={title}
+        title={t(title)}
         loading="lazy"
         referrerPolicy="no-referrer-when-downgrade"
         allowFullScreen={interactive}

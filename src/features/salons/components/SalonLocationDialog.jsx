@@ -10,6 +10,7 @@ import {
   googleMapsLink,
 } from "../model/jordanMapLocation.js";
 import GoogleMapEmbed from "./GoogleMapEmbed.jsx";
+import t from "../../../shared/i18n/t.js";
 
 /** Shows a salon's saved location to guests, with directions in Google Maps. */
 export default function SalonLocationDialog({
@@ -25,10 +26,12 @@ export default function SalonLocationDialog({
   const copyLink = async () => {
     try {
       await navigator.clipboard.writeText(mapsLink);
-      showSuccessToast("Location link copied.", "Copied");
+      showSuccessToast(t("Location link copied."), t("Copied"));
     } catch {
       showErrorToast(
-        "Your browser did not allow copying. Use Open in Google Maps instead.",
+        t(
+          "Your browser did not allow copying. Use Open in Google Maps instead.",
+        ),
       );
     }
   };
@@ -44,27 +47,34 @@ export default function SalonLocationDialog({
           <MapPin />
         </span>
         <div>
-          <span className="eyebrow">{city || "Salon location"}</span>
-          <h2 id={titleId}>How to find {salonName}</h2>
-          <p>Open the pin in Google Maps to get turn-by-turn directions.</p>
+          <span className="eyebrow">
+            {city ? t(city) : t("Salon location")}
+          </span>
+          <h2 id={titleId}>{t("How to find {salonName}", { salonName })}</h2>
+          <p>
+            {t("Open the pin in Google Maps to get turn-by-turn directions.")}
+          </p>
         </div>
         <button
           className="location-dialog-close"
           type="button"
           onClick={onClose}
-          aria-label="Close salon location"
+          aria-label={t("Close salon location")}
         >
           <X size={18} />
         </button>
       </header>
 
       <div className="location-dialog-view-map">
-        <GoogleMapEmbed point={point} title={`Map showing ${salonName}`} />
+        <GoogleMapEmbed
+          point={point}
+          title={t("Map showing {salonName}", { salonName })}
+        />
       </div>
 
       <footer className="location-dialog-footer location-dialog-view-actions">
         <button className="btn btn-secondary" type="button" onClick={copyLink}>
-          <Copy size={16} aria-hidden="true" /> Copy link
+          <Copy size={16} aria-hidden="true" /> {t("Copy link")}
         </button>
         <a
           className="btn btn-secondary"
@@ -72,7 +82,8 @@ export default function SalonLocationDialog({
           target="_blank"
           rel="noreferrer"
         >
-          <ExternalLink size={16} aria-hidden="true" /> Open in Google Maps
+          <ExternalLink size={16} aria-hidden="true" />{" "}
+          {t("Open in Google Maps")}
         </a>
         <a
           className="btn btn-primary"
@@ -80,7 +91,7 @@ export default function SalonLocationDialog({
           target="_blank"
           rel="noreferrer"
         >
-          <Navigation size={16} aria-hidden="true" /> Get directions
+          <Navigation size={16} aria-hidden="true" /> {t("Get directions")}
         </a>
       </footer>
     </dialog>

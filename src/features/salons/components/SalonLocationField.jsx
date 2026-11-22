@@ -5,6 +5,7 @@ import { showErrorToast } from "../../../shared/notifications/toast.jsx";
 import { googleMapsLink, toMapPoint } from "../model/jordanMapLocation.js";
 import GoogleMapEmbed from "./GoogleMapEmbed.jsx";
 import SalonLocationPickerDialog from "./SalonLocationPickerDialog.jsx";
+import t from "../../../shared/i18n/t.js";
 
 /**
  * Owner-facing summary of the salon map pin with the button that opens the
@@ -14,8 +15,8 @@ export default function SalonLocationField({
   latitude,
   longitude,
   saving = false,
-  setLabel = "Map pin saved",
-  confirmLabel = "Save location",
+  setLabel = t("Map pin saved"),
+  confirmLabel = t("Save location"),
   onConfirm,
   onRemove,
 }) {
@@ -30,7 +31,7 @@ export default function SalonLocationField({
     } catch (error) {
       // Close the overlay first so the toast is not hidden behind it.
       setConfirmRemove(false);
-      showErrorToast(error?.message || "Could not remove the map pin.");
+      showErrorToast(error?.message || t("Could not remove the map pin."));
     }
   };
 
@@ -42,15 +43,15 @@ export default function SalonLocationField({
         onClick={() => setPickerOpen(true)}
         aria-label={
           point
-            ? "Change the salon location"
-            : "Select the salon location on the map"
+            ? t("Change the salon location")
+            : t("Select the salon location on the map")
         }
       >
         {point ? (
           <GoogleMapEmbed
             point={point}
             interactive={false}
-            title="Saved salon location"
+            title={t("Saved salon location")}
           />
         ) : (
           <span className="salon-location-field-empty" aria-hidden="true">
@@ -60,11 +61,13 @@ export default function SalonLocationField({
       </button>
 
       <div className="salon-location-field-body">
-        <strong>{point ? setLabel : "No map pin yet"}</strong>
+        <strong>{point ? setLabel : t("No map pin yet")}</strong>
         <span>
           {point
             ? `${point.lat.toFixed(6)}, ${point.lng.toFixed(6)}`
-            : "Add the exact point so guests can open the salon in Google Maps and get directions."}
+            : t(
+                "Add the exact point so guests can open the salon in Google Maps and get directions.",
+              )}
         </span>
         <div className="salon-location-field-actions">
           <button
@@ -74,7 +77,7 @@ export default function SalonLocationField({
             disabled={saving}
           >
             <MapPinned size={16} aria-hidden="true" />
-            {point ? "Change location" : "Select location on map"}
+            {point ? t("Change location") : t("Select location on map")}
           </button>
           {point && (
             <a
@@ -83,7 +86,8 @@ export default function SalonLocationField({
               target="_blank"
               rel="noreferrer"
             >
-              <ExternalLink size={15} aria-hidden="true" /> Open in Google Maps
+              <ExternalLink size={15} aria-hidden="true" />{" "}
+              {t("Open in Google Maps")}
             </a>
           )}
           {point && onRemove && (
@@ -93,7 +97,7 @@ export default function SalonLocationField({
               onClick={() => setConfirmRemove(true)}
               disabled={saving}
             >
-              <Trash2 size={15} aria-hidden="true" /> Remove pin
+              <Trash2 size={15} aria-hidden="true" /> {t("Remove pin")}
             </button>
           )}
         </div>
@@ -111,9 +115,11 @@ export default function SalonLocationField({
       )}
       <ConfirmDialog
         open={confirmRemove}
-        title="Remove the map pin?"
-        message="Guests will no longer see the salon on a map or get directions until you add a new pin."
-        confirmText="Remove pin"
+        title={t("Remove the map pin?")}
+        message={t(
+          "Guests will no longer see the salon on a map or get directions until you add a new pin.",
+        )}
+        confirmText={t("Remove pin")}
         danger
         loading={saving}
         onConfirm={remove}

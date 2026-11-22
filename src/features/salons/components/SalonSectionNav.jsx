@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { SALON_SECTIONS } from "../model/salonPage.js";
 import useSectionJump from "../hooks/useSectionJump.js";
+import t from "../../../shared/i18n/t.js";
 
 /** A section is "current" once its top passes this line under the tabs. */
 const ACTIVE_LINE_PX = 160;
@@ -63,7 +64,7 @@ export default function SalonSectionNav() {
   }, []);
 
   return (
-    <nav className="sn" aria-label="Salon page sections">
+    <nav className="sn" aria-label={t("Salon page sections")}>
       <ul>
         {SALON_SECTIONS.map(({ id, label }) => (
           <li key={id}>
@@ -73,7 +74,7 @@ export default function SalonSectionNav() {
               aria-current={active === id ? "location" : undefined}
               onClick={jump(id)}
             >
-              {label}
+              {t(label)}
             </a>
           </li>
         ))}

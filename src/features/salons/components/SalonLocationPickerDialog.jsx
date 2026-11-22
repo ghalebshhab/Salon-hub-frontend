@@ -20,15 +20,20 @@ import {
 } from "../model/jordanMapLocation.js";
 import GoogleMapEmbed from "./GoogleMapEmbed.jsx";
 import GoogleMapsLocationPicker from "./GoogleMapsLocationPicker.jsx";
+import t from "../../../shared/i18n/t.js";
 
-const OUTSIDE_JORDAN = "Choose a point inside Jordan.";
+const OUTSIDE_JORDAN = t("Choose a point inside Jordan.");
 const GEOLOCATION_TIMEOUT_MS = 12000;
 
 function describeLinkProblem(text) {
   if (/goo\.gl|maps\.app/i.test(text)) {
-    return "Short links do not include the pin. Open the link, then copy the full address from the browser bar, or copy the coordinates.";
+    return t(
+      "Short links do not include the pin. Open the link, then copy the full address from the browser bar, or copy the coordinates.",
+    );
   }
-  return "We could not find a point in Jordan in this text. Paste a Google Maps link or coordinates such as 31.9539, 35.9106.";
+  return t(
+    "We could not find a point in Jordan in this text. Paste a Google Maps link or coordinates such as 31.9539, 35.9106.",
+  );
 }
 
 function formatPoint({ lat, lng }) {
@@ -44,7 +49,7 @@ export default function SalonLocationPickerDialog({
   latitude,
   longitude,
   saving = false,
-  confirmLabel = "Save location",
+  confirmLabel = t("Save location"),
   onConfirm,
   onClose,
 }) {
@@ -77,14 +82,16 @@ export default function SalonLocationPickerDialog({
   const handleUnavailable = useCallback(() => {
     setInteractive(false);
     setNotice(
-      "Google Maps search is not available right now. Use your current location or paste a Google Maps link instead.",
+      t(
+        "Google Maps search is not available right now. Use your current location or paste a Google Maps link instead.",
+      ),
     );
   }, []);
   const handleOutside = useCallback(() => setNotice(OUTSIDE_JORDAN), []);
 
   const locateDevice = () => {
     if (!navigator.geolocation) {
-      setNotice("This browser cannot share its location.");
+      setNotice(t("This browser cannot share its location."));
       return;
     }
     setLocating(true);
@@ -94,7 +101,11 @@ export default function SalonLocationPickerDialog({
         setLocating(false);
         const picked = { lat: coords.latitude, lng: coords.longitude };
         if (!isInsideJordan(picked.lat, picked.lng)) {
-          setNotice(`Your device is outside Jordan. ${OUTSIDE_JORDAN}`);
+          setNotice(
+            t("Your device is outside Jordan. {OUTSIDE_JORDAN}", {
+              OUTSIDE_JORDAN,
+            }),
+          );
           return;
         }
         setSelection({ point: picked, address: "", city: "" });
@@ -103,8 +114,12 @@ export default function SalonLocationPickerDialog({
         setLocating(false);
         setNotice(
           error.code === error.PERMISSION_DENIED
-            ? "Location access was blocked. Allow it in the browser, or choose the point another way."
-            : "We could not read your location. Try again or choose the point another way.",
+            ? t(
+                "Location access was blocked. Allow it in the browser, or choose the point another way.",
+              )
+            : t(
+                "We could not read your location. Try again or choose the point another way.",
+              ),
         );
       },
       { enableHighAccuracy: true, timeout: GEOLOCATION_TIMEOUT_MS },
@@ -135,7 +150,7 @@ export default function SalonLocationPickerDialog({
       await onConfirm({ ...toLocationFields(point), city: selection.city });
       onClose();
     } catch (error) {
-      setSaveError(error?.message || "Could not save the location.");
+      setSaveError(error?.message || t("Could not save the location."));
     }
   };
 
@@ -154,11 +169,12 @@ export default function SalonLocationPickerDialog({
           <MapPinned />
         </span>
         <div>
-          <span className="eyebrow">Salon location</span>
-          <h2 id={titleId}>Pin your salon on the map</h2>
+          <span className="eyebrow">{t("Salon location")}</span>
+          <h2 id={titleId}>{t("Pin your salon on the map")}</h2>
           <p>
-            Guests use this pin to find the salon and get directions in Google
-            Maps.
+            {t(
+              "Guests use this pin to find the salon and get directions in Google Maps.",
+            )}
           </p>
         </div>
         <button
@@ -166,7 +182,7 @@ export default function SalonLocationPickerDialog({
           type="button"
           onClick={onClose}
           disabled={saving}
-          aria-label="Close location picker"
+          aria-label={t("Close location picker")}
         >
           <X size={18} />
         </button>
@@ -185,15 +201,16 @@ export default function SalonLocationPickerDialog({
           ) : point ? (
             <GoogleMapEmbed
               point={point}
-              title="Preview of the selected salon location"
+              title={t("Preview of the selected salon location")}
             />
           ) : (
             <div className="location-dialog-empty-map">
               <MapPin aria-hidden="true" />
-              <strong>No pin yet</strong>
+              <strong>{t("No pin yet")}</strong>
               <span>
-                Use your current location or paste a Google Maps link to place
-                the pin.
+                {t(
+                  "Use your current location or paste a Google Maps link to place the pin.",
+                )}
               </span>
             </div>
           )}
@@ -210,34 +227,39 @@ export default function SalonLocationPickerDialog({
             <span>
               <strong>
                 {locating
-                  ? "Finding your location…"
-                  : "Use my current location"}
+                  ? t("Finding your location…")
+                  : t("Use my current location")}
               </strong>
-              <small>Best when you are inside the salon now.</small>
+              <small>{t("Best when you are inside the salon now.")}</small>
             </span>
           </button>
 
           {interactive ? (
             <p className="location-dialog-hint">
-              Or search above the map, click the map, or drag the pin to the
-              salon entrance.
+              {t(
+                "Or search above the map, click the map, or drag the pin to the salon entrance.",
+              )}
             </p>
           ) : (
             <div className="location-link-method">
               <ol className="location-steps">
                 <li>
                   <a href={findOnGoogleMaps} target="_blank" rel="noreferrer">
-                    Open Google Maps <ExternalLink size={13} />
-                  </a>{" "}
-                  and find the salon.
+                    {t("Open Google Maps")} <ExternalLink size={13} />
+                  </a>
+                  {t("and find the salon.")}
                 </li>
                 <li>
-                  Click the salon, or right-click the entrance to drop a pin.
+                  {t(
+                    "Click the salon, or right-click the entrance to drop a pin.",
+                  )}
                 </li>
-                <li>Copy the link or the coordinates and paste them here.</li>
+                <li>
+                  {t("Copy the link or the coordinates and paste them here.")}
+                </li>
               </ol>
               <label className="location-link-label" htmlFor={linkId}>
-                Google Maps link or coordinates
+                {t("Google Maps link or coordinates")}
               </label>
               <div className="location-link-input">
                 <input
@@ -256,7 +278,7 @@ export default function SalonLocationPickerDialog({
                   type="button"
                   onClick={pasteFromClipboard}
                 >
-                  <ClipboardPaste size={15} /> Paste
+                  <ClipboardPaste size={15} /> {t("Paste")}
                 </button>
               </div>
               {linkProblem && (
@@ -278,24 +300,28 @@ export default function SalonLocationPickerDialog({
             className={`location-selection ${point ? "is-set" : ""}`}
             aria-live="polite"
           >
-            <span className="location-selection-label">Selected point</span>
+            <span className="location-selection-label">
+              {t("Selected point")}
+            </span>
             {point ? (
               <>
                 <strong>{selection.address || formatPoint(point)}</strong>
                 {selection.address && <small>{formatPoint(point)}</small>}
                 {selection.city && (
-                  <small>City detected: {selection.city}</small>
+                  <small>
+                    {t("City detected: {city}", { city: t(selection.city) })}
+                  </small>
                 )}
                 <a
                   href={googleMapsLink(point.lat, point.lng)}
                   target="_blank"
                   rel="noreferrer"
                 >
-                  Check it in Google Maps <ExternalLink size={13} />
+                  {t("Check it in Google Maps")} <ExternalLink size={13} />
                 </a>
               </>
             ) : (
-              <strong className="is-empty">Nothing selected yet</strong>
+              <strong className="is-empty">{t("Nothing selected yet")}</strong>
             )}
           </div>
         </aside>
@@ -314,7 +340,7 @@ export default function SalonLocationPickerDialog({
           onClick={onClose}
           disabled={saving}
         >
-          Cancel
+          {t("Cancel")}
         </button>
         <button
           className="btn btn-primary"
@@ -323,7 +349,7 @@ export default function SalonLocationPickerDialog({
           disabled={!point || saving}
         >
           <Check size={17} aria-hidden="true" />
-          {saving ? "Saving…" : confirmLabel}
+          {saving ? t("Saving…") : confirmLabel}
         </button>
       </footer>
     </dialog>

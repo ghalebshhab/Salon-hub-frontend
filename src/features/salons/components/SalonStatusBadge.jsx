@@ -1,3 +1,5 @@
+import t from "../../../shared/i18n/t.js";
+
 function SalonStatusBadge({ state }) {
   const value = state || "UNKNOWN";
 
@@ -5,7 +7,7 @@ function SalonStatusBadge({ state }) {
     <span
       className={value === "OPEN" ? "badge badge-open" : "badge badge-closed"}
     >
-      {value}
+      {t(value)}
     </span>
   );
 }

@@ -1,4 +1,5 @@
 import { Check, Pencil, X } from "lucide-react";
+import t from "../../../shared/i18n/t.js";
 
 export default function EditableSalonSection({
   eyebrow,
@@ -24,18 +25,18 @@ export default function EditableSalonSection({
     >
       <header className="owner-edit-section-heading">
         <div>
-          <span className="eyebrow">{eyebrow}</span>
-          <h2>{title}</h2>
-          {description && <p>{description}</p>}
+          <span className="eyebrow">{t(eyebrow)}</span>
+          <h2>{t(title)}</h2>
+          {description && <p>{t(description)}</p>}
         </div>
         {!editing && (
           <button
             className="owner-edit-trigger"
             type="button"
             onClick={onEdit}
-            aria-label={`Edit ${title}`}
+            aria-label={t("Edit {title}", { title })}
           >
-            <Pencil size={16} /> Edit
+            <Pencil size={16} /> {t("Edit")}
           </button>
         )}
       </header>
@@ -44,7 +45,7 @@ export default function EditableSalonSection({
           {editor}
           <div className="owner-inline-actions">
             <button className="btn btn-primary" disabled={saving}>
-              <Check size={17} /> {saving ? "Saving…" : "Save changes"}
+              <Check size={17} /> {saving ? t("Saving…") : t("Save changes")}
             </button>
             <button
               className="btn btn-secondary"
@@ -52,7 +53,7 @@ export default function EditableSalonSection({
               disabled={saving}
               onClick={onCancel}
             >
-              <X size={17} /> Cancel
+              <X size={17} /> {t("Cancel")}
             </button>
           </div>
         </form>

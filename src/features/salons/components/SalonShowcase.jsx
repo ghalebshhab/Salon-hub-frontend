@@ -4,27 +4,17 @@ import { Link } from "react-router-dom";
 import { MapPin, Clock, ArrowRight } from "lucide-react";
 import SalonCoverPlaceholder from "./SalonCoverPlaceholder.jsx";
 import SalonPlanBadge from "./SalonPlanBadge.jsx";
+import SalonShowcaseSkeleton from "./SalonShowcaseSkeleton.jsx";
+import t from "../../../shared/i18n/t.js";
 
 function SalonShowcase() {
   const { getImages, formatTime, salons, loading } = useSalonShowcase();
   if (loading) {
     return (
-      <div
-        className="salon-showcase-grid"
-        role="status"
-        aria-label="Loading salons"
-      >
-        {[0, 1, 2].map((item) => (
-          <div className="salon-showcase-card salon-skeleton" key={item}>
-            <div className="salon-skeleton-image" />
-            <div className="salon-skeleton-body">
-              <span className="skeleton-line skeleton-title" />
-              <span className="skeleton-line" />
-              <span className="skeleton-line skeleton-short" />
-            </div>
-          </div>
-        ))}
-        <span className="sr-only">Loading salons...</span>
+      <div role="status" aria-label={t("Loading salons")}>
+        <div aria-hidden="true">
+          <SalonShowcaseSkeleton />
+        </div>
       </div>
     );
   }
@@ -32,8 +22,8 @@ function SalonShowcase() {
   if (salons.length === 0) {
     return (
       <div className="empty-state">
-        <h3>No salons yet</h3>
-        <p>Salon profiles will appear here when owners create them.</p>
+        <h3>{t("No salons yet")}</h3>
+        <p>{t("Salon profiles will appear here when owners create them.")}</p>
       </div>
     );
   }
@@ -64,7 +54,7 @@ function SalonShowcase() {
                     : "salon-state-badge closed"
                 }
               >
-                {salon.state}
+                {t(salon.state)}
               </span>
               <SalonPlanBadge
                 badge={salon.planBadge}
@@ -77,7 +67,7 @@ function SalonShowcase() {
 
               <p className="salon-location">
                 <MapPin size={16} />
-                {salon.city} • {salon.address}
+                {t(salon.city)} • {salon.address}
               </p>
 
               <p className="salon-time">
@@ -86,7 +76,7 @@ function SalonShowcase() {
               </p>
 
               <div className="salon-showcase-footer">
-                <span>View profile</span>
+                <span>{t("View profile")}</span>
                 <ArrowRight size={18} />
               </div>
             </div>

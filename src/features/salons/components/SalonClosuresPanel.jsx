@@ -8,10 +8,8 @@ import {
   showWarningToast,
 } from "../../../shared/notifications/toast.jsx";
 import useSalonClosures from "../hooks/useSalonClosures.js";
-import {
-  formatDateRange,
-  getTodayDate,
-} from "../../bookings/model/booking.js";
+import { formatDateRange, getTodayDate } from "../../bookings/model/booking.js";
+import t from "../../../shared/i18n/t.js";
 
 const emptyForm = () => ({
   startDate: getTodayDate(),
@@ -54,9 +52,9 @@ export default function SalonClosuresPanel({ salonId }) {
     }
     setAffected(result.affectedBookings);
     if (result.affectedBookings > 0) {
-      showWarningToast(result.message, "Appointments inside the closure");
+      showWarningToast(result.message, t("Appointments inside the closure"));
     } else {
-      showSuccessToast("Closure saved. Customers cannot book these days.");
+      showSuccessToast(t("Closure saved. Customers cannot book these days."));
     }
     setForm(emptyForm());
   };
@@ -65,7 +63,8 @@ export default function SalonClosuresPanel({ salonId }) {
     if (!removing) return;
     const result = await remove(removing.id);
     setRemoving(null);
-    if (result.ok) showSuccessToast("Closure removed. These days are open again.");
+    if (result.ok)
+      showSuccessToast(t("Closure removed. These days are open again."));
     else showErrorToast(result.message);
   };
 
@@ -76,11 +75,12 @@ export default function SalonClosuresPanel({ salonId }) {
     >
       <header className="owner-edit-section-heading">
         <div>
-          <span className="eyebrow">Holidays</span>
-          <h2 id={`${id}-title`}>Days the salon is closed</h2>
+          <span className="eyebrow">{t("Holidays")}</span>
+          <h2 id={`${id}-title`}>{t("Days the salon is closed")}</h2>
           <p>
-            Public holidays, renovation or a team trip. Nobody can book on
-            these days, and guests see the dates on your salon page.
+            {t(
+              "Public holidays, renovation or a team trip. Nobody can book on these days, and guests see the dates on your salon page.",
+            )}
           </p>
         </div>
         <span className="salon-closures-icon" aria-hidden="true">
@@ -90,7 +90,7 @@ export default function SalonClosuresPanel({ salonId }) {
 
       <form className="time-off-form" onSubmit={submit}>
         <label>
-          <span>From</span>
+          <span>{t("From")}</span>
           <input
             type="date"
             required
@@ -100,7 +100,7 @@ export default function SalonClosuresPanel({ salonId }) {
           />
         </label>
         <label>
-          <span>To</span>
+          <span>{t("To")}</span>
           <input
             type="date"
             required
@@ -110,25 +110,31 @@ export default function SalonClosuresPanel({ salonId }) {
           />
         </label>
         <label className="time-off-reason">
-          <span>Note for guests (optional)</span>
+          <span>{t("Note for guests (optional)")}</span>
           <input
             maxLength={255}
             value={form.reason}
             onChange={update("reason")}
-            placeholder="Eid holiday"
+            placeholder={t("Eid holiday")}
           />
         </label>
         <button className="btn btn-primary" type="submit" disabled={saving}>
           <Plus size={16} aria-hidden="true" />{" "}
-          {saving ? "Saving…" : "Add closure"}
+          {saving ? t("Saving…") : t("Add closure")}
         </button>
       </form>
 
       {affected > 0 && (
         <p className="salon-closures-warning" role="status">
-          {affected} appointment{affected === 1 ? "" : "s"} already fall inside
-          this closure. Move or cancel them in{" "}
-          <Link to="/owner/bookings">Salon Bookings</Link>.
+          {affected === 1
+            ? t(
+                "1 appointment already falls inside this closure. Move or cancel it in",
+              )
+            : t(
+                "{count} appointments already fall inside this closure. Move or cancel them in",
+                { count: affected },
+              )}{" "}
+          <Link to="/owner/bookings">{t("Salon Bookings")}</Link>.
         </p>
       )}
 
@@ -136,7 +142,7 @@ export default function SalonClosuresPanel({ salonId }) {
         <span className="skeleton-block time-off-skeleton" />
       ) : items.length === 0 ? (
         <p className="time-off-empty">
-          No closures planned. The salon follows its normal hours.
+          {t("No closures planned. The salon follows its normal hours.")}
         </p>
       ) : (
         <ul className="time-off-list">
@@ -149,7 +155,9 @@ export default function SalonClosuresPanel({ salonId }) {
               <button
                 className="icon-button danger"
                 type="button"
-                aria-label={`Remove the closure on ${formatDateRange(item.startDate, item.endDate)}`}
+                aria-label={t("Remove the closure on {dateRange}", {
+                  dateRange: formatDateRange(item.startDate, item.endDate),
+                })}
                 onClick={() => setRemoving(item)}
               >
                 <Trash2 size={16} aria-hidden="true" />
@@ -161,9 +169,9 @@ export default function SalonClosuresPanel({ salonId }) {
 
       <ConfirmDialog
         open={Boolean(removing)}
-        title="Remove this closure?"
-        message="Customers can book these days again."
-        confirmText="Remove"
+        title={t("Remove this closure?")}
+        message={t("Customers can book these days again.")}
+        confirmText={t("Remove")}
         danger
         onConfirm={confirmRemove}
         onCancel={() => setRemoving(null)}

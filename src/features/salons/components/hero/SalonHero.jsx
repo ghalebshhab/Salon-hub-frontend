@@ -9,8 +9,13 @@ import {
   showErrorToast,
   showSuccessToast,
 } from "../../../../shared/notifications/toast.jsx";
-import { salonStatement, tagline } from "../../model/salonPage.js";
+import {
+  salonDescription,
+  salonStatement,
+  tagline,
+} from "../../model/salonPage.js";
 import useSectionJump from "../../hooks/useSectionJump.js";
+import t from "../../../../shared/i18n/t.js";
 
 async function shareSalon(name) {
   const url = window.location.href;
@@ -20,32 +25,32 @@ async function shareSalon(name) {
       return;
     }
     await navigator.clipboard.writeText(url);
-    showSuccessToast("Link copied. Share it with a friend.");
+    showSuccessToast(t("Link copied. Share it with a friend."));
   } catch (error) {
     // The visitor closed the share sheet: nothing to report.
     if (error?.name === "AbortError") return;
-    showErrorToast("Could not share this page. Copy the address instead.");
+    showErrorToast(t("Could not share this page. Copy the address instead."));
   }
 }
 
 function HeroRating({ rating, onJump }) {
   if (rating.loading) return <span className="sh-fact is-placeholder" />;
   if (!rating.total) {
-    return <span className="sh-fact sh-new">New on SalonHub</span>;
+    return <span className="sh-fact sh-new">{t("New on SalonHub")}</span>;
   }
   return (
     <a className="sh-fact sh-rating" href="#reviews" onClick={onJump}>
       <StarRating value={rating.average} size={15} />
       <strong>{rating.average.toFixed(1)}</strong>
       <span>
-        ({rating.total} {rating.total === 1 ? "review" : "reviews"})
+        ({rating.total} {rating.total === 1 ? t("review") : t("reviews")})
       </span>
     </a>
   );
 }
 
 function HeroLocation({ salon, location }) {
-  const label = salon.city || "Salon location";
+  const label = salon.city || t("Salon location");
   if (location?.onOpenMap) {
     return (
       <button
@@ -54,7 +59,7 @@ function HeroLocation({ salon, location }) {
         onClick={location.onOpenMap}
       >
         <MapPin size={15} aria-hidden="true" />
-        {label}
+        {t(label)}
       </button>
     );
   }
@@ -67,7 +72,7 @@ function HeroLocation({ salon, location }) {
         rel="noreferrer"
       >
         <MapPin size={15} aria-hidden="true" />
-        {label}
+        {t(label)}
         <ExternalLink size={12} aria-hidden="true" />
       </a>
     );
@@ -75,7 +80,7 @@ function HeroLocation({ salon, location }) {
   return (
     <span className="sh-fact">
       <MapPin size={15} aria-hidden="true" />
-      {salon.city || "Location not listed"}
+      {salon.city ? t(salon.city) : t("Location not listed")}
     </span>
   );
 }
@@ -95,7 +100,7 @@ export default function SalonHero({
   children,
 }) {
   const image = salon.images?.[0];
-  const line = tagline(salon.description);
+  const line = tagline(salonDescription(salon));
   const PrimaryIcon = primary.icon;
   const jump = useSectionJump();
 
@@ -127,7 +132,7 @@ export default function SalonHero({
             <HeroLocation salon={salon} location={location} />
             <span className={`sh-fact sh-status tone-${status.tone}`}>
               <span className="sh-dot" aria-hidden="true" />
-              {status.title}
+              {t(status.title)}
             </span>
           </div>
         </div>
@@ -143,15 +148,15 @@ export default function SalonHero({
               <p>{line}</p>
             </blockquote>
             <figcaption className="sh-note-caption">
-              <span>In the salon&apos;s words</span>
+              <span>{t("In the salon's words")}</span>
               <a href="#about" onClick={jump("about")}>
-                Read the story
+                {t("Read the story")}
               </a>
             </figcaption>
           </figure>
         ) : (
           <p className="sh-note-empty">
-            Book a visit, meet the team and see their work.
+            {t("Book a visit, meet the team and see their work.")}
           </p>
         )}
 
@@ -162,12 +167,12 @@ export default function SalonHero({
             state={primary.state}
           >
             <PrimaryIcon size={18} aria-hidden="true" />
-            {primary.label}
+            {t(primary.label)}
           </Link>
           {salon.phoneNumber && (
             <a className="btn btn-secondary" href={`tel:${salon.phoneNumber}`}>
               <Phone size={17} aria-hidden="true" />
-              Call
+              {t("Call")}
             </a>
           )}
           {follow && (
@@ -175,8 +180,10 @@ export default function SalonHero({
               type="button"
               className={`sh-icon-button${follow.followed ? " is-on" : ""}`}
               aria-pressed={follow.followed}
-              aria-label={follow.followed ? "Following salon" : "Follow salon"}
-              title={follow.followed ? "Following" : "Follow"}
+              aria-label={
+                follow.followed ? t("Following salon") : t("Follow salon")
+              }
+              title={follow.followed ? t("Following") : t("Follow")}
               disabled={follow.busy}
               onClick={follow.toggle}
             >
@@ -190,8 +197,8 @@ export default function SalonHero({
           <button
             type="button"
             className="sh-icon-button"
-            aria-label="Share salon"
-            title="Share"
+            aria-label={t("Share salon")}
+            title={t("Share")}
             onClick={() => shareSalon(salon.name)}
           >
             <Share2 size={18} aria-hidden="true" />

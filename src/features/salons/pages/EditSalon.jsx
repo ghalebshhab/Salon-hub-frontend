@@ -10,7 +10,7 @@ import {
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import SalonCoverPlaceholder from "../components/SalonCoverPlaceholder.jsx";
-import Loading from "../../../shared/components/Loading.jsx";
+import { EditSalonSkeleton } from "../components/OwnerSalonSkeletons.jsx";
 import SalonWorkGallery from "../../media/components/SalonWorkGallery.jsx";
 import { optimizedCloudinaryImage } from "../../media/model/cloudinaryMedia.js";
 import ReviewsList from "../../reviews/components/ReviewsList.jsx";
@@ -28,17 +28,20 @@ import {
 } from "../components/SalonSectionEditors.jsx";
 import SalonStatusBadge from "../components/SalonStatusBadge.jsx";
 import useEditSalon from "../hooks/useEditSalon.js";
+import ErrorPage from "../../../shared/components/ErrorPage.jsx";
+import t from "../../../shared/i18n/t.js";
+import { salonDescription } from "../model/salonPage.js";
+import { PAGE_HEADS } from "../../../shared/copy/pageHeads.js";
 
-const formatTime = (value) => value?.slice(0, 5) || "Not listed";
+const formatTime = (value) => value?.slice(0, 5) || t("Not listed");
 
 export default function EditSalon() {
   const [activeSection, setActiveSection] = useState(null);
   const [uploadedImage, setUploadedImage] = useState("");
   const editor = useEditSalon();
 
-  if (editor.loading)
-    return <Loading message="Preparing your salon profile…" />;
-  if (!editor.salon) return <div className="empty-state">Salon not found.</div>;
+  if (editor.loading) return <EditSalonSkeleton />;
+  if (!editor.salon) return <ErrorPage kind="notFound" />;
 
   const { salon, form } = editor;
   const salonId = salon.salonId;
@@ -69,14 +72,12 @@ export default function EditSalon() {
       <div className="container section">
         <header className="owner-editor-topbar">
           <div>
-            <span className="eyebrow">Live profile editor</span>
-            <h1>Shape the page your guests see</h1>
-            <p>
-              Edit one section at a time without losing the salon-page context.
-            </p>
+            <span className="eyebrow">{t(PAGE_HEADS.editSalon.eyebrow)}</span>
+            <h1>{t(PAGE_HEADS.editSalon.title)}</h1>
+            <p>{t(PAGE_HEADS.editSalon.text)}</p>
           </div>
           <Link className="btn btn-secondary" to={`/salons/${salonId}`}>
-            <Eye size={17} /> View public page
+            <Eye size={17} /> {t("View public page")}
           </Link>
         </header>
 
@@ -88,7 +89,7 @@ export default function EditSalon() {
                   width: 1400,
                   height: 1000,
                 })}
-                alt={`${salon.name} salon`}
+                alt={t("{name} salon", { name: salon.name })}
               />
             ) : (
               <SalonCoverPlaceholder name={salon.name} variant="hero" />
@@ -102,35 +103,37 @@ export default function EditSalon() {
           </div>
           <div className="salon-details-hero-copy">
             <div className="salon-details-kicker">
-              <span className="eyebrow">Salon profile</span>
+              <span className="eyebrow">{t("Salon profile")}</span>
               <SalonStatusBadge state={salon.state} />
             </div>
             <h1>{salon.name}</h1>
             <p className="salon-details-location">
               <MapPin aria-hidden="true" />
-              <span>{salon.city || "Location not listed"}</span>
+              <span>
+                {salon.city ? t(salon.city) : t("Location not listed")}
+              </span>
             </p>
             <p className="salon-details-description">
-              {salon.description || "Add the story behind your salon."}
+              {salonDescription(salon) || t("Add the story behind your salon.")}
             </p>
             <button
               className="btn btn-primary owner-hero-edit"
               type="button"
               onClick={() => beginEdit("identity")}
             >
-              <Pencil size={17} /> Edit name and story
+              <Pencil size={17} /> {t("Edit name and story")}
             </button>
             <div className="salon-details-hero-meta">
               <div>
                 <Clock3 aria-hidden="true" />
-                <span>Hours</span>
+                <span>{t("Hours")}</span>
                 <strong>
                   {formatTime(salon.openTime)} – {formatTime(salon.closeTime)}
                 </strong>
               </div>
               <div>
                 <UsersRound aria-hidden="true" />
-                <span>Team capacity</span>
+                <span>{t("Team capacity")}</span>
                 <strong>
                   {salon.currentNumOfEmployees ?? 0} / {salon.maxNumOfEmployees}
                 </strong>
@@ -142,39 +145,41 @@ export default function EditSalon() {
         <div className="owner-edit-grid">
           <EditableSalonSection
             {...sectionProps("identity")}
-            eyebrow="Identity"
-            title="Name and salon story"
-            description="This copy leads the public page and helps guests understand the experience."
+            eyebrow={t("Identity")}
+            title={t("Name and salon story")}
+            description={t(
+              "This copy leads the public page and helps guests understand the experience.",
+            )}
             className="owner-edit-wide"
             editor={
               <IdentityEditor form={form} onChange={editor.handleChange} />
             }
           >
-            <p className="owner-edit-summary">{salon.description}</p>
+            <p className="owner-edit-summary">{salonDescription(salon)}</p>
           </EditableSalonSection>
 
           <EditableSalonSection
             {...sectionProps("contact")}
-            eyebrow="Contact"
-            title="How guests reach you"
+            eyebrow={t("Contact")}
+            title={t("How guests reach you")}
             editor={
               <ContactEditor form={form} onChange={editor.handleChange} />
             }
           >
             <div className="owner-edit-detail-list">
               <span>
-                <Phone size={17} /> {salon.phoneNumber || "Not listed"}
+                <Phone size={17} /> {salon.phoneNumber || t("Not listed")}
               </span>
               <span>
-                <Mail size={17} /> {salon.email || "Not listed"}
+                <Mail size={17} /> {salon.email || t("Not listed")}
               </span>
             </div>
           </EditableSalonSection>
 
           <EditableSalonSection
             {...sectionProps("availability")}
-            eyebrow="Availability"
-            title="Hours and team capacity"
+            eyebrow={t("Availability")}
+            title={t("Hours and team capacity")}
             editor={
               <AvailabilityEditor
                 form={form}
@@ -189,24 +194,28 @@ export default function EditSalon() {
                 {formatTime(salon.closeTime)}
               </span>
               <span>
-                <UsersRound size={17} /> Up to {salon.maxNumOfEmployees} team
-                members
+                <UsersRound size={17} />{" "}
+                {t("Up to {maxNumOfEmployees} team members", {
+                  maxNumOfEmployees: salon.maxNumOfEmployees,
+                })}
               </span>
             </div>
           </EditableSalonSection>
 
           <EditableSalonSection
             {...sectionProps("location")}
-            eyebrow="Location"
-            title="Help guests arrive with confidence"
-            description="Pin the exact entrance on Google Maps. Guests can open it and get directions from the salon page."
+            eyebrow={t("Location")}
+            title={t("Help guests arrive with confidence")}
+            description={t(
+              "Pin the exact entrance on Google Maps. Guests can open it and get directions from the salon page.",
+            )}
             className="owner-edit-wide"
             editor={<CityEditor form={form} onChange={editor.handleChange} />}
           >
             <div className="owner-location-summary">
               <span className="owner-location-city">
-                <MapPin size={17} aria-hidden="true" /> City:{" "}
-                <strong>{salon.city || "Not listed"}</strong>
+                <MapPin size={17} aria-hidden="true" /> {t("City:")}
+                <strong>{salon.city ? t(salon.city) : t("Not listed")}</strong>
               </span>
               <SalonLocationField
                 latitude={salon.latitude}
@@ -224,11 +233,12 @@ export default function EditSalon() {
         <div className="owner-public-preview">
           <div className="owner-public-preview-heading">
             <div>
-              <span className="eyebrow">Public content</span>
-              <h2>Manage the rest of the salon experience</h2>
+              <span className="eyebrow">{t("Public content")}</span>
+              <h2>{t("Manage the rest of the salon experience")}</h2>
               <p>
-                Review the live content here, then use the focused workspace for
-                structural changes.
+                {t(
+                  "Review the live content here, then use the focused workspace for structural changes.",
+                )}
               </p>
             </div>
           </div>
@@ -236,14 +246,14 @@ export default function EditSalon() {
           <section className="salon-details-section">
             <div className="salon-section-heading owner-preview-section-heading">
               <div>
-                <span className="eyebrow">The menu</span>
-                <h2>Services</h2>
+                <span className="eyebrow">{t("The menu")}</span>
+                <h2>{t("Services")}</h2>
               </div>
               <Link
                 className="btn btn-secondary btn-small"
                 to="/owner/services"
               >
-                Manage services
+                {t("Manage services")}
               </Link>
             </div>
             <SalonServicesList salonId={salonId} />
@@ -252,14 +262,14 @@ export default function EditSalon() {
           <section className="salon-details-section">
             <div className="salon-section-heading owner-preview-section-heading">
               <div>
-                <span className="eyebrow">Your professionals</span>
-                <h2>Salon team</h2>
+                <span className="eyebrow">{t("Your professionals")}</span>
+                <h2>{t("Salon team")}</h2>
               </div>
               <Link
                 className="btn btn-secondary btn-small"
                 to="/owner/employees"
               >
-                Manage team
+                {t("Manage team")}
               </Link>
             </div>
             <SalonTeam employees={editor.employees} />
@@ -267,16 +277,16 @@ export default function EditSalon() {
 
           <section className="salon-details-section">
             <div className="salon-section-heading">
-              <span className="eyebrow">Team portfolio</span>
-              <h2>Recent work</h2>
+              <span className="eyebrow">{t("Team portfolio")}</span>
+              <h2>{t("Recent work")}</h2>
             </div>
             <SalonWorkGallery salonId={salonId} />
           </section>
 
           <section className="salon-details-section">
             <div className="salon-section-heading">
-              <span className="eyebrow">Client notes</span>
-              <h2>Guest reviews</h2>
+              <span className="eyebrow">{t("Client notes")}</span>
+              <h2>{t("Guest reviews")}</h2>
             </div>
             <ReviewsList salonId={salonId} />
           </section>

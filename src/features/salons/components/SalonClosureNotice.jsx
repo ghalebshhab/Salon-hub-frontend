@@ -1,9 +1,7 @@
 import { CalendarX2 } from "lucide-react";
 import useSalonClosures from "../hooks/useSalonClosures.js";
-import {
-  formatDateRange,
-  getTodayDate,
-} from "../../bookings/model/booking.js";
+import { formatDateRange, getTodayDate } from "../../bookings/model/booking.js";
+import t from "../../../shared/i18n/t.js";
 
 const MAX_SHOWN = 3;
 
@@ -24,14 +22,21 @@ export default function SalonClosureNotice({ salonId }) {
   return (
     <aside
       className={`salon-closure-notice ${closedNow ? "is-now" : ""}`}
-      aria-label="Salon closures"
+      aria-label={t("Salon closures")}
     >
       <CalendarX2 size={18} aria-hidden="true" />
       <div>
         <strong>
           {closedNow
-            ? `Closed today${closedNow.endDate !== today ? ` until ${formatDateRange(closedNow.endDate)}` : ""}`
-            : "Closed on some upcoming days"}
+            ? t("Closed today{value}", {
+                value:
+                  closedNow.endDate !== today
+                    ? t(" until {dateRange}", {
+                        dateRange: formatDateRange(closedNow.endDate),
+                      })
+                    : "",
+              })
+            : t("Closed on some upcoming days")}
         </strong>
         <ul>
           {shown.map((item) => (

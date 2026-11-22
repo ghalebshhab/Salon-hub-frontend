@@ -1,5 +1,6 @@
 import { Scissors } from "lucide-react";
 import { salonInitials } from "../model/salonInitials.js";
+import t from "../../../shared/i18n/t.js";
 
 /**
  * The salon page monogram: a round emblem with the initials and a short
@@ -8,12 +9,12 @@ import { salonInitials } from "../model/salonInitials.js";
 function MonogramEmblem({ name, statement }) {
   return (
     <div className="salon-emblem">
-      <span className="salon-emblem-kicker">{statement.kicker}</span>
+      <span className="salon-emblem-kicker">{t(statement.kicker)}</span>
       <span className="salon-emblem-initials">{salonInitials(name)}</span>
       <span className="salon-emblem-rule">
         <Scissors aria-hidden="true" />
       </span>
-      <span className="salon-emblem-statement">{statement.text}</span>
+      <span className="salon-emblem-statement">{t(statement.text)}</span>
     </div>
   );
 }

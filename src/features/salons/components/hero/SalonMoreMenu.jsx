@@ -1,6 +1,7 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { MoreHorizontal } from "lucide-react";
 import { Link } from "react-router-dom";
+import t from "../../../../shared/i18n/t.js";
 
 /**
  * A small "More" menu for actions most visitors do not need (report,
@@ -46,7 +47,7 @@ export default function SalonMoreMenu({ actions }) {
         aria-haspopup="true"
         aria-expanded={open}
         aria-controls={menuId}
-        aria-label="More actions"
+        aria-label={t("More actions")}
         onClick={() => setOpen((value) => !value)}
       >
         <MoreHorizontal size={20} aria-hidden="true" />
@@ -64,7 +65,7 @@ export default function SalonMoreMenu({ actions }) {
                     onClick={close}
                   >
                     <Icon size={16} aria-hidden="true" />
-                    {label}
+                    {t(label)}
                   </Link>
                 ) : (
                   <button
@@ -77,7 +78,7 @@ export default function SalonMoreMenu({ actions }) {
                     }}
                   >
                     <Icon size={16} aria-hidden="true" />
-                    {label}
+                    {t(label)}
                   </button>
                 )}
               </li>

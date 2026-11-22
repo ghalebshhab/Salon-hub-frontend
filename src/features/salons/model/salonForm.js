@@ -2,6 +2,9 @@ export function toSalonPayload(form) {
   return {
     salonName: form.name.trim(),
     salonDescription: form.description.trim(),
+    ...(typeof form.descriptionAr === "string"
+      ? { salonDescriptionAr: form.descriptionAr.trim() }
+      : {}),
     salonPhoneNumber: form.phoneNumber.trim(),
     salonEmail: form.email.trim(),
     salonCity: form.city,
@@ -46,6 +49,8 @@ export function fromSalonResponse(salon) {
     maxNumOfEmployees: salon.maxEmployeesNumber ?? salon.maxNumOfEmployees ?? 0,
     images: profilePictureUrl ? [profilePictureUrl] : [],
     // The backend sends "Open" / "Closed"; the UI compares with "OPEN".
-    state: String(salon.openningStatus ?? salon.state ?? "CLOSED").toUpperCase(),
+    state: String(
+      salon.openningStatus ?? salon.state ?? "CLOSED",
+    ).toUpperCase(),
   };
 }

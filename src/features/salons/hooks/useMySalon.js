@@ -11,6 +11,7 @@ import {
   getMySalonApi,
   resubmitSalonApi,
 } from "../api/salonApi.js";
+import t from "../../../shared/i18n/t.js";
 
 export default function useMySalon() {
   const navigate = useNavigate();
@@ -34,16 +35,16 @@ export default function useMySalon() {
       setResubmittingSalon(true);
       const response = await resubmitSalonApi(salon.salonId);
       if (!response.success) {
-        showErrorToast(response.message || "Could not resubmit salon.");
+        showErrorToast(response.message || t("Could not resubmit salon."));
         return;
       }
-      showSuccessToast("Salon resubmitted for administrator review.");
+      showSuccessToast(t("Salon resubmitted for administrator review."));
       await refetch();
     } catch (error) {
       showErrorToast(
         error?.response?.data?.message ||
           error?.message ||
-          "Could not resubmit salon.",
+          t("Could not resubmit salon."),
       );
     } finally {
       setResubmittingSalon(false);
@@ -55,16 +56,16 @@ export default function useMySalon() {
       setDeletingSalon(true);
       const response = await deleteMySalonApi(salon.salonId);
       if (!response.success) {
-        showErrorToast(response.message || "Could not delete salon.");
+        showErrorToast(response.message || t("Could not delete salon."));
         return;
       }
-      showSuccessToast("Salon deleted successfully.");
+      showSuccessToast(t("Salon deleted successfully."));
       navigate("/owner/dashboard");
     } catch (error) {
       showErrorToast(
         error?.response?.data?.message ||
           error?.message ||
-          "Could not delete salon.",
+          t("Could not delete salon."),
       );
     } finally {
       setDeletingSalon(false);
@@ -75,7 +76,7 @@ export default function useMySalon() {
     loading,
     error:
       queryError?.response?.status === 404
-        ? "You haven't created a salon yet."
+        ? t("You haven't created a salon yet.")
         : queryError?.message,
     deleteSalonModalOpen,
     setDeleteSalonModalOpen,

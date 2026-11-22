@@ -1,14 +1,15 @@
 import { SALON_CITIES } from "../model/salonCities.js";
+import t from "../../../shared/i18n/t.js";
 
 export function IdentityEditor({ form, onChange }) {
   return (
     <div className="owner-editor-fields">
       <label>
-        <span>Salon name</span>
+        <span>{t("Salon name")}</span>
         <input name="name" value={form.name} onChange={onChange} required />
       </label>
       <label className="owner-editor-wide">
-        <span>Salon story</span>
+        <span>{t("Salon story")}</span>
         <textarea
           name="description"
           value={form.description}
@@ -18,7 +19,23 @@ export function IdentityEditor({ form, onChange }) {
           required
         />
         <small>
-          Tell guests what makes the salon and its experience distinct.
+          {t("Tell guests what makes the salon and its experience distinct.")}
+        </small>
+      </label>
+      <label className="owner-editor-wide">
+        <span>{t("Salon story in Arabic")}</span>
+        <textarea
+          name="descriptionAr"
+          value={form.descriptionAr ?? ""}
+          onChange={onChange}
+          dir="rtl"
+          lang="ar"
+          rows="4"
+        />
+        <small>
+          {t(
+            "Optional. Leave the Arabic empty and SalonHub translates your English for you.",
+          )}
         </small>
       </label>
     </div>
@@ -29,7 +46,7 @@ export function ContactEditor({ form, onChange }) {
   return (
     <div className="owner-editor-fields">
       <label>
-        <span>Public phone</span>
+        <span>{t("Public phone")}</span>
         <input
           name="phoneNumber"
           value={form.phoneNumber}
@@ -38,7 +55,7 @@ export function ContactEditor({ form, onChange }) {
         />
       </label>
       <label>
-        <span>Public email</span>
+        <span>{t("Public email")}</span>
         <input
           name="email"
           type="email"
@@ -58,7 +75,7 @@ export function AvailabilityEditor({ form, setForm, onChange }) {
   return (
     <div className="owner-editor-fields">
       <label>
-        <span>Opening time</span>
+        <span>{t("Opening time")}</span>
         <input
           type="time"
           value={form.openTime.slice(0, 5)}
@@ -67,7 +84,7 @@ export function AvailabilityEditor({ form, setForm, onChange }) {
         />
       </label>
       <label>
-        <span>Closing time</span>
+        <span>{t("Closing time")}</span>
         <input
           type="time"
           value={form.closeTime.slice(0, 5)}
@@ -76,7 +93,7 @@ export function AvailabilityEditor({ form, setForm, onChange }) {
         />
       </label>
       <label>
-        <span>Maximum team members</span>
+        <span>{t("Maximum team members")}</span>
         <input
           name="maxNumOfEmployees"
           type="number"
@@ -94,11 +111,13 @@ export function CityEditor({ form, onChange }) {
   return (
     <div className="owner-editor-fields">
       <label>
-        <span>City shown on the profile</span>
+        <span>{t("City shown on the profile")}</span>
         <select name="city" value={form.city} onChange={onChange} required>
-          <option value="">Select a city</option>
+          <option value="">{t("Select a city")}</option>
           {SALON_CITIES.map((city) => (
-            <option key={city}>{city}</option>
+            <option key={city} value={city}>
+              {t(city)}
+            </option>
           ))}
         </select>
       </label>

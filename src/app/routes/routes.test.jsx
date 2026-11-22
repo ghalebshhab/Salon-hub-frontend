@@ -1,8 +1,9 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { signInForTest } from "../../test/session.js";
 import { beforeEach, expect, it, vi } from "vitest";
 import { MemoryRouter } from "react-router-dom";
 import AppRoutes from "./AppRoutes.jsx";
-import { clearAuthData, saveToken } from "../../shared/auth/tokenStorage.js";
+import { clearAuthData } from "../../shared/auth/tokenStorage.js";
 import AuthProvider from "../../features/auth/providers/AuthProvider.jsx";
 import http from "../../shared/api/httpClient.js";
 const ownerProfile = {
@@ -102,7 +103,7 @@ const paths = [
 it.each(paths)(
   "renders route %s with the existing API contracts",
   async (pathname) => {
-    saveToken("test-token");
+    signInForTest();
     const { container } = renderRoutes(pathname);
     await waitFor(
       () => {
@@ -129,7 +130,9 @@ it("redirects protected routes to login and retains the destination", async () =
 it("renders a not-found page", async () => {
   renderRoutes("/missing");
   expect(
-    await screen.findByRole("heading", { name: "Page not found" }),
+    await screen.findByRole("heading", {
+      name: "This page took a different cut",
+    }),
   ).toBeDefined();
 });
 it("returns to the protected destination after a successful login", async () => {
@@ -139,7 +142,7 @@ it("returns to the protected destination after a successful login", async () => 
     headers: {},
     data: {
       success: true,
-      data: config.url === "/auth/login" ? { token: "signed-in" } : [],
+      data: config.url === "/auth/login" ? signInReply() : [],
     },
   });
   const { container } = renderRoutes("/owner/applications");
@@ -164,20 +167,27 @@ it("returns to the protected destination after a successful login", async () => 
   ).toBeDefined();
 });
 
-it("redirects authenticated non-owners away from the owner dashboard", async () => {
-  saveToken("member-token");
+// The server answers a sign-in by setting the session cookies; the hint
+// cookie is the part the app can read.
+function signInReply() {
+  document.cookie = "salonhub_auth=1; Path=/";
+  return null;
+}
+
+it("shows the access page to authenticated non-owners on the owner dashboard", async () => {
+  signInForTest();
   renderRoutes("/owner/dashboard", { ...ownerProfile, role: "USER" });
 
   expect(
     await screen.findByRole("heading", {
-      name: /Your next great.*salon experience.*starts here/i,
+      name: "This area is not for your account",
     }),
   ).toBeDefined();
   expect(screen.queryByText("Good morning, Test")).toBeNull();
 });
 
 it("shows an owner dashboard shortcut in the application header", async () => {
-  saveToken("owner-token");
+  signInForTest();
   renderRoutes("/");
 
   const shortcut = await screen.findByRole("link", {
@@ -186,13 +196,13 @@ it("shows an owner dashboard shortcut in the application header", async () => {
   expect(shortcut.getAttribute("href")).toBe("/owner/dashboard");
 });
 
-it("protects salon management routes from authenticated non-owners", async () => {
-  saveToken("member-token");
+it("shows the access page on salon management routes to non-owners", async () => {
+  signInForTest();
   renderRoutes("/owner/services", { ...ownerProfile, role: "USER" });
 
   expect(
     await screen.findByRole("heading", {
-      name: /Your next great.*salon experience.*starts here/i,
+      name: "This area is not for your account",
     }),
   ).toBeDefined();
   expect(screen.queryByRole("heading", { name: /services/i })).toBeNull();

@@ -1,6 +1,6 @@
 import { beforeEach, expect, it, vi } from "vitest";
+import { signInForTest } from "../../../test/session.js";
 import http from "../../../shared/api/httpClient.js";
-import { saveToken } from "../../../shared/auth/tokenStorage.js";
 import {
   getAllSalonsApi,
   resubmitSalonApi,
@@ -11,7 +11,7 @@ const requests = [];
 
 beforeEach(() => {
   requests.length = 0;
-  saveToken("owner-token");
+  signInForTest();
   http.defaults.adapter = vi.fn(async (config) => {
     requests.push(config);
     return {
@@ -48,5 +48,5 @@ it("updates and resubmits the authenticated owner's salon", async () => {
     method: "post",
     url: "/salons/7/resubmit",
   });
-  expect(requests[1].headers.Authorization).toBe("Bearer owner-token");
+  expect(requests[1].withCredentials).toBe(true);
 });

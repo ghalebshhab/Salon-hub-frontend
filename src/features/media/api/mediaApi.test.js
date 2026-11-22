@@ -1,12 +1,12 @@
 import { beforeEach, expect, it, vi } from "vitest";
+import { signInForTest } from "../../../test/session.js";
 import httpClient from "../../../shared/api/httpClient.js";
-import { saveToken } from "../../../shared/auth/tokenStorage.js";
 import {
   uploadSalonCoverApi,
   uploadSalonCoverFromDriveApi,
 } from "./mediaApi.js";
 
-beforeEach(() => saveToken("owner-test-token"));
+beforeEach(() => signInForTest());
 
 it("preserves authentication, cancellation and progress options for both cover sources", async () => {
   const requests = [];
@@ -42,7 +42,7 @@ it("preserves authentication, cancellation and progress options for both cover s
     expect(request.timeout).toBe(120000);
     expect(request.showLoading).toBe(false);
     expect(request.salonHubLoadingId).toBeUndefined();
-    expect(request.headers.Authorization).toBe("Bearer owner-test-token");
+    expect(request.withCredentials).toBe(true);
   }
   expect(requests[0].url).toBe("/media/salon-cover");
   expect(requests[0].data.get("file")).toBe(file);

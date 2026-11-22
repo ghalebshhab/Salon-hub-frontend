@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it } from "vitest";
 import http, { loadingMessageFor } from "./httpClient.js";
-import { getToken, saveToken } from "../auth/tokenStorage.js";
+import { clearAuthData, isLoggedIn } from "../auth/tokenStorage.js";
+import { signInForTest } from "../../test/session.js";
 import { getApiErrorMessage, requireData } from "./response.js";
 import {
   getLoadingSnapshot,
@@ -13,95 +14,89 @@ const fail = (status) => async (config) => {
 afterEach(resetLoadingForTests);
 
 describe("HTTP authentication policy", () => {
-  it("sends authentication to logout but not to public authentication flows", async () => {
-    saveToken("valid");
-    const inspect = (expectedAuthorization) => async (config) => {
-      expect(config.headers.Authorization).toBe(expectedAuthorization);
-      return {
-        config,
-        data: { success: true, data: null },
-        headers: {},
-        status: 200,
-        statusText: "OK",
-      };
+  const ok = (config) => ({
+    config,
+    data: { success: true, data: null },
+    headers: {},
+    status: 200,
+    statusText: "OK",
+  });
+  // Answers the token refresh call (it does not use a per-request adapter).
+  const answerRefresh = (succeeds) => {
+    const calls = [];
+    http.defaults.adapter = async (config) => {
+      calls.push(config.url);
+      if (succeeds) return ok(config);
+      throw { config, response: { status: 401 } };
     };
+    return calls;
+  };
 
-    await http.post("/auth/login", {}, { adapter: inspect(undefined) });
-    await http.post("/auth/email/verify", {}, { adapter: inspect(undefined) });
-    await http.post(
-      "/auth/password/forgot",
-      {},
-      { adapter: inspect(undefined) },
-    );
-    await http.post(
-      "/auth/password/verify-code",
-      {},
-      {
-        adapter: inspect(undefined),
-      },
-    );
-    await http.post(
-      "/auth/password/reset",
-      {},
-      { adapter: inspect(undefined) },
-    );
-    await http.post(
-      "/auth/password/change",
-      {},
-      {
-        adapter: inspect("Bearer valid"),
-      },
-    );
-    await http.post("/auth/logout", {}, { adapter: inspect("Bearer valid") });
+  afterEach(() => {
+    delete http.defaults.adapter;
+    clearAuthData();
   });
 
-  it("attaches the token and clears an expired session on 401", async () => {
-    saveToken("old");
+  it("sends the cookies and the CSRF header, never a token header", async () => {
+    signInForTest();
+    await http.post(
+      "/bookings",
+      {},
+      {
+        adapter: async (config) => {
+          expect(config.withCredentials).toBe(true);
+          expect(config.headers["X-Requested-With"]).toBe("XMLHttpRequest");
+          expect(config.headers.Authorization).toBeUndefined();
+          return ok(config);
+        },
+      },
+    );
+  });
+
+  it("refreshes the session once on 401 and repeats the request", async () => {
+    signInForTest();
+    const refreshCalls = answerRefresh(true);
+    let attempts = 0;
+    const response = await http.get("/bookings/my", {
+      adapter: async (config) => {
+        attempts += 1;
+        if (attempts === 1) throw { config, response: { status: 401 } };
+        return ok(config);
+      },
+    });
+
+    expect(response.data.success).toBe(true);
+    expect(attempts).toBe(2);
+    expect(refreshCalls).toEqual(["/auth/refresh"]);
+    expect(isLoggedIn()).toBe(true);
+  });
+
+  it("signs out on this device when the refresh also fails", async () => {
+    signInForTest();
+    answerRefresh(false);
     await expect(
       http.get("/bookings/my", { adapter: fail(401) }),
     ).rejects.toBeDefined();
-    expect(getToken()).toBeNull();
+    expect(isLoggedIn()).toBe(false);
   });
-  it("does not send a stale session with explicitly public requests", async () => {
-    saveToken("stale");
-    await http.get("/salons/1", {
-      skipAuth: true,
-      adapter: async (config) => {
-        expect(config.headers.Authorization).toBeUndefined();
-        return {
-          config,
-          data: { success: true, data: { id: 1 } },
-          headers: {},
-          status: 200,
-          statusText: "OK",
-        };
-      },
-    });
-    expect(getToken()).toBe("stale");
-  });
-  it("keeps the session for forbidden requests and failed login attempts", async () => {
-    saveToken("valid");
+
+  it("does not refresh for public requests, forbidden requests or failed logins", async () => {
+    signInForTest();
+    const refreshCalls = answerRefresh(true);
+    await expect(
+      http.get("/salons/1", { skipAuth: true, adapter: fail(401) }),
+    ).rejects.toBeDefined();
     await expect(
       http.get("/owner", { adapter: fail(403) }),
     ).rejects.toBeDefined();
-    expect(getToken()).toBe("valid");
     await expect(
       http.post("/auth/login", {}, { adapter: fail(401) }),
     ).rejects.toBeDefined();
-    expect(getToken()).toBe("valid");
+
+    expect(refreshCalls).toEqual([]);
+    expect(isLoggedIn()).toBe(true);
   });
-  it("does not clear a newer session for an old request", async () => {
-    saveToken("old");
-    await expect(
-      http.get("/bookings/my", {
-        adapter: async (config) => {
-          saveToken("new");
-          throw { config, response: { status: 401 } };
-        },
-      }),
-    ).rejects.toBeDefined();
-    expect(getToken()).toBe("new");
-  });
+
   it("surfaces unsuccessful API envelopes", () => {
     expect(() =>
       requireData({ success: false, message: "Not available" }),

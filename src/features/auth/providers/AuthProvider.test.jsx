@@ -1,6 +1,7 @@
 import { act, renderHook, waitFor } from "@testing-library/react";
+import { signInForTest } from "../../../test/session.js";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { clearAuthData, saveToken } from "../../../shared/auth/tokenStorage.js";
+import { clearAuthData } from "../../../shared/auth/tokenStorage.js";
 import useAuth from "../../../shared/auth/useAuth.js";
 import AuthProvider from "./AuthProvider.jsx";
 
@@ -19,7 +20,7 @@ describe("AuthProvider", () => {
     const { result } = renderHook(() => useAuth(), { wrapper });
     expect(result.current.loggedIn).toBe(false);
 
-    act(() => saveToken("test-token"));
+    act(() => signInForTest());
     expect(result.current.loggedIn).toBe(true);
 
     act(() => clearAuthData());
@@ -27,7 +28,7 @@ describe("AuthProvider", () => {
   });
 
   it("loads the authenticated user role for owner-only experiences", async () => {
-    saveToken("owner-token");
+    signInForTest();
     const { result } = renderHook(() => useAuth(), { wrapper });
 
     await waitFor(() => expect(result.current.profileLoading).toBe(false));
@@ -44,7 +45,7 @@ describe("AuthProvider", () => {
       <AuthProvider loadProfile={refreshProfile}>{children}</AuthProvider>
     );
 
-    saveToken("promoted-owner-token");
+    signInForTest();
     const { result } = renderHook(() => useAuth(), { wrapper: refreshWrapper });
 
     await waitFor(() => expect(result.current.role).toBe("USER"));

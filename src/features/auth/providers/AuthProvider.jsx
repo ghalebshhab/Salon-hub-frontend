@@ -8,13 +8,18 @@ import {
 import { getUserProfileApi } from "../api/authApi.js";
 import { requireData } from "../../../shared/api/response.js";
 import AuthContext from "../../../shared/auth/authContext.js";
-import { getToken, subscribeAuth } from "../../../shared/auth/tokenStorage.js";
+import {
+  getSessionKey,
+  subscribeAuth,
+} from "../../../shared/auth/tokenStorage.js";
+import t from "../../../shared/i18n/t.js";
 
 export default function AuthProvider({
   children,
   loadProfile = getUserProfileApi,
 }) {
-  const token = useSyncExternalStore(subscribeAuth, getToken, () => null);
+  // "token" is a session key, not a secret: the real tokens are httpOnly cookies.
+  const token = useSyncExternalStore(subscribeAuth, getSessionKey, () => null);
   const [profileState, setProfileState] = useState({
     token: null,
     user: null,
@@ -46,7 +51,7 @@ export default function AuthProvider({
         if (controller.signal.aborted) return;
         setProfileState({
           token,
-          user: requireData(response, "Your account could not be loaded."),
+          user: requireData(response, t("Your account could not be loaded.")),
           loading: false,
           error: null,
         });

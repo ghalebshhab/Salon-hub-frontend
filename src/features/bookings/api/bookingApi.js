@@ -175,6 +175,37 @@ export const markNoShowApi = async (bookingId) => {
   return response.data;
 };
 
+// ---------- leave on time ----------
+
+const departurePath = (bookingId) => `/bookings/${bookingId}/departure-plan`;
+
+export const getDeparturePlanApi = async (bookingId, config = {}) => {
+  const response = await httpClient.get(departurePath(bookingId), {
+    ...config,
+    ...quiet,
+  });
+  return response.data;
+};
+
+/** Saves where the customer leaves from and turns the leave alerts on. */
+export const setDepartureOriginApi = async (bookingId, origin) => {
+  const response = await httpClient.put(
+    `${departurePath(bookingId)}/origin`,
+    origin,
+    quiet,
+  );
+  return response.data;
+};
+
+/** Forgets the saved place and turns the leave alerts off. */
+export const clearDepartureOriginApi = async (bookingId) => {
+  const response = await httpClient.delete(
+    `${departurePath(bookingId)}/origin`,
+    quiet,
+  );
+  return response.data;
+};
+
 export const getBookingRescheduleAvailabilityApi = async (
   bookingId,
   bookingDate,

@@ -1,3 +1,5 @@
+import t from "../../../shared/i18n/t.js";
+import { dateLocale } from "../../../shared/i18n/language.js";
 const STATUS_CLASSES = {
   ACCEPTED: "active-tag",
   IN_PROGRESS: "active-tag",
@@ -12,14 +14,14 @@ export const getStatusClass = (status) =>
   STATUS_CLASSES[status] || "pending-tag";
 
 const STATUS_LABELS = {
-  PENDING: "Waiting for the salon",
-  ACCEPTED: "Confirmed",
-  IN_PROGRESS: "In service",
-  COMPLETED: "Completed",
-  REJECTED: "Not accepted",
-  CANCELLED: "Cancelled",
-  EXPIRED: "Expired, no answer",
-  NO_SHOW: "Missed",
+  PENDING: t("Waiting for the salon"),
+  ACCEPTED: t("Confirmed"),
+  IN_PROGRESS: t("In service"),
+  COMPLETED: t("Completed"),
+  REJECTED: t("Not accepted"),
+  CANCELLED: t("Cancelled"),
+  EXPIRED: t("Expired, no answer"),
+  NO_SHOW: t("Missed"),
 };
 export const getStatusLabel = (status) => STATUS_LABELS[status] || status;
 
@@ -42,20 +44,20 @@ export const isLiveToday = (booking, today = getTodayDate()) =>
   booking.bookingDate === today;
 
 const UNAVAILABLE_MESSAGES = {
-  TIME_OFF: "is on time off this day.",
-  NOT_WORKING: "does not work on this day.",
-  FULLY_BOOKED: "is fully booked this day.",
-  BUSY: "has another appointment at this time.",
-  NO_TIME_LEFT_TODAY: "has no time left today.",
-  NO_QUALIFIED_EMPLOYEE: "cannot do every selected service.",
+  TIME_OFF: "{who} is on time off this day.",
+  NOT_WORKING: "{who} does not work on this day.",
+  FULLY_BOOKED: "{who} is fully booked this day.",
+  BUSY: "{who} has another appointment at this time.",
+  NO_TIME_LEFT_TODAY: "{who} has no time left today.",
+  NO_QUALIFIED_EMPLOYEE: "{who} cannot do every selected service.",
 };
 
 /** Plain sentence for why a day or an employee has no free time. */
-export function describeUnavailable(reason, who = "The salon") {
-  if (reason === "SALON_CLOSED") return "The salon is closed this day.";
+export function describeUnavailable(reason, who = t("The salon")) {
+  if (reason === "SALON_CLOSED") return t("The salon is closed this day.");
   const message = UNAVAILABLE_MESSAGES[reason];
-  if (!message) return `${who} has no free time this day.`;
-  return `${who} ${message}`;
+  if (!message) return t("{who} has no free time this day.", { who });
+  return t(message, { who });
 }
 
 /** Staff can record a no-show this long after the start (matches the server). */
@@ -65,7 +67,9 @@ export const NO_SHOW_GRACE_MINUTES = 15;
 export function canMarkNoShow(booking, now = new Date()) {
   if (booking?.status !== "ACCEPTED" || !booking.bookingDate) return false;
   const start = parseLocalDate(booking.bookingDate);
-  const [hours, minutes] = toHourMinute(booking.bookingTime).split(":").map(Number);
+  const [hours, minutes] = toHourMinute(booking.bookingTime)
+    .split(":")
+    .map(Number);
   start.setHours(hours || 0, (minutes || 0) + NO_SHOW_GRACE_MINUTES, 0, 0);
   return now >= start;
 }
@@ -95,11 +99,15 @@ export function getAnswerDeadline(booking, now = new Date()) {
 export function formatDeadline(date, now = new Date()) {
   const time = `${String(date.getHours()).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}`;
   const today = getTodayDate(now);
-  const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+  const tomorrow = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate() + 1,
+  );
   const day = getTodayDate(date);
   if (day === today) return `today ${time}`;
   if (day === getTodayDate(tomorrow)) return `tomorrow ${time}`;
-  const label = date.toLocaleDateString("en-GB", {
+  const label = date.toLocaleDateString(dateLocale(), {
     weekday: "short",
     day: "numeric",
     month: "short",
@@ -109,9 +117,9 @@ export function formatDeadline(date, now = new Date()) {
 
 /** "3 h 20 min left", "45 min left". */
 export function formatTimeLeft(msLeft) {
-  if (msLeft <= 0) return "time is up";
+  if (msLeft <= 0) return t("time is up");
   const minutes = Math.max(1, Math.ceil(msLeft / 60000));
-  return `${formatDuration(minutes)} left`;
+  return t("{duration} left", { duration: formatDuration(minutes) });
 }
 
 export function getTodayDate(date = new Date()) {
@@ -148,19 +156,19 @@ export function getUpcomingDays(count = 14, from = new Date()) {
       value: getTodayDate(date),
       weekday:
         index === 0
-          ? "Today"
+          ? t("Today")
           : index === 1
-            ? "Tomorrow"
-            : date.toLocaleDateString("en-GB", { weekday: "short" }),
+            ? t("Tomorrow")
+            : date.toLocaleDateString(dateLocale(), { weekday: "short" }),
       day: date.getDate(),
-      month: date.toLocaleDateString("en-GB", { month: "short" }),
+      month: date.toLocaleDateString(dateLocale(), { month: "short" }),
     };
   });
 }
 
 export function formatDateLabel(value) {
   if (!value) return "";
-  return parseLocalDate(value).toLocaleDateString("en-GB", {
+  return parseLocalDate(value).toLocaleDateString(dateLocale(), {
     weekday: "long",
     day: "numeric",
     month: "long",
@@ -183,9 +191,9 @@ export function formatClock(dateTime) {
 }
 
 const DAY_PARTS = [
-  { key: "morning", label: "Morning", until: 12 },
-  { key: "afternoon", label: "Afternoon", until: 17 },
-  { key: "evening", label: "Evening", until: 24 },
+  { key: "morning", label: t("Morning"), until: 12 },
+  { key: "afternoon", label: t("Afternoon"), until: 17 },
+  { key: "evening", label: t("Evening"), until: 24 },
 ];
 
 /** Groups availability slots into morning, afternoon and evening. */
@@ -204,17 +212,19 @@ export function groupSlotsByDayPart(slots = []) {
 
 export function formatDuration(minutes) {
   const value = Number(minutes) || 0;
-  if (value < 60) return `${value} min`;
+  if (value < 60) return t("{value} min", { value });
   const hours = Math.floor(value / 60);
   const rest = value % 60;
-  return rest ? `${hours} h ${rest} min` : `${hours} h`;
+  return rest
+    ? t("{hours} h {rest} min", { hours, rest })
+    : t("{hours} h", { hours });
 }
 
 export function formatDistance(meters) {
   if (meters == null) return "";
   return meters < 1000
-    ? `${Math.round(meters / 10) * 10} m`
-    : `${(meters / 1000).toFixed(1)} km`;
+    ? t("{meters} m", { meters: Math.round(meters / 10) * 10 })
+    : t("{fixed} km", { fixed: (meters / 1000).toFixed(1) });
 }
 
 export function canEmployeePerformServices(employee, serviceIds) {

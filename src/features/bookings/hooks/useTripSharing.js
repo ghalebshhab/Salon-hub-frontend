@@ -5,6 +5,7 @@ import {
   stopJourneyApi,
   updateJourneyPositionApi,
 } from "../api/bookingApi.js";
+import t from "../../../shared/i18n/t.js";
 
 /** Send a new position after this much movement or this much time. */
 export const MIN_MOVE_METERS = 75;
@@ -33,7 +34,7 @@ export function shouldSendPosition(last, next, now) {
   );
 }
 
-const readPosition = () =>
+export const readPosition = () =>
   new Promise((resolve, reject) => {
     navigator.geolocation.getCurrentPosition(
       ({ coords }) =>
@@ -76,7 +77,7 @@ export default function useTripSharing(bookingId, tracking, run) {
       },
       () =>
         setLocationNote(
-          "Live location paused. Your ETA updates when it comes back.",
+          t("Live location paused. Your ETA updates when it comes back."),
         ),
       { enableHighAccuracy: true, maximumAge: 15000, timeout: 20000 },
     );
@@ -92,7 +93,9 @@ export default function useTripSharing(bookingId, tracking, run) {
         lastSentRef.current = { ...position, sentAt: Date.now() };
       } catch {
         setLocationNote(
-          "Location is off, so the salon sees that you are on the way but not your ETA.",
+          t(
+            "Location is off, so the salon sees that you are on the way but not your ETA.",
+          ),
         );
       }
     }

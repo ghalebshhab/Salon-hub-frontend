@@ -1,4 +1,5 @@
 import { formatClock } from "../../model/booking.js";
+import t from "../../../../shared/i18n/t.js";
 
 /** Progress bar for a running service with the expected end time. */
 export default function ServiceProgress({ tracking, who }) {
@@ -9,10 +10,14 @@ export default function ServiceProgress({ tracking, who }) {
       <div className="live-progress-head">
         <strong>
           {overdue
-            ? "Finishing up"
-            : `${tracking.remainingMinutes ?? "—"} min left`}
+            ? t("Finishing up")
+            : t("{value} min left", {
+                value: tracking.remainingMinutes ?? "—",
+              })}
         </strong>
-        <span>Ends around {formatClock(tracking.expectedEndAt)}</span>
+        <span>
+          {t("Ends around")} {formatClock(tracking.expectedEndAt)}
+        </span>
       </div>
       <div
         className="live-progress-bar"
@@ -20,13 +25,15 @@ export default function ServiceProgress({ tracking, who }) {
         aria-valuemin={0}
         aria-valuemax={100}
         aria-valuenow={percent}
-        aria-label={`${who} service progress`}
+        aria-label={t("{who} service progress", { who })}
       >
         <span
           style={{ transform: `scaleX(${Math.min(percent, 100) / 100})` }}
         />
       </div>
-      <small>Started at {formatClock(tracking.serviceStartedAt)}</small>
+      <small>
+        {t("Started at")} {formatClock(tracking.serviceStartedAt)}
+      </small>
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getMySalonPendingBookingsApi } from "../api/bookingApi.js";
 import { requireData } from "../../../shared/api/response.js";
+import t from "../../../shared/i18n/t.js";
 
 const REFRESH_MS = 60_000;
 
@@ -23,7 +24,7 @@ export default function usePendingBookingCount(enabled) {
         const response = await getMySalonPendingBookingsApi({
           signal: controller.signal,
         });
-        const bookings = requireData(response, "Unable to load requests");
+        const bookings = requireData(response, t("Unable to load requests"));
         setCount(Array.isArray(bookings) ? bookings.length : 0);
       } catch {
         // Keep the previous count; the bookings page reports real errors.

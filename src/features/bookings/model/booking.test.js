@@ -135,8 +135,10 @@ it("gives the answer deadline of a pending request with urgency", () => {
   expect(formatDeadline(later.deadline, now)).toBe("tomorrow 09:15");
 
   expect(
-    getAnswerDeadline({ ...booking, responseDeadline: "2026-11-16T09:00:00" }, now)
-      .overdue,
+    getAnswerDeadline(
+      { ...booking, responseDeadline: "2026-11-16T09:00:00" },
+      now,
+    ).overdue,
   ).toBe(true);
   expect(getAnswerDeadline({ ...booking, status: "ACCEPTED" }, now)).toBeNull();
 });
@@ -155,7 +157,9 @@ it("allows a no-show only fifteen minutes after a confirmed start", () => {
 });
 
 it("writes a closure as one day or a range", () => {
-  expect(formatDateRange("2026-11-20", "2026-11-20")).toBe("Friday 20 November");
+  expect(formatDateRange("2026-11-20", "2026-11-20")).toBe(
+    "Friday 20 November",
+  );
   expect(formatDateRange("2026-11-20", "2026-11-22")).toBe(
     "Friday 20 November – Sunday 22 November",
   );

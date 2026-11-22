@@ -11,6 +11,8 @@ import {
   getMethodShort,
   toFils,
 } from "../../../payments/model/payment.js";
+import t from "../../../../shared/i18n/t.js";
+import { serviceName } from "../../../services/model/serviceText.js";
 
 /** Live summary of the request: on the side on desktop, on top of the review on mobile. */
 export default function BookingSummary({
@@ -26,18 +28,20 @@ export default function BookingSummary({
 }) {
   return (
     <div className="bk-summary">
-      <span className="eyebrow">Your visit</span>
+      <span className="eyebrow">{t("Your visit")}</span>
       <h2>{salon.name}</h2>
-      <p className="bk-summary-city">{salon.city}</p>
+      <p className="bk-summary-city">{t(salon.city)}</p>
 
       <ul className="bk-summary-services">
         {services.length === 0 ? (
-          <li className="is-empty">No service selected yet</li>
+          <li className="is-empty">{t("No service selected yet")}</li>
         ) : (
           services.map((service) => (
             <li key={service.id}>
-              <span>{service.name}</span>
-              <b>{Number(service.price)} JD</b>
+              <span>{serviceName(service)}</span>
+              <b>
+                {Number(service.price)} {t("JD")}
+              </b>
             </li>
           ))
         )}
@@ -46,7 +50,7 @@ export default function BookingSummary({
       <dl className="bk-summary-facts">
         <div>
           <dt>
-            <UserRound size={15} aria-hidden="true" /> Professional
+            <UserRound size={15} aria-hidden="true" /> {t("Professional")}
           </dt>
           <dd>
             {step < 1 ? (
@@ -55,28 +59,28 @@ export default function BookingSummary({
               employee.fullName
             ) : (
               <span className="bk-summary-assign">
-                <UsersRound size={13} aria-hidden="true" /> Salon assigns
+                <UsersRound size={13} aria-hidden="true" /> {t("Salon assigns")}
               </span>
             )}
           </dd>
         </div>
         <div>
           <dt>
-            <CalendarDays size={15} aria-hidden="true" /> Day
+            <CalendarDays size={15} aria-hidden="true" /> {t("Day")}
           </dt>
           <dd>{step < 2 ? "—" : formatDateLabel(bookingDate)}</dd>
         </div>
         {step >= 3 && paymentMethod && (
           <div>
             <dt>
-              <Wallet size={15} aria-hidden="true" /> Payment
+              <Wallet size={15} aria-hidden="true" /> {t("Payment")}
             </dt>
             <dd>{getMethodShort(paymentMethod)}</dd>
           </div>
         )}
         <div>
           <dt>
-            <Clock3 size={15} aria-hidden="true" /> Time
+            <Clock3 size={15} aria-hidden="true" /> {t("Time")}
           </dt>
           <dd>
             {bookingTime
@@ -89,13 +93,13 @@ export default function BookingSummary({
       </dl>
 
       <div className="bk-summary-total">
-        <span>Total</span>
+        <span>{t("Total")}</span>
         <strong>{formatMoney(toFils(totalPrice))}</strong>
       </div>
       <p className="bk-summary-foot">
         {paymentMethod === "CASH" || !paymentMethod
-          ? "Pay at the salon. No charge to request."
-          : "No charge to request. You pay after the salon confirms."}
+          ? t("Pay at the salon. No charge to request.")
+          : t("No charge to request. You pay after the salon confirms.")}
       </p>
     </div>
   );

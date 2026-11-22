@@ -7,6 +7,7 @@ import {
   groupSlotsByDayPart,
   toHourMinute,
 } from "../../model/booking.js";
+import t from "../../../../shared/i18n/t.js";
 
 function NoTimes({
   availability,
@@ -19,19 +20,19 @@ function NoTimes({
   if (error) {
     return (
       <div className="bk-notice is-error" role="alert">
-        <strong>We could not load the times.</strong>
+        <strong>{t("We could not load the times.")}</strong>
         <span>{error}</span>
         <button
           className="btn btn-secondary btn-small"
           type="button"
           onClick={onRetry}
         >
-          <RotateCw size={15} aria-hidden="true" /> Try again
+          <RotateCw size={15} aria-hidden="true" /> {t("Try again")}
         </button>
       </div>
     );
   }
-  const who = employee?.fullName || "The salon";
+  const who = employee?.fullName || t("The salon");
   const next = availability?.nextAvailableDate;
   return (
     <div className="bk-notice" role="status">
@@ -41,8 +42,10 @@ function NoTimes({
       </strong>
       <span>
         {employee
-          ? "Pick another day, or let the salon assign a free professional for this day."
-          : "Pick another day to see free times."}
+          ? t(
+              "Pick another day, or let the salon assign a free professional for this day.",
+            )
+          : t("Pick another day to see free times.")}
       </span>
       <div className="bk-notice-actions">
         {next && (
@@ -51,7 +54,7 @@ function NoTimes({
             type="button"
             onClick={() => onPickDate(next)}
           >
-            Next free day: {formatDateLabel(next)}
+            {t("Next free day:")} {formatDateLabel(next)}
           </button>
         )}
         {employee && (
@@ -60,7 +63,8 @@ function NoTimes({
             type="button"
             onClick={onSalonAssigns}
           >
-            <UsersRound size={15} aria-hidden="true" /> Let the salon assign
+            <UsersRound size={15} aria-hidden="true" />{" "}
+            {t("Let the salon assign")}
           </button>
         )}
       </div>
@@ -89,17 +93,29 @@ export default function TimeStep({
   return (
     <div className="bk-fieldset">
       <div className="bk-step-title">
-        <span className="eyebrow">Step 3</span>
-        Pick a day and time
+        <span className="eyebrow">{t("Step 3")}</span>
+        {t("Pick a day and time")}
         <small>
-          Times follow the salon hours ({toHourMinute(salon.openTime)}–
-          {toHourMinute(salon.closeTime)})
-          {employee ? ` and ${employee.fullName}'s schedule` : ""}. Busy times
-          and days off are already hidden.
+          {employee
+            ? t(
+                "Times follow the salon hours ({open}–{close}) and {name}'s schedule. Busy times and days off are already hidden.",
+                {
+                  open: toHourMinute(salon.openTime),
+                  close: toHourMinute(salon.closeTime),
+                  name: employee.fullName,
+                },
+              )
+            : t(
+                "Times follow the salon hours ({open}–{close}). Busy times and days off are already hidden.",
+                {
+                  open: toHourMinute(salon.openTime),
+                  close: toHourMinute(salon.closeTime),
+                },
+              )}
         </small>
       </div>
 
-      <div className="bk-date-strip" role="listbox" aria-label="Day">
+      <div className="bk-date-strip" role="listbox" aria-label={t("Day")}>
         {days.map((day) => (
           <button
             key={day.value}
@@ -115,11 +131,11 @@ export default function TimeStep({
           </button>
         ))}
         <label className="bk-date bk-date-other">
-          <small>Other</small>
+          <small>{t("Other")}</small>
           <CalendarSearch size={18} aria-hidden="true" />
           <input
             type="date"
-            aria-label="Choose another date"
+            aria-label={t("Choose another date")}
             value={dateInStrip ? "" : bookingDate}
             min={days[0].value}
             onChange={(event) =>
@@ -130,12 +146,12 @@ export default function TimeStep({
       </div>
 
       <p className="bk-date-heading">
-        {bookingDate ? formatDateLabel(bookingDate) : "Choose a day"}
-        {bookingDate && !dateInStrip && " (custom date)"}
+        {bookingDate ? formatDateLabel(bookingDate) : t("Choose a day")}
+        {bookingDate && !dateInStrip && t(" (custom date)")}
       </p>
 
       {loading ? (
-        <div className="bk-slot-skeleton" aria-label="Loading free times">
+        <div className="bk-slot-skeleton" aria-label={t("Loading free times")}>
           {Array.from({ length: 8 }, (_, index) => (
             <span key={index} className="skeleton-block" />
           ))}
@@ -152,12 +168,12 @@ export default function TimeStep({
       ) : (
         <div className="bk-slot-groups">
           {groups.map((group) => (
-            <section key={group.key} aria-label={group.label}>
-              <h3>{group.label}</h3>
+            <section key={group.key} aria-label={t(group.label)}>
+              <h3>{t(group.label)}</h3>
               <div
                 className="bk-slots"
                 role="radiogroup"
-                aria-label={`${group.label} times`}
+                aria-label={t("{label} times", { label: group.label })}
               >
                 {group.slots.map((slot) => {
                   const time = toHourMinute(slot.time);
@@ -173,7 +189,9 @@ export default function TimeStep({
                       onClick={() => onTimeChange(time)}
                     >
                       <strong>{time}</strong>
-                      {!employee && <small>{count} free</small>}
+                      {!employee && (
+                        <small>{t("{count} free", { count })}</small>
+                      )}
                     </button>
                   );
                 })}
@@ -184,8 +202,10 @@ export default function TimeStep({
       )}
       {availability && (
         <p className="bk-hint">
-          Same-day times start at least {availability.minimumLeadMinutes}{" "}
-          minutes from now.
+          {t(
+            "Same-day times start at least {minimumLeadMinutes} minutes from now.",
+            { minimumLeadMinutes: availability.minimumLeadMinutes },
+          )}
         </p>
       )}
     </div>

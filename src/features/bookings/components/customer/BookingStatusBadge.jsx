@@ -8,6 +8,7 @@ import {
   UserX,
 } from "lucide-react";
 import { getStatusLook } from "../../model/customerBookings.js";
+import useI18n from "../../../../shared/i18n/useI18n.js";
 
 const STATUS_ICONS = {
   PENDING: Hourglass,
@@ -22,12 +23,13 @@ const STATUS_ICONS = {
 
 /** Status pill: icon + text, so the meaning never depends on color only. */
 export default function BookingStatusBadge({ status }) {
+  const { t } = useI18n();
   const look = getStatusLook(status);
   const Icon = STATUS_ICONS[status] || Hourglass;
   return (
     <span className={`mb-status tone-${look.tone}`}>
       <Icon size={14} aria-hidden="true" />
-      {look.label}
+      {t(look.label)}
     </span>
   );
 }

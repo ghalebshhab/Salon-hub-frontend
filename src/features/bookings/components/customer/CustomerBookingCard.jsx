@@ -24,6 +24,8 @@ import {
   formatPrice,
   getDateParts,
 } from "../../model/customerBookings.js";
+import t from "../../../../shared/i18n/t.js";
+import { serviceName } from "../../../services/model/serviceText.js";
 
 function DateTile({ booking, live }) {
   const parts = getDateParts(booking.bookingDate);
@@ -32,7 +34,9 @@ function DateTile({ booking, live }) {
     <div className={`mb-date ${live ? "is-live" : ""}`} aria-hidden="true">
       <span className="mb-date-month">{parts.month}</span>
       <strong className="mb-date-day">{parts.day}</strong>
-      <span className="mb-date-weekday">{live ? "Today" : parts.weekday}</span>
+      <span className="mb-date-weekday">
+        {live ? t("Today") : parts.weekday}
+      </span>
     </div>
   );
 }
@@ -44,45 +48,63 @@ function StatusNote({ booking, live }) {
     case "PENDING":
       return (
         <p className="mb-note tone-warning">
-          Your request is with the salon.{" "}
+          {t("Your request is with the salon.")}
           {employee
-            ? `Your time with ${employee} is held until the salon decides.`
-            : "The salon will confirm and choose your professional."}{" "}
-          We will notify you.
+            ? t("Your time with {employee} is held until the salon decides.", {
+                employee,
+              })
+            : t("The salon will confirm and choose your professional.")}
+          {t("We will notify you.")}
         </p>
       );
     case "ACCEPTED":
       if (live) return null;
       return booking.customerConfirmedAt ? (
         <p className="mb-note tone-success">
-          <CheckCircle2 size={16} aria-hidden="true" /> You told the salon you
-          are coming{employee ? ` to see ${employee}` : ""}. On the day, open
-          this page to share your trip.
+          <CheckCircle2 size={16} aria-hidden="true" />{" "}
+          {employee
+            ? t(
+                "You told the salon you are coming to see {employee}. On the day, open this page to share your trip.",
+                { employee },
+              )
+            : t(
+                "You told the salon you are coming. On the day, open this page to share your trip.",
+              )}
         </p>
       ) : (
         <p className="mb-note tone-success">
-          Confirmed{employee ? ` with ${employee}` : ""}. On the day, open this
-          page to share your trip and follow your service live.
+          {employee
+            ? t(
+                "Confirmed with {employee}. On the day, open this page to share your trip and follow your service live.",
+                { employee },
+              )
+            : t(
+                "Confirmed. On the day, open this page to share your trip and follow your service live.",
+              )}
         </p>
       );
     case "REJECTED":
       return (
         <p className="mb-note tone-danger">
-          The salon could not take this time. You can choose another time.
+          {t(
+            "The salon could not take this time. You can choose another time.",
+          )}
         </p>
       );
     case "EXPIRED":
       return (
         <p className="mb-note tone-danger">
-          The salon did not answer in time, so this request expired. Nothing was
-          charged.
+          {t(
+            "The salon did not answer in time, so this request expired. Nothing was charged.",
+          )}
         </p>
       );
     case "NO_SHOW":
       return (
         <p className="mb-note tone-danger">
-          The salon marked this visit as missed. If you were there, contact the
-          salon.
+          {t(
+            "The salon marked this visit as missed. If you were there, contact the salon.",
+          )}
         </p>
       );
     default:
@@ -93,13 +115,18 @@ function StatusNote({ booking, live }) {
 /** Asks the customer to confirm a confirmed appointment, so the salon can plan. */
 function AttendancePrompt({ booking, confirming, onConfirm }) {
   return (
-    <div className="mb-attendance" role="group" aria-label="Confirm your visit">
+    <div
+      className="mb-attendance"
+      role="group"
+      aria-label={t("Confirm your visit")}
+    >
       <CalendarCheck2 size={20} aria-hidden="true" />
       <div>
-        <strong>Are you still coming?</strong>
+        <strong>{t("Are you still coming?")}</strong>
         <span>
-          Tell the salon now. If your plans changed, cancel so another customer
-          can take the time.
+          {t(
+            "Tell the salon now. If your plans changed, cancel so another customer can take the time.",
+          )}
         </span>
       </div>
       <button
@@ -108,7 +135,7 @@ function AttendancePrompt({ booking, confirming, onConfirm }) {
         disabled={confirming}
         onClick={() => onConfirm(booking.id)}
       >
-        {confirming ? "Saving…" : "Yes, I'm coming"}
+        {confirming ? t("Saving…") : t("Yes, I'm coming")}
       </button>
     </div>
   );
@@ -116,18 +143,24 @@ function AttendancePrompt({ booking, confirming, onConfirm }) {
 
 function RescheduleProposal({ booking, proposal, responding, onDecision }) {
   return (
-    <div className="mb-reschedule" role="group" aria-label="New time proposed">
+    <div
+      className="mb-reschedule"
+      role="group"
+      aria-label={t("New time proposed")}
+    >
       <div className="mb-reschedule-head">
         <CalendarClock size={20} aria-hidden="true" />
         <div>
-          <strong>The salon proposed a new time</strong>
+          <strong>{t("The salon proposed a new time")}</strong>
           <span>
             {proposal.proposedDate} · {toHourMinute(proposal.proposedTime)}
           </span>
         </div>
       </div>
-      {proposal.note && <p className="mb-reschedule-note">{proposal.note}</p>}
-      <small>Your current time stays until you accept.</small>
+      {proposal.note && (
+        <p className="mb-reschedule-note">{t(proposal.note)}</p>
+      )}
+      <small>{t("Your current time stays until you accept.")}</small>
       <div className="mb-actions">
         <button
           className="btn btn-primary btn-small"
@@ -135,7 +168,7 @@ function RescheduleProposal({ booking, proposal, responding, onDecision }) {
           disabled={responding}
           onClick={() => onDecision(booking.id, proposal.id, true)}
         >
-          Accept new time
+          {t("Accept new time")}
         </button>
         <button
           className="btn btn-secondary btn-small"
@@ -143,7 +176,7 @@ function RescheduleProposal({ booking, proposal, responding, onDecision }) {
           disabled={responding}
           onClick={() => onDecision(booking.id, proposal.id, false)}
         >
-          Keep my time
+          {t("Keep my time")}
         </button>
       </div>
     </div>
@@ -162,18 +195,18 @@ function MoreDetails({ booking }) {
   return (
     <details className="mb-details">
       <summary>
-        Booking details
+        {t("Booking details")}
         <ChevronDown size={16} aria-hidden="true" />
       </summary>
       <dl className="mb-details-grid">
         <div>
-          <dt>Booking number</dt>
+          <dt>{t("Booking number")}</dt>
           <dd>#{booking.id}</dd>
         </div>
         {booking.customerPhoneNumber && (
           <div>
             <dt>
-              <Phone size={14} aria-hidden="true" /> Phone
+              <Phone size={14} aria-hidden="true" /> {t("Phone")}
             </dt>
             <dd>{booking.customerPhoneNumber}</dd>
           </div>
@@ -181,21 +214,21 @@ function MoreDetails({ booking }) {
         {booking.customerLocation && (
           <div>
             <dt>
-              <MapPin size={14} aria-hidden="true" /> Your area
+              <MapPin size={14} aria-hidden="true" /> {t("Your area")}
             </dt>
             <dd>{booking.customerLocation}</dd>
           </div>
         )}
         {booking.note && (
           <div className="is-wide">
-            <dt>Your note</dt>
-            <dd>{booking.note}</dd>
+            <dt>{t("Your note")}</dt>
+            <dd>{t(booking.note)}</dd>
           </div>
         )}
       </dl>
       {history.length > 0 && (
         <div className="mb-history">
-          <strong>Time changes</strong>
+          <strong>{t("Time changes")}</strong>
           <ul>
             {history.map((proposal) => (
               <li key={proposal.id}>
@@ -314,7 +347,7 @@ export default function CustomerBookingCard({
 
         {booking.ownerNote && (
           <blockquote className="mb-salon-note">
-            <span>Message from the salon</span>
+            <span>{t("Message from the salon")}</span>
             {booking.ownerNote}
           </blockquote>
         )}
@@ -324,13 +357,13 @@ export default function CustomerBookingCard({
             <ul>
               {services.map((service) => (
                 <li key={service.id}>
-                  <span>{service.name}</span>
+                  <span>{serviceName(service)}</span>
                   <span>{formatPrice(service.price)}</span>
                 </li>
               ))}
             </ul>
             <div className="mb-total">
-              <span>Total</span>
+              <span>{t("Total")}</span>
               <strong>{formatPrice(booking.totalPrice)}</strong>
             </div>
           </div>
@@ -348,7 +381,7 @@ export default function CustomerBookingCard({
                 onClick={() => onReview(booking)}
               >
                 <MessageSquareText size={16} aria-hidden="true" />
-                Write a review
+                {t("Write a review")}
               </button>
             )}
             {canBookAgain && (
@@ -357,7 +390,7 @@ export default function CustomerBookingCard({
                 to={`/salons/${booking.salonId}/book`}
               >
                 <RotateCcw size={16} aria-hidden="true" />
-                Book again
+                {t("Book again")}
               </Link>
             )}
             {cancellable && (
@@ -367,7 +400,7 @@ export default function CustomerBookingCard({
                 onClick={() => onCancel(booking.id)}
               >
                 <XCircle size={16} aria-hidden="true" />
-                Cancel booking
+                {t("Cancel booking")}
               </button>
             )}
           </footer>

@@ -5,6 +5,7 @@ import {
   formatTimeLeft,
   getAnswerDeadline,
 } from "../model/booking.js";
+import t from "../../../shared/i18n/t.js";
 
 /**
  * How long the salon has to answer a pending request.
@@ -21,18 +22,24 @@ export default function AnswerDeadline({ booking, audience = "customer" }) {
   let text;
   if (audience === "owner") {
     text = info.overdue
-      ? "The answer time is over. This request will expire."
-      : `Answer by ${when} · ${formatTimeLeft(info.msLeft)}`;
+      ? t("The answer time is over. This request will expire.")
+      : t("Answer by {when} · {timeLeft}", {
+          when,
+          timeLeft: formatTimeLeft(info.msLeft),
+        });
   } else {
     text = info.overdue
-      ? "The salon did not answer in time. This request will expire."
-      : `The salon answers by ${when}. If not, the request expires and you can book again.`;
+      ? t("The salon did not answer in time. This request will expire.")
+      : t(
+          "The salon answers by {when}. If not, the request expires and you can book again.",
+          { when },
+        );
   }
 
   return (
     <p className={`answer-deadline ${tone}`} role="status">
       <Hourglass size={15} aria-hidden="true" />
-      <span>{text}</span>
+      <span>{t(text)}</span>
     </p>
   );
 }

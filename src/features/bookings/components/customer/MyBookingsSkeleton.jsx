@@ -1,10 +1,11 @@
+import t from "../../../../shared/i18n/t.js";
 /** Placeholder cards while the bookings load, so the layout does not jump. */
 export default function MyBookingsSkeleton({ count = 3 }) {
   return (
     <div
       className="mb-list"
       aria-busy="true"
-      aria-label="Loading your bookings"
+      aria-label={t("Loading your bookings")}
     >
       {Array.from({ length: count }, (_, index) => (
         <div className="mb-card is-skeleton" key={index}>

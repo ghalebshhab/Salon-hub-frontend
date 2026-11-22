@@ -17,26 +17,31 @@ import {
   selectBookings,
 } from "../model/customerBookings.js";
 import BookingViewTabs from "../components/customer/BookingViewTabs.jsx";
+import useI18n from "../../../shared/i18n/useI18n.js";
 import CustomerBookingCard from "../components/customer/CustomerBookingCard.jsx";
 import MyBookingsSkeleton from "../components/customer/MyBookingsSkeleton.jsx";
 import ReceiptDialog from "../../payments/components/ReceiptDialog.jsx";
 import CreateReviewModal from "../../reviews/components/CreateReviewModal.jsx";
+import t from "../../../shared/i18n/t.js";
+import { PAGE_HEADS } from "../../../shared/copy/pageHeads.js";
 
 const EMPTY_STATES = {
   upcoming: {
     Icon: CalendarCheck2,
-    title: "No upcoming appointments",
-    text: "Find a salon you like and book your next visit in a few taps.",
+    title: t("No upcoming appointments"),
+    text: t("Find a salon you like and book your next visit in a few taps."),
   },
   past: {
     Icon: History,
-    title: "No past visits yet",
-    text: "After your first appointment, you can review it and book it again from here.",
+    title: t("No past visits yet"),
+    text: t(
+      "After your first appointment, you can review it and book it again from here.",
+    ),
   },
   closed: {
     Icon: CalendarX2,
-    title: "Nothing cancelled",
-    text: "Cancelled, declined and expired requests appear here.",
+    title: t("Nothing cancelled"),
+    text: t("Cancelled, declined and expired requests appear here."),
   },
 };
 
@@ -58,6 +63,7 @@ function MyBookings() {
     handleReviewCreated,
     canCancel,
   } = useMyBookings();
+  const { t } = useI18n();
   const highlightedId = useHighlightedBooking(!loading);
   const [params, setParams] = useSearchParams();
   const [receiptBookingId, setReceiptBookingId] = useState(null);
@@ -95,27 +101,35 @@ function MyBookings() {
     <section className="container section mb-page">
       <header className="mb-hero">
         <div>
-          <span className="eyebrow">My appointments</span>
-          <h1>My bookings</h1>
+          <span className="eyebrow">{t(PAGE_HEADS.myBookings.eyebrow)}</span>
+          <h1>{t(PAGE_HEADS.myBookings.title)}</h1>
           <p>
             {loading
-              ? "Loading your appointments…"
+              ? t(PAGE_HEADS.myBookings.text)
               : counts.upcoming > 0
-                ? `You have ${counts.upcoming} upcoming ${counts.upcoming === 1 ? "appointment" : "appointments"}.`
-                : "Your requests, visits and receipts in one place."}
+                ? t(
+                    counts.upcoming === 1
+                      ? "You have 1 upcoming appointment."
+                      : "You have {count} upcoming appointments.",
+                    { count: counts.upcoming },
+                  )
+                : t("Your requests, visits and receipts in one place.")}
           </p>
         </div>
         <Link className="btn btn-primary" to="/">
           <CalendarPlus size={18} aria-hidden="true" />
-          Book a new visit
+          {t("Book a new visit")}
         </Link>
       </header>
 
       {needsAnswer > 0 && (
         <p className="mb-alert" role="status">
           <strong>{needsAnswer}</strong>{" "}
-          {needsAnswer === 1 ? "salon proposed" : "salons proposed"} a new time.
-          Please accept it or keep your time.
+          {t(
+            needsAnswer === 1
+              ? "salon proposed a new time. Please accept it or keep your time."
+              : "salons proposed a new time. Please accept it or keep your time.",
+          )}
         </p>
       )}
 
@@ -129,11 +143,11 @@ function MyBookings() {
             <span className="mb-empty-icon" aria-hidden="true">
               <empty.Icon size={28} />
             </span>
-            <h2>{empty.title}</h2>
-            <p>{empty.text}</p>
+            <h2>{t(empty.title)}</h2>
+            <p>{t(empty.text)}</p>
             {view !== "closed" && (
               <Link className="btn btn-secondary btn-small" to="/">
-                Explore salons
+                {t("Explore salons")}
               </Link>
             )}
           </div>

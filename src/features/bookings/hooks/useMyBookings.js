@@ -15,6 +15,7 @@ import {
   rejectBookingRescheduleApi,
 } from "../api/bookingApi.js";
 import { confirmAction } from "../../../shared/confirm/confirmStore.js";
+import t from "../../../shared/i18n/t.js";
 
 export default function useMyBookings() {
   const [respondingProposalId, setRespondingProposalId] = useState(null);
@@ -45,21 +46,31 @@ export default function useMyBookings() {
           booking.status === "ACCEPTED"
         ) {
           showSuccessToast(
-            `Your appointment at ${booking.salonName} was accepted.`,
+            t("Your appointment at {salon} was accepted.", {
+              salon: booking.salonName,
+            }),
           );
         } else if (
           oldBooking.status !== booking.status &&
           booking.status === "REJECTED"
         ) {
           showErrorToast(
-            `Your appointment at ${booking.salonName} was declined.`,
+            t("Your appointment at {salon} was declined.", {
+              salon: booking.salonName,
+            }),
           );
         } else if (
           oldBooking.assignedEmployeeId !== booking.assignedEmployeeId &&
           booking.assignedEmployeeName
         ) {
           showSuccessToast(
-            `Your service provider for ${booking.salonName} is now ${booking.assignedEmployeeName}. See the booking update for details.`,
+            t(
+              "Your service provider for {salon} is now {employee}. See the booking update for details.",
+              {
+                salon: booking.salonName,
+                employee: booking.assignedEmployeeName,
+              },
+            ),
           );
         }
       });
@@ -93,10 +104,10 @@ export default function useMyBookings() {
 
   const handleCancel = async (bookingId) => {
     const confirmCancel = await confirmAction({
-      title: "Cancel this booking?",
-      message: "The salon will be told that you cancelled.",
-      confirmText: "Cancel booking",
-      cancelText: "Keep booking",
+      title: t("Cancel this booking?"),
+      message: t("The salon will be told that you cancelled."),
+      confirmText: t("Cancel booking"),
+      cancelText: t("Keep booking"),
       danger: true,
     });
 
@@ -106,14 +117,16 @@ export default function useMyBookings() {
       const response = await cancelMyBookingApi(bookingId);
 
       if (response.success) {
-        showSuccessToast(response.message || "Booking cancelled successfully");
+        showSuccessToast(
+          response.message || t("Booking cancelled successfully"),
+        );
         loadBookings();
       } else {
-        showErrorToast(response.message || "Failed to cancel booking");
+        showErrorToast(response.message || t("Failed to cancel booking"));
       }
     } catch (error) {
       console.error(error);
-      showErrorToast(error?.message || "Failed to cancel booking");
+      showErrorToast(error?.message || t("Failed to cancel booking"));
     }
   };
 
@@ -122,16 +135,18 @@ export default function useMyBookings() {
     try {
       const response = await confirmAttendanceApi(bookingId);
       if (!response.success) {
-        showErrorToast(response.message || "Could not confirm your visit.");
+        showErrorToast(response.message || t("Could not confirm your visit."));
         return;
       }
-      showSuccessToast(response.message || "The salon knows you are coming.");
+      showSuccessToast(
+        response.message || t("The salon knows you are coming."),
+      );
       loadBookings();
     } catch (error) {
       showErrorToast(
         error?.response?.data?.message ||
           error?.message ||
-          "Could not confirm your visit.",
+          t("Could not confirm your visit."),
       );
     } finally {
       setConfirmingId(null);
@@ -145,16 +160,16 @@ export default function useMyBookings() {
         ? await acceptBookingRescheduleApi(bookingId, proposalId)
         : await rejectBookingRescheduleApi(bookingId, proposalId);
       if (!response.success) {
-        showErrorToast(response.message || "Could not save your decision.");
+        showErrorToast(response.message || t("Could not save your decision."));
         return;
       }
-      showSuccessToast(response.message || "Your decision was saved.");
+      showSuccessToast(response.message || t("Your decision was saved."));
       loadBookings();
     } catch (error) {
       showErrorToast(
         error?.response?.data?.message ||
           error?.message ||
-          "Could not save your decision.",
+          t("Could not save your decision."),
       );
     } finally {
       setRespondingProposalId(null);

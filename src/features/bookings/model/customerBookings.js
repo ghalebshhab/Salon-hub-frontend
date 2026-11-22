@@ -1,10 +1,12 @@
 import { getTodayDate, isLiveToday, parseLocalDate } from "./booking.js";
+import t from "../../../shared/i18n/t.js";
+import { dateLocale } from "../../../shared/i18n/language.js";
 
 /** The three lists on the customer's My Bookings page. */
 export const BOOKING_VIEWS = [
-  { key: "upcoming", label: "Upcoming" },
-  { key: "past", label: "Past" },
-  { key: "closed", label: "Cancelled" },
+  { key: "upcoming", label: t("Upcoming") },
+  { key: "past", label: t("Past") },
+  { key: "closed", label: t("Cancelled") },
 ];
 
 const CLOSED_STATUSES = new Set([
@@ -17,14 +19,14 @@ const OPEN_STATUSES = new Set(["PENDING", "ACCEPTED", "IN_PROGRESS"]);
 
 /** One look per status: tone for color, short label, and icon name. */
 export const STATUS_LOOK = {
-  PENDING: { tone: "warning", label: "Waiting for salon" },
-  ACCEPTED: { tone: "success", label: "Confirmed" },
-  IN_PROGRESS: { tone: "brand", label: "In service" },
-  COMPLETED: { tone: "neutral", label: "Completed" },
-  REJECTED: { tone: "danger", label: "Not accepted" },
-  CANCELLED: { tone: "danger", label: "Cancelled" },
-  EXPIRED: { tone: "danger", label: "Expired" },
-  NO_SHOW: { tone: "danger", label: "Missed" },
+  PENDING: { tone: "warning", label: t("Waiting for salon") },
+  ACCEPTED: { tone: "success", label: t("Confirmed") },
+  IN_PROGRESS: { tone: "brand", label: t("In service") },
+  COMPLETED: { tone: "neutral", label: t("Completed") },
+  REJECTED: { tone: "danger", label: t("Not accepted") },
+  CANCELLED: { tone: "danger", label: t("Cancelled") },
+  EXPIRED: { tone: "danger", label: t("Expired") },
+  NO_SHOW: { tone: "danger", label: t("Missed") },
 };
 
 export const getStatusLook = (status) =>
@@ -80,8 +82,8 @@ export function getDateParts(value) {
   if (!date || Number.isNaN(date.getTime())) return null;
   return {
     day: date.getDate(),
-    month: date.toLocaleDateString("en-GB", { month: "short" }),
-    weekday: date.toLocaleDateString("en-GB", { weekday: "short" }),
+    month: date.toLocaleDateString(dateLocale(), { month: "short" }),
+    weekday: date.toLocaleDateString(dateLocale(), { weekday: "short" }),
     year: date.getFullYear(),
   };
 }
@@ -90,9 +92,11 @@ export function formatDuration(minutes) {
   if (!minutes) return "";
   const hours = Math.floor(minutes / 60);
   const rest = minutes % 60;
-  if (!hours) return `${rest} min`;
-  return rest ? `${hours} h ${rest} min` : `${hours} h`;
+  if (!hours) return t("{rest} min", { rest });
+  return rest ? t("{hours} h {rest} min", { hours, rest }) : `${hours} h`;
 }
 
 export const formatPrice = (value) =>
-  value == null ? "" : `${Number(value).toFixed(2).replace(/\.00$/, "")} JD`;
+  value == null
+    ? ""
+    : t("{value} JD", { value: Number(value).toFixed(2).replace(/\.00$/, "") });

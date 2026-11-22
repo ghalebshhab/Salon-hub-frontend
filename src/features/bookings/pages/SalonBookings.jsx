@@ -8,14 +8,15 @@ import useSalonBookings from "../hooks/useSalonBookings.js";
 import { getEligibleEmployees } from "../model/booking.js";
 import CashReceivedDialog from "../../payments/components/CashReceivedDialog.jsx";
 import ReceiptDialog from "../../payments/components/ReceiptDialog.jsx";
+import t from "../../../shared/i18n/t.js";
+import { SalonBookingsSkeleton } from "../components/BookingsPageSkeletons.jsx";
+import { PAGE_HEADS } from "../../../shared/copy/pageHeads.js";
 
 function SalonBookings() {
   const manager = useSalonBookings();
   const highlightedId = useHighlightedBooking(!manager.loading);
 
-  if (manager.loading) {
-    return <div className="loading">Loading salon bookings...</div>;
-  }
+  if (manager.loading) return <SalonBookingsSkeleton />;
 
   const replacementEmployees = manager.assignmentBooking
     ? getEligibleEmployees(manager.assignmentBooking, manager.employees)
@@ -25,19 +26,18 @@ function SalonBookings() {
     <section className="container section">
       <div className="profile-header">
         <div>
-          <span className="eyebrow">Salon appointments</span>
-          <h1>Salon Bookings</h1>
-          <p>
-            Confirm requests and choose who serves each customer. Today's
-            appointments show the customer's trip and the service progress live.
-          </p>
+          <span className="eyebrow">{t(PAGE_HEADS.salonBookings.eyebrow)}</span>
+          <h1>{t(PAGE_HEADS.salonBookings.title)}</h1>
+          <p>{t(PAGE_HEADS.salonBookings.text)}</p>
         </div>
       </div>
 
       {manager.bookings.length === 0 ? (
         <div className="empty-state">
-          <h3>No bookings yet</h3>
-          <p>When customers book your services, they will appear here.</p>
+          <h3>{t("No bookings yet")}</h3>
+          <p>
+            {t("When customers book your services, they will appear here.")}
+          </p>
         </div>
       ) : (
         <div className="booking-list">

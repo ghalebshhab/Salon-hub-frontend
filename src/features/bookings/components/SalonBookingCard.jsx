@@ -19,6 +19,8 @@ import {
 import AnswerDeadline from "./AnswerDeadline.jsx";
 import StaffLiveCard from "./live/StaffLiveCard.jsx";
 import PaymentStrip from "../../payments/components/PaymentStrip.jsx";
+import t from "../../../shared/i18n/t.js";
+import { serviceName } from "../../services/model/serviceText.js";
 
 /**
  * What the owner should know about the customer before the visit: whether
@@ -34,15 +36,15 @@ function CustomerSignals({ booking }) {
       {confirmed && (
         <span className="booking-signal is-good">
           <CalendarCheck2 size={14} aria-hidden="true" />
-          Customer confirmed they are coming
+          {t("Customer confirmed they are coming")}
         </span>
       )}
       {missed > 0 && (
         <span className="booking-signal is-warning">
           <AlertTriangle size={14} aria-hidden="true" />
           {missed === 1
-            ? "Missed 1 visit at your salon"
-            : `Missed ${missed} visits at your salon`}
+            ? t("Missed 1 visit at your salon")
+            : t("Missed {missed} visits at your salon", { missed })}
         </span>
       )}
     </div>
@@ -77,7 +79,7 @@ export default function SalonBookingCard({
     >
       <div className="booking-card-header">
         <div>
-          <h3>{booking.customerName || "Customer"}</h3>
+          <h3>{booking.customerName || t("Customer")}</h3>
           <p>{booking.customerEmail}</p>
         </div>
         <span className={statusClass}>{getStatusLabel(booking.status)}</span>
@@ -111,11 +113,14 @@ export default function SalonBookingCard({
       </div>
 
       <div className="booking-services">
-        <strong>Requested services:</strong>
+        <strong>{t("Requested services:")}</strong>
         <div>
           {booking.services?.map((service) => (
             <span className="service-chip" key={service.id}>
-              {service.name} - {service.price} JD
+              {t("{name} - {price} JD", {
+                name: serviceName(service),
+                price: service.price,
+              })}
             </span>
           ))}
         </div>
@@ -125,26 +130,28 @@ export default function SalonBookingCard({
         <div>
           <strong>
             <UserRound size={15} />
-            Assigned employee
+            {t("Assigned employee")}
           </strong>
           <p>
             {booking.assignedEmployeeName
               ? `${booking.assignedEmployeeName} • ${
-                  booking.assignedEmployeeSpecialty || "Employee"
-                }${booking.status === "PENDING" ? " (requested by the customer)" : ""}`
-              : "Customer asked you to assign someone"}
+                  booking.assignedEmployeeSpecialty || t("Employee")
+                }${booking.status === "PENDING" ? ` (${t("requested by the customer")})` : ""}`
+              : t("Customer asked you to assign someone")}
           </p>
         </div>
         {canManage && (
           <select
             value={booking.assignedEmployeeId || ""}
             onChange={(event) => onAssign(booking, event.target.value)}
-            aria-label={`Assign employee to ${booking.customerName || "customer"}`}
+            aria-label={t("Assign employee to {value}", {
+              value: booking.customerName || t("customer"),
+            })}
           >
-            <option value="">Assign employee</option>
+            <option value="">{t("Assign employee")}</option>
             {eligibleEmployees.map((employee) => (
               <option key={employee.id} value={employee.id}>
-                {employee.fullName} - {employee.specialty || "Employee"}
+                {employee.fullName} - {employee.specialty || t("Employee")}
               </option>
             ))}
           </select>
@@ -152,8 +159,16 @@ export default function SalonBookingCard({
       </div>
 
       <div className="booking-summary-row">
-        <span>Total Price: {booking.totalPrice} JD</span>
-        <span>Total Duration: {booking.totalDurationMinutes} min</span>
+        <span>
+          {t("Total Price: {totalPrice} JD", {
+            totalPrice: booking.totalPrice,
+          })}
+        </span>
+        <span>
+          {t("Total Duration: {totalDurationMinutes} min", {
+            totalDurationMinutes: booking.totalDurationMinutes,
+          })}
+        </span>
       </div>
 
       <PaymentStrip
@@ -165,18 +180,18 @@ export default function SalonBookingCard({
 
       {booking.note && (
         <p className="booking-note">
-          <strong>Customer note:</strong> {booking.note}
+          <strong>{t("Customer note:")}</strong> {t(booking.note)}
         </p>
       )}
       {booking.ownerNote && (
         <p className="booking-note">
-          <strong>Your note:</strong> {booking.ownerNote}
+          <strong>{t("Your note:")}</strong> {booking.ownerNote}
         </p>
       )}
 
       {booking.rescheduleProposals?.length > 0 && (
         <div className="reschedule-history">
-          <strong>Reschedule history</strong>
+          <strong>{t("Reschedule history")}</strong>
           {booking.rescheduleProposals.map((proposal) => (
             <div className="reschedule-history-item" key={proposal.id}>
               <span>
@@ -188,7 +203,7 @@ export default function SalonBookingCard({
               >
                 {proposal.status}
               </span>
-              {proposal.note && <p>{proposal.note}</p>}
+              {proposal.note && <p>{t(proposal.note)}</p>}
             </div>
           ))}
         </div>
@@ -203,8 +218,8 @@ export default function SalonBookingCard({
         >
           <CalendarClock size={16} />
           {pendingReschedule
-            ? "Waiting for customer decision"
-            : "Propose new date and time"}
+            ? t("Waiting for customer decision")
+            : t("Propose new date and time")}
         </button>
       )}
 
@@ -217,7 +232,7 @@ export default function SalonBookingCard({
             disabled={Boolean(pendingReschedule)}
           >
             <CheckCircle size={16} />
-            {booking.assignedEmployeeId ? "Accept" : "Assign and accept"}
+            {booking.assignedEmployeeId ? t("Accept") : t("Assign and accept")}
           </button>
           <button
             className="btn btn-danger btn-small"
@@ -225,7 +240,7 @@ export default function SalonBookingCard({
             onClick={() => onReject(booking)}
           >
             <XCircle size={16} />
-            Reject
+            {t("Reject")}
           </button>
         </div>
       )}
@@ -238,7 +253,7 @@ export default function SalonBookingCard({
             onClick={() => onComplete(booking.id)}
           >
             <CheckCircle size={16} />
-            Mark Completed
+            {t("Mark Completed")}
           </button>
           {onNoShow && canMarkNoShow(booking) && (
             <button
@@ -247,7 +262,7 @@ export default function SalonBookingCard({
               onClick={() => onNoShow(booking)}
             >
               <UserX size={16} />
-              Customer did not come
+              {t("Customer did not come")}
             </button>
           )}
         </div>

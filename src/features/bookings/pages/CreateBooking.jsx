@@ -16,6 +16,10 @@ import ReviewStep from "../components/wizard/ReviewStep.jsx";
 import BookingSummary from "../components/wizard/BookingSummary.jsx";
 import BookingSent from "../components/wizard/BookingSent.jsx";
 import { formatMoney, toFils } from "../../payments/model/payment.js";
+import ErrorPage from "../../../shared/components/ErrorPage.jsx";
+import classifyError from "../../../shared/errors/classifyError.js";
+import BookingWizardSkeleton from "../components/wizard/BookingWizardSkeleton.jsx";
+import t from "../../../shared/i18n/t.js";
 
 /**
  * Shown when the salon's missed-visit rule limits this customer: either
@@ -31,19 +35,20 @@ function PaymentRestrictionNotice({ restriction, phone, salonPath }) {
       <div>
         <strong>
           {restriction.blocked
-            ? "Online booking is not available for you here"
-            : "This salon asks you to pay in advance"}
+            ? t("Online booking is not available for you here")
+            : t("This salon asks you to pay in advance")}
         </strong>
         <p>{restriction.message}</p>
         {restriction.blocked && (
           <div className="bk-restriction-actions">
             {phone && (
               <a className="btn btn-primary btn-small" href={`tel:${phone}`}>
-                <Phone size={16} aria-hidden="true" /> Call {phone}
+                <Phone size={16} aria-hidden="true" />{" "}
+                {t("Call {phone}", { phone })}
               </a>
             )}
             <Link className="btn btn-secondary btn-small" to={salonPath}>
-              Back to the salon
+              {t("Back to the salon")}
             </Link>
           </div>
         )}
@@ -71,29 +76,16 @@ function CreateBooking() {
     });
   }, [step]);
 
-  if (flow.loading) {
-    return (
-      <section
-        className="container section bk-page"
-        aria-label="Loading booking"
-      >
-        <div className="skeleton-block bk-skeleton-head" />
-        <div className="skeleton-block bk-skeleton-body" />
-      </section>
-    );
-  }
+  if (flow.loading) return <BookingWizardSkeleton />;
 
   if (!flow.salon) {
     return (
-      <section className="container section">
-        <div className="empty-state">
-          <h3>Salon not found</h3>
-          <p>Please go back and choose another salon.</p>
-          <Link className="btn btn-primary" to="/">
-            Browse salons
-          </Link>
-        </div>
-      </section>
+      <ErrorPage
+        kind={classifyError(flow.salonError, {
+          notFoundKind: "salonUnavailable",
+        })}
+        onRetry={flow.reloadSalon}
+      />
     );
   }
 
@@ -110,7 +102,7 @@ function CreateBooking() {
         <Link className="bk-back" to={`/salons/${salonId}`}>
           <ArrowLeft size={16} aria-hidden="true" /> {flow.salon.name}
         </Link>
-        <h1>Book an appointment</h1>
+        <h1>{t("Book an appointment")}</h1>
         <BookingStepper
           steps={BOOKING_STEPS}
           current={step}
@@ -193,11 +185,15 @@ function CreateBooking() {
                 onClick={flow.goBack}
                 disabled={flow.submitting}
               >
-                <ArrowLeft size={17} aria-hidden="true" /> Back
+                <ArrowLeft size={17} aria-hidden="true" /> {t("Back")}
               </button>
             )}
             <div className="bk-actions-total" aria-hidden="true">
-              <span>{flow.selectedServices.length} service(s)</span>
+              <span>
+                {t("{length} service(s)", {
+                  length: flow.selectedServices.length,
+                })}
+              </span>
               <strong>{formatMoney(toFils(flow.totalPrice))}</strong>
             </div>
             {isLast ? (
@@ -208,7 +204,7 @@ function CreateBooking() {
                 disabled={flow.submitting || !flow.canContinue}
               >
                 <Send size={17} aria-hidden="true" />
-                {flow.submitting ? "Sending…" : "Send request"}
+                {flow.submitting ? t("Sending…") : t("Send request")}
               </button>
             ) : (
               <button
@@ -217,13 +213,13 @@ function CreateBooking() {
                 onClick={flow.goNext}
                 disabled={!flow.canContinue}
               >
-                Continue <ArrowRight size={17} aria-hidden="true" />
+                {t("Continue")} <ArrowRight size={17} aria-hidden="true" />
               </button>
             )}
           </div>
         </div>
 
-        <aside className="bk-aside" aria-label="Booking summary">
+        <aside className="bk-aside" aria-label={t("Booking summary")}>
           <BookingSummary
             salon={flow.salon}
             services={flow.selectedServices}

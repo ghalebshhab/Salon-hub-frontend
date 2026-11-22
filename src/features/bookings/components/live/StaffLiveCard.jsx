@@ -27,6 +27,7 @@ import ConfirmDialog from "../../../../shared/components/ConfirmDialog.jsx";
 import { showSuccessToast } from "../../../../shared/notifications/toast.jsx";
 import LiveTimeline from "./LiveTimeline.jsx";
 import ServiceProgress from "./ServiceProgress.jsx";
+import t from "../../../../shared/i18n/t.js";
 
 function secondsAgo(from, now) {
   if (!from || !now) return null;
@@ -35,8 +36,8 @@ function secondsAgo(from, now) {
 
 function agoLabel(seconds) {
   if (seconds == null) return "";
-  if (seconds < 60) return `${seconds} s ago`;
-  return `${Math.round(seconds / 60)} min ago`;
+  if (seconds < 60) return t("{seconds} s ago", { seconds });
+  return t("{value} min ago", { value: Math.round(seconds / 60) });
 }
 
 function CustomerJourney({ tracking }) {
@@ -45,8 +46,10 @@ function CustomerJourney({ tracking }) {
       <div className="live-journey is-arrived">
         <MapPinned size={18} aria-hidden="true" />
         <div>
-          <strong>Customer arrived</strong>
-          <span>Checked in at {formatClock(tracking.arrivedAt)}</span>
+          <strong>{t("Customer arrived")}</strong>
+          <span>
+            {t("Checked in at")} {formatClock(tracking.arrivedAt)}
+          </span>
         </div>
       </div>
     );
@@ -65,19 +68,21 @@ function CustomerJourney({ tracking }) {
         <div className="live-eta">
           <strong>
             {tracking.etaMinutes != null
-              ? `${tracking.etaMinutes} min away`
-              : "On the way"}
+              ? t("{etaMinutes} min away", { etaMinutes: tracking.etaMinutes })
+              : t("On the way")}
           </strong>
           <span>
             {[
               tracking.distanceMeters != null &&
                 formatDistance(tracking.distanceMeters),
               tracking.expectedArrivalAt &&
-                `arrives about ${formatClock(tracking.expectedArrivalAt)}`,
-              ago != null && `updated ${agoLabel(ago)}`,
+                t("arrives about {time}", {
+                  time: formatClock(tracking.expectedArrivalAt),
+                }),
+              ago != null && t("updated {ago}", { ago: agoLabel(ago) }),
             ]
               .filter(Boolean)
-              .join(" · ") || "Location not shared"}
+              .join(" · ") || t("Location not shared")}
           </span>
         </div>
         {route && (
@@ -87,13 +92,14 @@ function CustomerJourney({ tracking }) {
             target="_blank"
             rel="noreferrer"
           >
-            <Navigation size={14} aria-hidden="true" /> Live route and traffic
-            in Google Maps
+            <Navigation size={14} aria-hidden="true" />{" "}
+            {t("Live route and traffic in Google Maps")}
           </a>
         )}
         <small className="live-hint">
-          ETA is estimated from distance. Google Maps shows the exact drive
-          time.
+          {t(
+            "ETA is estimated from distance. Google Maps shows the exact drive time.",
+          )}
         </small>
       </div>
     );
@@ -102,8 +108,10 @@ function CustomerJourney({ tracking }) {
     <div className="live-journey">
       <Clock3 size={18} aria-hidden="true" />
       <div>
-        <strong>Not on the way yet</strong>
-        <span>You will see the ETA when the customer starts the trip.</span>
+        <strong>{t("Not on the way yet")}</strong>
+        <span>
+          {t("You will see the ETA when the customer starts the trip.")}
+        </span>
       </div>
     </div>
   );
@@ -135,7 +143,7 @@ export default function StaffLiveCard({ booking, onStatusChange }) {
   const complete = async () => {
     await act(
       () => completeServiceApi(booking.id),
-      "Service completed. The customer was notified.",
+      t("Service completed. The customer was notified."),
     );
     setConfirmComplete(false);
   };
@@ -143,7 +151,7 @@ export default function StaffLiveCard({ booking, onStatusChange }) {
   const noShow = async () => {
     await act(
       () => markNoShowApi(booking.id),
-      "Marked as no-show. The customer was notified.",
+      t("Marked as no-show. The customer was notified."),
     );
     setConfirmNoShow(false);
   };
@@ -151,16 +159,19 @@ export default function StaffLiveCard({ booking, onStatusChange }) {
   return (
     <section
       className="live-card is-staff"
-      aria-label="Live appointment status"
+      aria-label={t("Live appointment status")}
     >
       <header className="live-card-head">
         <span className="live-pill">
-          <Radio size={13} aria-hidden="true" /> Live today ·{" "}
-          {toHourMinute(tracking.bookingTime)}
+          <Radio size={13} aria-hidden="true" />{" "}
+          {t("Live today · {time}", {
+            time: toHourMinute(tracking.bookingTime),
+          })}
         </span>
         {tracking.customerPhoneNumber && (
           <a className="live-call" href={`tel:${tracking.customerPhoneNumber}`}>
-            <Phone size={14} aria-hidden="true" /> Call {tracking.customerName}
+            <Phone size={14} aria-hidden="true" />{" "}
+            {t("Call {customerName}", { customerName: tracking.customerName })}
           </a>
         )}
       </header>
@@ -181,7 +192,7 @@ export default function StaffLiveCard({ booking, onStatusChange }) {
               disabled={busy}
               onClick={() => run(() => extendServiceApi(booking.id, 10))}
             >
-              <Plus size={15} aria-hidden="true" /> 10 min
+              <Plus size={15} aria-hidden="true" /> {t("10 min")}
             </button>
             <button
               className="btn btn-primary btn-small"
@@ -189,7 +200,8 @@ export default function StaffLiveCard({ booking, onStatusChange }) {
               disabled={busy}
               onClick={() => setConfirmComplete(true)}
             >
-              <CheckCircle2 size={15} aria-hidden="true" /> Complete service
+              <CheckCircle2 size={15} aria-hidden="true" />{" "}
+              {t("Complete service")}
             </button>
           </div>
         </>
@@ -204,15 +216,15 @@ export default function StaffLiveCard({ booking, onStatusChange }) {
             onClick={() =>
               act(
                 () => startServiceApi(booking.id),
-                "Service started. The customer can follow it live.",
+                t("Service started. The customer can follow it live."),
               )
             }
           >
-            <Play size={15} aria-hidden="true" /> Start service
+            <Play size={15} aria-hidden="true" /> {t("Start service")}
           </button>
           {!tracking.canStartService && (
             <small className="live-hint">
-              You can start up to 1 hour before{" "}
+              {t("You can start up to 1 hour before")}
               {toHourMinute(tracking.bookingTime)}.
             </small>
           )}
@@ -230,12 +242,17 @@ export default function StaffLiveCard({ booking, onStatusChange }) {
                 disabled={busy}
                 onClick={() => setConfirmNoShow(true)}
               >
-                <UserX size={15} aria-hidden="true" /> Customer did not come
+                <UserX size={15} aria-hidden="true" />{" "}
+                {t("Customer did not come")}
               </button>
             ) : (
               <small className="live-hint">
-                If the customer does not come, you can mark a no-show from{" "}
-                {formatClock(tracking.noShowAllowedFrom)}.
+                {t(
+                  "If the customer does not come, you can mark a no-show from {time}.",
+                  {
+                    time: formatClock(tracking.noShowAllowedFrom),
+                  },
+                )}
               </small>
             )}
           </div>
@@ -243,13 +260,13 @@ export default function StaffLiveCard({ booking, onStatusChange }) {
 
       {tracking.status === "NO_SHOW" && (
         <p className="live-line">
-          <UserX size={16} aria-hidden="true" /> Marked as no-show
+          <UserX size={16} aria-hidden="true" /> {t("Marked as no-show")}
         </p>
       )}
 
       {tracking.status === "COMPLETED" && (
         <p className="live-line is-done">
-          <CheckCircle2 size={16} aria-hidden="true" /> Completed at{" "}
+          <CheckCircle2 size={16} aria-hidden="true" /> {t("Completed at")}
           {formatClock(tracking.completedAt)}
         </p>
       )}
@@ -262,9 +279,11 @@ export default function StaffLiveCard({ booking, onStatusChange }) {
 
       <ConfirmDialog
         open={confirmComplete}
-        title="Complete this service?"
-        message={`${tracking.customerName} will be asked to leave a review.`}
-        confirmText="Complete"
+        title={t("Complete this service?")}
+        message={t("{customerName} will be asked to leave a review.", {
+          customerName: tracking.customerName,
+        })}
+        confirmText={t("Complete")}
         loading={busy}
         onConfirm={complete}
         onCancel={() => setConfirmComplete(false)}
@@ -272,9 +291,12 @@ export default function StaffLiveCard({ booking, onStatusChange }) {
 
       <ConfirmDialog
         open={confirmNoShow}
-        title="Mark as no-show?"
-        message={`${tracking.customerName} did not come. The appointment closes as missed, and the customer is told. You cannot undo this.`}
-        confirmText="Mark no-show"
+        title={t("Mark as no-show?")}
+        message={t(
+          "{customerName} did not come. The appointment closes as missed, and the customer is told. You cannot undo this.",
+          { customerName: tracking.customerName },
+        )}
+        confirmText={t("Mark no-show")}
         danger
         loading={busy}
         onConfirm={noShow}

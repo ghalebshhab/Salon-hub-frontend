@@ -17,12 +17,13 @@ import {
   createBookingApi,
   getBookingAvailabilityApi,
 } from "../api/bookingApi.js";
+import t from "../../../shared/i18n/t.js";
 
 export const BOOKING_STEPS = [
-  { key: "services", label: "Service" },
-  { key: "professional", label: "Professional" },
-  { key: "time", label: "Date & time" },
-  { key: "review", label: "Review" },
+  { key: "services", label: t("Service") },
+  { key: "professional", label: t("Professional") },
+  { key: "time", label: t("Date & time") },
+  { key: "review", label: t("Review") },
 ];
 
 const DEFAULT_PAYMENT_OPTIONS = {
@@ -92,10 +93,13 @@ export default function useCreateBooking() {
     },
     [salonId],
   );
-  const { data, loading } = useQuery(loader, {
-    initialData: {},
-    onError: showErrorToast,
-  });
+  // No toast: a salon that cannot load gets the full error page instead.
+  const {
+    data,
+    loading,
+    error: salonError,
+    refetch: reloadSalon,
+  } = useQuery(loader, { initialData: {} });
   const {
     salon = null,
     services = [],
@@ -115,7 +119,7 @@ export default function useCreateBooking() {
     ? {
         message:
           paymentOptions.restrictionMessage ||
-          "This salon limits online booking for your account.",
+          t("This salon limits online booking for your account."),
         blocked: paymentMethods.length === 0,
       }
     : null;
@@ -170,7 +174,7 @@ export default function useCreateBooking() {
         },
         { signal },
       );
-      return requireData(response, "Unable to load available times");
+      return requireData(response, t("Unable to load available times"));
     },
     [
       availabilityReady,
@@ -190,7 +194,7 @@ export default function useCreateBooking() {
   const availabilityError = availabilityQueryError
     ? availabilityQueryError?.response?.data?.message ||
       availabilityQueryError?.message ||
-      "Unable to load available times"
+      t("Unable to load available times")
     : "";
   const availableSlots = availability?.slots || [];
 
@@ -225,26 +229,30 @@ export default function useCreateBooking() {
 
   const stepError = (index) => {
     if (index === 0 && selectedServices.length === 0) {
-      return "Choose at least one service.";
+      return t("Choose at least one service.");
     }
     if (index === 0 && eligibleEmployees.length === 0) {
-      return "No professional at this salon can do all the selected services together. Remove one service to continue.";
+      return t(
+        "No professional at this salon can do all the selected services together. Remove one service to continue.",
+      );
     }
     if (index === 2 && !bookingTime) {
-      return "Choose a time to continue.";
+      return t("Choose a time to continue.");
     }
     if (index === 3) {
       if (paymentRestriction?.blocked) {
         return paymentRestriction.message;
       }
       if (customerLocation.trim().length === 0) {
-        return "Tell the salon where you are coming from.";
+        return t("Tell the salon where you are coming from.");
       }
       if (customerLocation.trim().length > MAX_LOCATION) {
-        return `Keep the area under ${MAX_LOCATION} characters.`;
+        return t("Keep the area under {MAX_LOCATION} characters.", {
+          MAX_LOCATION,
+        });
       }
       if (note.trim().length > MAX_NOTE) {
-        return `Keep the note under ${MAX_NOTE} characters.`;
+        return t("Keep the note under {MAX_NOTE} characters.", { MAX_NOTE });
       }
     }
     return "";
@@ -298,7 +306,7 @@ export default function useCreateBooking() {
         setCreatedBooking(response.data);
         return;
       }
-      const message = response.message || "The request could not be sent.";
+      const message = response.message || t("The request could not be sent.");
       setSubmitError(message);
       // The time was taken while the customer was deciding: go back and refresh.
       if (/no longer available|opening hours|not working/i.test(message)) {
@@ -310,7 +318,7 @@ export default function useCreateBooking() {
       setSubmitError(
         error?.response?.data?.message ||
           error?.message ||
-          "The request could not be sent.",
+          t("The request could not be sent."),
       );
     } finally {
       setSubmitting(false);
@@ -319,6 +327,8 @@ export default function useCreateBooking() {
 
   return {
     salon,
+    salonError,
+    reloadSalon,
     services,
     loading,
     step,

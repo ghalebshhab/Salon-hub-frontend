@@ -20,6 +20,7 @@ import {
 import { getMySalonEmployeesApi } from "../../employees/api/salonEmployeesApi.js";
 import useCashPayment from "../../payments/hooks/useCashPayment.js";
 import { confirmAction } from "../../../shared/confirm/confirmStore.js";
+import t from "../../../shared/i18n/t.js";
 
 export default function useSalonBookings() {
   const [rejectModalOpen, setRejectModalOpen] = useState(false);
@@ -75,8 +76,16 @@ export default function useSalonBookings() {
       (item) => Number(item.id) === Number(employeeId),
     );
     const note = booking.assignedEmployeeName
-      ? `${booking.assignedEmployeeName} is unavailable for your appointment, so we’ve assigned ${employee?.fullName || "another qualified employee"} instead.`
-      : `We’ve assigned ${employee?.fullName || "an employee"} to your appointment.`;
+      ? t(
+          "{assignedEmployeeName} is unavailable for your appointment, so we’ve assigned {value} instead.",
+          {
+            assignedEmployeeName: booking.assignedEmployeeName,
+            value: employee?.fullName || t("another qualified employee"),
+          },
+        )
+      : t("We’ve assigned {value} to your appointment.", {
+          value: employee?.fullName || t("an employee"),
+        });
     setAssignmentBooking(booking);
     setReplacementEmployeeId(String(employeeId));
     setAssignmentNote(note);
@@ -92,7 +101,7 @@ export default function useSalonBookings() {
   const submitAssignment = async () => {
     if (!assignmentBooking || !replacementEmployeeId) return;
     if (!assignmentNote.trim()) {
-      showErrorToast("Add a short update for the customer.");
+      showErrorToast(t("Add a short update for the customer."));
       return;
     }
 
@@ -105,15 +114,15 @@ export default function useSalonBookings() {
       );
 
       if (response.success) {
-        showSuccessToast("Employee assigned and customer update saved.");
+        showSuccessToast(t("Employee assigned and customer update saved."));
         setAssignmentBooking(null);
         setReplacementEmployeeId("");
         setAssignmentNote("");
         loadBookings();
       } else {
         showErrorToast(
-          response.message || "Could not assign employee.",
-          "Failed",
+          response.message || t("Could not assign employee."),
+          t("Failed"),
         );
       }
     } catch (error) {
@@ -121,7 +130,7 @@ export default function useSalonBookings() {
       showErrorToast(
         error?.response?.data?.message ||
           error?.message ||
-          "Could not assign employee.",
+          t("Could not assign employee."),
       );
     } finally {
       setAssigning(false);
@@ -147,18 +156,18 @@ export default function useSalonBookings() {
       });
       if (response.success) {
         showSuccessToast(
-          "Confirmed. The customer and the employee were notified.",
+          t("Confirmed. The customer and the employee were notified."),
         );
         setAcceptingBooking(null);
         loadBookings();
       } else {
-        showErrorToast(response.message || "Failed to accept booking");
+        showErrorToast(response.message || t("Failed to accept booking"));
       }
     } catch (error) {
       showErrorToast(
         error?.response?.data?.message ||
           error?.message ||
-          "Failed to accept booking",
+          t("Failed to accept booking"),
       );
     } finally {
       setAccepting(false);
@@ -182,7 +191,7 @@ export default function useSalonBookings() {
     if (!selectedBooking) return;
 
     if (!rejectReason.trim()) {
-      showErrorToast("Please write the rejection reason");
+      showErrorToast(t("Please write the rejection reason"));
       return;
     }
 
@@ -194,15 +203,15 @@ export default function useSalonBookings() {
       });
 
       if (response.success) {
-        showSuccessToast("Rejection sent to customer");
+        showSuccessToast(t("Rejection sent to customer"));
         closeRejectModal();
         loadBookings();
       } else {
-        showErrorToast(response.message || "Failed to reject booking");
+        showErrorToast(response.message || t("Failed to reject booking"));
       }
     } catch (error) {
       console.error(error);
-      showErrorToast(error?.message || "Failed to reject booking");
+      showErrorToast(error?.message || t("Failed to reject booking"));
     } finally {
       setRejecting(false);
     }
@@ -246,7 +255,7 @@ export default function useSalonBookings() {
         if (!response.success) {
           setRescheduleSlots([]);
           setRescheduleError(
-            response.message || "Could not load appointment times.",
+            response.message || t("Could not load appointment times."),
           );
           return;
         }
@@ -265,7 +274,7 @@ export default function useSalonBookings() {
           setRescheduleError(
             error?.response?.data?.message ||
               error?.message ||
-              "Could not load appointment times.",
+              t("Could not load appointment times."),
           );
         }
       } finally {
@@ -286,7 +295,7 @@ export default function useSalonBookings() {
 
   const submitReschedule = async () => {
     if (!rescheduleBooking || !rescheduleDate || !rescheduleTime) {
-      showErrorToast("Choose a new date and available time.");
+      showErrorToast(t("Choose a new date and available time."));
       return;
     }
 
@@ -298,10 +307,10 @@ export default function useSalonBookings() {
         note: rescheduleNote.trim() || null,
       });
       if (!response.success) {
-        showErrorToast(response.message || "Could not send the proposal.");
+        showErrorToast(response.message || t("Could not send the proposal."));
         return;
       }
-      showSuccessToast(response.message || "Reschedule proposal sent.");
+      showSuccessToast(response.message || t("Reschedule proposal sent."));
       setRescheduleBooking(null);
       setRescheduleDate("");
       setRescheduleTime("");
@@ -312,7 +321,7 @@ export default function useSalonBookings() {
       showErrorToast(
         error?.response?.data?.message ||
           error?.message ||
-          "Could not send the proposal.",
+          t("Could not send the proposal."),
       );
     } finally {
       setRescheduleSaving(false);
@@ -321,9 +330,9 @@ export default function useSalonBookings() {
 
   const handleComplete = async (bookingId) => {
     const confirmComplete = await confirmAction({
-      title: "Mark this booking as completed?",
-      message: "Confirm that the service is done.",
-      confirmText: "Mark completed",
+      title: t("Mark this booking as completed?"),
+      message: t("Confirm that the service is done."),
+      confirmText: t("Mark completed"),
     });
 
     if (!confirmComplete) return;
@@ -332,22 +341,24 @@ export default function useSalonBookings() {
       const response = await completeBookingApi(bookingId);
 
       if (response.success) {
-        showSuccessToast(response.message || "Booking completed");
+        showSuccessToast(response.message || t("Booking completed"));
         loadBookings();
       } else {
-        showErrorToast(response.message || "Failed to complete booking");
+        showErrorToast(response.message || t("Failed to complete booking"));
       }
     } catch (error) {
       console.error(error);
-      showErrorToast(error?.message || "Failed to complete booking");
+      showErrorToast(error?.message || t("Failed to complete booking"));
     }
   };
 
   const handleNoShow = async (booking) => {
     const confirmed = await confirmAction({
-      title: "Mark as no-show?",
-      message: `${booking.customerName || "The customer"} will be told that they missed the appointment.`,
-      confirmText: "Mark no-show",
+      title: t("Mark as no-show?"),
+      message: t("{value} will be told that they missed the appointment.", {
+        value: booking.customerName || t("The customer"),
+      }),
+      confirmText: t("Mark no-show"),
       danger: true,
     });
     if (!confirmed) return;
@@ -355,16 +366,16 @@ export default function useSalonBookings() {
     try {
       const response = await markNoShowApi(booking.id);
       if (response.success) {
-        showSuccessToast("Marked as no-show. The customer was notified.");
+        showSuccessToast(t("Marked as no-show. The customer was notified."));
         loadBookings();
       } else {
-        showErrorToast(response.message || "Could not mark the no-show");
+        showErrorToast(response.message || t("Could not mark the no-show"));
       }
     } catch (error) {
       showErrorToast(
         error?.response?.data?.message ||
           error?.message ||
-          "Could not mark the no-show",
+          t("Could not mark the no-show"),
       );
     }
   };

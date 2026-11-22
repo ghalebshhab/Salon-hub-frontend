@@ -1,13 +1,18 @@
 import { Check, Clock3, Scissors } from "lucide-react";
 import { formatDuration } from "../../model/booking.js";
+import t from "../../../../shared/i18n/t.js";
+import {
+  serviceDescription,
+  serviceName,
+} from "../../../services/model/serviceText.js";
 
 export default function ServiceStep({ services, selectedIds, onToggle }) {
   if (services.length === 0) {
     return (
       <div className="bk-empty">
         <Scissors aria-hidden="true" />
-        <strong>No services to book yet</strong>
-        <span>This salon has not published any active service.</span>
+        <strong>{t("No services to book yet")}</strong>
+        <span>{t("This salon has not published any active service.")}</span>
       </div>
     );
   }
@@ -15,10 +20,10 @@ export default function ServiceStep({ services, selectedIds, onToggle }) {
   return (
     <fieldset className="bk-fieldset">
       <legend className="bk-step-title">
-        <span className="eyebrow">Step 1</span>
-        What would you like to book?
+        <span className="eyebrow">{t("Step 1")}</span>
+        {t("What would you like to book?")}
         <small>
-          Choose one or more services. You can combine them in one visit.
+          {t("Choose one or more services. You can combine them in one visit.")}
         </small>
       </legend>
       <div className="bk-service-grid">
@@ -39,14 +44,18 @@ export default function ServiceStep({ services, selectedIds, onToggle }) {
                 {selected && <Check size={14} />}
               </span>
               <span className="bk-service-body">
-                <strong>{service.name}</strong>
-                {service.description && <small>{service.description}</small>}
+                <strong>{serviceName(service)}</strong>
+                {service.description && (
+                  <small>{serviceDescription(service)}</small>
+                )}
                 <span className="bk-service-meta">
                   <span>
                     <Clock3 size={13} aria-hidden="true" />
                     {formatDuration(service.durationMinutes)}
                   </span>
-                  <b>{Number(service.price)} JD</b>
+                  <b>
+                    {Number(service.price)} {t("JD")}
+                  </b>
                 </span>
               </span>
             </label>

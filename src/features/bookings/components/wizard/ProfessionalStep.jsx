@@ -1,4 +1,5 @@
 import { UserRound, UsersRound } from "lucide-react";
+import t from "../../../../shared/i18n/t.js";
 
 function Avatar({ employee }) {
   if (employee.imageUrl) {
@@ -25,10 +26,10 @@ export default function ProfessionalStep({
   return (
     <fieldset className="bk-fieldset">
       <legend className="bk-step-title">
-        <span className="eyebrow">Step 2</span>
-        Who should take care of you?
+        <span className="eyebrow">{t("Step 2")}</span>
+        {t("Who should take care of you?")}
         <small>
-          Only professionals who can do every selected service are shown.
+          {t("Only professionals who can do every selected service are shown.")}
         </small>
       </legend>
 
@@ -47,13 +48,14 @@ export default function ProfessionalStep({
             <UsersRound size={20} />
           </span>
           <span className="bk-pro-body">
-            <strong>Let the salon assign</strong>
+            <strong>{t("Let the salon assign")}</strong>
             <small>
-              More free times. The salon picks a qualified professional and
-              tells you who.
+              {t(
+                "More free times. The salon picks a qualified professional and tells you who.",
+              )}
             </small>
           </span>
-          <span className="bk-badge">Most times</span>
+          <span className="bk-badge">{t("Most times")}</span>
         </label>
 
         {employees.map((employee) => {
@@ -73,7 +75,7 @@ export default function ProfessionalStep({
               <Avatar employee={employee} />
               <span className="bk-pro-body">
                 <strong>{employee.fullName}</strong>
-                <small>{employee.specialty || "Salon professional"}</small>
+                <small>{employee.specialty || t("Salon professional")}</small>
               </span>
             </label>
           );
@@ -82,8 +84,9 @@ export default function ProfessionalStep({
         {employees.length === 0 && (
           <p className="bk-inline-note">
             <UserRound size={16} aria-hidden="true" />
-            No single professional is listed for these services, so the salon
-            will assign one.
+            {t(
+              "No single professional is listed for these services, so the salon will assign one.",
+            )}
           </p>
         )}
       </div>

@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { getBookingTrackingApi } from "../api/bookingApi.js";
+import t from "../../../shared/i18n/t.js";
 
 export const TRACKING_POLL_MS = 15000;
 
@@ -27,14 +28,14 @@ export default function useBookingTracking(
           setTracking(response.data);
           setError("");
         } else {
-          setError(response.message || "Live status is not available.");
+          setError(response.message || t("Live status is not available."));
         }
       } catch (requestError) {
         if (requestError?.code === "ERR_CANCELED" || signal?.aborted) return;
         if (mountedRef.current) {
           setError(
             requestError?.response?.data?.message ||
-              "Live status is not available right now.",
+              t("Live status is not available right now."),
           );
         }
       }
@@ -71,14 +72,15 @@ export default function useBookingTracking(
         setError("");
         return { ok: true, message: response.message };
       }
-      const message = response?.message || "The action could not be completed.";
+      const message =
+        response?.message || t("The action could not be completed.");
       setError(message);
       return { ok: false, message };
     } catch (requestError) {
       const message =
         requestError?.response?.data?.message ||
         requestError?.message ||
-        "The action could not be completed.";
+        t("The action could not be completed.");
       setError(message);
       return { ok: false, message };
     } finally {

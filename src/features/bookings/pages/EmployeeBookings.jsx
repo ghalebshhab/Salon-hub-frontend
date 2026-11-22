@@ -14,6 +14,10 @@ import {
 } from "../model/booking.js";
 
 import { CalendarDays, Clock, MapPin, Phone, Scissors } from "lucide-react";
+import t from "../../../shared/i18n/t.js";
+import { serviceName } from "../../services/model/serviceText.js";
+import { EmployeeBookingsSkeleton } from "../components/BookingsPageSkeletons.jsx";
+import { PAGE_HEADS } from "../../../shared/copy/pageHeads.js";
 
 function AppointmentCard({
   booking,
@@ -34,7 +38,7 @@ function AppointmentCard({
           {(booking.customerName || "C").charAt(0).toUpperCase()}
         </div>
         <div>
-          <h3>{booking.customerName || "Customer"}</h3>
+          <h3>{booking.customerName || t("Customer")}</h3>
           <p>
             {toHourMinute(booking.bookingTime)} ·{" "}
             {formatDuration(booking.totalDurationMinutes)}
@@ -73,12 +77,12 @@ function AppointmentCard({
       <div className="booking-services">
         <strong>
           <Scissors size={16} aria-hidden="true" />
-          Services
+          {t("Services")}
         </strong>
         <div>
           {booking.services?.map((service) => (
             <span className="service-chip" key={service.id}>
-              {service.name} · {formatDuration(service.durationMinutes)}
+              {serviceName(service)} · {formatDuration(service.durationMinutes)}
             </span>
           ))}
         </div>
@@ -93,12 +97,12 @@ function AppointmentCard({
 
       {booking.note && (
         <p className="booking-note">
-          <strong>Customer note:</strong> {booking.note}
+          <strong>{t("Customer note:")}</strong> {t(booking.note)}
         </p>
       )}
       {booking.ownerNote && (
         <p className="booking-note">
-          <strong>Owner note:</strong> {booking.ownerNote}
+          <strong>{t("Owner note:")}</strong> {booking.ownerNote}
         </p>
       )}
     </article>
@@ -107,9 +111,9 @@ function AppointmentCard({
 
 function Group({ title, empty, bookings, ...cardProps }) {
   return (
-    <section className="employee-agenda-group" aria-label={title}>
+    <section className="employee-agenda-group" aria-label={t(title)}>
       <h2>
-        {title} <span>{bookings.length}</span>
+        {t(title)} <span>{bookings.length}</span>
       </h2>
       {bookings.length === 0 ? (
         <p className="employee-agenda-empty">{empty}</p>
@@ -151,9 +155,7 @@ function EmployeeBookings() {
   } = useEmployeeBookings();
   const highlightedId = useHighlightedBooking(!loading);
 
-  if (loading) {
-    return <div className="loading">Loading your appointments...</div>;
-  }
+  if (loading) return <EmployeeBookingsSkeleton />;
 
   const today = getTodayDate();
   const todays = bookings
@@ -183,40 +185,40 @@ function EmployeeBookings() {
     <section className="container section employee-agenda">
       <div className="profile-header">
         <div>
-          <span className="eyebrow">Employee area</span>
-          <h1>My appointments</h1>
-          <p>
-            See who is coming, follow their trip to the salon, and start or
-            finish each service.
-          </p>
+          <span className="eyebrow">
+            {t(PAGE_HEADS.employeeBookings.eyebrow)}
+          </span>
+          <h1>{t(PAGE_HEADS.employeeBookings.title)}</h1>
+          <p>{t(PAGE_HEADS.employeeBookings.text)}</p>
         </div>
       </div>
 
       {bookings.length === 0 ? (
         <div className="empty-state">
-          <h3>No assigned bookings yet</h3>
+          <h3>{t("No assigned bookings yet")}</h3>
           <p>
-            When the salon assigns you a booking, you get a notification and it
-            appears here.
+            {t(
+              "When the salon assigns you a booking, you get a notification and it appears here.",
+            )}
           </p>
         </div>
       ) : (
         <>
           <Group
-            title="Today"
-            empty="No appointments today."
+            title={t("Today")}
+            empty={t("No appointments today.")}
             bookings={todays}
             {...cardProps}
           />
           <Group
-            title="Upcoming"
-            empty="Nothing scheduled after today."
+            title={t("Upcoming")}
+            empty={t("Nothing scheduled after today.")}
             bookings={upcoming}
             {...cardProps}
           />
           <Group
-            title="Earlier"
-            empty="No earlier appointments."
+            title={t("Earlier")}
+            empty={t("No earlier appointments.")}
             bookings={past}
             {...cardProps}
           />

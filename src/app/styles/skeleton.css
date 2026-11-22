@@ -1,0 +1,304 @@
+/*
+ * Shared skeleton base and the page-shaped PageSkeleton layouts.
+ * A soft shimmer moves across neutral blocks; with reduced motion the blocks
+ * stay still. Colors come from the theme tokens, so dark mode works.
+ */
+.skeleton-block {
+  display: block;
+  border-radius: var(--radius-sm);
+  background:
+    linear-gradient(
+        90deg,
+        transparent 0%,
+        color-mix(in srgb, var(--card) 70%, transparent) 50%,
+        transparent 100%
+      )
+      0 0 / 200% 100% no-repeat,
+    color-mix(in srgb, var(--text) 8%, var(--card));
+  animation: skeleton-shimmer 1.4s ease-in-out infinite;
+}
+
+@keyframes skeleton-shimmer {
+  from {
+    background-position:
+      150% 0,
+      0 0;
+  }
+  to {
+    background-position:
+      -50% 0,
+      0 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-block {
+    animation: none;
+  }
+}
+
+/* ---------- PageSkeleton ---------- */
+.page-skeleton {
+  display: grid;
+  gap: var(--space-6);
+  width: min(100%, 1120px);
+  margin-inline: auto;
+  padding-block: var(--space-6) var(--space-12);
+  animation: page-skeleton-in 220ms ease-out both;
+}
+
+@keyframes page-skeleton-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.page-skeleton-head,
+.page-skeleton-stack {
+  display: grid;
+  gap: var(--space-2);
+}
+.page-skeleton-head {
+  gap: var(--space-3);
+}
+.page-skeleton-stack {
+  flex: 1;
+  min-width: 0;
+}
+
+.page-skeleton-kicker {
+  width: 96px;
+  height: 12px;
+}
+.page-skeleton-title {
+  width: min(360px, 70%);
+  height: 30px;
+  border-radius: var(--radius-md);
+}
+.page-skeleton-line {
+  width: 60%;
+  height: 12px;
+}
+.page-skeleton-line.is-wide {
+  width: min(520px, 90%);
+}
+.page-skeleton-line.is-strong {
+  width: 45%;
+  height: 15px;
+}
+.page-skeleton-line.is-short {
+  width: 30%;
+}
+
+.page-skeleton-card,
+.page-skeleton-row {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--card);
+}
+.page-skeleton-card {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-5);
+}
+
+.page-skeleton-list {
+  display: grid;
+  gap: var(--space-3);
+}
+.page-skeleton-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-5);
+}
+.page-skeleton-avatar {
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+}
+.page-skeleton-chip {
+  flex: 0 0 auto;
+  width: 84px;
+  height: 28px;
+  border-radius: var(--radius-full);
+}
+
+.page-skeleton-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--space-4);
+}
+.page-skeleton-media {
+  height: 150px;
+  border-radius: var(--radius-md);
+}
+
+.page-skeleton-form {
+  max-width: 640px;
+  gap: var(--space-5);
+}
+.page-skeleton-label {
+  width: 120px;
+  height: 11px;
+}
+.page-skeleton-input {
+  height: 44px;
+  border-radius: var(--radius-md);
+}
+.page-skeleton-button {
+  width: 160px;
+  height: 44px;
+  border-radius: var(--radius-full);
+}
+
+.page-skeleton-profile {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+}
+.page-skeleton-portrait {
+  flex: 0 0 auto;
+  width: 88px;
+  height: 88px;
+  border-radius: var(--radius-full);
+}
+
+.page-skeleton-kpis {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+.page-skeleton-figure {
+  width: 55%;
+  height: 28px;
+  border-radius: var(--radius-md);
+}
+.page-skeleton-chart {
+  height: 220px;
+  border-radius: var(--radius-md);
+}
+
+@media (max-width: 900px) {
+  .page-skeleton-kpis {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .page-skeleton {
+    gap: var(--space-5);
+    padding-block: var(--space-4) var(--space-8);
+  }
+  .page-skeleton-chip {
+    display: none;
+  }
+  .page-skeleton-profile {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* ---------- page-matched skeletons (Bone.jsx) ---------- */
+.skeleton-page {
+  animation: page-skeleton-in 220ms ease-out both;
+}
+.skeleton-lines {
+  display: grid;
+  width: 100%;
+}
+/* A real card or control frame that holds bones instead of content. */
+.skeleton-frame {
+  pointer-events: none;
+}
+/* A bone that sits on another bone (for example text on a cover image). */
+.skeleton-block.is-raised {
+  background-color: color-mix(in srgb, var(--text) 15%, var(--card));
+}
+/* A real image box (cover, photo) shown as one large bone. */
+.skeleton-cover {
+  position: relative;
+  background: color-mix(in srgb, var(--text) 8%, var(--card));
+}
+.skeleton-cover > .skeleton-block:first-child {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.skeleton-cover::after {
+  display: none;
+}
+.skeleton-head {
+  display: grid;
+  flex: 1 1 auto;
+  gap: 12px;
+  min-width: 0;
+}
+/*
+ * Known, fixed text shown as shimmer bars: the text keeps its real font, size
+ * and wrapping (so every line sits where the real line will be), but only its
+ * background shows. Each wrapped line gets its own rounded bar.
+ */
+.skeleton-text {
+  color: transparent !important;
+  border-radius: 6px;
+  background:
+    linear-gradient(
+        90deg,
+        transparent 0%,
+        color-mix(in srgb, var(--card) 70%, transparent) 50%,
+        transparent 100%
+      )
+      0 0 / 200% 100% no-repeat,
+    color-mix(in srgb, var(--text) 8%, var(--card));
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  animation: skeleton-shimmer 1.4s ease-in-out infinite;
+  user-select: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-text {
+    animation: none;
+  }
+}
+.skeleton-text * {
+  color: transparent !important;
+}
+.skeleton-line {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+/*
+ * A real control (a button, a chip) kept at its real size and painted as one
+ * bone: its text and icons keep the space but are not shown.
+ */
+.skeleton-page .skeleton-control {
+  border-color: transparent !important;
+  color: transparent !important;
+  background:
+    linear-gradient(
+        90deg,
+        transparent 0%,
+        color-mix(in srgb, var(--card) 70%, transparent) 50%,
+        transparent 100%
+      )
+      0 0 / 200% 100% no-repeat,
+    color-mix(in srgb, var(--text) 8%, var(--card)) !important;
+  box-shadow: none !important;
+  animation: skeleton-shimmer 1.4s ease-in-out infinite;
+  pointer-events: none;
+}
+.skeleton-page .skeleton-control * {
+  visibility: hidden;
+}
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-page .skeleton-control {
+    animation: none;
+  }
+}

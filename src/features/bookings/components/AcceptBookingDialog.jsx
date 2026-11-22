@@ -2,12 +2,15 @@ import { CheckCircle, UserRoundCheck } from "lucide-react";
 import { useId, useState } from "react";
 import useAssignableEmployees from "../hooks/useAssignableEmployees.js";
 import { formatDateLabel, toHourMinute } from "../model/booking.js";
+import t from "../../../shared/i18n/t.js";
+import { serviceName } from "../../services/model/serviceText.js";
+import useOverlayDialog from "../../../shared/hooks/useOverlayDialog.js";
 
 const REASON_LABELS = {
-  BUSY: "Busy at this time",
-  TIME_OFF: "On time off",
-  NOT_WORKING: "Not working then",
-  SALON_CLOSED: "Salon closed that day",
+  BUSY: t("Busy at this time"),
+  TIME_OFF: t("On time off"),
+  NOT_WORKING: t("Not working then"),
+  SALON_CLOSED: t("Salon closed that day"),
 };
 
 function pickDefault(employees, requestedId) {
@@ -29,10 +32,11 @@ export default function AcceptBookingDialog({
   onClose,
   onSubmit,
 }) {
+  const dialogRef = useOverlayDialog(onClose, { locked: accepting });
   const id = useId();
   const [choice, setChoice] = useState(null);
   const [note, setNote] = useState(
-    "See you soon! Please arrive a few minutes early.",
+    t("See you soon! Please arrive a few minutes early."),
   );
 
   const { employees, loading, error } = useAssignableEmployees(booking.id);
@@ -50,6 +54,7 @@ export default function AcceptBookingDialog({
     <div className="reject-modal-overlay" role="presentation">
       <div
         className="reject-modal accept-modal"
+        ref={dialogRef}
         role="dialog"
         aria-modal="true"
         aria-labelledby={`${id}-title`}
@@ -59,33 +64,41 @@ export default function AcceptBookingDialog({
           type="button"
           onClick={onClose}
           disabled={accepting}
-          aria-label="Close accept dialog"
+          aria-label={t("Close accept dialog")}
         >
           ×
         </button>
         <div className="reject-modal-icon accept-modal-icon">
           <UserRoundCheck size={30} aria-hidden="true" />
         </div>
-        <span className="eyebrow">Confirm appointment</span>
+        <span className="eyebrow">{t("Confirm appointment")}</span>
         <h2 id={`${id}-title`}>
-          Who will serve {booking.customerName || "this customer"}?
+          {booking.customerName
+            ? t("Who will serve {name}?", { name: booking.customerName })
+            : t("Who will serve this customer?")}
         </h2>
         <p className="reject-modal-subtitle">
-          {formatDateLabel(booking.bookingDate)} at{" "}
-          {toHourMinute(booking.bookingTime)} ·{" "}
-          {booking.services?.map((service) => service.name).join(", ")}
+          {t("{date} at {time}", {
+            date: formatDateLabel(booking.bookingDate),
+            time: toHourMinute(booking.bookingTime),
+          })}{" "}
+          · {booking.services?.map(serviceName).join(", ")}
         </p>
 
         {requestedUnavailable && (
           <p className="accept-warning" role="status">
-            The customer asked for {requested.fullName}, who is{" "}
-            {(REASON_LABELS[requested.reason] || "unavailable").toLowerCase()}.
-            Choose another professional; the customer will see the change.
+            {t(
+              "The customer asked for {name}, who is not free ({reason}). Choose another professional; the customer will see the change.",
+              {
+                name: requested.fullName,
+                reason: t(REASON_LABELS[requested.reason] || "Unavailable"),
+              },
+            )}
           </p>
         )}
 
         <fieldset className="accept-employees" aria-busy={loading}>
-          <legend className="sr-only">Employee</legend>
+          <legend className="sr-only">{t("Employee")}</legend>
           {loading &&
             Array.from({ length: 3 }, (_, index) => (
               <span
@@ -95,13 +108,14 @@ export default function AcceptBookingDialog({
             ))}
           {!loading && error && (
             <p className="accept-warning" role="alert">
-              Could not load your team. Close and try again.
+              {t("Could not load your team. Close and try again.")}
             </p>
           )}
           {!loading && !error && employees.length === 0 && (
             <p className="accept-warning">
-              No employee can do every requested service. Update the services on
-              your team page, or reject with a note.
+              {t(
+                "No employee can do every requested service. Update the services on your team page, or reject with a note.",
+              )}
             </p>
           )}
           {employees.map((employee) => (
@@ -125,17 +139,17 @@ export default function AcceptBookingDialog({
                 <strong>
                   {employee.fullName}
                   {employee.id === booking.assignedEmployeeId && (
-                    <em> · requested</em>
+                    <em> {t("· requested")}</em>
                   )}
                 </strong>
-                <small>{employee.specialty || "Salon professional"}</small>
+                <small>{employee.specialty || t("Salon professional")}</small>
               </span>
               <span
                 className={`accept-employee-state ${employee.available ? "is-free" : ""}`}
               >
                 {employee.available
-                  ? "Free"
-                  : REASON_LABELS[employee.reason] || "Unavailable"}
+                  ? t("Free")
+                  : REASON_LABELS[employee.reason] || t("Unavailable")}
               </span>
             </label>
           ))}
@@ -143,14 +157,15 @@ export default function AcceptBookingDialog({
 
         {noneFree && employees.length > 0 && (
           <p className="accept-warning">
-            Nobody is free at this time. Propose a new time to the customer
-            instead.
+            {t(
+              "Nobody is free at this time. Propose a new time to the customer instead.",
+            )}
           </p>
         )}
 
         <div className="reject-input-group">
           <label htmlFor={`${id}-note`}>
-            Message to the customer (optional)
+            {t("Message to the customer (optional)")}
           </label>
           <textarea
             id={`${id}-note`}
@@ -167,7 +182,7 @@ export default function AcceptBookingDialog({
             onClick={onClose}
             disabled={accepting}
           >
-            Cancel
+            {t("Cancel")}
           </button>
           <button
             className="btn btn-primary"
@@ -181,7 +196,7 @@ export default function AcceptBookingDialog({
             }
           >
             <CheckCircle size={17} aria-hidden="true" />
-            {accepting ? "Confirming…" : "Confirm and notify"}
+            {accepting ? t("Confirming…") : t("Confirm and notify")}
           </button>
         </div>
       </div>

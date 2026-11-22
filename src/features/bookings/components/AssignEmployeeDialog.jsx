@@ -1,4 +1,7 @@
 import { UserRound } from "lucide-react";
+import t from "../../../shared/i18n/t.js";
+import { useId } from "react";
+import useOverlayDialog from "../../../shared/hooks/useOverlayDialog.js";
 
 export default function AssignEmployeeDialog({
   employees,
@@ -10,28 +13,39 @@ export default function AssignEmployeeDialog({
   onClose,
   onSubmit,
 }) {
+  const id = useId();
+  const dialogRef = useOverlayDialog(onClose, { locked: assigning });
   return (
     <div className="reject-modal-overlay" role="presentation">
-      <div className="reject-modal" role="dialog" aria-modal="true">
+      <div
+        className="reject-modal"
+        ref={dialogRef}
+        role="dialog"
+        aria-labelledby={`${id}-title`}
+        aria-modal="true"
+      >
         <button
           className="reject-modal-close"
           type="button"
           onClick={onClose}
-          aria-label="Close reassignment dialog"
+          aria-label={t("Close reassignment dialog")}
         >
           ×
         </button>
         <div className="reject-modal-icon">
           <UserRound size={30} />
         </div>
-        <span className="eyebrow">Appointment update</span>
-        <h2>Assign another employee</h2>
+        <span className="eyebrow">{t("Appointment update")}</span>
+        <h2 id={`${id}-title`}>{t("Assign another employee")}</h2>
         <p className="reject-modal-subtitle">
-          The customer will see this update with the new employee on their
-          booking.
+          {t(
+            "The customer will see this update with the new employee on their booking.",
+          )}
         </p>
         <div className="reject-input-group">
-          <label htmlFor="replacement-employee">Available employee</label>
+          <label htmlFor="replacement-employee">
+            {t("Available employee")}
+          </label>
           <select
             id="replacement-employee"
             value={employeeId}
@@ -39,21 +53,23 @@ export default function AssignEmployeeDialog({
           >
             {employees.map((employee) => (
               <option key={employee.id} value={employee.id}>
-                {employee.fullName} - {employee.specialty || "Employee"}
+                {employee.fullName} - {employee.specialty || t("Employee")}
               </option>
             ))}
           </select>
         </div>
         <div className="reject-input-group">
           <label htmlFor="assignment-customer-note">
-            Update for the customer
+            {t("Update for the customer")}
           </label>
           <textarea
             id="assignment-customer-note"
             maxLength={1000}
             value={note}
             onChange={(event) => onNoteChange(event.target.value)}
-            placeholder="Explain that the selected employee is unavailable and who will take the appointment."
+            placeholder={t(
+              "Explain that the selected employee is unavailable and who will take the appointment.",
+            )}
           />
         </div>
         <div className="reject-modal-actions">
@@ -63,7 +79,7 @@ export default function AssignEmployeeDialog({
             onClick={onClose}
             disabled={assigning}
           >
-            Cancel
+            {t("Cancel")}
           </button>
           <button
             className="btn btn-primary"
@@ -71,7 +87,7 @@ export default function AssignEmployeeDialog({
             onClick={onSubmit}
             disabled={assigning || !employeeId}
           >
-            {assigning ? "Saving…" : "Assign and update customer"}
+            {assigning ? t("Saving…") : t("Assign and update customer")}
           </button>
         </div>
       </div>

@@ -8,7 +8,7 @@ export default defineConfig(({ mode }) => {
   const allowedHosts = [".vercel.run"];
   const apiProxy = {
     "/api": {
-      target: env.VITE_API_PROXY_TARGET || "http://localhost:8080",
+      target: env.VITE_API_PROXY_TARGET || "http://localhost:8081",
       changeOrigin: true,
     },
   };

@@ -11,7 +11,7 @@ npm ci
 npm run dev
 ```
 
-Browser requests use `/api`. During development, Vite proxies that path to `http://localhost:8080`; set `VITE_API_PROXY_TARGET` in `.env.local` to change the local backend target. Set `VITE_API_BASE_URL` only when the API must use a separate public origin. Restart Vite after changing environment values. All `VITE_*` values are public and must not contain secrets.
+Browser requests use `/api`. During development, Vite proxies that path to the local backend at `http://localhost:8081`; set `VITE_API_PROXY_TARGET` in `.env.local` to change the local backend target. Set `VITE_API_BASE_URL` only when the API must use a separate public origin. Restart Vite after changing environment values. All `VITE_*` values are public and must not contain secrets.
 
 ## Commands
 

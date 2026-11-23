@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useLocation } from "react-router-dom";
 
 const DESKTOP_KEY = "salonhub.sidebar.collapsed";
 
@@ -13,7 +14,13 @@ function readDesktopPreference() {
 
 export default function useNavigationState() {
   const [collapsed, setCollapsed] = useState(readDesktopPreference);
-  const [mobileOpen, setMobileOpen] = useState(false);
+  // The phone menu remembers the page it was opened on and counts as open
+  // only on that page, so opening any other page closes it.
+  const { pathname, search } = useLocation();
+  const currentPage = `${pathname}${search}`;
+  const [openedOnPage, setOpenedOnPage] = useState(null);
+  const mobileOpen = openedOnPage === currentPage;
+  const setMobileOpen = (open) => setOpenedOnPage(open ? currentPage : null);
   // The control that opened the drawer gets focus back when it closes.
   const openerRef = useRef(null);
   const wasOpenRef = useRef(false);
@@ -35,11 +42,35 @@ export default function useNavigationState() {
 
   useEffect(() => {
     const handleKeyDown = (event) => {
-      if (event.key === "Escape") setMobileOpen(false);
+      if (event.key === "Escape") setOpenedOnPage(null);
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
+
+  // While the phone menu is open: a tap outside it (header and page
+  // included) closes it, and so does a tap on any link inside it, even a
+  // link to the page that is already open.
+  useEffect(() => {
+    if (!mobileOpen) return undefined;
+    const handlePointerDown = (event) => {
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+      if (target.closest(".app-sidebar, .mobile-menu-button")) return;
+      setOpenedOnPage(null);
+    };
+    const handleClick = (event) => {
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+      if (target.closest(".app-sidebar a[href]")) setOpenedOnPage(null);
+    };
+    document.addEventListener("pointerdown", handlePointerDown);
+    document.addEventListener("click", handleClick);
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown);
+      document.removeEventListener("click", handleClick);
+    };
+  }, [mobileOpen]);
 
   return {
     collapsed,

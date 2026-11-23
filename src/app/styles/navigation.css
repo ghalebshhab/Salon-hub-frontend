@@ -4,6 +4,10 @@ body {
 body.navigation-drawer-open {
   overflow: hidden;
 }
+/* The open phone menu covers the page; the Lamsa button would cover its links. */
+body.navigation-drawer-open .lamsa-dock {
+  display: none;
+}
 .creative-navbar {
   position: sticky;
   top: 0;

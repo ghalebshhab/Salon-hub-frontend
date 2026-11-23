@@ -2,6 +2,14 @@
 
 React + Vite frontend for salon discovery, career profiles, hiring applications, and salon management.
 
+**Version 1.0.0 is live:** https://salon-community-frontend.vercel.app
+
+| Part | Where it runs | Repository |
+| --- | --- | --- |
+| Website (this repository) | Vercel | [Salon-hub-frontend](https://github.com/ghalebshhab/Salon-hub-frontend) |
+| API | Render (Docker), TiDB Cloud database | [Salon-hub-backend](https://github.com/ghalebshhab/Salon-hub-backend) |
+| Admin dashboard | Vercel | [salon-hub-admin-dashboard](https://github.com/ghalebshhab/salon-hub-admin-dashboard) |
+
 ## Local development
 
 Use Node.js 24 LTS (minimum 22.12) and npm.
@@ -104,10 +112,14 @@ Route guards provide navigation behavior; the backend must enforce authorization
 
 ## Deployment
 
-1. Run `npm ci` and `npm run check`.
-2. Build with `VITE_API_BASE_URL` pointing to the deployed API, or use the production default `/api` with a same-origin reverse proxy.
-3. Serve `dist/` over HTTPS. Rewrite frontend routes to `index.html` so deep links such as `/owner/applications` work. Proxy `/api` to the Spring Boot backend.
-4. If the API is on a different origin, configure its CORS policy for the frontend origin.
+Production runs on Vercel. Every push to `main` deploys automatically.
+
+- `.env.production` sets `VITE_API_BASE_URL=/api`, so the browser calls the API on the site's own domain.
+- `vercel.json` forwards `/api/*` to `https://salon-hub-backend.onrender.com` and sends every other path to `index.html`, so deep links such as `/owner/applications` work. Because the API is same-site, the httpOnly `SameSite=Strict` session cookies work.
+- The backend must list the site's address in `CORS_ALLOWED_ORIGINS` and `FRONTEND_URL` (see the backend's `documentation/production-environment.md`).
+- Do not set `VITE_API_BASE_URL` in the Vercel settings. The only value Vercel needs is `VITE_GOOGLE_MAPS_API_KEY`, a browser key limited to the Vercel domain.
+
+To deploy somewhere else: run `npm ci` and `npm run check`, serve `dist/` over HTTPS, rewrite app routes to `index.html`, and proxy `/api` to the backend.
 
 Pages are lazy-loaded. The app has route-loading, not-found, and render-error fallbacks. Vite preview is for local verification, not the production web server.
 
@@ -136,9 +148,10 @@ Tests cover active routes with mocked API responses, login redirects, authentica
 
 ## Project status and related repository
 
-Active development. SalonHub aims to provide a clean, responsive user experience with reusable components and maintainable backend integration.
+Version 1.0.0, released on 23 November 2026, is in production. Development continues on `main`; each release is a Git tag (`v1.0.0`) with a GitHub release.
 
-Backend: [Salon Hub Backend](https://github.com/ghalebshhab/Salon-hub-backend)
+- Backend: [Salon Hub Backend](https://github.com/ghalebshhab/Salon-hub-backend)
+- Admin dashboard: [SalonHub Admin Dashboard](https://github.com/ghalebshhab/salon-hub-admin-dashboard)
 
 ## Author
 

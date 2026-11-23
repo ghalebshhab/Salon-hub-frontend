@@ -4,11 +4,11 @@ React + Vite frontend for salon discovery, career profiles, hiring applications,
 
 **Version 1.0.0 is live:** https://salon-community-frontend.vercel.app
 
-| Part | Where it runs | Repository |
-| --- | --- | --- |
-| Website (this repository) | Vercel | [Salon-hub-frontend](https://github.com/ghalebshhab/Salon-hub-frontend) |
-| API | Render (Docker), TiDB Cloud database | [Salon-hub-backend](https://github.com/ghalebshhab/Salon-hub-backend) |
-| Admin dashboard | Vercel | [salon-hub-admin-dashboard](https://github.com/ghalebshhab/salon-hub-admin-dashboard) |
+| Part                      | Where it runs                        | Repository                                                                            |
+| ------------------------- | ------------------------------------ | ------------------------------------------------------------------------------------- |
+| Website (this repository) | Vercel                               | [Salon-hub-frontend](https://github.com/ghalebshhab/Salon-hub-frontend)               |
+| API                       | Render (Docker), TiDB Cloud database | [Salon-hub-backend](https://github.com/ghalebshhab/Salon-hub-backend)                 |
+| Admin dashboard           | Vercel                               | [salon-hub-admin-dashboard](https://github.com/ghalebshhab/salon-hub-admin-dashboard) |
 
 ## Local development
 

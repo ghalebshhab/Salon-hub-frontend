@@ -856,3 +856,54 @@ body:has(.creative-navbar.is-scrolled) .app-sidebar {
     box-shadow: none;
   }
 }
+
+/* Header on tablets and phones: every control must stay on screen.
+   The page title is removed from the layout (visibility: hidden kept its
+   width and pushed the menu button off the right edge), the actions keep
+   their size, and only the logo gives up space. */
+@media (max-width: 900px) {
+  .header-page-title {
+    display: none;
+  }
+  .creative-navbar-inner {
+    justify-content: space-between;
+  }
+  .creative-brand {
+    flex: 0 1 auto;
+    min-width: 0;
+    overflow: hidden;
+  }
+  .navbar-actions {
+    flex: 0 0 auto;
+    margin-inline-start: auto;
+  }
+}
+@media (max-width: 560px) {
+  .creative-navbar-inner {
+    gap: 8px;
+    padding-inline: 12px;
+  }
+  .navbar-actions {
+    gap: 4px;
+  }
+  /* Mark only: the full logo and five header buttons do not fit. */
+  .creative-brand .brand-logo-copy {
+    display: none;
+  }
+  .header-join-button {
+    padding-inline: var(--space-3);
+  }
+}
+@media (max-width: 380px) {
+  .navbar-actions .header-search-trigger,
+  .navbar-actions .header-icon-button,
+  .navbar-actions .header-avatar-button,
+  .navbar-actions .notification-bell-button,
+  .navbar-actions .mobile-menu-button {
+    width: 40px;
+    height: 40px;
+  }
+  .navbar-actions {
+    gap: 2px;
+  }
+}

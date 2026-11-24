@@ -263,6 +263,7 @@ export default function CustomerBookingCard({
   onConfirmAttendance,
   onReview,
   onReceipt,
+  onChangeMethod,
   onRescheduleDecision,
 }) {
   const services = booking.services || [];
@@ -369,7 +370,11 @@ export default function CustomerBookingCard({
           </div>
         )}
 
-        <PaymentStrip payment={booking.payment} onReceipt={onReceipt} />
+        <PaymentStrip
+          payment={booking.payment}
+          onReceipt={onReceipt}
+          onChangeMethod={onChangeMethod}
+        />
         <MoreDetails booking={booking} />
 
         {hasActions && (

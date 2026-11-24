@@ -366,6 +366,8 @@ export default function useCreateBooking() {
     setPaymentMethod,
     paymentRestriction,
     freeCancelHours: paymentOptions.freeCancelHours ?? 24,
+    cliqAlias: paymentOptions.cliqAlias || null,
+    cliqName: paymentOptions.cliqName || null,
     submitting,
     submitError,
     submit,

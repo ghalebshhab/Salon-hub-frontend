@@ -174,6 +174,7 @@ export default function SalonBookingCard({
       <PaymentStrip
         payment={booking.payment}
         canCollect={Boolean(onCashReceived)}
+        canConfirmCliq
         onCollect={() => onCashReceived(booking)}
         onReceipt={onReceipt ? () => onReceipt(booking) : undefined}
       />

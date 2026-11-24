@@ -4,6 +4,7 @@ import {
   Lock,
   Save,
   SlidersHorizontal,
+  Smartphone,
   UserX,
 } from "lucide-react";
 import { useId, useState } from "react";
@@ -21,6 +22,9 @@ const toForm = (settings) => ({
   cashEnabled: settings.cashEnabled,
   cardPrepaidEnabled: settings.cardPrepaidEnabled,
   cardPostpaidEnabled: settings.cardPostpaidEnabled,
+  cliqEnabled: Boolean(settings.cliqEnabled),
+  cliqAlias: settings.cliqAlias || "",
+  cliqName: settings.cliqName || "",
   freeCancelHours: String(settings.freeCancelHours),
   lateCancelFeePercent: String(settings.lateCancelFeePercent),
   noShowFeePercent: String(settings.noShowFeePercent),
@@ -84,14 +88,19 @@ export default function PaymentSettingsPanel({ salonId }) {
 
   const submit = async (event) => {
     event.preventDefault();
+    // Optional chaining: the React Compiler reads these fields during render
+    // to memoize this handler, and the form is null until settings load.
     const result = await save({
-      cashEnabled: form.cashEnabled,
-      cardPrepaidEnabled: form.cardPrepaidEnabled,
-      cardPostpaidEnabled: form.cardPostpaidEnabled,
-      freeCancelHours: Number(form.freeCancelHours),
-      lateCancelFeePercent: Number(form.lateCancelFeePercent),
-      noShowFeePercent: Number(form.noShowFeePercent),
-      noShowLimit: form.noShowRuleOn ? Number(form.noShowLimit) : null,
+      cashEnabled: form?.cashEnabled,
+      cardPrepaidEnabled: form?.cardPrepaidEnabled,
+      cardPostpaidEnabled: form?.cardPostpaidEnabled,
+      cliqEnabled: form?.cliqEnabled,
+      cliqAlias: form?.cliqAlias?.trim() || null,
+      cliqName: form?.cliqName?.trim() || null,
+      freeCancelHours: Number(form?.freeCancelHours),
+      lateCancelFeePercent: Number(form?.lateCancelFeePercent),
+      noShowFeePercent: Number(form?.noShowFeePercent),
+      noShowLimit: form?.noShowRuleOn ? Number(form?.noShowLimit) : null,
     });
     if (!result.ok) {
       showErrorToast(result.message);
@@ -158,6 +167,44 @@ export default function PaymentSettingsPanel({ salonId }) {
               }
               onChange={set("cardPrepaidEnabled")}
             />
+            <MethodToggle
+              icon={Smartphone}
+              label={t("CliQ transfer")}
+              hint={t(
+                "Guests send the amount to your CliQ alias. You mark it as paid.",
+              )}
+              checked={form.cliqEnabled}
+              onChange={set("cliqEnabled")}
+            />
+            {form.cliqEnabled && (
+              <div className="pay-cliq-fields">
+                <label>
+                  <span>{t("CliQ alias or mobile number")}</span>
+                  <input
+                    type="text"
+                    dir="ltr"
+                    required
+                    maxLength={40}
+                    pattern="\+?[A-Za-z0-9._\-]{2,40}"
+                    title={t(
+                      "Use 2 to 40 letters, digits, dots, dashes or underscores.",
+                    )}
+                    value={form.cliqAlias}
+                    onChange={setNumber("cliqAlias")}
+                    placeholder="SALONHUB or 0791234567"
+                  />
+                </label>
+                <label>
+                  <span>{t("Account name guests see (optional)")}</span>
+                  <input
+                    type="text"
+                    maxLength={80}
+                    value={form.cliqName}
+                    onChange={setNumber("cliqName")}
+                  />
+                </label>
+              </div>
+            )}
             {planLocks.card && (
               <PlanLockNote>
                 {t(

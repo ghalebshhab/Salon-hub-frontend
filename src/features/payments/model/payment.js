@@ -23,7 +23,15 @@ export const PAYMENT_METHODS = {
     short: t("Card now"),
     hint: t("The amount is held now and taken only after the service."),
   },
+  CLIQ: {
+    label: t("CliQ transfer"),
+    short: t("CliQ"),
+    hint: t("Send the amount from your bank app to the salon's CliQ alias."),
+  },
 };
+
+/** Methods without a gateway that the customer can switch between. */
+export const MANUAL_METHODS = ["CASH", "CLIQ"];
 
 /** Card methods the wizard shows as "coming soon" while no provider is connected. */
 export const CARD_METHODS = ["CARD_POSTPAID", "CARD_PREPAID"];
@@ -45,6 +53,7 @@ export const TRANSACTION_LABELS = {
   VOID: t("Closed without charge"),
   REFUND: t("Refund"),
   METHOD_CHANGED: t("Method changed"),
+  CLIQ_RECEIVED: t("CliQ transfer received"),
 };
 
 const NUMBER = new Intl.NumberFormat(dateLocale(), {
@@ -81,6 +90,34 @@ export function getPaymentStatus(status) {
 
 export function isCardMethod(method) {
   return CARD_METHODS.includes(method);
+}
+
+export function isCliq(method) {
+  return method === "CLIQ";
+}
+
+/**
+ * The customer can still move between cash and CliQ while nothing is paid
+ * and the visit has not started. The server checks the same rule.
+ */
+export function canSwitchMethod(booking) {
+  const payment = booking?.payment;
+  return Boolean(
+    payment &&
+    MANUAL_METHODS.includes(payment.method) &&
+    payment.status === "UNPAID" &&
+    ["PENDING", "ACCEPTED"].includes(booking.status),
+  );
+}
+
+/** Unpaid CliQ bookings show the customer where to send the money. */
+export function needsCliqTransfer(payment) {
+  return Boolean(
+    payment &&
+    isCliq(payment.method) &&
+    ["UNPAID", "FAILED"].includes(payment.status) &&
+    payment.cliqAlias,
+  );
 }
 
 /** Only bookings that ended with a service can have a receipt to show. */

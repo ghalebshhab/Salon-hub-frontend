@@ -30,6 +30,28 @@ export const recordCashPaymentApi = async (bookingId) => {
   return response.data;
 };
 
+/**
+ * Only the salon owner confirms that a CliQ transfer arrived. The reference
+ * (the bank's transfer number) is optional.
+ */
+export const recordCliqPaymentApi = async (bookingId, reference) => {
+  const response = await httpClient.post(
+    `/bookings/${bookingId}/payment/cliq`,
+    reference ? { reference } : null,
+    quiet,
+  );
+  return response.data;
+};
+
+/** The customer moves an unpaid booking between cash and CliQ. */
+export const changePaymentMethodApi = async (bookingId, method) => {
+  const response = await httpClient.put(
+    `/bookings/${bookingId}/payment/method`,
+    { method },
+  );
+  return response.data;
+};
+
 export const getPaymentSettingsApi = async (salonId, config = {}) => {
   const response = await httpClient.get(`/salons/${salonId}/payment-settings`, {
     ...config,

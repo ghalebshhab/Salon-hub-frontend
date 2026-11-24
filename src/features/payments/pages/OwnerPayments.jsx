@@ -8,13 +8,19 @@ import {
   HandCoins,
   Percent,
   RefreshCw,
+  Smartphone,
   Wallet,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import CashReceivedDialog from "../components/CashReceivedDialog.jsx";
 import PaymentSettingsPanel from "../components/PaymentSettingsPanel.jsx";
 import useOwnerPayments from "../hooks/useOwnerPayments.js";
-import { REPORT_PERIODS, formatMoney, formatRate } from "../model/payment.js";
+import {
+  REPORT_PERIODS,
+  formatMoney,
+  formatRate,
+  isCliq,
+} from "../model/payment.js";
 import t from "../../../shared/i18n/t.js";
 import { PAGE_HEADS } from "../../../shared/copy/pageHeads.js";
 
@@ -41,7 +47,7 @@ function Kpi({
 function KpiSkeleton() {
   return (
     <div className="pay-kpis" aria-busy="true">
-      {Array.from({ length: 5 }, (_, index) => (
+      {Array.from({ length: 6 }, (_, index) => (
         <span key={index} className="skeleton-block pay-kpi-skeleton" />
       ))}
     </div>
@@ -151,6 +157,11 @@ export default function OwnerPayments() {
             detail={summary.cardFils === 0 ? t("Not connected yet") : null}
           />
           <Kpi
+            icon={Smartphone}
+            label={t("CliQ")}
+            value={formatMoney(summary.cliqFils ?? 0, currency)}
+          />
+          <Kpi
             icon={HandCoins}
             tone={summary.outstandingCount > 0 ? "tone-warning" : ""}
             label={t("Still unpaid")}
@@ -227,8 +238,17 @@ export default function OwnerPayments() {
                         type="button"
                         onClick={() => cash.request(booking)}
                       >
-                        <HandCoins size={15} aria-hidden="true" />
-                        {t("Cash received")}
+                        {isCliq(booking.payment?.method) ? (
+                          <>
+                            <Smartphone size={15} aria-hidden="true" />
+                            {t("Paid by CliQ")}
+                          </>
+                        ) : (
+                          <>
+                            <HandCoins size={15} aria-hidden="true" />
+                            {t("Cash received")}
+                          </>
+                        )}
                       </button>
                     )}
                   </div>

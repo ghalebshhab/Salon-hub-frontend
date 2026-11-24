@@ -2839,6 +2839,58 @@ const AR = {
   "Salon story in Arabic": "قصة الصالون بالعربي",
   "Optional. Leave the Arabic empty and SalonHub translates your English for you.":
     "اختياري. اترك الحقل العربي فاضي وSalonHub بترجم النص الإنجليزي عنك.",
+  // CliQ booking payments, double booking and own-salon rules
+  CliQ: "CliQ",
+  "Send the amount from your bank app to the salon's CliQ alias.":
+    "حوّل المبلغ من تطبيق البنك على اسم CliQ تبع الصالون.",
+  "CliQ transfer received": "انستلم تحويل CliQ",
+  "Paid by CliQ": "مدفوع بـ CliQ",
+  "Did the CliQ transfer from {name} arrive?": "وصل تحويل CliQ من {name}؟",
+  "Did the customer's CliQ transfer arrive?": "وصل تحويل CliQ من الزبون؟",
+  "{services}. Check your bank app first. The customer gets a receipt at once.":
+    "{services}. تأكد من تطبيق البنك أول. الزبون بوصله إيصال فورًا.",
+  "From the bank's message": "من رسالة البنك",
+  "Yes, mark as paid": "آه، علّمه مدفوع",
+  "Send {amount} by CliQ to": "حوّل {amount} بـ CliQ على",
+  "The salon marks it as paid when the money arrives.":
+    "الصالون بعلّمه مدفوع لما توصل المصاري.",
+  "Change payment method": "غيّر طريقة الدفع",
+  "Guests send the amount to your CliQ alias. You mark it as paid.":
+    "الزباين بحوّلوا المبلغ على اسم CliQ تبعك، وإنت بتعلّمه مدفوع.",
+  "CliQ alias or mobile number": "اسم CliQ أو رقم الموبايل",
+  "Use 2 to 40 letters, digits, dots, dashes or underscores.":
+    "استخدم من 2 لـ 40 حرف أو رقم أو نقطة أو شرطة أو شرطة سفلية.",
+  "Account name guests see (optional)":
+    "اسم الحساب اللي بشوفه الزباين (اختياري)",
+  "Could not change the payment method.": "ما قدرنا نغيّر طريقة الدفع.",
+  "This salon accepts no other method for this booking.":
+    "هالصالون ما بقبل طريقة دفع ثانية لهالحجز.",
+  "Payment method": "طريقة الدفع",
+  "Send to": "حوّل على",
+  "Change method": "غيّر الطريقة",
+  "You are the owner of this salon": "إنت صاحب هالصالون",
+  "You have another booking at this time": "عندك حجز ثاني بنفس هالوقت",
+  "CliQ payment recorded": "انسجّلت دفعة CliQ",
+  "CliQ payment was already recorded": "دفعة CliQ مسجّلة من قبل",
+  "You will pay by CliQ": "رح تدفع بـ CliQ",
+  "You will pay in cash at the salon": "رح تدفع كاش بالصالون",
+  "Only the salon owner can confirm a CliQ transfer":
+    "بس صاحب الصالون بقدر يأكّد تحويل CliQ",
+  "The customer did not choose CliQ for this booking":
+    "الزبون ما اختار CliQ لهالحجز",
+  "Choose cash or CliQ": "اختار كاش أو CliQ",
+  "The payment method can change only before the service starts":
+    "طريقة الدفع بتتغيّر بس قبل ما تبلش الخدمة",
+  "This booking is already paid or closed": "هالحجز مدفوع أو مسكّر",
+  "This booking is paid by card. Its payment method cannot change":
+    "هالحجز مدفوع بالبطاقة، وطريقة الدفع ما بتتغيّر",
+  "Confirm a CliQ transfer after the salon accepts the booking":
+    "أكّد تحويل CliQ بعد ما يقبل الصالون الحجز",
+  "Enter your CliQ alias or mobile number to turn CliQ on":
+    "اكتب اسم CliQ أو رقم الموبايل عشان تشغّل CliQ",
+  "Keep at least one payment method on": "خلّي طريقة دفع وحدة على الأقل شغّالة",
+  "This salon does not accept this payment method":
+    "هالصالون ما بقبل طريقة الدفع هاي",
 };
 
 export default AR;

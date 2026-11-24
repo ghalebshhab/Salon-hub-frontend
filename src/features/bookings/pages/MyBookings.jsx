@@ -21,6 +21,9 @@ import useI18n from "../../../shared/i18n/useI18n.js";
 import CustomerBookingCard from "../components/customer/CustomerBookingCard.jsx";
 import MyBookingsSkeleton from "../components/customer/MyBookingsSkeleton.jsx";
 import ReceiptDialog from "../../payments/components/ReceiptDialog.jsx";
+import ChangePaymentMethodDialog from "../../payments/components/ChangePaymentMethodDialog.jsx";
+import usePaymentMethodChange from "../../payments/hooks/usePaymentMethodChange.js";
+import { canSwitchMethod } from "../../payments/model/payment.js";
 import CreateReviewModal from "../../reviews/components/CreateReviewModal.jsx";
 import t from "../../../shared/i18n/t.js";
 import { PAGE_HEADS } from "../../../shared/copy/pageHeads.js";
@@ -51,6 +54,7 @@ function MyBookings() {
   const {
     bookings,
     loading,
+    loadBookings,
     handleCancel,
     handleConfirmAttendance,
     confirmingId,
@@ -68,6 +72,7 @@ function MyBookings() {
   const [params, setParams] = useSearchParams();
   const [receiptBookingId, setReceiptBookingId] = useState(null);
   const closeReceipt = useCallback(() => setReceiptBookingId(null), []);
+  const methodChange = usePaymentMethodChange({ onChanged: loadBookings });
 
   // A link to one booking opens the list that holds it.
   const highlighted = bookings.find((item) => item.id === highlightedId);
@@ -169,6 +174,11 @@ function MyBookings() {
                 onConfirmAttendance={handleConfirmAttendance}
                 onReview={openReviewModal}
                 onReceipt={() => setReceiptBookingId(booking.id)}
+                onChangeMethod={
+                  canSwitchMethod(booking)
+                    ? () => methodChange.request(booking)
+                    : undefined
+                }
                 onRescheduleDecision={handleRescheduleDecision}
               />
             ))}
@@ -184,6 +194,14 @@ function MyBookings() {
         />
       )}
       <ReceiptDialog bookingId={receiptBookingId} onClose={closeReceipt} />
+      <ChangePaymentMethodDialog
+        key={methodChange.target?.id ?? "none"}
+        booking={methodChange.target}
+        options={methodChange.options}
+        saving={methodChange.saving}
+        onConfirm={methodChange.confirm}
+        onCancel={methodChange.cancel}
+      />
     </section>
   );
 }

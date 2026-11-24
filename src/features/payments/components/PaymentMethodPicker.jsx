@@ -1,4 +1,10 @@
-import { Banknote, CreditCard, Lock, ShieldCheck } from "lucide-react";
+import {
+  Banknote,
+  CreditCard,
+  Lock,
+  ShieldCheck,
+  Smartphone,
+} from "lucide-react";
 import { useId } from "react";
 import {
   CARD_METHODS,
@@ -11,11 +17,13 @@ const ICONS = {
   CASH: Banknote,
   CARD_POSTPAID: CreditCard,
   CARD_PREPAID: CreditCard,
+  CLIQ: Smartphone,
 };
 
 /**
- * Radio cards for the booking wizard. Methods the salon cannot take yet are
- * shown locked, so the customer knows they exist but cannot pick them.
+ * Radio cards for the booking wizard. Card methods the salon cannot take yet
+ * are shown locked, so the customer knows they exist but cannot pick them.
+ * CliQ shows only when the salon accepts it, with the alias to send to.
  */
 export default function PaymentMethodPicker({
   methods = ["CASH"],
@@ -23,9 +31,15 @@ export default function PaymentMethodPicker({
   onChange,
   totalFils,
   freeCancelHours = 24,
+  cliqAlias,
+  cliqName,
 }) {
   const id = useId();
-  const shown = ["CASH", ...CARD_METHODS];
+  const shown = [
+    "CASH",
+    ...(methods.includes("CLIQ") ? ["CLIQ"] : []),
+    ...CARD_METHODS,
+  ];
 
   return (
     <fieldset className="pay-picker" aria-describedby={`${id}-terms`}>
@@ -73,6 +87,15 @@ export default function PaymentMethodPicker({
           );
         })}
       </div>
+
+      {value === "CLIQ" && cliqAlias && (
+        <p className="pay-picker-cliq" role="status">
+          {t("Send {amount} by CliQ to", { amount: formatMoney(totalFils) })}{" "}
+          <strong dir="ltr">{cliqAlias}</strong>
+          {cliqName && <> ({cliqName})</>}.{" "}
+          {t("The salon marks it as paid when the money arrives.")}
+        </p>
+      )}
 
       <p className="pay-picker-terms" id={`${id}-terms`}>
         <ShieldCheck size={15} aria-hidden="true" />

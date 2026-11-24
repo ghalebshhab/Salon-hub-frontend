@@ -168,6 +168,8 @@ function CreateBooking() {
               onPaymentMethodChange={flow.setPaymentMethod}
               totalPrice={flow.totalPrice}
               freeCancelHours={flow.freeCancelHours}
+              cliqAlias={flow.cliqAlias}
+              cliqName={flow.cliqName}
             />
           )}
 

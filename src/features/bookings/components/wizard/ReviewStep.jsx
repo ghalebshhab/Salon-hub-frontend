@@ -16,6 +16,8 @@ export default function ReviewStep({
   onPaymentMethodChange,
   totalPrice,
   freeCancelHours,
+  cliqAlias,
+  cliqName,
 }) {
   const id = useId();
   return (
@@ -96,6 +98,8 @@ export default function ReviewStep({
         onChange={onPaymentMethodChange}
         totalFils={toFils(totalPrice)}
         freeCancelHours={freeCancelHours}
+        cliqAlias={cliqAlias}
+        cliqName={cliqName}
       />
     </div>
   );

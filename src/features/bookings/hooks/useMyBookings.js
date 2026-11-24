@@ -194,6 +194,7 @@ export default function useMyBookings() {
   return {
     bookings,
     loading,
+    loadBookings,
     handleCancel,
     handleConfirmAttendance,
     confirmingId,

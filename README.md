@@ -2,7 +2,7 @@
 
 React + Vite frontend for salon discovery, career profiles, hiring applications, and salon management.
 
-**Version 1.0.0 is live:** https://salon-community-frontend.vercel.app
+**Version 1.1.0 is live:** https://salon-community-frontend.vercel.app
 
 | Part                      | Where it runs                        | Repository                                                                            |
 | ------------------------- | ------------------------------------ | ------------------------------------------------------------------------------------- |
@@ -148,7 +148,7 @@ Tests cover active routes with mocked API responses, login redirects, authentica
 
 ## Project status and related repository
 
-Version 1.0.0, released on 23 November 2026, is in production. Development continues on `main`; each release is a Git tag (`v1.0.0`) with a GitHub release.
+Version 1.1.0, released on 24 November 2026, is in production (version 1.0.0 was released on 23 November 2026). Development continues on `main`; each release is a Git tag (`v1.1.0`) with a GitHub release.
 
 - Backend: [Salon Hub Backend](https://github.com/ghalebshhab/Salon-hub-backend)
 - Admin dashboard: [SalonHub Admin Dashboard](https://github.com/ghalebshhab/salon-hub-admin-dashboard)

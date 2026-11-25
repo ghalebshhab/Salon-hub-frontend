@@ -19,8 +19,14 @@ export default function useCareerProfile() {
     (signal) => getUserProfileApi({ signal }).then(requireData),
     [],
   );
-  const { data: profile, loading } = useQuery(loader, {
+  // keepPreviousData: a refetch after save must not swap the form for the skeleton.
+  const {
+    data: profile,
+    loading,
+    refetch,
+  } = useQuery(loader, {
     onError: showErrorToast,
+    keepPreviousData: true,
   });
   const form = draft || {
     dateOfBirth: profile?.dateOfBirth || "",
@@ -54,7 +60,9 @@ export default function useCareerProfile() {
         showErrorToast(response.message || t("Could not save career profile"));
         return;
       }
-      setDraft(null);
+      // Keep the saved values on screen and reload the profile, so the form
+      // and the completion score do not fall back to the stale first load.
+      refetch();
       showSuccessToast(t("Career profile saved."));
     } catch (error) {
       showErrorToast(
